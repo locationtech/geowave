@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "rm", parentOperation = FeatureLayerSection.class)
 @Parameters(commandDescription = "Remove GeoServer feature Layer")
@@ -48,8 +47,12 @@ public class GeoServerRemoveFeatureLayerCommand extends GeoServerRemoveCommand<S
     final Response deleteLayerResponse = geoserverClient.deleteFeatureLayer(layerName);
 
     if (deleteLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject listObj = JSONObject.fromObject(deleteLayerResponse.getEntity());
-      return "\nGeoServer delete layer response " + layerName + ": " + listObj.toString(2);
+      // This response comes straight back from Jersey rather than through the
+      // client's own Response.ok(String), so the entity is an unread stream.
+      return "\nGeoServer delete layer response "
+          + layerName
+          + ": "
+          + deleteLayerResponse.readEntity(String.class);
     }
     final String errorMessage =
         "Error deleting GeoServer layer '"

@@ -11,11 +11,11 @@ package org.locationtech.geowave.cli.geoserver.style;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "list", parentOperation = StyleSection.class)
 @Parameters(commandDescription = "List GeoServer styles")
@@ -31,9 +31,9 @@ public class GeoServerListStylesCommand extends GeoServerCommand<String> {
     final Response listStylesResponse = geoserverClient.getStyles();
 
     if (listStylesResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject jsonResponse = JSONObject.fromObject(listStylesResponse.getEntity());
-      final JSONArray styles = jsonResponse.getJSONArray("styles");
-      return "\nGeoServer styles list: " + styles.toString(2);
+      final JsonNode jsonResponse = GeoServerJson.parse(listStylesResponse.getEntity());
+      final JsonNode styles = jsonResponse.get("styles");
+      return "\nGeoServer styles list: " + GeoServerJson.pretty(styles);
     }
     final String errorMessage =
         "Error getting GeoServer styles list: "
