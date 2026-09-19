@@ -61,9 +61,12 @@ jobs:
     env:
       IT_ONLY: false
       # spotbugs 3.1.10 cannot load on JDK 9+, which would mask whatever this
-      # job is actually meant to reveal. MAVEN_ARGS needs Maven 3.9+, which the
-      # wrapper pins.
-      MAVEN_ARGS: -Dspotbugs.skip
+      # job is actually meant to reveal. --fail-at-end because the point of this
+      # job is to enumerate what Java 21 breaks, and stopping at the first module
+      # reveals one problem per run: today core/ingest fails and the forty-odd
+      # modules behind it are never reached. MAVEN_ARGS needs Maven 3.9+, which
+      # the wrapper pins.
+      MAVEN_ARGS: -Dspotbugs.skip --fail-at-end
     steps:
       - uses: actions/checkout@v4
 
