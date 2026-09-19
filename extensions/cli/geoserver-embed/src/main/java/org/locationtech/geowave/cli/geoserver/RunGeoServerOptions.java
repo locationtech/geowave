@@ -11,8 +11,6 @@ package org.locationtech.geowave.cli.geoserver;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
@@ -106,21 +104,7 @@ public class RunGeoServerOptions {
     }
     gsWebapp.setResourceBase(directory);
 
-    final WebAppClassLoader classLoader =
-        AccessController.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
-          @Override
-          public WebAppClassLoader run() {
-            try {
-              return new WebAppClassLoader(gsWebapp);
-            } catch (final IOException e) {
-              LOGGER.error("Unable to create new classloader", e);
-              return null;
-            }
-          }
-        });
-    if (classLoader == null) {
-      throw new IOException("Unable to create classloader");
-    }
+    final WebAppClassLoader classLoader = new WebAppClassLoader(gsWebapp);
     final String classpath = System.getProperty("java.class.path").replace(":", ";");
     final String[] individualEntries = classpath.split(";");
     final StringBuffer str = new StringBuffer();
