@@ -18,7 +18,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.restlet.data.Form;
 import org.restlet.data.Parameter;
@@ -36,7 +36,7 @@ public class RequestParametersFormTest {
     final String keyName;
     final Form form = Mockito.mock(Form.class);
     Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
-    Mockito.when(form.getFirst(Matchers.anyString())).thenAnswer(
+    Mockito.when(form.getFirst(ArgumentMatchers.anyString())).thenAnswer(
         i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
 
     return form;

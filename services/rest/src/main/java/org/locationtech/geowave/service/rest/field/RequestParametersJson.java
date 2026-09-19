@@ -9,14 +9,14 @@
 package org.locationtech.geowave.service.rest.field;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Map;
 import org.restlet.representation.Representation;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RequestParametersJson extends RequestParameters {
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   public RequestParametersJson(final Representation request) throws IOException {
     super();
@@ -30,56 +30,20 @@ public class RequestParametersJson extends RequestParameters {
 
   @Override
   public List<?> getList(final String parameter) {
-    return jsonArrayToList((JSONArray) getValue(parameter));
+    return (List<?>) getValue(parameter);
   }
 
   @Override
   public Object[] getArray(final String parameter) {
-    return jsonArrayToArray((JSONArray) getValue(parameter));
+    final List<?> list = getList(parameter);
+    return (list == null) ? null : list.toArray();
   }
 
-  private void injectJsonParams(final String jsonString) {
-    final JSONObject json = new JSONObject(jsonString);
-    for (final String key : json.keySet()) {
-      // For each parameter in the form, add the parameter name and value
-      // to the Map<String, Object>.
-      try {
-        // First try to add the value as a JSONArray.
-        keyValuePairs.put(key, json.getJSONArray(key));
-      } catch (final JSONException e) {
-        // If that does not work, add the parameter as an Object.
-        keyValuePairs.put(key, json.get(key));
-      }
-    }
-  }
-
-  private Object[] jsonArrayToArray(final JSONArray jsonArray) {
-    if (jsonArray == null) {
-      return null;
-    }
-
-    // Initialize the output Array.
-    final int jsonArrayLenth = jsonArray.length();
-    final Object[] outArray = new Object[jsonArrayLenth];
-    for (int i = 0; i < jsonArrayLenth; i++) {
-      // Then add each JSONArray element to it.
-      outArray[i] = jsonArray.get(i);
-    }
-    return outArray;
-  }
-
-  private List<Object> jsonArrayToList(final JSONArray jsonArray) {
-    if (jsonArray == null) {
-      return null;
-    }
-
-    // Initialize the output List.
-    final int jsonArrayLenth = jsonArray.length();
-    final List<Object> outList = new ArrayList<>();
-    for (int i = 0; i < jsonArrayLenth; i++) {
-      // Then add each JSONArray element to it.
-      outList.add(jsonArray.get(i));
-    }
-    return outList;
+  /**
+   * Jackson maps a JSON document onto plain Java types -- String, Integer, Double, Boolean, List
+   * and Map -- which is exactly what {@link RequestParameters#getValue} is expected to hand back.
+   */
+  private void injectJsonParams(final String jsonString) throws IOException {
+    keyValuePairs.putAll(MAPPER.readValue(jsonString, new TypeReference<Map<String, Object>>() {}));
   }
 }
