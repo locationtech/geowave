@@ -17,8 +17,6 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import com.google.common.collect.Collections2;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 /**
  * Class that implements a compound index strategy. It combines a PartitionIndexStrategy with a
@@ -368,13 +366,6 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
     }
 
     /** Convert Tiered Index Metadata statistics to a JSON object */
-    @Override
-    public JSONObject toJSONObject() throws JSONException {
-      final JSONObject jo = new JSONObject();
-      jo.put("type", "CompoundIndexMetaDataWrapper");
-      jo.put("index", index);
-      return jo;
-    }
   }
 
   /**

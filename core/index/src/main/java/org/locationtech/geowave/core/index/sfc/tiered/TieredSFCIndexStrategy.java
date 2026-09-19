@@ -46,8 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableBiMap.Builder;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 /**
  * This class uses multiple SpaceFillingCurve objects, one per tier, to represent a single cohesive
@@ -624,21 +622,6 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
     }
 
     /** Convert Tiered Index Metadata statistics to a JSON object */
-    @Override
-    public JSONObject toJSONObject() throws JSONException {
-      final JSONObject jo = new JSONObject();
-      jo.put("type", "TieredSFCIndexStrategy");
-
-      jo.put("TierCountsSize", tierCounts.length);
-
-      if (null == orderedTierIdToSfcIndex) {
-        jo.put("orderedTierIdToSfcIndex", "null");
-      } else {
-        jo.put("orderedTierIdToSfcIndexSize", orderedTierIdToSfcIndex.size());
-      }
-
-      return jo;
-    }
   }
 
   @Override
