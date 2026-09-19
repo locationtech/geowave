@@ -122,7 +122,6 @@ jobs:
         profile:
           - redis-it
           - rocksdb-it
-          - accumulo-it-client
           - accumulo-it-server
           - hbase-it-client
           - hbase-it-server
@@ -130,6 +129,14 @@ jobs:
           - 'rocksdb-it,secondary-index-it'
           - 'hbase-it-server,secondary-index-it'
         include:
+          # accumulo-it-client fails intermittently in
+          # GeoWaveCustomCRSSpatialVectorIT with "Unable to delete all features
+          # in bulk delete" -- the same commit passes on one run and fails on
+          # the next. Without the server-side library a bulk delete is a scan
+          # and delete, so it is timing sensitive. This lane still gates: a
+          # deterministic break fails every attempt and so fails the build.
+          - profile: accumulo-it-client
+            retry_tests: true
           # Cassandra's cluster startup is timing sensitive, hence the retry,
           # and a full pass takes around 80 minutes, so it paces the matrix.
           - profile: cassandra-it
