@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.geotime.store.query.filter.expression;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
 import org.locationtech.geowave.core.geotime.adapter.TemporalFieldDescriptor;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression;

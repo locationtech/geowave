@@ -40,8 +40,6 @@ import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy.TierIndexMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStrategy {
   private static final Logger LOGGER = LoggerFactory.getLogger(XZHierarchicalIndexStrategy.class);
@@ -515,18 +513,6 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     }
 
     /** Convert XZHierarchical Index Metadata statistics to a JSON object */
-    @Override
-    public JSONObject toJSONObject() throws JSONException {
-      final JSONObject jo = new JSONObject();
-      jo.put("type", "XZHierarchicalIndexStrategy");
-
-      jo.put("pointCurveMultiDimensionalId", pointCurveMultiDimensionalId);
-      jo.put("xzCurveMultiDimensionalId", xzCurveMultiDimensionalId);
-      jo.put("pointCurveCount", pointCurveCount);
-      jo.put("xzCurveCount", xzCurveCount);
-
-      return jo;
-    }
   }
 
   @Override

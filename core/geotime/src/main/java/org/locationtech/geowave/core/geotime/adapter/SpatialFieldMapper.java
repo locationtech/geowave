@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.geotime.adapter;
 
 import java.nio.ByteBuffer;
 import java.util.List;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField.SpatialIndexFieldOptions;

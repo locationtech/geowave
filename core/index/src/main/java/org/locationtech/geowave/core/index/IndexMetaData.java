@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.index;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 public interface IndexMetaData extends Mergeable {
   /**
    * Update the aggregation result using the new entry provided
@@ -25,7 +22,4 @@ public interface IndexMetaData extends Mergeable {
    * @param insertionIds the new indices to compute an updated aggregation result on
    */
   public void insertionIdsRemoved(InsertionIds insertionIds);
-
-  /** Create a JSON object that shows all the metadata handled by this object */
-  public JSONObject toJSONObject() throws JSONException;
 }

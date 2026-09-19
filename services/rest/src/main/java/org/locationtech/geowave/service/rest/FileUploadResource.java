@@ -15,7 +15,7 @@ import javax.ws.rs.BadRequestException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.locationtech.geowave.service.rest.operations.RestOperationStatusMessage;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;

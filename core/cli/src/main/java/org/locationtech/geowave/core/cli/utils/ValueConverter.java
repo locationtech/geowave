@@ -12,8 +12,7 @@ package org.locationtech.geowave.core.cli.utils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /** Used for general purpose value conversion via appache commons ConvertUtils */
 public class ValueConverter {
@@ -43,7 +42,8 @@ public class ValueConverter {
         return (X) value;
       }
 
-      if ((value.getClass() == JSONObject.class) || (value.getClass() == JSONArray.class)) {
+      // already-parsed JSON passes through rather than being stringified
+      if (value instanceof JsonNode) {
         return (X) value;
       }
     }
