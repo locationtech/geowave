@@ -13,12 +13,13 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "add", parentOperation = FeatureLayerSection.class)
 @Parameters(commandDescription = "Add a GeoServer feature layer")
@@ -63,8 +64,8 @@ public class GeoServerAddFeatureLayerCommand extends GeoServerCommand<String> {
         geoserverClient.addFeatureLayer(workspace, datastore, layerName, null);
 
     if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
-      final JSONObject listObj = JSONObject.fromObject(addLayerResponse.getEntity());
-      return "\nGeoServer add layer response " + layerName + ":" + listObj.toString(2);
+      final JsonNode listObj = GeoServerJson.parse(addLayerResponse.getEntity());
+      return "\nGeoServer add layer response " + layerName + ":" + GeoServerJson.pretty(listObj);
     }
     final String errorMessage =
         "Error adding GeoServer layer "

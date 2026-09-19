@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.spark.HashPartitioner;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaFutureAction;

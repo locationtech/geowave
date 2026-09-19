@@ -13,12 +13,13 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "get", parentOperation = CoverageSection.class)
 @Parameters(commandDescription = "Get a GeoServer coverage's info")
@@ -55,8 +56,11 @@ public class GeoServerGetCoverageCommand extends GeoServerCommand<String> {
         geoserverClient.getCoverage(workspace, cvgstore, cvgName, false);
 
     if (getCvgResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject jsonResponse = JSONObject.fromObject(getCvgResponse.getEntity());
-      return "\nGeoServer coverage info for '" + cvgName + "': " + jsonResponse.toString(2);
+      final JsonNode jsonResponse = GeoServerJson.parse(getCvgResponse.getEntity());
+      return "\nGeoServer coverage info for '"
+          + cvgName
+          + "': "
+          + GeoServerJson.pretty(jsonResponse);
     }
     final String errorMessage =
         "Error getting GeoServer coverage info for "

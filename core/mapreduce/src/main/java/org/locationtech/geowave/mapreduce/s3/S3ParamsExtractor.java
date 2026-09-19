@@ -10,7 +10,7 @@ package org.locationtech.geowave.mapreduce.s3;
 
 import java.io.IOException;
 import java.net.URL;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class S3ParamsExtractor {
 

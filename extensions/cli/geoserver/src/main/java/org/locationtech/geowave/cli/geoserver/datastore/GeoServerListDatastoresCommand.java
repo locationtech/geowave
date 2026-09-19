@@ -11,12 +11,12 @@ package org.locationtech.geowave.cli.geoserver.datastore;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "list", parentOperation = DatastoreSection.class)
 @Parameters(commandDescription = "List GeoServer datastores")
@@ -38,9 +38,9 @@ public class GeoServerListDatastoresCommand extends GeoServerCommand<String> {
     final Response listStoresResponse = geoserverClient.getDatastores(workspace);
 
     if (listStoresResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject jsonResponse = JSONObject.fromObject(listStoresResponse.getEntity());
-      final JSONArray datastores = jsonResponse.getJSONArray("dataStores");
-      return "\nGeoServer stores list for '" + workspace + "': " + datastores.toString(2);
+      final JsonNode jsonResponse = GeoServerJson.parse(listStoresResponse.getEntity());
+      final JsonNode datastores = jsonResponse.get("dataStores");
+      return "\nGeoServer stores list for '" + workspace + "': " + GeoServerJson.pretty(datastores);
     }
     final String errorMessage =
         "Error getting GeoServer stores list for '"
