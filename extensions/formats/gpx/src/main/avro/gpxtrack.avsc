@@ -40,7 +40,7 @@
 					"type":"array",
 					"items":"string"
 				}],
-				"default" : "null"
+				"default" : null
 			}
 		],
 	"doc:" : "Stores GPX Track files, and, if available metadata blobs per OSM practice"
