@@ -215,7 +215,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
 
     if ((gpxTrack.getTags() != null) && (gpxTrack.getTags().size() > 0)) {
       final String tags =
-          org.apache.commons.lang.StringUtils.join(gpxTrack.getTags(), TAG_SEPARATOR);
+          org.apache.commons.lang3.StringUtils.join(gpxTrack.getTags(), TAG_SEPARATOR);
       dataSet.put("Tags", tags);
     } else {
       dataSet.put("Tags", null);

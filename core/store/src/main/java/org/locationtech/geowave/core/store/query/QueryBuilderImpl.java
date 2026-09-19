@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.store.query;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
