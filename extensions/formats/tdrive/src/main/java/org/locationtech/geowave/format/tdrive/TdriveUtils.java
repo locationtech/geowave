@@ -18,14 +18,16 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.jts.geom.Geometry;
-import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a convenience class for performing common GPX static utility methods such as schema
  * validation, file parsing, and SimpleFeatureType definition.
  */
 public class TdriveUtils {
+  private static final Logger LOGGER = LoggerFactory.getLogger(TdriveUtils.class);
   public static final String TDRIVE_POINT_FEATURE = "tdrivepoint";
 
   private static final ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
@@ -70,7 +72,7 @@ public class TdriveUtils {
         return line.split(",").length == 4;
       }
     } catch (final Exception e) {
-      Log.warn("Error validating file: " + file.getPath(), e);
+      LOGGER.warn("Error validating file: " + file.getPath(), e);
       return false;
     }
     return false;
