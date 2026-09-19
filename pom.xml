@@ -1762,12 +1762,6 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>compatibility</id>
-			<properties>
-				<accumulo.version>1.9.2</accumulo.version>
-			</properties>
-		</profile>
-		<profile>
 			<id>doclint-java8-disable</id>
 			<activation>
 				<jdk>[1.8,)</jdk>

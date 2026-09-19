@@ -124,7 +124,6 @@ jobs:
           - filesystem-it
           - 'filesystem-it,secondary-index-it'
           - 'rocksdb-it,secondary-index-it'
-          - 'accumulo-it-server,compatibility'
           - 'hbase-it-server,secondary-index-it'
         # cassandra-it is excluded for now: it is much slower than the other
         # lanes and was holding up the whole matrix. Run it on demand with
