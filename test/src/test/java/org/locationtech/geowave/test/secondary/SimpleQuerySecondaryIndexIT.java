@@ -51,7 +51,6 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM},

@@ -13,7 +13,7 @@
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Cloud Bigtable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/), and [Apache Kudu](https://kudu.apache.org/), as well as direct FileSystem support)
+  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/), as well as direct FileSystem support)
   * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins

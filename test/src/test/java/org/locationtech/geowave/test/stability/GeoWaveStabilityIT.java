@@ -60,7 +60,6 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
@@ -71,7 +70,6 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,

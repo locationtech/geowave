@@ -76,12 +76,10 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
   @GeoWaveTestStore(
       value = {
           GeoWaveTestStore.GeoWaveStoreType.ACCUMULO,
-          GeoWaveTestStore.GeoWaveStoreType.BIGTABLE,
           GeoWaveTestStore.GeoWaveStoreType.CASSANDRA,
           GeoWaveTestStore.GeoWaveStoreType.DYNAMODB,
           GeoWaveTestStore.GeoWaveStoreType.FILESYSTEM,
           GeoWaveTestStore.GeoWaveStoreType.HBASE,
-          GeoWaveTestStore.GeoWaveStoreType.KUDU,
           GeoWaveTestStore.GeoWaveStoreType.REDIS,
           GeoWaveTestStore.GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
@@ -155,7 +153,7 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
         DimensionalityType.SPATIAL_TEMPORAL.getDefaultIndices());
     final SimpleFeatureType featureType =
         ((FeatureDataAdapter) store.getTypes()[0]).getFeatureType();
-    testGeometry(featureType, store);
+    testGeometry(featureType, store, false);
     testNumericStat(featureType, store);
   }
 
@@ -168,7 +166,7 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
         DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL.getDefaultIndices());
     final SimpleFeatureType featureType =
         ((FeatureDataAdapter) store.getTypes()[0]).getFeatureType();
-    testGeometry(featureType, store);
+    testGeometry(featureType, store, true);
     testNumericStat(featureType, store);
   }
 
@@ -179,10 +177,19 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
         POLYGON_FILE_LOCATION,
         IngestOptions.newBuilder().threads(4).build(),
         DimensionalityType.SPATIAL.getDefaultIndices());
-    testGeometry(((FeatureDataAdapter) store.getTypes()[0]).getFeatureType(), store);
+    testGeometry(((FeatureDataAdapter) store.getTypes()[0]).getFeatureType(), store, true);
   }
 
-  private static void testGeometry(final SimpleFeatureType featureType, final DataStore store) {
+  /**
+   * @param centroidWithinGeometry whether a feature's centroid is guaranteed to fall inside the
+   *        feature itself. True for points and for these polygons; false for lines, where the
+   *        centroid of a bent track routinely sits off the track altogether and therefore in a cell
+   *        the geometry never touches.
+   */
+  private static void testGeometry(
+      final SimpleFeatureType featureType,
+      final DataStore store,
+      final boolean centroidWithinGeometry) {
     final String geometryField = featureType.getGeometryDescriptor().getLocalName();
     final List<CountStatistic> stats = new ArrayList<>();
     for (final SpatialBinningType type : SpatialBinningType.values()) {
@@ -289,14 +296,19 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
                         entry.getKey().precision,
                         entry.getKey().type.binToString(bin.getBytes())),
                     scaledResult <= count);
-                final Long centroidResult = centroidResults.get(bin);
-                Assert.assertTrue(
-                    String.format(
-                        "Centroid result is greater than the full geometry for %s (%d) at bin %s",
-                        entry.getKey().type,
-                        entry.getKey().precision,
-                        entry.getKey().type.binToString(bin.getBytes())),
-                    (centroidResult == null) || (centroidResult <= count));
+                // Only meaningful when the centroid lies within the geometry. A line's centroid
+                // need not be on the line, so its bin is not required to be one the geometry
+                // covers.
+                if (centroidWithinGeometry) {
+                  final Long centroidResult = centroidResults.get(bin);
+                  Assert.assertTrue(
+                      String.format(
+                          "Centroid result is greater than the full geometry for %s (%d) at bin %s",
+                          entry.getKey().type,
+                          entry.getKey().precision,
+                          entry.getKey().type.binToString(bin.getBytes())),
+                      (centroidResult == null) || (centroidResult <= count));
+                }
               });
             });
   }

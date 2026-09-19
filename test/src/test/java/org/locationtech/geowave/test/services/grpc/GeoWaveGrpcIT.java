@@ -49,13 +49,11 @@ import org.apache.logging.log4j.core.config.Configurator;
 @GeoWaveTestStore(
     value = {
         GeoWaveStoreType.ACCUMULO,
-        GeoWaveStoreType.BIGTABLE,
         // Cassandra is currently erroring with java.lang.ClassNotFoundException:
         // org.eclipse.core.resources.IWorkspaceRoot on the spatial join
         // GeoWaveStoreType.CASSANDRA,
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.HBASE,
-        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB,
         GeoWaveStoreType.FILESYSTEM})

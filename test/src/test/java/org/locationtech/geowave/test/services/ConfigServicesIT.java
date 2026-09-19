@@ -37,11 +37,9 @@ public class ConfigServicesIT extends BaseServiceIT {
 
   @GeoWaveTestStore({
       GeoWaveStoreType.ACCUMULO,
-      GeoWaveStoreType.BIGTABLE,
       GeoWaveStoreType.HBASE,
       GeoWaveStoreType.CASSANDRA,
       GeoWaveStoreType.DYNAMODB,
-      GeoWaveStoreType.KUDU,
       GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB,
       GeoWaveStoreType.FILESYSTEM})

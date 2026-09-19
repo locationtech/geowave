@@ -1,15 +1,23 @@
 name: Publish
-on: 
+on:
   push:
-    branches:
-      - master
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   DEV_RESOURCES_VERSION: 1.7
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"
 jobs:
   publish:
     if: github.repository == 'locationtech/geowave'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-24.04
     name: Publish Artifacts and Docs
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -22,24 +30,18 @@ jobs:
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
-    - name: Set up JDK 1.8
-      uses: joschi/setup-jdk@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
       with:
-        java-version: '8'  
-        architecture: x64  
+        distribution: temurin
+        java-version: '8'
+        cache: maven
 
-    - name: Cache resources
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-geowave-resources
-      with:
-        key:  ${{ runner.os }}-Publish
-        path: ~/.m2
 
     - name: Install Local Artifacts
-      run: mvn install -B -DskipTests -Dspotbugs.skip
+      run: ./mvnw install -B -DskipTests -Dspotbugs.skip
 
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
@@ -65,10 +67,10 @@ jobs:
         args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
 
     - name: Build HTML Docs
-      run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
+      run: ./mvnw -P html -pl docs install -DskipTests -Dspotbugs.skip
 
     - name: Build Aggregate Javadocs
-      run: mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
+      run: ./mvnw javadoc:aggregate -B -DskipTests -Dspotbugs.skip
 
     - name: Build Python Docs
       run: ./.utility/build-python-docs.sh

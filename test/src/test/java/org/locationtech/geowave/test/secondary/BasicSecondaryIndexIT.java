@@ -30,12 +30,10 @@ public class BasicSecondaryIndexIT extends AbstractSecondaryIndexIT {
       value = {
           GeoWaveStoreType.ACCUMULO,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.BIGTABLE,
           // TODO: Cassandra seems to have inconsistencies passing this IT
           // GeoWaveStoreType.CASSANDRA,
           // TODO: DynamoDB disabled, because it takes abnormally long on this test (~500s)
           // GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
       // testLocalIngestAndQuerySpatialAndSpatialTemporal sporadically fails on

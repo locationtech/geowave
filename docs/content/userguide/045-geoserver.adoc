@@ -54,18 +54,6 @@ These options are available for Accumulo data stores.
 | password                          | Accumulo user's password                                         |
 |======================
 
-==== Bigtable Data Store Configuration
-
-These options are available for Bigtable data stores.
-
-[options="header", cols="30%,45%,25%"]
-|======================
-| Name                              | Description                                                      | Constraints
-| scanCacheSize                     | The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory) |
-| projectId                         | The Bigtable project to connect to                               |
-| instanceId                        | The Bigtable instance to connect to                              |
-|======================
-
 ==== Cassandra Data Store Configuration
 
 These options are available for Cassandra data stores.
@@ -106,16 +94,6 @@ These options are available for HBase data stores.
 | scanCacheSize                      | The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory) |
 | disableVerifyCoprocessors          | Disables coprocessor verification, which ensures that coprocessors have been added to the HBase table prior to executing server-side operations |
 | coprocessorJar                     | Path (HDFS URL) to the JAR containing coprocessor classes         |
-|======================
-
-==== Kudu Data Store Configuration
-
-These options are available for Kudu data stores.
-
-[options="header", cols="30%,45%,25%"]
-|======================
-| Name                               | Description                                                       | Constraints
-| kuduMaster                         | A URL for the Kudu master node                                    |
 |======================
 
 ==== Redis Data Store Configuration

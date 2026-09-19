@@ -10,11 +10,6 @@ Commands that stand up standalone stores for testing and debug purposes.
 
 include::manpages/util/accumulo/geowave-runserver.txt[]
 
-[[bigtable-runserver]]
-=== Run Standalone Bigtable
-
-include::manpages/util/bigtable/geowave-runbigtable.txt[]
-
 [[cassandra-runserver]]
 === Run Standalone Cassandra
 
@@ -29,11 +24,6 @@ include::manpages/util/dynamodb/geowave-rundynamodb.txt[]
 === Run Standalone HBase
 
 include::manpages/util/hbase/geowave-runhbase.txt[]
-
-[[kudu-runserver]]
-=== Run Standalone Kudu
-
-include::manpages/util/kudu/geowave-runkudu.txt[]
 
 [[redis-runserver]]
 === Run Standalone Redis

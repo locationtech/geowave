@@ -23,8 +23,8 @@ import org.locationtech.jts.geom.Point;
  * Covers the properties that H3 binning is expected to hold, independent of the H3 library version.
  *
  * <p> Under h3 3.x these could not all be satisfied: {@code polyfill} returned only cells whose
- * centre fell inside the polygon, so coverage was an under-approximation that was compensated for by
- * buffering the input by an approximate edge length. h3 4.x's
+ * centre fell inside the polygon, so coverage was an under-approximation that was compensated for
+ * by buffering the input by an approximate edge length. h3 4.x's
  * {@code polygonToCellsExperimental(..., containment_overlapping)} returns every cell the polygon
  * touches, so binning is now both sound and complete and the buffering is gone.
  */
@@ -70,8 +70,8 @@ public class H3BinningHelperTest {
 
   /**
    * Bin ids are the on-disk key space for every stored statistic, so a change here silently
-   * invalidates existing data rather than failing loudly. These are the canonical H3 indexes for the
-   * fixture point and must not drift across library upgrades.
+   * invalidates existing data rather than failing loudly. These are the canonical H3 indexes for
+   * the fixture point and must not drift across library upgrades.
    */
   @Test
   public void cellIdsAreStable() {

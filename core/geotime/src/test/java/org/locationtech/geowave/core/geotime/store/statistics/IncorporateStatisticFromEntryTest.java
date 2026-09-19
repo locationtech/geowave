@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.statistics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
@@ -29,15 +30,16 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
 /**
- * Regression coverage for {@code DataStore.incorporateStatisticFromEntry} against a binning strategy
- * whose weighting is bin-dependent.
+ * Regression coverage for {@code DataStore.incorporateStatisticFromEntry} against a binning
+ * strategy whose weighting is bin-dependent.
  *
- * <p> The failure mode this guards against is computing a single {@link
- * org.locationtech.geowave.core.store.api.StatisticValue} with no bin set and then incorporating
- * that same instance into every bin. {@link SpatialFieldValueBinningStrategy#getWeight} starts from
- * a weight of 1 and refines it by walking the bin's bytes, so an unset bin leaves the loop body
- * unexecuted and yields a weight of 1 for every bin. A geometry spanning N cells then contributes a
- * full count to each of them rather than its share, inflating the total N-fold.
+ * <p> The failure mode this guards against is computing a single
+ * {@link org.locationtech.geowave.core.store.api.StatisticValue} with no bin set and then
+ * incorporating that same instance into every bin.
+ * {@link SpatialFieldValueBinningStrategy#getWeight} starts from a weight of 1 and refines it by
+ * walking the bin's bytes, so an unset bin leaves the loop body unexecuted and yields a weight of 1
+ * for every bin. A geometry spanning N cells then contributes a full count to each of them rather
+ * than its share, inflating the total N-fold.
  */
 public class IncorporateStatisticFromEntryTest {
 
@@ -93,6 +95,13 @@ public class IncorporateStatisticFromEntryTest {
         new SpatialIndexBuilder().createIndex());
   }
 
+  // The in-memory store is cached statically per namespace, and these tests do not set one, so
+  // anything left behind is visible to every other test in the JVM.
+  @After
+  public void tearDown() {
+    dataStore.deleteAll();
+  }
+
   @Test
   public void weightsAreComputedPerBinRatherThanOncePerEntry() {
     final CountStatistic count = new CountStatistic(TYPE_NAME);
@@ -111,8 +120,7 @@ public class IncorporateStatisticFromEntryTest {
 
     long bins = 0;
     long total = 0;
-    try (CloseableIterator<Pair<ByteArray, Long>> it =
-        dataStore.getBinnedStatisticValues(count)) {
+    try (CloseableIterator<Pair<ByteArray, Long>> it = dataStore.getBinnedStatisticValues(count)) {
       while (it.hasNext()) {
         bins++;
         total += it.next().getValue();

@@ -105,12 +105,12 @@ count = datastore.aggregate(aggregation_query_builder.build())
 print(count)
 ```
 """
-from pkg_resources import get_distribution
-from pkg_resources import DistributionNotFound
+from importlib.metadata import version as _distribution_version
+from importlib.metadata import PackageNotFoundError
 
 try:
-    version = get_distribution('pygw').version
-except DistributionNotFound:
+    version = _distribution_version('pygw')
+except PackageNotFoundError:
     from maven_version import get_maven_version
 
     version = get_maven_version()

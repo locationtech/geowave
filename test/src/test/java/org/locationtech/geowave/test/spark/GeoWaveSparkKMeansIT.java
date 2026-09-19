@@ -53,11 +53,9 @@ public class GeoWaveSparkKMeansIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           // TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
           // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
       // out of memory (heap space) for filesystem on this test

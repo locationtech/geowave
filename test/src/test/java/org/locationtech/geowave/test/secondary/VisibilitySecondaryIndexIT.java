@@ -39,7 +39,6 @@ public class VisibilitySecondaryIndexIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM},

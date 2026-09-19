@@ -59,11 +59,9 @@ public class StatServicesIT extends BaseServiceIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM},

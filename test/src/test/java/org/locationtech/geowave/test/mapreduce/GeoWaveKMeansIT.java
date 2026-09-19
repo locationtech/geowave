@@ -65,7 +65,6 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveKMeansIT {
   @GeoWaveTestStore({
       GeoWaveStoreType.ACCUMULO,
-      GeoWaveStoreType.BIGTABLE,
       GeoWaveStoreType.REDIS,
       GeoWaveStoreType.ROCKSDB,
       GeoWaveStoreType.FILESYSTEM})

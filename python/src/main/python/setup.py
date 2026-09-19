@@ -11,9 +11,8 @@ def get_version():
         version = get_maven_version()
     except ModuleNotFoundError:
         # If maven version isn't found, it must be from the distribution
-        from pkg_resources import get_distribution
-        from pkg_resources import DistributionNotFound
-        version = get_distribution('pygw').version
+        from importlib.metadata import version as distribution_version
+        version = distribution_version('pygw')
     return version
 
 
@@ -44,6 +43,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
     ],
-    install_requires=['py4j==0.10.8.1', 'shapely==1.7'],
+    install_requires=['py4j==0.10.9.9', 'shapely>=2.0,<3'],
     python_requires='>=3,<3.8'  # py4j does not support python 3.8 yet
 )
