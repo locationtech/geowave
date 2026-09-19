@@ -1,13 +1,14 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/SETTINGS/1.0.0" xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
+        <!-- Sonatype Central Portal. SONATYPE_USERNAME/SONATYPE_PASSWORD are the
+             Portal user token, not the retired OSSRH JIRA account. -->
         <server>
-            <!-- Maven Central Deployment -->
-            <id>ossrh</id>
+            <id>central</id>
             <username>${env.SONATYPE_USERNAME}</username>
             <password>${env.SONATYPE_PASSWORD}</password>
         </server>
-        
+
         <server>
           <id>osgeo-release</id>
           <httpConfiguration>
@@ -21,7 +22,7 @@
 
     <profiles>
       <profile>
-        <id>ossrh</id>
+        <id>signing</id>
         <activation>
           <activeByDefault>true</activeByDefault>
         </activation>

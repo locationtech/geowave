@@ -16,7 +16,16 @@ env:
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"
 jobs:
   publish:
-    if: github.repository == 'locationtech/geowave'
+    # The runner label this job asked for was retired years ago, so it has not
+    # run since; the first push to master that can actually reach a runner would
+    # otherwise publish without anyone deciding to. Publishing stays off until a
+    # committer sets the PUBLISH_ON_MASTER repository variable to true, which
+    # should happen once the org.locationtech namespace is granted on the Central
+    # Portal and SONATYPE_USERNAME/SONATYPE_PASSWORD hold a Portal user token.
+    # Until then a committer can still publish deliberately with Run workflow.
+    if: >-
+      github.repository == 'locationtech/geowave' &&
+      (github.event_name == 'workflow_dispatch' || vars.PUBLISH_ON_MASTER == 'true')
     runs-on: ubuntu-24.04
     name: Publish Artifacts and Docs
     env:
