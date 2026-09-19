@@ -51,14 +51,7 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
       final ClassLoader parentCl,
       final String serversideLib) {
     if (hbaseMiniClusterCl == null) {
-      hbaseMiniClusterCl =
-          java.security.AccessController.doPrivileged(
-              new java.security.PrivilegedAction<ClassLoader>() {
-                @Override
-                public ClassLoader run() {
-                  return new HBaseMiniClusterClassLoader(parentCl, serversideLib);
-                }
-              });
+      hbaseMiniClusterCl = new HBaseMiniClusterClassLoader(parentCl, serversideLib);
     }
     return hbaseMiniClusterCl;
   }

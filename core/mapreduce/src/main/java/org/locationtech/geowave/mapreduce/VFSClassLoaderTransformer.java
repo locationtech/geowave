@@ -46,14 +46,7 @@ public class VFSClassLoaderTransformer implements ClassLoaderTransformerSpi {
         fileUrls[i] = fileList.get(i);
       }
 
-      return java.security.AccessController.doPrivileged(
-          new java.security.PrivilegedAction<URLClassLoader>() {
-            @Override
-            public URLClassLoader run() {
-              final URLClassLoader ucl = new URLClassLoader(fileUrls, cl);
-              return ucl;
-            }
-          });
+      return new URLClassLoader(fileUrls, cl);
     }
     return null;
   }
