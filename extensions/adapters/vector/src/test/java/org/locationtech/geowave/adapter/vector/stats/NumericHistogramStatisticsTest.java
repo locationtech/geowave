@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.FastMath;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -224,7 +224,7 @@ public class NumericHistogramStatisticsTest {
       } else if (i == 225) {
         next = Integer.MIN_VALUE;
       } else {
-        next = (m * rand.nextDouble() * MathUtils.sign(rand.nextGaussian()));
+        next = (m * rand.nextDouble() * FastMath.signum(rand.nextGaussian()));
       }
       statValue2.entryIngested(dataAdapter, create(next));
       if (!Double.isNaN(next)) {
