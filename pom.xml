@@ -17,15 +17,13 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+	<!-- Releases go through central-publishing-maven-plugin in the release profile,
+		which intercepts deploy and needs no repository entry of its own. -->
 	<distributionManagement>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>central</id>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
 	</distributionManagement>
 	<scm>
 		<url>https://github.com/locationtech/geowave.git</url>
@@ -58,6 +56,7 @@
 	</developers>
 	<properties>
 		<geowave-dev-resources.version>1.7</geowave-dev-resources.version>
+		<central.publishing.version>0.11.0</central.publishing.version>
 		<spark.version>3.1.1</spark.version>
 		<uzaygezen.version>0.2</uzaygezen.version>
 		<jsonlib.version>2.4</jsonlib.version>
@@ -1642,13 +1641,8 @@
 			<url>https://repo.osgeo.org/repository/release/</url>
 		</repository>
 		<repository>
-			<id>geosolutions</id>
-			<name>GeoSolutions Repository</name>
-			<url>http://maven.geo-solutions.it</url>
-		</repository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>central-snapshots</id>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -1776,16 +1770,18 @@
 
 			<build>
 				<plugins>
-					<!-- To release to Maven central -->
+					<!-- To release to Maven central. OSSRH was retired on 2025-06-30; this
+						replaces nexus-staging-maven-plugin, and SONATYPE_USERNAME/SONATYPE_PASSWORD
+						must now be a Central Portal user token rather than JIRA credentials. -->
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.8</version>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>${central.publishing.version}</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<publishingServerId>central</publishingServerId>
+							<autoPublish>true</autoPublish>
+							<waitUntilPublished>true</waitUntilPublished>
 						</configuration>
 					</plugin>
 					<!-- To generate javadoc -->
