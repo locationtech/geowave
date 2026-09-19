@@ -16,7 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -44,7 +44,7 @@ public class GeoWaveOperationServiceWrapperTest {
     Mockito.when(operation.getMethod()).thenReturn(method);
     Mockito.when(operation.runAsync()).thenReturn(isAsync);
     Mockito.when(operation.successStatusIs200()).thenReturn(successStatusIs200);
-    Mockito.when(operation.computeResults(Matchers.any())).thenReturn(null);
+    Mockito.when(operation.computeResults(ArgumentMatchers.any())).thenReturn(null);
 
     return operation;
   }
