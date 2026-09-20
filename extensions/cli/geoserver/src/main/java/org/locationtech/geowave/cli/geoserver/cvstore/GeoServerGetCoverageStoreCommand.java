@@ -13,12 +13,13 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "get", parentOperation = CoverageStoreSection.class)
 @Parameters(commandDescription = "Get GeoServer CoverageStore info")
@@ -55,9 +56,12 @@ public class GeoServerGetCoverageStoreCommand extends GeoServerCommand<String> {
     final Response getCvgStoreResponse = geoserverClient.getCoverageStore(workspace, csName, false);
 
     if (getCvgStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject jsonResponse = JSONObject.fromObject(getCvgStoreResponse.getEntity());
-      final JSONObject cvgstore = jsonResponse.getJSONObject("coverageStore");
-      return "\nGeoServer coverage store info for '" + csName + "': " + cvgstore.toString(2);
+      final JsonNode jsonResponse = GeoServerJson.parse(getCvgStoreResponse.getEntity());
+      final JsonNode cvgstore = jsonResponse.get("coverageStore");
+      return "\nGeoServer coverage store info for '"
+          + csName
+          + "': "
+          + GeoServerJson.pretty(cvgstore);
     }
     final String errorMessage =
         "Error getting GeoServer coverage store info for '"

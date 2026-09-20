@@ -13,11 +13,11 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "list", parentOperation = WorkspaceSection.class)
 @Parameters(commandDescription = "List GeoServer workspaces")
@@ -38,11 +38,11 @@ public class GeoServerListWorkspacesCommand extends GeoServerCommand<List<String
     if (getWorkspacesResponse.getStatus() == Status.OK.getStatusCode()) {
       results.add("\nList of GeoServer workspaces:");
 
-      final JSONObject jsonResponse = JSONObject.fromObject(getWorkspacesResponse.getEntity());
+      final JsonNode jsonResponse = GeoServerJson.parse(getWorkspacesResponse.getEntity());
 
-      final JSONArray workspaces = jsonResponse.getJSONArray("workspaces");
+      final JsonNode workspaces = jsonResponse.get("workspaces");
       for (int i = 0; i < workspaces.size(); i++) {
-        final String wsName = workspaces.getJSONObject(i).getString("name");
+        final String wsName = GeoServerJson.text(workspaces.get(i), "name");
         results.add("  > " + wsName);
       }
 

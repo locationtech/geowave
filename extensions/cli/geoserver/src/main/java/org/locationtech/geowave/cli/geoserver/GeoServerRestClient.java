@@ -74,13 +74,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import com.beust.jcommander.internal.Console;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class GeoServerRestClient {
   private static GeoServerRestClient SINGLETON_INSTANCE;
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
-  private static final int defaultIndentation = 2;
 
   private static class DataAdapterInfo {
     String typeName;
@@ -320,11 +320,11 @@ public class GeoServerRestClient {
 
       final String descr =
           "Failed to add layer(s). Please use -a, or choose one of these layers with -id:";
-      final JSONObject jsonObj = getJsonFromAdapters(adapterInfoList, descr);
+      final ObjectNode jsonObj = getJsonFromAdapters(adapterInfoList, descr);
 
       LOGGER.debug(jsonObj.toString());
 
-      return Response.ok(jsonObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(jsonObj)).build();
     }
 
     // verify the workspace exists
@@ -551,29 +551,21 @@ public class GeoServerRestClient {
   /**
    * Get JSON object(s) from adapter list
    */
-  private JSONObject getJsonFromAdapters(
+  private ObjectNode getJsonFromAdapters(
       final ArrayList<DataAdapterInfo> adapterInfoList,
       final String description) {
-    final StringBuffer buf = new StringBuffer();
-
-    // If we made it this far, let's just iterate through the adapter IDs
-    // and build the JSON response data
-    buf.append("{'description':'" + description + "', " + "'layers':[");
-
-    for (int i = 0; i < adapterInfoList.size(); i++) {
-      final DataAdapterInfo info = adapterInfoList.get(i);
-
-      buf.append("{'id':'" + info.typeName + "',");
-      buf.append("'type':'" + (info.isRaster ? "raster" : "vector") + "'}");
-
-      if (i < (adapterInfoList.size() - 1)) {
-        buf.append(",");
-      }
+    final ArrayNode layers = GeoServerJson.array();
+    for (final DataAdapterInfo info : adapterInfoList) {
+      final ObjectNode layer = GeoServerJson.object();
+      layer.put("id", info.typeName);
+      layer.put("type", info.isRaster ? "raster" : "vector");
+      layers.add(layer);
     }
 
-    buf.append("]}");
-
-    return JSONObject.fromObject(buf.toString());
+    final ObjectNode result = GeoServerJson.object();
+    result.put("description", description);
+    result.set("layers", layers);
+    return result;
   }
 
   /**
@@ -589,12 +581,12 @@ public class GeoServerRestClient {
 
     final Response getWsResponse = getWorkspaces();
     if (getWsResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject jsonResponse = JSONObject.fromObject(getWsResponse.getEntity());
+      final JsonNode jsonResponse = GeoServerJson.parse(getWsResponse.getEntity());
 
-      final JSONArray workspaces = jsonResponse.getJSONArray("workspaces");
+      final JsonNode workspaces = jsonResponse.get("workspaces");
 
       for (int i = 0; i < workspaces.size(); i++) {
-        final String wsName = workspaces.getJSONObject(i).getString("name");
+        final String wsName = GeoServerJson.text(workspaces.get(i), "name");
 
         if (wsName.equals(workspace)) {
           return true;
@@ -617,16 +609,16 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the workspace names
-      final JSONArray workspaceArray =
+      final ArrayNode workspaceArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
+              GeoServerJson.parse(resp.readEntity(String.class)),
               "workspaces",
               "workspace");
 
-      final JSONObject workspacesObj = new JSONObject();
-      workspacesObj.put("workspaces", workspaceArray);
+      final ObjectNode workspacesObj = GeoServerJson.object();
+      workspacesObj.set("workspaces", workspaceArray);
 
-      return Response.ok(workspacesObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(workspacesObj)).build();
     }
 
     return resp;
@@ -650,7 +642,7 @@ public class GeoServerRestClient {
   }
 
   /**
-   * Get the string version of a datastore JSONObject from geoserver
+   * Get the string version of a datastore JSON object from geoserver
    */
   public Response getDatastore(
       final String workspaceName,
@@ -667,10 +659,10 @@ public class GeoServerRestClient {
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
 
-      final JSONObject datastore = JSONObject.fromObject(resp.readEntity(String.class));
+      final JsonNode datastore = GeoServerJson.parse(resp.readEntity(String.class));
 
       if (datastore != null) {
-        return Response.ok(datastore.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(datastore)).build();
       }
     }
 
@@ -689,16 +681,16 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the datastore names
-      final JSONArray datastoreArray =
+      final ArrayNode datastoreArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
+              GeoServerJson.parse(resp.readEntity(String.class)),
               "dataStores",
               "dataStore");
 
-      final JSONObject dsObj = new JSONObject();
-      dsObj.put("dataStores", datastoreArray);
+      final ObjectNode dsObj = GeoServerJson.object();
+      dsObj.set("dataStores", datastoreArray);
 
-      return Response.ok(dsObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(dsObj)).build();
     }
 
     return resp;
@@ -758,10 +750,10 @@ public class GeoServerRestClient {
             quietOnNotFound).request().get();
 
     if (resp.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject layer = JSONObject.fromObject(resp.readEntity(String.class));
+      final JsonNode layer = GeoServerJson.parse(resp.readEntity(String.class));
 
       if (layer != null) {
-        return Response.ok(layer.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(layer)).build();
       }
     }
 
@@ -789,14 +781,11 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the datastore names
-      final JSONArray layerArray =
-          getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
-              "layers",
-              "layer");
+      final ArrayNode layerArray =
+          getArrayEntryNames(GeoServerJson.parse(resp.readEntity(String.class)), "layers", "layer");
 
       // holder for simple layer info (when geowaveOnly = false)
-      final JSONArray layerInfoArray = new JSONArray();
+      final ArrayNode layerInfoArray = GeoServerJson.array();
 
       final Map<String, List<String>> namespaceLayersMap = new HashMap<>();
       final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
@@ -808,13 +797,13 @@ public class GeoServerRestClient {
         // kind
 
         if (include) { // just grab it...
-          layerInfoArray.add(layerArray.getJSONObject(i));
+          layerInfoArray.add(layerArray.get(i));
           continue; // and move on
         }
 
         // at this point, we are filtering somehow. get some more info
         // about the layer
-        final String name = layerArray.getJSONObject(i).getString("name");
+        final String name = GeoServerJson.text(layerArray.get(i), "name");
 
         final String layer = (String) getFeatureLayer(name, false).getEntity();
 
@@ -834,35 +823,32 @@ public class GeoServerRestClient {
 
           // filter on workspace?
           if (!wsFilter || ((ws != null) && ws.equals(workspaceName))) {
-            final JSONObject datastore =
-                JSONObject.fromObject(getDatastore(ds, ws, false).getEntity()).getJSONObject(
-                    "dataStore");
+            final JsonNode datastore =
+                GeoServerJson.parse(getDatastore(ds, ws, false).getEntity()).get("dataStore");
 
             // only process GeoWave layers
             if (geowaveOnly) {
               if ((datastore != null)
-                  && datastore.containsKey("type")
-                  && datastore.getString("type").startsWith("GeoWave Datastore")) {
+                  && datastore.has("type")
+                  && GeoServerJson.text(datastore, "type").startsWith("GeoWave Datastore")) {
 
-                JSONArray entryArray = null;
-                if (datastore.get("connectionParameters") instanceof JSONObject) {
-                  entryArray =
-                      datastore.getJSONObject("connectionParameters").getJSONArray("entry");
-                } else if (datastore.get("connectionParameters") instanceof JSONArray) {
-                  entryArray =
-                      datastore.getJSONArray("connectionParameters").getJSONObject(0).getJSONArray(
-                          "entry");
+                JsonNode entryArray = null;
+                final JsonNode connectionParameters = datastore.get("connectionParameters");
+                if ((connectionParameters != null) && connectionParameters.isObject()) {
+                  entryArray = connectionParameters.get("entry");
+                } else if ((connectionParameters != null) && connectionParameters.isArray()) {
+                  entryArray = connectionParameters.get(0).get("entry");
                 }
 
                 if (entryArray == null) {
                   LOGGER.error(
-                      "entry Array is null - didn't find a connectionParameters datastore object that was a JSONObject or JSONArray");
+                      "entry Array is null - didn't find a connectionParameters datastore object that was a JSON object or array");
                 } else {
                   // group layers by namespace
                   for (int j = 0; j < entryArray.size(); j++) {
-                    final JSONObject entry = entryArray.getJSONObject(j);
-                    final String key = entry.getString("@key");
-                    final String value = entry.getString("$");
+                    final JsonNode entry = entryArray.get(j);
+                    final String key = GeoServerJson.text(entry, "@key");
+                    final String value = GeoServerJson.text(entry, "$");
 
                     if (key.startsWith("gwNamespace")) {
                       if (namespaceLayersMap.containsKey(value)) {
@@ -878,7 +864,7 @@ public class GeoServerRestClient {
                 }
               }
             } else { // just get all the layers from this store
-              layerInfoArray.add(layerArray.getJSONObject(i));
+              layerInfoArray.add(layerArray.get(i));
             }
           }
         }
@@ -887,32 +873,32 @@ public class GeoServerRestClient {
       // Handle geowaveOnly response
       if (geowaveOnly) {
         // create the json object with layers sorted by namespace
-        final JSONArray layersArray = new JSONArray();
+        final ArrayNode layersArray = GeoServerJson.array();
         for (final Map.Entry<String, List<String>> kvp : namespaceLayersMap.entrySet()) {
-          final JSONArray layers = new JSONArray();
+          final ArrayNode layers = GeoServerJson.array();
 
           for (int i = 0; i < kvp.getValue().size(); i++) {
-            final JSONObject layerObj = new JSONObject();
+            final ObjectNode layerObj = GeoServerJson.object();
             layerObj.put("name", kvp.getValue().get(i));
             layers.add(layerObj);
           }
 
-          final JSONObject layersObj = new JSONObject();
+          final ObjectNode layersObj = GeoServerJson.object();
           layersObj.put("namespace", kvp.getKey());
-          layersObj.put("layers", layers);
+          layersObj.set("layers", layers);
 
           layersArray.add(layersObj);
         }
 
-        final JSONObject layersObj = new JSONObject();
-        layersObj.put("layers", layersArray);
+        final ObjectNode layersObj = GeoServerJson.object();
+        layersObj.set("layers", layersArray);
 
-        return Response.ok(layersObj.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(layersObj)).build();
       } else {
-        final JSONObject layersObj = new JSONObject();
-        layersObj.put("layers", layerInfoArray);
+        final ObjectNode layersObj = GeoServerJson.object();
+        layersObj.set("layers", layerInfoArray);
 
-        return Response.ok(layersObj.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(layersObj)).build();
       }
     }
 
@@ -997,16 +983,13 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the style names
-      final JSONArray styleArray =
-          getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
-              "styles",
-              "style");
+      final ArrayNode styleArray =
+          getArrayEntryNames(GeoServerJson.parse(resp.readEntity(String.class)), "styles", "style");
 
-      final JSONObject stylesObj = new JSONObject();
-      stylesObj.put("styles", styleArray);
+      final ObjectNode stylesObj = GeoServerJson.object();
+      stylesObj.set("styles", styleArray);
 
-      return Response.ok(stylesObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(stylesObj)).build();
     }
 
     return resp;
@@ -1057,10 +1040,10 @@ public class GeoServerRestClient {
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
 
-      final JSONObject cvgstore = JSONObject.fromObject(resp.readEntity(String.class));
+      final JsonNode cvgstore = GeoServerJson.parse(resp.readEntity(String.class));
 
       if (cvgstore != null) {
-        return Response.ok(cvgstore.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(cvgstore)).build();
       }
     }
 
@@ -1079,16 +1062,16 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the datastore names
-      final JSONArray coveragesArray =
+      final ArrayNode coveragesArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
+              GeoServerJson.parse(resp.readEntity(String.class)),
               "coverageStores",
               "coverageStore");
 
-      final JSONObject dsObj = new JSONObject();
-      dsObj.put("coverageStores", coveragesArray);
+      final ObjectNode dsObj = GeoServerJson.object();
+      dsObj.set("coverageStores", coveragesArray);
 
-      return Response.ok(dsObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(dsObj)).build();
     }
 
     return resp;
@@ -1158,16 +1141,16 @@ public class GeoServerRestClient {
       resp.bufferEntity();
 
       // get the datastore names
-      final JSONArray coveragesArray =
+      final ArrayNode coveragesArray =
           getArrayEntryNames(
-              JSONObject.fromObject(resp.readEntity(String.class)),
+              GeoServerJson.parse(resp.readEntity(String.class)),
               "coverages",
               "coverage");
 
-      final JSONObject dsObj = new JSONObject();
-      dsObj.put("coverages", coveragesArray);
+      final ObjectNode dsObj = GeoServerJson.object();
+      dsObj.set("coverages", coveragesArray);
 
-      return Response.ok(dsObj.toString(defaultIndentation)).build();
+      return Response.ok(GeoServerJson.pretty(dsObj)).build();
     }
 
     return resp;
@@ -1194,10 +1177,10 @@ public class GeoServerRestClient {
     if (resp.getStatus() == Status.OK.getStatusCode()) {
       resp.bufferEntity();
 
-      final JSONObject cvg = JSONObject.fromObject(resp.readEntity(String.class));
+      final JsonNode cvg = GeoServerJson.parse(resp.readEntity(String.class));
 
       if (cvg != null) {
-        return Response.ok(cvg.toString(defaultIndentation)).build();
+        return Response.ok(GeoServerJson.pretty(cvg)).build();
       }
     }
 
@@ -1247,46 +1230,46 @@ public class GeoServerRestClient {
 
   // Internal methods
   protected String createFeatureTypeJson(final String featureTypeName) {
-    final JSONObject featTypeJson = new JSONObject();
+    final ObjectNode featTypeJson = GeoServerJson.object();
 
     featTypeJson.put("name", featureTypeName);
 
-    final JSONObject jsonObj = new JSONObject();
-    jsonObj.put("featureType", featTypeJson);
+    final ObjectNode jsonObj = GeoServerJson.object();
+    jsonObj.set("featureType", featTypeJson);
 
     return jsonObj.toString();
   }
 
-  protected JSONArray getArrayEntryNames(
-      JSONObject jsonObj,
+  protected ArrayNode getArrayEntryNames(
+      JsonNode jsonObj,
       final String firstKey,
       final String secondKey) {
     // get the top level object/array
-    if (jsonObj.get(firstKey) instanceof JSONObject) {
-      jsonObj = jsonObj.getJSONObject(firstKey);
-    } else if (jsonObj.get(firstKey) instanceof JSONArray) {
-      final JSONArray tempArray = jsonObj.getJSONArray(firstKey);
-      if (tempArray.size() > 0) {
-        if (tempArray.get(0) instanceof JSONObject) {
-          jsonObj = tempArray.getJSONObject(0);
+    final JsonNode first = jsonObj.get(firstKey);
+    if ((first != null) && first.isObject()) {
+      jsonObj = first;
+    } else if ((first != null) && first.isArray()) {
+      if (first.size() > 0) {
+        if (first.get(0).isObject()) {
+          jsonObj = first.get(0);
         } else {
           // empty list!
-          return new JSONArray();
+          return GeoServerJson.array();
         }
       }
     }
 
     // get the sub level object/array
-    final JSONArray entryArray = new JSONArray();
-    if (jsonObj.get(secondKey) instanceof JSONObject) {
-      final JSONObject entry = new JSONObject();
-      entry.put("name", jsonObj.getJSONObject(secondKey).getString("name"));
+    final ArrayNode entryArray = GeoServerJson.array();
+    final JsonNode second = jsonObj.get(secondKey);
+    if ((second != null) && second.isObject()) {
+      final ObjectNode entry = GeoServerJson.object();
+      entry.put("name", GeoServerJson.text(second, "name"));
       entryArray.add(entry);
-    } else if (jsonObj.get(secondKey) instanceof JSONArray) {
-      final JSONArray entries = jsonObj.getJSONArray(secondKey);
-      for (int i = 0; i < entries.size(); i++) {
-        final JSONObject entry = new JSONObject();
-        entry.put("name", entries.getJSONObject(i).getString("name"));
+    } else if ((second != null) && second.isArray()) {
+      for (int i = 0; i < second.size(); i++) {
+        final ObjectNode entry = GeoServerJson.object();
+        entry.put("name", GeoServerJson.text(second.get(i), "name"));
         entryArray.add(entry);
       }
     }
@@ -1302,12 +1285,12 @@ public class GeoServerRestClient {
       final String authDataUrl,
       final String queryIndexStrategy,
       final boolean enabled) {
-    final JSONObject dataStore = new JSONObject();
+    final ObjectNode dataStore = GeoServerJson.object();
     dataStore.put("name", name);
     dataStore.put("type", GeoServerConfig.DISPLAY_NAME_PREFIX + geowaveStoreType);
     dataStore.put("enabled", Boolean.toString(enabled));
 
-    final JSONObject connParams = new JSONObject();
+    final ObjectNode connParams = GeoServerJson.object();
 
     if (geowaveStoreConfig != null) {
       for (final Entry<String, String> e : geowaveStoreConfig.entrySet()) {
@@ -1323,10 +1306,10 @@ public class GeoServerRestClient {
       connParams.put("Authorization Data URL", authDataUrl);
     }
 
-    dataStore.put("connectionParameters", connParams);
+    dataStore.set("connectionParameters", connParams);
 
-    final JSONObject jsonObj = new JSONObject();
-    jsonObj.put("dataStore", dataStore);
+    final ObjectNode jsonObj = GeoServerJson.object();
+    jsonObj.set("dataStore", dataStore);
 
     return jsonObj.toString();
   }

@@ -10,12 +10,9 @@
 	<name>Geowave GeoServer Commandline Tools</name>
 	<description>Geowave Commandline Tools For Managing GeoServer Layers and Data Stores</description>
 	<dependencies>
-		<!-- json-lib used to arrive through core/cli, which no longer uses it. This
-			module is the last consumer and is next in line to move to Jackson. -->
 		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<classifier>jdk15</classifier>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>

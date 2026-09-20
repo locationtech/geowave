@@ -11,11 +11,12 @@ package org.locationtech.geowave.cli.geoserver.featurelayer;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
+import org.locationtech.geowave.cli.geoserver.GeoServerJson;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @GeowaveOperation(name = "list", parentOperation = FeatureLayerSection.class)
 @Parameters(commandDescription = "List GeoServer feature layers")
@@ -55,8 +56,8 @@ public class GeoServerListFeatureLayersCommand extends GeoServerCommand<String> 
         geoserverClient.getFeatureLayers(workspace, datastore, geowaveOnly);
 
     if (listLayersResponse.getStatus() == Status.OK.getStatusCode()) {
-      final JSONObject listObj = JSONObject.fromObject(listLayersResponse.getEntity());
-      return "\nGeoServer layer list: " + listObj.toString(2);
+      final JsonNode listObj = GeoServerJson.parse(listLayersResponse.getEntity());
+      return "\nGeoServer layer list: " + GeoServerJson.pretty(listObj);
     }
     final String errorMessage =
         "Error getting GeoServer layer list: "

@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "add", parentOperation = FeatureLayerSection.class)
 @Parameters(commandDescription = "Add a GeoServer feature layer")
@@ -63,8 +62,12 @@ public class GeoServerAddFeatureLayerCommand extends GeoServerCommand<String> {
         geoserverClient.addFeatureLayer(workspace, datastore, layerName, null);
 
     if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
-      final JSONObject listObj = JSONObject.fromObject(addLayerResponse.getEntity());
-      return "\nGeoServer add layer response " + layerName + ":" + listObj.toString(2);
+      // This response comes straight back from Jersey rather than through the
+      // client's own Response.ok(String), so the entity is an unread stream.
+      return "\nGeoServer add layer response "
+          + layerName
+          + ":"
+          + addLayerResponse.readEntity(String.class);
     }
     final String errorMessage =
         "Error adding GeoServer layer "
