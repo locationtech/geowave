@@ -10,8 +10,6 @@ package org.locationtech.geowave.test.services;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
@@ -125,21 +123,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
         gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
         gsWebapp.setResourceBase(GEOSERVER_WAR_DIR);
 
-        final WebAppClassLoader classLoader =
-            AccessController.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
-              @Override
-              public WebAppClassLoader run() {
-                try {
-                  return new WebAppClassLoader(gsWebapp);
-                } catch (final IOException e) {
-                  LOGGER.error("Unable to create new classloader", e);
-                  return null;
-                }
-              }
-            });
-        if (classLoader == null) {
-          throw new IOException("Unable to create classloader");
-        }
+        final WebAppClassLoader classLoader = new WebAppClassLoader(gsWebapp);
         final String classpath = System.getProperty("java.class.path").replace(":", ";");
         final String[] individualEntries = classpath.split(";");
         final StringBuffer str = new StringBuffer();
