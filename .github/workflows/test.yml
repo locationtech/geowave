@@ -60,13 +60,15 @@ jobs:
     continue-on-error: true
     env:
       IT_ONLY: false
-      # spotbugs 3.1.10 cannot load on JDK 9+, which would mask whatever this
-      # job is actually meant to reveal. --fail-at-end because the point of this
-      # job is to enumerate what Java 21 breaks, and stopping at the first module
-      # reveals one problem per run: today core/ingest fails and the forty-odd
-      # modules behind it are never reached. MAVEN_ARGS needs Maven 3.9+, which
-      # the wrapper pins.
-      MAVEN_ARGS: -Dspotbugs.skip --fail-at-end
+      # spotbugs 3.1.10 cannot load on JDK 9+, which would mask whatever this job
+      # is meant to reveal. The point of the job is to enumerate everything Java
+      # 21 breaks in one run, so a failing test must not stop the reactor:
+      # --fail-at-end alone still skips whatever depends on the failed module,
+      # and core/ingest failing is enough to hide a large part of the tree.
+      # maven.test.failure.ignore lets every module run; the step after this one
+      # restores the signal by reading the surefire reports. MAVEN_ARGS needs
+      # Maven 3.9+, which the wrapper pins.
+      MAVEN_ARGS: -Dspotbugs.skip --fail-at-end -Dmaven.test.failure.ignore=true
     steps:
       - uses: actions/checkout@v4
 
@@ -79,6 +81,31 @@ jobs:
 
       - name: Run
         run: ./.utility/run-tests.sh
+
+      - name: Summarize what Java 21 broke
+        if: always()
+        run: |
+          failed=$(grep -rlE '^Tests run:.*(Failures: [1-9]|Errors: [1-9])' \
+            --include='*.txt' . 2>/dev/null | sort || true)
+          if [ -z "$failed" ]; then
+            echo "No test failures on JDK 21." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo "### Tests failing on JDK 21"
+            echo
+            for report in $failed; do
+              echo "<details><summary>$(basename "$report" .txt)</summary>"
+              echo
+              echo '```'
+              head -40 "$report"
+              echo '```'
+              echo
+              echo "</details>"
+            done
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "$(echo "$failed" | wc -l) test classes failed on JDK 21" >&2
+          exit 1
 
   python-tests:
     runs-on: ubuntu-24.04
