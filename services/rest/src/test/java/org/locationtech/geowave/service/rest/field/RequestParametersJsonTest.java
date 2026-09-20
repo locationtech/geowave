@@ -14,19 +14,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class RequestParametersJsonTest {
 
   private RequestParametersJson classUnderTest;
 
-  private JSONObject testJSON;
+  private static final ObjectMapper MAPPER = new ObjectMapper();
+
+  private ObjectNode testJSON;
 
   private final int testNumber = 42;
   private final String testKey = "foo";
@@ -66,7 +69,7 @@ public class RequestParametersJsonTest {
 
   @Test
   public void getValueReturnsJsonString() throws Exception {
-    testJSON = new JSONObject();
+    testJSON = MAPPER.createObjectNode();
     testJSON.put(testKey, testString);
     final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
@@ -76,7 +79,7 @@ public class RequestParametersJsonTest {
 
   @Test
   public void getStringReturnsJsonString() throws Exception {
-    testJSON = new JSONObject();
+    testJSON = MAPPER.createObjectNode();
 
     testJSON.put(testKey, testString);
     final Representation request = mockedJsonRequest(testJSON.toString());
@@ -87,9 +90,9 @@ public class RequestParametersJsonTest {
 
   @Test
   public void getListReturnsJsonList() throws Exception {
-    testJSON = new JSONObject();
+    testJSON = MAPPER.createObjectNode();
 
-    testJSON.put(testKey, testList);
+    testJSON.set(testKey, MAPPER.valueToTree(testList));
     final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
@@ -98,9 +101,9 @@ public class RequestParametersJsonTest {
 
   @Test
   public void getArrayReturnsJsonArray() throws Exception {
-    testJSON = new JSONObject();
+    testJSON = MAPPER.createObjectNode();
 
-    testJSON.put(testKey, testArray);
+    testJSON.set(testKey, MAPPER.valueToTree(testArray));
     final Representation request = mockedJsonRequest(testJSON.toString());
     classUnderTest = new RequestParametersJson(request);
 
@@ -109,7 +112,7 @@ public class RequestParametersJsonTest {
 
   @Test
   public void getValueReturnsJsonNumber() throws Exception {
-    testJSON = new JSONObject();
+    testJSON = MAPPER.createObjectNode();
 
     testJSON.put(testKey, testNumber);
     final Representation request = mockedJsonRequest(testJSON.toString());
