@@ -9,8 +9,13 @@ echo -e "Building javadocs...\n"
 echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
 echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
-# Build the dev-resources jar
-if ! curl --head --silent --fail  https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom 2> /dev/null;
+# dev-resources is consumed as a plugin dependency, so it has to already exist
+# in a repository before the reactor starts -- it cannot be a reactor module.
+# Publish it only when this version is not out there yet. Ask Maven rather than
+# a Nexus REST endpoint; OSSRH was retired on 2025-06-30.
+if ! "$MVN" -q -B dependency:get \
+      -Dartifact=org.locationtech.geowave:geowave-dev-resources:${DEV_RESOURCES_VERSION}:pom \
+      -Dtransitive=false > /dev/null 2>&1;
   then
     pushd dev-resources
     echo -e "Deploying dev-resources..."

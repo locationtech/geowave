@@ -22,8 +22,8 @@ To use GeoWave snapshots the following repository should be added to the POM fil
 [source, xml]
 ----
 <repository>
-  <id>ossrh</id>
-  <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  <id>central-snapshots</id>
+  <url>https://central.sonatype.com/repository/maven-snapshots/</url>
   <releases>
     <enabled>false</enabled>
   </releases>
@@ -32,3 +32,13 @@ To use GeoWave snapshots the following repository should be added to the POM fil
   </snapshots>
 </repository>
 ----
+==== Publishing
+
+GeoWave publishes through the https://central.sonatype.com/[Sonatype Central Portal]. OSSRH (`oss.sonatype.org`) was retired on 30 June 2025, so the older `nexus-staging-maven-plugin` path no longer works.
+
+Publishing happens automatically from the `Publish` workflow on every push to `master`, which runs `.utility/publish-artifacts.sh`. That script signs the artifacts with the CI GPG key and runs `mvn deploy -Prelease`; the `release` profile activates `central-publishing-maven-plugin`, which uploads a deployment bundle to the Portal and waits for it to be published.
+
+Two things must be in place for this to work:
+
+* The `SONATYPE_USERNAME` and `SONATYPE_PASSWORD` repository secrets must hold a Central Portal *user token*, not the retired OSSRH account. Tokens are generated from the Portal account page.
+* The `org.locationtech` namespace must be verified on the Portal for the publishing account. LocationTech namespaces are administered by the Eclipse Foundation rather than by the project, so obtaining publishing rights goes through the EMO.
