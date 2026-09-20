@@ -16,7 +16,7 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -80,7 +80,7 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicRasterIT.class);
-  private static final double DELTA = MathUtils.EPSILON;
+  private static final double DELTA = Precision.EPSILON;
   private static long startMillis;
 
   @Override

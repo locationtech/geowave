@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.math.util.MathUtils;
 import org.apache.commons.math3.geometry.Vector;
 import org.apache.commons.math3.geometry.euclidean.twod.Euclidean2D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.commons.math3.util.Precision;
 import org.locationtech.geowave.analytic.clustering.NeighborData;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
@@ -255,7 +255,7 @@ public class GeometryHullTool {
       for (final Coordinate candidate : innerPoints) {
         final double dist = calcDistance(edge.start, edge.end, candidate);
         // on the hull
-        if (MathUtils.equals(dist, 0.0, 0.000000001)) {
+        if (Precision.equals(dist, 0.0, 0.000000001)) {
           score = 0.0;
           selectedCandidate = candidate;
           break;
@@ -367,7 +367,7 @@ public class GeometryHullTool {
       lastEdge = edge;
       NeighborData<Coordinate> candidate = edge.getPoints().pollFirst();
       while (candidate != null) {
-        if (!MathUtils.equals(candidate.getDistance(), 0.0, 0.000000001)) {
+        if (!Precision.equals(candidate.getDistance(), 0.0, 0.000000001)) {
           final Coordinate selectedCandidate = candidate.getElement();
           final double eh = edge.distance;
           final double startToCandidate =

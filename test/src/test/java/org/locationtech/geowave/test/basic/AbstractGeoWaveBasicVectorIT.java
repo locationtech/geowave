@@ -27,7 +27,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
@@ -817,22 +817,22 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         "The min X of the bounding box stat does not match the expected value",
         cachedValue.minX,
         bboxStat.getMinX(),
-        MathUtils.EPSILON);
+        Precision.EPSILON);
     Assert.assertEquals(
         "The min Y of the bounding box stat does not match the expected value",
         cachedValue.minY,
         bboxStat.getMinY(),
-        MathUtils.EPSILON);
+        Precision.EPSILON);
     Assert.assertEquals(
         "The max X of the bounding box stat does not match the expected value",
         cachedValue.maxX,
         bboxStat.getMaxX(),
-        MathUtils.EPSILON);
+        Precision.EPSILON);
     Assert.assertEquals(
         "The max Y of the bounding box stat does not match the expected value",
         cachedValue.maxY,
         bboxStat.getMaxY(),
-        MathUtils.EPSILON);
+        Precision.EPSILON);
   }
 
   protected static class StatisticsCache implements IngestCallback<SimpleFeature> {

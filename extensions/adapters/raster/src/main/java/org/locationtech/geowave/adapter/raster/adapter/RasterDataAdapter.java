@@ -46,7 +46,7 @@ import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -516,7 +516,7 @@ public class RasterDataAdapter implements
       // also try to find the one entry that is closest to 1.0 without
       // going over (this will be the full resolution level)
       // add an epsilon to try to catch any roundoff error
-      final double fullRes = 1.0 + MathUtils.EPSILON;
+      final double fullRes = 1.0 + Precision.EPSILON;
       final Entry<Double, SubStrategy> fullResEntry = substrategyMap.floorEntry(fullRes);
       final List<SubStrategy> pyramidLevels = new ArrayList<>();
       if (fullResEntry != null) {
