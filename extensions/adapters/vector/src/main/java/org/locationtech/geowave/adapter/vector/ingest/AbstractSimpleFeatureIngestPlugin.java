@@ -11,7 +11,7 @@ package org.locationtech.geowave.adapter.vector.ingest;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;

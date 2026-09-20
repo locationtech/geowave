@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.UUID;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.jaitools.jts.CoordinateSequence2D;

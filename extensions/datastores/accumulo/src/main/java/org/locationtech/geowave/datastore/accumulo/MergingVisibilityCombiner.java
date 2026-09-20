@@ -17,7 +17,7 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.accumulo.core.security.ColumnVisibility;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;

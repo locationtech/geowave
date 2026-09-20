@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.store.query;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.OptimalExpressionQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
