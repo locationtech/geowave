@@ -47,6 +47,40 @@ public class DynamoDBUtilsTest {
     verifySorted(encodedBinary);
   }
 
+  /**
+   * The encoding preserves order only between keys of the same length. Base64 pads with '=', which
+   * this alphabet maps to itself at 0x3D -- between '9' (0x39) and 'A' (0x41) rather than below
+   * everything -- so a padded short key can sort above a longer one that is smaller in raw form.
+   *
+   * <p> Nothing stores mixed-length sort keys in one partition today: tiered indexes put the tier
+   * byte in the <em>partition</em> key, so every sort key within a DynamoDB partition comes from
+   * the same space filling curve and is the same length, and a query always pins the partition with
+   * an equality condition. This records the constraint that makes that safe, so that a future index
+   * strategy mixing lengths within a partition has something to trip over.
+   */
+  @Test
+  public void encodingIsOrderPreservingOnlyWithinALength() {
+    final byte[] shorter = new byte[] {(byte) 0x97};
+    final byte[] longer =
+        new byte[] {(byte) 0x97, 0x01, (byte) 0xcc, (byte) 0xc5, 0x52, (byte) 0xc4, 0x06};
+    assertTrue("raw: the longer key is greater", compareUnsigned(shorter, longer) < 0);
+    assertTrue(
+        "encoded: the padded shorter key sorts above it, which is the whole caveat",
+        compareUnsigned(
+            DynamoDBUtils.encodeSortableBase64(shorter),
+            DynamoDBUtils.encodeSortableBase64(longer)) > 0);
+  }
+
+  private static int compareUnsigned(final byte[] a, final byte[] b) {
+    for (int i = 0; (i < a.length) && (i < b.length); i++) {
+      final int diff = (a[i] & 0xFF) - (b[i] & 0xFF);
+      if (diff != 0) {
+        return diff;
+      }
+    }
+    return a.length - b.length;
+  }
+
   private void verifySorted(final List<byte[]> list) {
     byte[] last = null;
     for (final byte[] binary : list) {
