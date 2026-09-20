@@ -68,13 +68,11 @@
 		<geoserver.version>2.19.0</geoserver.version>
 		<accumulo.version>2.0.1</accumulo.version>
 		<thrift.version>0.12.0</thrift.version>
-		<bigtable.version>1.20.0</bigtable.version>
 		<cassandra.version>4.0.1</cassandra.version>
 		<redisson.version>3.15.5</redisson.version>
 		<rocksdb.version>6.19.3</rocksdb.version>
 		<cassandraclient.version>4.11.1</cassandraclient.version>
 		<cassandraunit.version>4.3.1.0</cassandraunit.version>
-		<kuduclient.version>1.14.0</kuduclient.version>
 		<grpc.version>1.38.0</grpc.version>
 		<netty.version>4.1.65.Final</netty.version>
 		<protobuf.version>3.17.1</protobuf.version>
@@ -122,7 +120,7 @@
 		<math3.version>3.6.1</math3.version>
 		<junit.version>4.13.2</junit.version>
 		<clearspring.version>2.9.6</clearspring.version>
-		<py4j.version>0.10.8.1</py4j.version>
+		<py4j.version>0.10.9.9</py4j.version>
 		<glassfish.el.version>3.0.1-b08</glassfish.el.version>
 		<paranamer.version>2.8</paranamer.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -495,6 +493,13 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -504,17 +509,6 @@
 			<dependency>
 				<groupId>org.locationtech.geowave</groupId>
 				<artifactId>geowave-cli-accumulo-embed</artifactId>
-				<version>${project.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.locationtech.geowave</groupId>
-				<artifactId>geowave-cli-bigtable-embed</artifactId>
 				<version>${project.version}</version>
 				<exclusions>
 					<exclusion>
@@ -535,6 +529,13 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -550,6 +551,13 @@
 				<artifactId>accumulo-test</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
@@ -565,6 +573,13 @@
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -575,11 +590,6 @@
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-shell</artifactId>
 				<version>${accumulo.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.cloud.bigtable</groupId>
-				<artifactId>bigtable-hbase-2.x-shaded</artifactId>
-				<version>${bigtable.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -1555,18 +1565,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<!-- for incrementing version numbers and tagging repositories To Use: 
 				0. Ensure all files checked into master (clean environment). Make sure you 
 				have access to both mvn and git on your command line, and you are in a terminal 
@@ -1676,6 +1674,36 @@
 	</pluginRepositories>
 	<profiles>
 		<profile>
+			<!-- spotbugs-maven-plugin 3.1.10 bundles a Groovy that cannot initialize on
+				JDK 9 or later: the mojo fails to load before it ever reads its own skip
+				parameter, so -Dspotbugs.skip alone cannot avoid it. Binding the execution
+				through a profile means the property deactivates the profile and the plugin
+				is never resolved at all, which is what -Dspotbugs.skip is expected to do.
+				This can go away once the analyzer is upgraded. -->
+			<id>spotbugs</id>
+			<activation>
+				<property>
+					<name>!spotbugs.skip</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>build-installer-plugin</id>
 			<properties>
 				<!-- standalone installer seems to work better at least on windows with 
@@ -1731,12 +1759,6 @@
 				<skipTests>true</skipTests>
 				<formatter.skip>true</formatter.skip>
 				<spotbugs.skip>true</spotbugs.skip>
-			</properties>
-		</profile>
-		<profile>
-			<id>compatibility</id>
-			<properties>
-				<accumulo.version>1.9.2</accumulo.version>
 			</properties>
 		</profile>
 		<profile>

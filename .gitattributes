@@ -4,6 +4,10 @@
 
 # Never modify line endings of our bash scripts
 *.sh -crlf
+mvnw -crlf
+
+# Windows batch files need CRLF
+*.cmd text eol=crlf
 
 #
 # The above will handle all files NOT found below

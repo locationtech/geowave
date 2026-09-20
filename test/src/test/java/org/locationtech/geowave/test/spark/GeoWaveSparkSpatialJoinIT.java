@@ -46,10 +46,8 @@ import org.slf4j.LoggerFactory;
 @GeoWaveTestStore(
     value = {
         GeoWaveStoreType.ACCUMULO,
-        GeoWaveStoreType.BIGTABLE,
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.CASSANDRA,
-        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB,
         GeoWaveStoreType.FILESYSTEM})

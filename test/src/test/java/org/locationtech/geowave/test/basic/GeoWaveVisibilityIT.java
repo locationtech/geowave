@@ -80,7 +80,6 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM},

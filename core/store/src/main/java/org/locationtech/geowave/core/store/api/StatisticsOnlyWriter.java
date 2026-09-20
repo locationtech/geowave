@@ -16,8 +16,8 @@ import java.io.Flushable;
  * themselves. This is useful for maintaining aggregate statistics from streaming data or external
  * sources without the overhead of storing all raw data.
  *
- * <p>Usage is identical to a regular {@link Writer}, but entries are only used to compute statistics
- * and are not stored:
+ * <p>Usage is identical to a regular {@link Writer}, but entries are only used to compute
+ * statistics and are not stored:
  *
  * <pre>
  * {@code
@@ -37,8 +37,8 @@ import java.io.Flushable;
  * </pre>
  *
  * <p>The writer automatically finds all statistics registered for the type, computes statistic
- * values from each entry, applies the statistic's binning strategy, and incorporates the values into
- * the appropriate bins, all without storing the entries themselves.
+ * values from each entry, applies the statistic's binning strategy, and incorporates the values
+ * into the appropriate bins, all without storing the entries themselves.
  *
  * @param <T> The type of entries to compute statistics from
  */
@@ -53,8 +53,9 @@ public interface StatisticsOnlyWriter<T> extends Closeable, Flushable {
   void write(T entry);
 
   /**
-   * Compute and incorporate statistics from multiple entries without storing the entries themselves.
-   * This is a convenience method equivalent to calling {@link #write(Object)} for each entry.
+   * Compute and incorporate statistics from multiple entries without storing the entries
+   * themselves. This is a convenience method equivalent to calling {@link #write(Object)} for each
+   * entry.
    *
    * @param entries the entries to compute statistics from (will not be stored)
    */

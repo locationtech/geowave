@@ -1,8 +1,10 @@
 #!/bin/bash
+
+MVN="$(cd "$(dirname "$0")/.." && pwd)/mvnw"
 set -ev
 
 echo -e "Building javadocs...\n"
-mvn javadoc:javadoc -B -DskipTests -Dspotbugs.skip
+"$MVN" javadoc:javadoc -B -DskipTests -Dspotbugs.skip
 
 echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
 echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
@@ -12,11 +14,11 @@ if ! curl --head --silent --fail  https://oss.sonatype.org/service/local/reposit
   then
     pushd dev-resources
     echo -e "Deploying dev-resources..."
-    mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+    "$MVN" deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
     popd
 fi
 echo -e "Deploying geowave artifacts..."
-mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+"$MVN" deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
 
 # Get the version from the build.properties file
 filePath=deploy/target/classes/build.properties

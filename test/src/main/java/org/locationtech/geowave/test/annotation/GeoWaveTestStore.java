@@ -13,12 +13,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.locationtech.geowave.test.AccumuloStoreTestEnvironment;
-import org.locationtech.geowave.test.BigtableStoreTestEnvironment;
 import org.locationtech.geowave.test.CassandraStoreTestEnvironment;
 import org.locationtech.geowave.test.DynamoDBStoreTestEnvironment;
 import org.locationtech.geowave.test.FileSystemStoreTestEnvironment;
 import org.locationtech.geowave.test.HBaseStoreTestEnvironment;
-import org.locationtech.geowave.test.KuduStoreTestEnvironment;
 import org.locationtech.geowave.test.RedisStoreTestEnvironment;
 import org.locationtech.geowave.test.RocksDBStoreTestEnvironment;
 import org.locationtech.geowave.test.StoreTestEnvironment;
@@ -46,10 +44,8 @@ public @interface GeoWaveTestStore {
   public static enum GeoWaveStoreType {
     DYNAMODB(DynamoDBStoreTestEnvironment.getInstance()),
     ACCUMULO(AccumuloStoreTestEnvironment.getInstance()),
-    BIGTABLE(BigtableStoreTestEnvironment.getInstance()),
     CASSANDRA(CassandraStoreTestEnvironment.getInstance()),
     HBASE(HBaseStoreTestEnvironment.getInstance()),
-    KUDU(KuduStoreTestEnvironment.getInstance()),
     REDIS(RedisStoreTestEnvironment.getInstance()),
     ROCKSDB(RocksDBStoreTestEnvironment.getInstance()),
     FILESYSTEM(FileSystemStoreTestEnvironment.getInstance());

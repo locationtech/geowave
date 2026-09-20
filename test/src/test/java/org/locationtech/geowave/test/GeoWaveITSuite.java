@@ -95,13 +95,9 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     VisibilitySecondaryIndexIT.class,
     GeoWaveStabilityIT.class,
     QueryOptionsIT.class,
-    // for now tests are taking too long in travis and landsatIT is a long test
-    // LandsatIT.class,
-    // these also help shave off some time
+    // these help shave off some time
     // DBScanIT.class,
     // GeoWaveNNIT.class,
-    // TODO AWS seems to have taken down LandSat 8 data, tests won't work
-    // CustomCRSLandsatIT.class,
     GeoWaveBasicRasterIT.class,
     GeoWaveBasicCustomCRSRasterIT.class,
     AttributesSubsetQueryIT.class,
