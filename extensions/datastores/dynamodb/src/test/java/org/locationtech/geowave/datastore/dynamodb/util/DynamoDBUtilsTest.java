@@ -52,11 +52,20 @@ public class DynamoDBUtilsTest {
    * this alphabet maps to itself at 0x3D -- between '9' (0x39) and 'A' (0x41) rather than below
    * everything -- so a padded short key can sort above a longer one that is smaller in raw form.
    *
-   * <p> Nothing stores mixed-length sort keys in one partition today: tiered indexes put the tier
-   * byte in the <em>partition</em> key, so every sort key within a DynamoDB partition comes from
-   * the same space filling curve and is the same length, and a query always pins the partition with
-   * an equality condition. This records the constraint that makes that safe, so that a future index
-   * strategy mixing lengths within a partition has something to trip over.
+   * <p> The text index stores mixed lengths in one partition and is affected.
+   * {@code TextIndexUtils.getForwardInsertionIds} uses a constant partition key and the raw text
+   * bytes as the sort key, so one partition holds every indexed string at whatever length it
+   * happens to be. Prefix searches against it lose rows at both ends of the range: a stored key
+   * that extends the query's start can encode below it, and one that extends the query's end can
+   * encode above it.
+   *
+   * <p> Tiered spatial indexes are not affected, because
+   * {@code BinnedSFCUtils.getSingleBinnedInsertionId} puts the tier byte in the <em>partition</em>
+   * key, so every sort key in one of those partitions comes from a single space filling curve at a
+   * single length.
+   *
+   * <p> Fixing this means an encoding that orders across lengths, which changes the stored key
+   * format and needs a migration. Until then this records the defect rather than hiding it.
    */
   @Test
   public void encodingIsOrderPreservingOnlyWithinALength() {
