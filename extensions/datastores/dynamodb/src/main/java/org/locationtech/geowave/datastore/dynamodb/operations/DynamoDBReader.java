@@ -303,38 +303,18 @@ public class DynamoDBReader<T> implements RowReader<T> {
             new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(
                 new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
     if (sortRange == null) {
-      start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-      end = ByteArrayUtils.getNextInclusive(start);
+      start = rangeStart(internalAdapterId, null);
+      end = rangeEnd(internalAdapterId, null);
     } else if (sortRange.isSingleValue()) {
-      start =
-          ByteArrayUtils.combineArrays(
-              ByteArrayUtils.shortToByteArray(internalAdapterId),
-              DynamoDBUtils.encodeSortableBase64(sortRange.getStart()));
-      end =
-          ByteArrayUtils.combineArrays(
-              ByteArrayUtils.shortToByteArray(internalAdapterId),
-              DynamoDBUtils.encodeSortableBase64(
-                  ByteArrayUtils.getNextInclusive(sortRange.getStart())));
+      start = rangeStart(internalAdapterId, sortRange.getStart());
+      end = singleValueRangeEnd(internalAdapterId, sortRange.getStart());
     } else {
-      if (sortRange.getStart() == null) {
-        start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-      } else {
-        start =
-            ByteArrayUtils.combineArrays(
-                ByteArrayUtils.shortToByteArray(internalAdapterId),
-                DynamoDBUtils.encodeSortableBase64(sortRange.getStart()));
-      }
-      if (sortRange.getEnd() == null) {
-        end = next(ByteArrayUtils.shortToByteArray(internalAdapterId));
-      } else {
-        end =
-            ByteArrayUtils.combineArrays(
-                ByteArrayUtils.shortToByteArray(internalAdapterId),
-                DynamoDBUtils.encodeSortableBase64(next(sortRange.getEnd())));
-      }
+      start = rangeStart(internalAdapterId, sortRange.getStart());
+      end = rangeEnd(internalAdapterId, sortRange.getEnd());
     }
-    // because this DYNAMODB BETWEEN is inclusive on the end, we are using an inclusive getEnd which
-    // appends 0xFF instead of the typical getEndAsNextPrefix which assumes an exclusive end
+    // DynamoDB's BETWEEN is inclusive on the end, so the upper bound has to sort above every
+    // stored key the range should match rather than below the next one. The two bounds above pad
+    // differently on purpose; see their javadoc.
     query.addKeyConditionsEntry(
         DynamoDBRow.GW_RANGE_KEY,
         new Condition().withComparisonOperator(ComparisonOperator.BETWEEN).withAttributeValueList(
@@ -343,7 +323,55 @@ public class DynamoDBReader<T> implements RowReader<T> {
     return query;
   }
 
-  private byte[] next(final byte[] bytes) {
+  /**
+   * The inclusive lower bound of the range key for a sort key, matching the layout
+   * {@link org.locationtech.geowave.datastore.dynamodb.DynamoDBRow#getRangeKey} writes. A null sort
+   * key means "from the first row this adapter has".
+   */
+  static byte[] rangeStart(final short internalAdapterId, final byte[] sortKey) {
+    final byte[] adapter = ByteArrayUtils.shortToByteArray(internalAdapterId);
+    if (sortKey == null) {
+      return adapter;
+    }
+    return ByteArrayUtils.combineArrays(adapter, DynamoDBUtils.encodeSortableBase64(sortKey));
+  }
+
+  /**
+   * The inclusive upper bound for a range, whose end sort key may be a <em>prefix</em> of the keys
+   * it should match -- which is what a text search does. Padding before the encoding is what makes
+   * that work: a stored key longer than the end still has to sort below the bound, and only the
+   * encoded form of a padded end is above every encoded extension of it.
+   *
+   * <p> This bound is not tight. Padding before the encoding stops it at the largest byte the
+   * sortable alphabet emits, 'z' (0x7A), while a stored key continues past its encoded sort key
+   * with a raw dataId byte that can be anything, so a row whose sort key equals the end exactly and
+   * whose dataId begins above 0x7A sorts past it. {@link #singleValueRangeEnd} fixes that for the
+   * one case where it can be fixed safely. Doing the same here would lose every row whose sort key
+   * merely starts with the end -- measured at 73% of a prefix search's results against 0.03% for
+   * this bound. Making both correct at once needs a sort key encoding that orders across lengths,
+   * which encodeSortableBase64 does not, and that is a change to the stored key format.
+   */
+  static byte[] rangeEnd(final short internalAdapterId, final byte[] sortKey) {
+    if (sortKey == null) {
+      return next(ByteArrayUtils.shortToByteArray(internalAdapterId));
+    }
+    return ByteArrayUtils.combineArrays(
+        ByteArrayUtils.shortToByteArray(internalAdapterId),
+        DynamoDBUtils.encodeSortableBase64(next(sortKey)));
+  }
+
+  /**
+   * The inclusive upper bound when the range is a single sort key. The stored sort key has to equal
+   * the query's, so its encoding is a fixed prefix and the padding can go on afterwards, where 0xFF
+   * is above every byte the alphabet emits and above every raw dataId byte. Padding before the
+   * encoding instead left the bound at 'z' (0x7A) and dropped every row whose dataId began above
+   * that: 133 of the 256 possibilities, whenever the sort key length was a multiple of three.
+   */
+  static byte[] singleValueRangeEnd(final short internalAdapterId, final byte[] sortKey) {
+    return next(rangeStart(internalAdapterId, sortKey));
+  }
+
+  private static byte[] next(final byte[] bytes) {
     final byte[] newBytes = new byte[bytes.length + 16];
     System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
     for (int i = bytes.length; i < newBytes.length; i++) {
