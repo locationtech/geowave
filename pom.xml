@@ -80,7 +80,9 @@
 		<configuration2.version>2.3</configuration2.version>
 		<hbase.version>2.4.2</hbase.version>
 		<hadoop.version>3.1.2</hadoop.version>
-		<avro.version>1.7.6</avro.version>
+		<avro.version>1.11.4</avro.version>
+		<extra.enforcer.rules.version>1.10.0</extra.enforcer.rules.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<awssdk.version>1.11.1015</awssdk.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<httpcore.version>4.4.4</httpcore.version>
@@ -285,6 +287,13 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<!-- Spark's copy carries the hadoop2 classifier, which is a different
+						conflict key from the one GeoWave declares, so Maven mediates neither
+						away and both land on the classpath with the same class names. -->
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-mapred</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -988,7 +997,6 @@
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-mapred</artifactId>
 				<version>${avro.version}</version>
-				<classifier>hadoop2</classifier>
 			</dependency>
 			<dependency>
 				<groupId>com.amazonaws</groupId>
@@ -1426,18 +1434,47 @@
 								<requireMavenVersion>
 									<version>[3.9.0,)</version>
 								</requireMavenVersion>
+								<!-- The build targets Java 8 and CI compiles on JDK 8, but a
+									dependency bump can quietly bring in a jar built for a later
+									release: javac then refuses to read it and the failure names a
+									class file version rather than the dependency that caused it.
+									Avro 1.12 is exactly this: Java 11 bytecode, and the bump to it
+									was reviewed on JDK 17 where nothing complained. Check the
+									dependencies against the compiler target instead of finding out
+									from javac. -->
+								<enforceBytecodeVersion>
+									<maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
+									<ignoreClasses>
+										<!-- Multi-release jars keep newer bytecode under
+											META-INF/versions, which a Java 8 runtime never loads. -->
+										<ignoreClass>META-INF.versions.*</ignoreClass>
+										<ignoreClass>module-info</ignoreClass>
+										<!-- The only pre-existing violation in the whole graph: five
+											classes in akka-stream that bridge to java.util.concurrent.Flow
+											and are compiled for 11 on purpose. Nothing loads them unless it
+											asks for JavaFlowSupport, and nothing here does. -->
+										<ignoreClass>akka.stream.javadsl.JavaFlowSupport*</ignoreClass>
+									</ignoreClasses>
+								</enforceBytecodeVersion>
 							</rules>
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>extra-enforcer-rules</artifactId>
+						<version>${extra.enforcer.rules.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.16.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${maven.compiler.target}</source>
+					<target>${maven.compiler.target}</target>
 				</configuration>
 			</plugin>
 			<plugin>

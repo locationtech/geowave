@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.locationtech.jts.geom.Coordinate;
-import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -109,7 +108,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
                 pointInstance++;
               }
             } catch (final Exception e) {
-              Log.warn("Error parsing tdrive file: " + input.getPath(), e);
+              LOGGER.warn("Error parsing tdrive file: " + input.getPath(), e);
             }
           }
         }
@@ -140,7 +139,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
         }
       };
     } catch (final IOException e) {
-      Log.warn("Error parsing tdrive file: " + input.getPath(), e);
+      LOGGER.warn("Error parsing tdrive file: " + input.getPath(), e);
     }
     return new CloseableIterator.Empty<>();
   }
