@@ -15,11 +15,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<asciidoctor.epub.version>1.5.0-alpha.4</asciidoctor.epub.version>
-		<asciidoctor.maven.plugin.version>1.5.2.1</asciidoctor.maven.plugin.version>
-		<asciidoctorj.pdf.version>1.5.0-alpha.7</asciidoctorj.pdf.version>
-		<asciidoctor.pdf.version>1.5.0.alpha.7</asciidoctor.pdf.version>
-		<jruby.version>1.7.20.1</jruby.version>
+		<asciidoctor.epub.version>2.1.3</asciidoctor.epub.version>
+		<asciidoctor.maven.plugin.version>2.2.6</asciidoctor.maven.plugin.version>
+		<asciidoctorj.pdf.version>2.3.19</asciidoctorj.pdf.version>
 		<maven.build.timestamp.format>EEEEE, MMMMM dd, yyyy 'at' hh:mm a 'UTC'</maven.build.timestamp.format>
 	</properties>
 
@@ -659,8 +657,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -676,8 +675,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -693,8 +693,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -710,8 +711,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -727,8 +729,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							
@@ -745,8 +748,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -762,8 +766,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -779,8 +784,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -796,8 +802,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -813,8 +820,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -830,8 +838,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -847,8 +856,9 @@
 										<require>asciidoctor-pdf</require>
 									</requires>
 									<backend>pdf</backend>
-									<compact>true</compact>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 						</executions>
@@ -881,7 +891,9 @@
 									<sourceDirectory>${project.build.directory}/content/overview</sourceDirectory>
 									<sourceDocumentName>overview.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -894,7 +906,9 @@
 									<sourceDirectory>${project.build.directory}/content/installation-guide</sourceDirectory>
 									<sourceDocumentName>installation-guide.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -907,7 +921,9 @@
 									<sourceDirectory>${project.build.directory}/content/userguide</sourceDirectory>
 									<sourceDocumentName>userguide.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -920,7 +936,9 @@
 									<sourceDirectory>${project.build.directory}/content/devguide</sourceDirectory>
 									<sourceDocumentName>devguide.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -933,7 +951,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
 									<sourceDocumentName>quickstart.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -946,7 +966,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/quickstart-emr</sourceDirectory>
 									<sourceDocumentName>quickstart-emr.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -959,7 +981,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/aws-env</sourceDirectory>
 									<sourceDocumentName>aws-env.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -972,7 +996,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/interact-cluster</sourceDirectory>
 									<sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -985,7 +1011,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/jupyter</sourceDirectory>
 									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -998,7 +1026,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/spatial-join</sourceDirectory>
 									<sourceDocumentName>spatial-join.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -1011,7 +1041,9 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/zeppelin</sourceDirectory>
 									<sourceDocumentName>zeppelin.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 							<execution>
@@ -1024,7 +1056,9 @@
 									<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
 									<sourceDocumentName>commands.adoc</sourceDocumentName>
 									<backend>epub3</backend>
-									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<source-highlighter>coderay</source-highlighter>
+									</attributes>
 								</configuration>
 							</execution>
 						</executions>
@@ -1050,8 +1084,8 @@
 									<sourceDirectory>${project.build.directory}/content/geowave-index</sourceDirectory>
 									<sourceDocumentName>index.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<stylesheet>blank.css</stylesheet>
 										<title>GeoWave</title>
@@ -1075,8 +1109,8 @@
 									<sourceDirectory>${project.build.directory}/content/overview</sourceDirectory>
 									<sourceDocumentName>overview.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<icons>font</icons>
@@ -1099,8 +1133,8 @@
 									<sourceDirectory>${project.build.directory}/content/downloads</sourceDirectory>
 									<sourceDocumentName>downloads.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<title>GeoWave Downloads</title>
@@ -1123,8 +1157,8 @@
 									<sourceDirectory>${project.build.directory}/content/installation-guide</sourceDirectory>
 									<sourceDocumentName>installation-guide.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1148,8 +1182,8 @@
 									<sourceDirectory>${project.build.directory}/content/userguide</sourceDirectory>
 									<sourceDocumentName>userguide.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1173,8 +1207,8 @@
 									<sourceDirectory>${project.build.directory}/content/devguide</sourceDirectory>
 									<sourceDocumentName>devguide.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1198,8 +1232,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart</sourceDirectory>
 									<sourceDocumentName>quickstart.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1223,8 +1257,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/quickstart-emr</sourceDirectory>
 									<sourceDocumentName>quickstart-emr.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1248,8 +1282,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/aws-env</sourceDirectory>
 									<sourceDocumentName>aws-env.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<icons>font</icons>
@@ -1273,8 +1307,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/interact-cluster</sourceDirectory>
 									<sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1298,8 +1332,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/jupyter</sourceDirectory>
 									<sourceDocumentName>jupyter.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1323,8 +1357,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/spatial-join</sourceDirectory>
 									<sourceDocumentName>spatial-join.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1348,8 +1382,8 @@
 									<sourceDirectory>${project.build.directory}/content/quickstart-emr/zeppelin</sourceDirectory>
 									<sourceDocumentName>zeppelin.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -1373,8 +1407,8 @@
 									<sourceDirectory>${project.build.directory}/content/commands</sourceDirectory>
 									<sourceDocumentName>commands.adoc</sourceDocumentName>
 									<backend>html5</backend>
-									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
+										<source-highlighter>highlightjs</source-highlighter>
 										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
