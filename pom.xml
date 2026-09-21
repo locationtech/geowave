@@ -102,7 +102,7 @@
 		<collections4.version>4.4</collections4.version>
 		<io.version>2.8.0</io.version>
 		<text.version>1.6</text.version>
-		<lang3.version>3.8.1</lang3.version>
+		<lang3.version>3.17.0</lang3.version>
 		<jcommander.version>1.82</jcommander.version>
 		<hbaseprotobuf.version>3.5.1</hbaseprotobuf.version>
 		<hbaseprotoc.version>2.5.0</hbaseprotoc.version>
