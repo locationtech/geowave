@@ -92,48 +92,63 @@ public class ClasspathUtils {
     return jarFile.getAbsolutePath();
   }
 
+  /**
+   * Builds the class path to write into a pathing jar's manifest.
+   *
+   * <p> This used to walk the classloader chain and demand that every loader be a
+   * {@link URLClassLoader} or a {@link VFSClassLoader}, throwing otherwise. From JDK 9 the
+   * application and platform loaders are {@code jdk.internal.loader.ClassLoaders$AppClassLoader}
+   * and {@code $PlatformClassLoader}, neither of which is a URLClassLoader, so it threw "Unknown
+   * classloader type" on every JDK above 8 with no flag able to prevent it. Every integration lane
+   * reaches this, through GeoWaveMultiProcessIngestIT as well as the HBase and Accumulo mini
+   * cluster factories.
+   *
+   * <p> The system class path is now read from {@code java.class.path}, which is what the
+   * application loader is built from anyway and which works on every release. Loaders that carry
+   * entries the system class path does not know about -- VFSClassLoader, and any other
+   * URLClassLoader in the chain -- are still walked and contribute their URLs. A loader of any
+   * other kind is skipped rather than fatal: the JDK's own built-in loaders are exactly that case,
+   * and their contents are already covered by java.class.path.
+   */
   private static String getClasspath(final Class context, final URL... additionalUrls)
       throws IOException {
 
     try {
-      final ArrayList<ClassLoader> classloaders = new ArrayList<>();
-
-      ClassLoader cl = context.getClassLoader();
-
-      while (cl != null) {
-        classloaders.add(cl);
-        cl = cl.getParent();
-      }
-
-      Collections.reverse(classloaders);
-
       final StringBuilder classpathBuilder = new StringBuilder();
       for (final URL u : additionalUrls) {
         append(classpathBuilder, u);
       }
 
-      // assume 0 is the system classloader and skip it
-      for (int i = 0; i < classloaders.size(); i++) {
-        final ClassLoader classLoader = classloaders.get(i);
-
-        if (classLoader instanceof URLClassLoader) {
-
-          for (final URL u : ((URLClassLoader) classLoader).getURLs()) {
-            append(classpathBuilder, u);
-          }
-
-        } else if (classLoader instanceof VFSClassLoader) {
-
-          final VFSClassLoader vcl = (VFSClassLoader) classLoader;
-          for (final FileObject f : vcl.getFileObjects()) {
-            append(classpathBuilder, f.getURL());
-          }
-        } else {
-          throw new IllegalArgumentException(
-              "Unknown classloader type : " + classLoader.getClass().getName());
+      for (final String entry : System.getProperty("java.class.path", "").split(
+          File.pathSeparator)) {
+        if (!entry.isEmpty()) {
+          append(classpathBuilder, new File(entry).toURI().toURL());
         }
       }
 
+      final ArrayList<ClassLoader> classloaders = new ArrayList<>();
+      ClassLoader cl = context.getClassLoader();
+      while (cl != null) {
+        classloaders.add(cl);
+        cl = cl.getParent();
+      }
+      Collections.reverse(classloaders);
+
+      for (final ClassLoader classLoader : classloaders) {
+        if (classLoader instanceof VFSClassLoader) {
+          for (final FileObject f : ((VFSClassLoader) classLoader).getFileObjects()) {
+            append(classpathBuilder, f.getURL());
+          }
+        } else if (classLoader instanceof URLClassLoader) {
+          for (final URL u : ((URLClassLoader) classLoader).getURLs()) {
+            append(classpathBuilder, u);
+          }
+        }
+      }
+
+      if (classpathBuilder.length() == 0) {
+        return "";
+      }
       classpathBuilder.deleteCharAt(0);
       return classpathBuilder.toString();
 
