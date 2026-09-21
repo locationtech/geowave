@@ -115,8 +115,8 @@
 		<jackson.version>1.9.13</jackson.version>
 		<beanutils.version>1.11.0</beanutils.version>
 		<mockito.version>4.11.0</mockito.version>
-		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
-		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
+		<fasterxml.jackson.version>2.18.2</fasterxml.jackson.version>
+		<fasterxml.jackson.databind.version>2.18.2</fasterxml.jackson.databind.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
 		<slf4j.version>2.0.16</slf4j.version>
 		<log4j.version>2.24.3</log4j.version>
@@ -1278,9 +1278,15 @@
 				<artifactId>jackson-dataformat-yaml</artifactId>
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
+			<!-- Kafka brings jackson-module-scala at its own Jackson version, and the
+				module refuses to load against a databind whose minor version differs. It
+				says so and then throws, which is fatal to every Spark job, because
+				RDDOperationScope registers it before anything else runs. Managing the
+				coordinate keeps it with the rest of Jackson. The _2.11 coordinate this
+				replaces was a leftover nothing had referred to since Scala 2.11. -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.module</groupId>
-				<artifactId>jackson-module-scala_2.11</artifactId>
+				<artifactId>jackson-module-scala_2.13</artifactId>
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
