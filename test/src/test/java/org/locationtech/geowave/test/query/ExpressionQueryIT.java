@@ -107,8 +107,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
-import jersey.repackaged.com.google.common.collect.Iterators;
-import jersey.repackaged.com.google.common.collect.Sets;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 
 @RunWith(GeoWaveITRunner.class)
 public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {

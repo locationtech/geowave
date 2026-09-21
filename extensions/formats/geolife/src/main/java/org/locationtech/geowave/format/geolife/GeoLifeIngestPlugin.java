@@ -45,7 +45,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jersey.repackaged.com.google.common.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 /*
  */

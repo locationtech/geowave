@@ -343,6 +343,137 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
 					</exclusion>
+					<!-- Spark's web UI runs on Jersey 3 and jakarta.ws.rs; GeoWave's services
+						are still Jersey 2 and javax.ws.rs, and the two cannot share a JVM.
+						Managing jersey.version only pulls the artifacts GeoWave names down to
+						2.23.1 and leaves the rest of Spark's tree at 3.x, which is worse than
+						either: the services ITs died in RuntimeDelegateImpl with a null HK2
+						DynamicConfigurationService. Excluding the UI's stack keeps one coherent
+						Jersey on the classpath. Nothing in GeoWave drives Spark's UI, and the
+						test session turns it off; this is what Phase 4.5 exists to undo. -->
+					<exclusion>
+						<groupId>org.glassfish.jersey.core</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.containers</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.inject</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2.external</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<!-- Spark's copy carries the hadoop2 classifier, which is a different
+						conflict key from the one GeoWave declares, so Maven mediates neither
+						away and both land on the classpath with the same class names. -->
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-mapred</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.spark</groupId>
+				<artifactId>spark-sql_2.13</artifactId>
+				<version>${spark.version}</version>
+				<!-- Same Jersey and HK2 story as spark-core: see the note there. -->
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<!-- Spark's web UI runs on Jersey 3 and jakarta.ws.rs; GeoWave's services
+						are still Jersey 2 and javax.ws.rs, and the two cannot share a JVM.
+						Managing jersey.version only pulls the artifacts GeoWave names down to
+						2.23.1 and leaves the rest of Spark's tree at 3.x, which is worse than
+						either: the services ITs died in RuntimeDelegateImpl with a null HK2
+						DynamicConfigurationService. Excluding the UI's stack keeps one coherent
+						Jersey on the classpath. Nothing in GeoWave drives Spark's UI, and the
+						test session turns it off; this is what Phase 4.5 exists to undo. -->
+					<exclusion>
+						<groupId>org.glassfish.jersey.core</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.containers</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.inject</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2.external</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<!-- Spark's copy carries the hadoop2 classifier, which is a different
+						conflict key from the one GeoWave declares, so Maven mediates neither
+						away and both land on the classpath with the same class names. -->
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-mapred</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.spark</groupId>
+				<artifactId>spark-mllib_2.13</artifactId>
+				<version>${spark.version}</version>
+				<!-- mllib pulls spark-sql and spark-streaming, which is the path Jersey 3
+					actually arrived by; excluding it on spark-core alone was not enough. -->
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<!-- Spark's web UI runs on Jersey 3 and jakarta.ws.rs; GeoWave's services
+						are still Jersey 2 and javax.ws.rs, and the two cannot share a JVM.
+						Managing jersey.version only pulls the artifacts GeoWave names down to
+						2.23.1 and leaves the rest of Spark's tree at 3.x, which is worse than
+						either: the services ITs died in RuntimeDelegateImpl with a null HK2
+						DynamicConfigurationService. Excluding the UI's stack keeps one coherent
+						Jersey on the classpath. Nothing in GeoWave drives Spark's UI, and the
+						test session turns it off; this is what Phase 4.5 exists to undo. -->
+					<exclusion>
+						<groupId>org.glassfish.jersey.core</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.containers</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.jersey.inject</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.glassfish.hk2.external</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<!-- Spark's copy carries the hadoop2 classifier, which is a different
 						conflict key from the one GeoWave declares, so Maven mediates neither
 						away and both land on the classpath with the same class names. -->
