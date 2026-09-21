@@ -143,8 +143,33 @@
 		<jacoco.version>0.8.15</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<!-- The add-opens below are Spark's, not GeoWave's. Spark 4 injects exactly this
+			set into every driver and executor it launches, from
+			org.apache.spark.launcher.JavaModuleOptions; without them Kryo cannot build a
+			serializer for java.nio.HeapByteBuffer, which Spark itself registers, and
+			KryoSerializer.newKryo throws before any test runs. The integration suite hosts
+			Spark in the test JVM rather than through spark-submit, so nothing else adds
+			them. GeoWave's own code needs none of them; that is what the flip removed.
+			Spark's add-modules for jdk.incubator.vector is deliberately not carried over:
+			Spark treats it as an optimisation and it only produces an incubator warning
+			here. -->
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
-			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+			-Xmx2g -XX:MaxMetaspaceSize=512m
+			--add-opens=java.base/java.lang=ALL-UNNAMED
+			--add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+			--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+			--add-opens=java.base/java.io=ALL-UNNAMED
+			--add-opens=java.base/java.net=ALL-UNNAMED
+			--add-opens=java.base/java.nio=ALL-UNNAMED
+			--add-opens=java.base/java.util=ALL-UNNAMED
+			--add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+			--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED
+			--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED
+			--add-opens=java.base/sun.nio.ch=ALL-UNNAMED
+			--add-opens=java.base/sun.nio.cs=ALL-UNNAMED
+			--add-opens=java.base/sun.security.action=ALL-UNNAMED
+			--add-opens=java.base/sun.util.calendar=ALL-UNNAMED
+			--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED</test.args>
 		<spotbugs.version>4.8.6</spotbugs.version>
 		<!-- 4.8.6.x is the last line built for Java 8; 4.10.x is class-file major 55
 			and would not load on the JDK 8 gate. The plugin and the analysis engine
