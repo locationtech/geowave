@@ -68,6 +68,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.Comparator;
 import scala.Tuple2;
 
 public class KDERunner {
@@ -255,7 +256,8 @@ public class KDERunner {
                   cells.getNumPartitions(),
                   cells.rdd(),
                   true,
-                  scala.math.Ordering.Double$.MODULE$,
+                  scala.math.Ordering$.MODULE$.comparatorToOrdering(
+                      Comparator.<Double>naturalOrder()),
                   scala.reflect.ClassTag$.MODULE$.apply(Double.class))).sortByKey(false).cache();
       final long count = cells.count();
       if (count == 0) {

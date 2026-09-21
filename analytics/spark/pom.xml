@@ -6,10 +6,6 @@
 		<relativePath>../</relativePath>
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
-	<properties>
-		<java.version>1.8</java.version>
-		<scala.version>2.11.8</scala.version>
-	</properties>
 	<artifactId>geowave-analytic-spark</artifactId>
 	<name>GeoWave Spark Analytics</name>
 
@@ -41,12 +37,6 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-api</artifactId>
 			</dependency>
-		<dependency>
-			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.12</artifactId>
-			<version>${spark.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
