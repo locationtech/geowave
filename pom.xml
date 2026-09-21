@@ -83,7 +83,11 @@
 		<avro.version>1.11.4</avro.version>
 		<extra.enforcer.rules.version>1.10.0</extra.enforcer.rules.version>
 		<maven.compiler.target>21</maven.compiler.target>
-		<awssdk.version>1.11.1015</awssdk.version>
+		<!-- 1.11.x calls PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE, which Jackson
+			removed in 2.12, so EC2MetadataUtils fails its class initialiser against the
+			Jackson that Spark 4 requires. 1.12.788 is the last v1 release and uses the
+			current API. v1 is out of support; Phase 2.10 replaces it with v2. -->
+		<awssdk.version>1.12.788</awssdk.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<httpcore.version>4.4.4</httpcore.version>
 		<geotools.scope>compile</geotools.scope>
