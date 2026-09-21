@@ -325,6 +325,14 @@ public class FeatureDataAdapter implements
 
   @Override
   public Object getFieldValue(final SimpleFeature entry, final String fieldName) {
+
+    // Object fieldValue = entry.getAttribute(fieldName);
+    // if ((fieldValue instanceof Geometry)
+    // && !(((Geometry) fieldValue).getUserData() instanceof CoordinateReferenceSystem)) {
+    // ((Geometry) fieldValue).setUserData(getFeatureType().getCoordinateReferenceSystem());
+    // }
+
+
     return entry.getAttribute(fieldName);
   }
 

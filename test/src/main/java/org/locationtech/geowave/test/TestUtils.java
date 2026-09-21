@@ -147,7 +147,11 @@ public class TestUtils {
   // CRS for Web Mercator
   public static String CUSTOM_CRSCODE = "EPSG:3857";
 
+  // CRS for WGS84
+  public static String CUSTOM_CRSCODE_WGS84 = "EPSG:4326";
+
   public static final CoordinateReferenceSystem CUSTOM_CRS;
+  public static final CoordinateReferenceSystem CUSTOM_CRS_WGS84;
 
   public static final double DOUBLE_EPSILON = 1E-8d;
 
@@ -157,6 +161,15 @@ public class TestUtils {
     } catch (final FactoryException e) {
       LOGGER.error("Unable to decode " + CUSTOM_CRSCODE + "CRS", e);
       throw new RuntimeException("Unable to initialize " + CUSTOM_CRSCODE + " CRS");
+    }
+  }
+
+  static {
+    try {
+      CUSTOM_CRS_WGS84 = CRS.decode(CUSTOM_CRSCODE_WGS84, true);
+    } catch (final FactoryException e) {
+      LOGGER.error("Unable to decode " + CUSTOM_CRSCODE_WGS84 + "CRS", e);
+      throw new RuntimeException("Unable to initialize " + CUSTOM_CRSCODE_WGS84 + " CRS");
     }
   }
 
@@ -173,6 +186,23 @@ public class TestUtils {
         new SpatialTemporalDimensionalityTypeProvider();
     final SpatialTemporalOptions o = p.createOptions();
     o.setCrs(CUSTOM_CRSCODE);
+    final Index primaryIndex = SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(o);
+    return primaryIndex;
+  }
+
+  public static Index createWGS84SpatialIndex() {
+    final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+    final SpatialOptions so = sdp.createOptions();
+    so.setCrs(CUSTOM_CRSCODE_WGS84);
+    final Index primaryIndex = SpatialDimensionalityTypeProvider.createIndexFromOptions(so);
+    return primaryIndex;
+  }
+
+  public static Index createWGS84SpatialTemporalIndex() {
+    final SpatialTemporalDimensionalityTypeProvider p =
+        new SpatialTemporalDimensionalityTypeProvider();
+    final SpatialTemporalOptions o = p.createOptions();
+    o.setCrs(CUSTOM_CRSCODE_WGS84);
     final Index primaryIndex = SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(o);
     return primaryIndex;
   }
@@ -738,6 +768,7 @@ public class TestUtils {
     // test under default style
     for (int x = 0; x < expected.getWidth(); x++) {
       for (int y = 0; y < expected.getHeight(); y++) {
+
         if (actual.getRGB(x, y) != expected.getRGB(x, y)) {
           errorPixels++;
           if (errorPixels > maxErrorPixels) {
@@ -892,6 +923,7 @@ public class TestUtils {
       final Response response) {
     final String assertionMsg =
         msg + String.format(": A %s response code should be received", expectedCode);
+
     Assert.assertEquals(assertionMsg, expectedCode, response.getStatus());
   }
 

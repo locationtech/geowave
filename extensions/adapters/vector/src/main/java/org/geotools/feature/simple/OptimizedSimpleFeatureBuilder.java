@@ -8,7 +8,9 @@
  */
 package org.geotools.feature.simple;
 
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Variation of SimpleFeatureBuilder that skips object conversion, since GeoWave handles that
@@ -26,6 +28,12 @@ public class OptimizedSimpleFeatureBuilder extends SimpleFeatureBuilder {
       throw new ArrayIndexOutOfBoundsException(
           "Can handle " + values.length + " attributes only, index is " + index);
 
+    // Add the CRS of the geometry to the user data
+    if (value instanceof Geometry) {
+      ((Geometry) value).setUserData(getFeatureType().getCoordinateReferenceSystem());
+    }
+
     values[index] = value;
+
   }
 }

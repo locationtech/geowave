@@ -23,6 +23,8 @@ import org.locationtech.geowave.core.store.statistics.binning.BinningStrategyUti
 import org.locationtech.geowave.core.store.statistics.binning.FieldValueBinningStrategy;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -128,7 +130,12 @@ public class SpatialFieldValueBinningStrategy extends FieldValueBinningStrategy 
   private ByteArray[] getSpatialBinsFromObj(final Object value) {
     if (value instanceof Geometry) {
       if (ComplexGeometryBinningOption.USE_CENTROID_ONLY.equals(complexGeometry)) {
-        return getSpatialBins(((Geometry) value).getCentroid());
+
+        Point centroid = ((Geometry) value).getCentroid();
+        centroid.setUserData(((Geometry) value).getUserData());
+
+        return getSpatialBins(centroid);
+        // return getSpatialBins(((Geometry) value).getCentroid());
       }
       return getSpatialBins((Geometry) value);
     }
