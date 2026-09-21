@@ -32,14 +32,13 @@ public class StartGrpcServerCommand extends DefaultOperation implements Command 
   public void execute(final OperationParams params) {
 
     LOGGER.info("Starting GeoWave grpc server on port: " + options.getPort());
-    GeoWaveGrpcServer server = null;
-
-    server = GeoWaveGrpcServer.getInstance();
+    final GeoWaveGrpcServer server = GeoWaveGrpcServer.getInstance();
 
     try {
       server.start(options.getPort());
-    } catch (final IOException | NullPointerException e) {
+    } catch (final IOException e) {
       LOGGER.error("Exception encountered starting gRPC server", e);
+      return;
     }
 
     if (!options.isNonBlocking()) {

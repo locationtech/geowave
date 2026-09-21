@@ -156,7 +156,7 @@ public class ConvexHullMapReduce {
      * Logic inspired by SpatialHadoop convexHullStream method
      */
     // absolute point cloud limit
-    private final int pointCloudThreshold = 50000000;
+    private static final int pointCloudThreshold = 50000000;
 
     private final List<Coordinate> batchCoords = new ArrayList<>(10000);
 

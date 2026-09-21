@@ -200,7 +200,7 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     return centroidFactory.createNextItem(feature, groupID, coordinate, extraNames, extraValues);
   }
 
-  private final int capacity = 100;
+  private static final int capacity = 100;
   private final LRUMap groupToCentroid = new LRUMap(capacity);
 
   @Override

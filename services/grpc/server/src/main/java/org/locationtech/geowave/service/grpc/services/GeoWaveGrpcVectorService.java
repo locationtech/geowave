@@ -85,29 +85,32 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
       throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
     }
 
-    GeoWaveGTDataStore gtStore = null;
+    final GeoWaveGTDataStore gtStore;
     try {
       gtStore = new GeoWaveGTDataStore(new GeoWavePluginConfig(storeLoader.getDataStorePlugin()));
     } catch (final IOException | GeoWavePluginException e) {
       LOGGER.error("Exception encountered instantiating GeoWaveGTDataStore", e);
       responseObserver.onError(e);
+      return;
     }
 
-    Filter filter = null;
+    final Filter filter;
     try {
       filter = ECQL.toFilter(request.getQuery());
     } catch (final CQLException e) {
       LOGGER.error("Exception encountered creating filter from CQL", e);
       responseObserver.onError(e);
+      return;
     }
 
-    ContentFeatureCollection featureCollection = null;
+    final ContentFeatureCollection featureCollection;
     try {
       final String typeName = request.getTypeName();
       featureCollection = gtStore.getFeatureSource(typeName).getFeatures(filter);
-    } catch (final IOException | NullPointerException e) {
+    } catch (final IOException e) {
       LOGGER.error("Exception encountered getting feature collection", e);
       responseObserver.onError(e);
+      return;
     }
 
     try (final SimpleFeatureIterator iterator = featureCollection.features()) {
@@ -131,9 +134,6 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         responseObserver.onNext(f);
       }
       responseObserver.onCompleted();
-    } catch (final NullPointerException e) {
-      LOGGER.error("Exception encountered", e);
-      responseObserver.onError(e);
     }
   }
 
