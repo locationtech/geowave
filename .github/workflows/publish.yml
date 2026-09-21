@@ -41,11 +41,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up JDK 8
+    # Artifacts are still built and published on 8. The docs are not: asciidoctor
+    # 2.x runs on JRuby 9.4, whose own dependencies (asm, joni, jcodings,
+    # invokebinder, backport9) are Java 9 bytecode, so it cannot load on 8. 8 is
+    # listed last so it stays the default JAVA_HOME and only the docs step opts
+    # out.
+    - name: Set up JDK 21 and JDK 8
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: '8'
+        java-version: |
+          21
+          8
         cache: maven
 
 
@@ -77,6 +84,8 @@ jobs:
 
     - name: Build HTML Docs
       run: ./mvnw -P html -pl docs install -DskipTests -Dspotbugs.skip
+      env:
+        JAVA_HOME: ${{ env.JAVA_HOME_21_X64 }}
 
     - name: Build Aggregate Javadocs
       run: ./mvnw javadoc:aggregate -B -DskipTests -Dspotbugs.skip
