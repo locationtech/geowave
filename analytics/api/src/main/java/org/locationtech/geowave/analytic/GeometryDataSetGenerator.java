@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
@@ -560,8 +561,12 @@ public class GeometryDataSetGenerator {
         final double distanceFactor,
         final int points) {
       final List<Point> results = new ArrayList<>();
-      final Random rand = new Random();
       final Vector2D originVec = coordinateTwo.subtract(coordinateOne);
+      // The caller invokes this once per coordinate pair, and it used to construct a Random each
+      // time. A Random seeded from the clock and then read a handful of times gives sequences that
+      // correlate across those calls, which is the opposite of what generated test data wants.
+      // ThreadLocalRandom has no such seed and needs no instance to carry around.
+      final ThreadLocalRandom rand = ThreadLocalRandom.current();
       for (int i = 0; i < points; i++) {
         // HP Fortify "Insecure Randomness" false positive
         // This random number is not used for any purpose

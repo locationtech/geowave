@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SpotBugs exclusions for GeoWave.
+
+  This replaces the filter that used to be loaded from inside the published
+  geowave-dev-resources jar. That file could not be changed without cutting a new
+  dev-resources release, which meant every suppression had to go through
+  omitVisitors and so applied to the whole project. Keeping it here makes each
+  exclusion reviewable next to its reason.
+
+  The first entry is the package exclusion carried over verbatim from
+  dev-resources 1.7. Everything after it was added when SpotBugs moved from
+  3.1.10 to 4.8.6, whose analysis is considerably better and which reports these
+  for the first time.
+-->
+<FindBugsFilter>
+	<!-- Generated sources. -->
+	<Match>
+		<Or>
+			<Package name="~.*\.avro" />
+			<Package name="~.*\.protobuf" />
+			<Package name="~.*\.gwql.parse" />
+		</Or>
+	</Match>
+
+	<!--
+	  The DataStax driver's getByteBuffer returns null for a NULL column, so
+	  chaining .array() off it is a possible NPE. Every one of these columns is
+	  written on every insert, so a null means the row is corrupt, and failing
+	  loudly there is the behaviour we want. Returning an empty array instead
+	  would turn a corrupt row into a silently wrong one.
+	-->
+	<Match>
+		<Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+		<Or>
+			<Class name="org.locationtech.geowave.datastore.cassandra.CassandraRow" />
+			<Class
+				name="org.locationtech.geowave.datastore.cassandra.operations.CassandraMetadataReader$PrimaryIDPrefixFilter" />
+		</Or>
+	</Match>
+
+	<!--
+	  BitVectorFactories.OPTIMAL.apply and the row transformer are functional
+	  interfaces SpotBugs cannot see the implementations of, so it assumes they
+	  may return null. Neither does, and a null would be a programming error in
+	  the caller rather than a condition to handle.
+	-->
+	<Match>
+		<Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+		<Or>
+			<Class
+				name="org.locationtech.geowave.core.index.sfc.hilbert.PrimitiveHilbertSFCOperations" />
+			<Class name="org.locationtech.geowave.core.store.operations.ParallelDecoder$DecodeTask" />
+		</Or>
+	</Match>
+
+	<!--
+	  Catching NullPointerException is normally wrong, but each of these sits in
+	  a multi-catch around reflective or parser code where a null is one of
+	  several equivalent malformed-input signals and the handler reports all of
+	  them the same way. Splitting NPE out would change what the caller sees for
+	  no benefit.
+	-->
+	<Match>
+		<Bug pattern="DCN_NULLPOINTER_EXCEPTION" />
+		<Or>
+			<Class name="org.locationtech.geowave.core.cli.prefix.JCommanderTranslationMap" />
+			<Class
+				name="org.locationtech.geowave.core.store.data.visibility.JsonFieldLevelVisibilityHandler" />
+			<Class name="org.locationtech.geowave.format.stanag4676.parser.TrackFileReader" />
+		</Or>
+	</Match>
+
+	<!--
+	  getTileValue has to return the same value for the same (x, y, b, r,
+	  tileSize) on every call: the raster ITs write tiles with it and then
+	  recompute the expected values with it to assert against. Seeding a Random
+	  from the inputs and reading it once is how that determinism is obtained.
+	  Reusing a long-lived Random, which is what this detector asks for, would
+	  make every tile value depend on call order.
+	-->
+	<Match>
+		<Bug pattern="DMI_RANDOM_USED_ONLY_ONCE" />
+		<Class name="org.locationtech.geowave.test.TestUtils" />
+		<Method name="getTileValue" />
+	</Match>
+
+	<!--
+	  JCommander assigns this field reflectively from the command line, which
+	  SpotBugs cannot see, so it concludes the field is a constant that should be
+	  static. Making it static would break the binding.
+	-->
+	<Match>
+		<Bug pattern="SS_SHOULD_BE_STATIC" />
+		<Class name="org.locationtech.geowave.datastore.hbase.cli.RunHBaseServer" />
+		<Field name="interactive" />
+	</Match>
+</FindBugsFilter>

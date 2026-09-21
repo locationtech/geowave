@@ -362,17 +362,21 @@ public class EarthVector {
 
   /** Convert radians to degrees */
   public static double radToDeg(final double rad) {
-    double deg = rad * DPR;
+    // Normalise to (-180, 180]. A remainder rather than a subtract-until-in-range loop: the loop
+    // never terminated for an infinite input, and repeated subtraction accumulates error that the
+    // exact IEEE remainder does not.
+    return normalizeDegrees(rad * DPR);
+  }
 
-    // normalize to (-180 to 180)
-    while (deg > 180) {
-      deg -= 360;
+  private static double normalizeDegrees(final double degrees) {
+    final double remainder = degrees % 360;
+    if (remainder > 180) {
+      return remainder - 360;
     }
-    while (deg < -180) {
-      deg += 360;
+    if (remainder < -180) {
+      return remainder + 360;
     }
-
-    return deg;
+    return remainder;
   }
 
   /** Convert kilometers to nautical miles */
@@ -630,14 +634,7 @@ public class EarthVector {
   }
 
   private static double get180NormalizedLon(final double lon) {
-    double newLon = lon;
-    while (newLon < -180) {
-      newLon += 360;
-    }
-    while (newLon > 180) {
-      newLon -= 360;
-    }
-    return newLon;
+    return normalizeDegrees(lon);
   }
 
   public int getNumGreatCircleSegments(final EarthVector endpoint, final double segmentLengthKM) {

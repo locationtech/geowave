@@ -168,7 +168,7 @@ public abstract class AbstractPartitioner<T> implements Partitioner<T> {
     {
       int i = 0;
       for (final String eachDistance : distancesArray) {
-        distancePerDimension[i++] = Double.valueOf(eachDistance);
+        distancePerDimension[i++] = Double.parseDouble(eachDistance);
       }
     }
     return distancePerDimension;

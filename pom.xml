@@ -145,7 +145,11 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
 			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
-		<spotbugs.version>3.1.10</spotbugs.version>
+		<spotbugs.version>4.8.6</spotbugs.version>
+		<!-- 4.8.6.x is the last line built for Java 8; 4.10.x is class-file major 55
+			and would not load on the JDK 8 gate. The plugin and the analysis engine
+			version independently, hence two properties. -->
+		<spotbugs.plugin.version>4.8.6.6</spotbugs.plugin.version>
 		<!-- DoInsideDoPrivileged reports DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED
 			and DP_DO_INSIDE_DO_PRIVILEGED, both of which exist to protect a
 			SecurityManager. JEP 411 deprecated that and JEP 486 removed it, so
@@ -154,12 +158,25 @@
 			The shared exclude filter lives in the published geowave-dev-resources
 			jar and cannot be changed without releasing a new one, so the detector
 			is omitted here instead. -->
-		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef,DoInsideDoPrivileged</spotbugs.omitVisitors>
+		<!-- Beyond the two the project already omitted and DoInsideDoPrivileged, these
+			are detectors SpotBugs 4 added that do not fit a library of this shape.
+			FindPublicAttributes wants public mutable fields made private, which is an
+			API break for published types; ConstructorThrow guards against finalizer
+			attacks; FindInstanceLockOnSharedStaticData, MultipleInstantiationsOfSingletons
+			and FindOverridableMethodCall are hardening rules aimed at code running
+			untrusted callers. Together they account for 192 of the 233 findings 4.8.6
+			reports. Everything else stays on, including the null-dereference and
+			DontCatchNullPointerException detectors, which find real defects here. -->
+		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef,DoInsideDoPrivileged,FindPublicAttributes,ConstructorThrow,FindInstanceLockOnSharedStaticData,MultipleInstantiationsOfSingletons,FindOverridableMethodCall</spotbugs.omitVisitors>
 		<spotbugs.effort>Max</spotbugs.effort>
 		<spotbugs.threshold>Medium</spotbugs.threshold>
 		<spotbugs.failOnError>true</spotbugs.failOnError>
 		<spotbugs.maxHeap>1024</spotbugs.maxHeap>
-		<spotbugs.filterFile>findbugs/findbugs-exclude.xml</spotbugs.filterFile>
+		<!-- A file in this repository rather than the one inside the published
+			geowave-dev-resources jar, so a suppression can be added with its reason
+			without cutting a dev-resources release. maven.multiModuleProjectDirectory
+			is needed because a relative path would resolve per module. -->
+		<spotbugs.filterFile>${maven.multiModuleProjectDirectory}/spotbugs-exclude.xml</spotbugs.filterFile>
 		<formatter.action>format</formatter.action>
 		<formatter.skip>false</formatter.skip>
 	</properties>
@@ -1306,7 +1323,7 @@
 				<plugin>
 					<groupId>com.github.spotbugs</groupId>
 					<artifactId>spotbugs-maven-plugin</artifactId>
-					<version>${spotbugs.version}</version>
+					<version>${spotbugs.plugin.version}</version>
 					<configuration>
 						<failOnError>${spotbugs.failOnError}</failOnError>
 						<threshold>${spotbugs.threshold}</threshold>
