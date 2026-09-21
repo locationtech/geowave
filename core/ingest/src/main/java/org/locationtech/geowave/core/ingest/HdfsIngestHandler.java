@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
 import org.locationtech.geowave.core.store.ingest.IngestUrlHandlerSpi;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.slf4j.Logger;
@@ -31,14 +30,6 @@ public class HdfsIngestHandler implements IngestUrlHandlerSpi {
       throws IOException {
     // If input path is HDFS
     if (inputPath.startsWith("hdfs://")) {
-      try {
-        URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
-      } catch (final Error | NoSuchFieldException | SecurityException | IllegalArgumentException
-          | IllegalAccessException e) {
-        LOGGER.error("Error in setStreamHandlerFactory for HDFS", e);
-        return null;
-      }
-
       final String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
       final String hdfsInputPath = inputPath.replaceFirst("hdfs://", "/");

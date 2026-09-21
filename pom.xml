@@ -57,7 +57,7 @@
 	<properties>
 		<geowave-dev-resources.version>1.7</geowave-dev-resources.version>
 		<central.publishing.version>0.11.0</central.publishing.version>
-		<spark.version>3.1.1</spark.version>
+		<spark.version>4.0.1</spark.version>
 		<uzaygezen.version>0.2</uzaygezen.version>
 		<geotools.version>25.0</geotools.version>
 		<jts.version>1.18.1</jts.version>
@@ -82,7 +82,7 @@
 		<hadoop.version>3.1.2</hadoop.version>
 		<avro.version>1.11.4</avro.version>
 		<extra.enforcer.rules.version>1.10.0</extra.enforcer.rules.version>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.target>21</maven.compiler.target>
 		<awssdk.version>1.11.1015</awssdk.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<httpcore.version>4.4.4</httpcore.version>
@@ -95,8 +95,8 @@
 		<lz4.version>1.7.1</lz4.version>
 		<zookeeper.version>3.5.7</zookeeper.version>
 		<jersey.version>2.23.1</jersey.version>
-		<scala.version>2.12.13</scala.version>
-		<kafka.artifact>kafka_2.12</kafka.artifact>
+		<scala.version>2.13.16</scala.version>
+		<kafka.artifact>kafka_2.13</kafka.artifact>
 		<kafka.version>2.8.0</kafka.version>
 		<snappy.version>1.1.8.2</snappy.version>
 		<collections4.version>4.4</collections4.version>
@@ -113,8 +113,8 @@
 		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<log4j.version>2.17.1</log4j.version>
+		<slf4j.version>2.0.16</slf4j.version>
+		<log4j.version>2.24.3</log4j.version>
 		<jna.version>5.7.0</jna.version>
 		<math3.version>3.6.1</math3.version>
 		<junit.version>4.13.2</junit.version>
@@ -259,7 +259,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.scala-lang.modules</groupId>
-				<artifactId>scala-collection-compat_2.12</artifactId>
+				<artifactId>scala-collection-compat_2.13</artifactId>
 				<version>2.3.0</version>
 			</dependency>
 			<dependency>
@@ -302,7 +302,7 @@
 			<dependency>
 				<!-- Spark dependency -->
 				<groupId>org.apache.spark</groupId>
-				<artifactId>spark-core_2.12</artifactId>
+				<artifactId>spark-core_2.13</artifactId>
 				<version>${spark.version}</version>
 				<exclusions>
 					<exclusion>
@@ -420,10 +420,10 @@
 				<artifactId>log4j-1.2-api</artifactId>
 				<version>${log4j.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+			<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl -->
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-slf4j-impl</artifactId>
+				<artifactId>log4j-slf4j2-impl</artifactId>
 				<version>${log4j.version}</version>
 			</dependency>
 			<dependency>
@@ -1227,10 +1227,10 @@
 	</dependencyManagement>
 	<!-- Dependencies used across ALL projects -->
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
+			<artifactId>log4j-slf4j2-impl</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
@@ -1491,8 +1491,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.16.0</version>
 				<configuration>
-					<source>${maven.compiler.target}</source>
-					<target>${maven.compiler.target}</target>
+					<release>${maven.compiler.target}</release>
 				</configuration>
 			</plugin>
 			<plugin>

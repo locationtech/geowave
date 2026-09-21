@@ -10,14 +10,15 @@ package org.locationtech.geowave.ingest.s3;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.ingest.URLIngestUtils;
-import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import com.upplication.s3fs.S3FileSystem;
 import io.findify.s3mock.S3Mock;
@@ -25,15 +26,13 @@ import io.findify.s3mock.S3Mock;
 public class DefaultGeoWaveAWSCredentialsProviderTest {
 
   @Test
-  public void testAnonymousAccess() throws NoSuchFieldException, SecurityException,
-      IllegalArgumentException, IllegalAccessException, URISyntaxException, IOException {
+  public void testAnonymousAccess() throws URISyntaxException, IOException {
     final File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
     temp.mkdirs();
     final S3Mock mockS3 =
         new S3Mock.Builder().withPort(8001).withFileBackend(
             temp.getAbsolutePath()).withInMemoryBackend().build();
     mockS3.start();
-    URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
     final SparkIngestDriver sparkDriver = new SparkIngestDriver();
     final S3FileSystem s3 = sparkDriver.initializeS3FS("s3://s3.amazonaws.com");
     s3.getClient().setEndpoint("http://127.0.0.1:8001");
@@ -44,5 +43,18 @@ public class DefaultGeoWaveAWSCredentialsProviderTest {
       Assert.assertEquals(1, s.count());
     }
     mockS3.shutdown();
+  }
+
+  /**
+   * Nothing in this module installs an s3 handler any more; it arrives through
+   * GeoWaveURLStreamHandlerProvider on the service path. Opening the URL would need a live
+   * endpoint, but constructing one is enough to show the protocol resolved, since URL throws
+   * MalformedURLException for a protocol with no handler.
+   */
+  @Test
+  public void s3AndHdfsProtocolsResolveWithoutAnyoneInstallingAFactory()
+      throws MalformedURLException {
+    Assert.assertEquals("s3", new URL("s3://testbucket/test").getProtocol());
+    Assert.assertEquals("hdfs", new URL("hdfs://localhost:8020/test").getProtocol());
   }
 }

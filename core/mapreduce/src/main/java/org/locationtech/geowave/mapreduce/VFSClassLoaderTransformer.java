@@ -30,14 +30,12 @@ public class VFSClassLoaderTransformer implements ClassLoaderTransformerSpi {
 
       for (int i = 0; i < fileObjs.length; i++) {
         final String fileStr = fileObjs[i].toString();
-        if (URLClassloaderUtils.verifyProtocol(fileStr)) {
-          try {
-            fileList.add(new URL(fileStr));
-          } catch (final MalformedURLException e) {
-            LOGGER.error("Unable to register classloader for '" + fileStr + "'", e);
-          }
-        } else {
-          LOGGER.error("Failed to register class loader from: " + fileStr);
+        try {
+          // s3 and hdfs resolve through GeoWaveURLStreamHandlerProvider; anything else the JVM
+          // does not know reaches the catch below, as it always did.
+          fileList.add(new URL(fileStr));
+        } catch (final MalformedURLException e) {
+          LOGGER.error("Unable to register classloader for '" + fileStr + "'", e);
         }
       }
 

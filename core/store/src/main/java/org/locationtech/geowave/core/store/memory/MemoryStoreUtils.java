@@ -68,9 +68,6 @@ public class MemoryStoreUtils {
     VisibilityExpression parse(final byte[] expression) throws IOException {
       if (expression.length > 0) {
         final VisibilityExpression expr = parse_(expression);
-        if (expr == null) {
-          badArgumentException("operator or missing parens", expression, index - 1);
-        }
         if (parens != 0) {
           badArgumentException("parenthesis mis-match", expression, index - 1);
         }
@@ -142,9 +139,6 @@ public class MemoryStoreUtils {
           case ')': {
             parens--;
             final VisibilityExpression child = processTerm(termStart, index - 1, expr, expression);
-            if ((child == null) && (result == null)) {
-              badArgumentException("empty expression not allowed", expression, index);
-            }
             if (result == null) {
               return child;
             }

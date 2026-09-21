@@ -124,7 +124,7 @@ public class KDERunner {
 
   public void close() {
     if (session != null) {
-      session.close();
+      session.stop();
       session = null;
     }
   }
