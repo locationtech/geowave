@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4-runtime</artifactId>
-			<version>4.7.2</version>
+			<version>${antlr.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hdrhistogram</groupId>
@@ -73,7 +73,7 @@
 			<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-maven-plugin</artifactId>
-				<version>4.7.2</version>
+				<version>${antlr.version}</version>
 				<executions>
 					<execution>
 						<id>antlr</id>
