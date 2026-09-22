@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.client.codec.Codec;
-import org.redisson.codec.FstCodec;
 import org.redisson.codec.LZ4Codec;
 import org.redisson.codec.SerializationCodec;
 import org.redisson.codec.SnappyCodec;
@@ -61,9 +60,9 @@ public class RedisOptions extends StoreFactoryOptions {
 
   @Parameter(
       names = "--serialization",
-      description = "Can be \"fst\" or \"jdk\". Defaults to fst. Note that this serialization codec is only used for the data index when secondary indexing.",
+      description = "Can be \"jdk\". Note that this serialization codec is only used for the data index when secondary indexing.",
       converter = SerializationConverter.class)
-  private Serialization serialization = Serialization.FST;
+  private Serialization serialization = Serialization.JDK;
   @ParametersDelegate
   protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions() {
     @Override
@@ -161,7 +160,11 @@ public class RedisOptions extends StoreFactoryOptions {
   };
 
   public static enum Serialization {
-    FST(FstCodec::new), JDK(SerializationCodec::new);
+    // fst was the default, and cannot be used above Java 8: FSTConfiguration pre-registers
+    // java.math.BigDecimal and reflects into its private final fields, so the codec throws
+    // InaccessibleObjectException in its own constructor. fst has not been released since 2018
+    // and redisson has since dropped FstCodec.
+    JDK(SerializationCodec::new);
 
     private transient Supplier<Codec> codec;
 
