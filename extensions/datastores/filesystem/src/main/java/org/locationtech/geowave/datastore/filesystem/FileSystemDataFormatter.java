@@ -10,9 +10,9 @@ package org.locationtech.geowave.datastore.filesystem;
 
 import java.util.Arrays;
 import java.util.Optional;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
+import org.locationtech.geowave.datastore.filesystem.util.FileSystemUtils;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
 
@@ -159,7 +159,7 @@ public interface FileSystemDataFormatter {
         final String typeName,
         final byte[] partitionKey) {
       if ((partitionKey != null) && (partitionKey.length > 0)) {
-        return ByteArrayUtils.byteArrayToString(partitionKey);
+        return FileSystemUtils.encodeKey(partitionKey);
       }
       return "";
     }
@@ -178,7 +178,7 @@ public interface FileSystemDataFormatter {
         final String indexName,
         final String typeName,
         final String partitionDirectoryName) {
-      return ByteArrayUtils.byteArrayFromString(partitionDirectoryName);
+      return FileSystemUtils.decodeKey(partitionDirectoryName);
     }
 
   }
