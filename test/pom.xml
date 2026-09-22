@@ -22,6 +22,8 @@
 			IgnoreUnrecognizedVMOptions is read first and makes the dead flags survivable.
 			Accumulo 2.1 dropped them, so this goes away with 4.2's bump. -->
 		<it.child.jvm.options />
+		<!-- Extra arguments for the IT JVM itself, set per lane. Empty except on cassandra-it. -->
+		<it.jvm.args />
 	</properties>
 	<artifactId>geowave-test</artifactId>
 	<name>GeoWave Integration Tests</name>
@@ -621,7 +623,7 @@
 										thinking they are surefire reports -->
 									<reportsDirectory>${surefire.report.path}
 									</reportsDirectory>
-									<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
+									<argLine>${test.args} ${it.jvm.args} ${jacoco.failsafe.argline}</argLine>
 									<environmentVariables>
 										<JAVA_TOOL_OPTIONS>${it.child.jvm.options}</JAVA_TOOL_OPTIONS>
 									</environmentVariables>
@@ -758,7 +760,32 @@
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>CASSANDRA</testStoreType>
+				<!-- Cassandra sizes every prepared statement with jamm before caching it
+					(QueryProcessor.storePreparedStatement -> ObjectSizes.measureDeep). Loaded as a
+					java agent, as cassandra-env.sh always does, jamm measures through
+					Instrumentation. Embedded without one it falls back to
+					Unsafe.objectFieldOffset, which throws "can't get field offset on a hidden
+					class" for the lambdas in ClusteringComparator on JDK 15+, so the first
+					PREPARE of any statement fails. The jar path is set by dependency:properties
+					below, which resolves it from the graph rather than pinning a version. -->
+				<it.jvm.args>-javaagent:${com.github.jbellis:jamm:jar}</it.jvm.args>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>locate-jamm</id>
+								<goals>
+									<goal>properties</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>dynamodb-it</id>
