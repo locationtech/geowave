@@ -161,9 +161,24 @@
 			them. GeoWave's own code needs none of them; that is what the flip removed.
 			Spark's add-modules for jdk.incubator.vector is deliberately not carried over:
 			Spark treats it as an optimisation and it only produces an incubator warning
-			here. -->
+			here.
+
+			MaxMetaspaceSize was 512m, the same figure as CompressedClassSpaceSize, which
+			is reserved out of that budget, so class metadata alone could exhaust it.
+			hbase-it-server died of OutOfMemoryError: Metaspace partway through the
+			services ITs and then took the lane to its timeout. That lane runs an HBase
+			mini cluster, GeoServer, Jetty, Spark and gRPC in one JVM, and Java 21 with
+			Spark 4 and Scala 2.13 loads far more classes than Java 8 with Spark 3 did.
+			Metaspace is off-heap and the runners have 16GB, so 1g is not a squeeze.
+
+			java.security.manager=allow is for embedded Cassandra: CassandraDaemon.setup
+			calls ThreadAwareSecurityManager.install, and System.setSecurityManager throws
+			UnsupportedOperationException from JDK 18 without it. It is not an add-opens
+			and it is test scope. JDK 24 removes the escape hatch entirely (JEP 486), so
+			this buys time rather than solving anything. -->
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
-			-Xmx2g -XX:MaxMetaspaceSize=512m
+			-Xmx2g -XX:MaxMetaspaceSize=1g
+			-Djava.security.manager=allow
 			--add-opens=java.base/java.lang=ALL-UNNAMED
 			--add-opens=java.base/java.lang.invoke=ALL-UNNAMED
 			--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
