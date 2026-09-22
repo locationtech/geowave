@@ -7,4 +7,28 @@ When a major change is made to the GeoWave codebase that alters the serializatio
 
 For more information about the migration command, see the link:commands.html#util-migrate[`util migrate`] documentation.
 
+==== Changes That Migration Cannot Handle
 
+Some changes alter a store's encoding in a way that `util migrate` cannot read, so the data has to be
+re-ingested.
+
+*Filesystem store file names, GeoWave 2.0.2.* Every metadata entry and every data row in a
+`filesystem` store is a single file whose name encodes that entry's key, and each partition of an
+index is a directory named the same way. Earlier versions encoded those names with URL-safe base64,
+whose alphabet uses upper and lower case to mean different things: `AA.bin` and `aA.bin` are the
+keys `0x00` and `0x68`. On a case-insensitive filesystem -- which is the default for macOS APFS, and
+the norm for Windows NTFS -- those are one file, so writing one of the two keys silently overwrote
+the other's entry while keeping the other's name. The entry just written was then invisible under
+its own key, and the entry it landed on was gone. 104 of the 256 one-byte keys collide this way, so
+a store on such a filesystem was losing metadata and rows routinely rather than in a corner case.
+
+Names are now encoded with unpadded base32hex, whose alphabet (`0-9A-V`) is single-case and, unlike
+base64, orders encoded names the same way the raw keys order. `util migrate` cannot convert an
+existing store: on the case-insensitive filesystems this fixes, entries were already lost, and there
+is no way to tell which of the surviving files are the ones they claim to be. A build with this
+change rejects a name it cannot read rather than guessing at it, so pointing one at an older store
+fails with an error naming the file; re-ingest into a new store instead. If your store is on a
+case-sensitive filesystem it was never affected by the corruption and its files are intact, so
+renaming each file and partition directory from the old encoding to the new one is enough; note that
+base32hex names are about 20% longer, which lowers the longest usable key from roughly 188 bytes to
+roughly 156 within a 255-character name limit.
