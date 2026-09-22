@@ -91,11 +91,13 @@ jobs:
     # backend. Each of these has a known, understood reason to be failing and
     # is tracked for 3.0.0, where the whole matrix has to be green.
     continue-on-error: ${{ matrix.continue_on_error == true }}
-    # Every lane that has ever passed finished between 34 and 75 minutes. Without a
-    # limit a hung lane runs to GitHub's six-hour ceiling before it reports, which
-    # cassandra-it did on #1952 -- six hours to learn nothing. 90 minutes is clear of
-    # the slowest good run and turns a hang into a result four times sooner.
-    timeout-minutes: 90
+    # Without a limit a hung lane runs to GitHub's six-hour ceiling before it reports,
+    # which cassandra-it did on #1952 -- six hours to learn nothing. The first cap was
+    # 90 minutes, on the basis that every lane which had ever passed finished in 34 to
+    # 75. That reading was off, because a lane with a failing test stops early: once the
+    # failures were fixed, filesystem-it took 88.6 minutes to pass and eight lanes were
+    # cut off at the cap. 150 still turns a hang into a result well inside the ceiling.
+    timeout-minutes: 150
     strategy:
       fail-fast: false
       matrix:
