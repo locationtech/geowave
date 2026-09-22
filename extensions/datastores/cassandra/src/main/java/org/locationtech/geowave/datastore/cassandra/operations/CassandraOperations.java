@@ -96,6 +96,10 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 public class CassandraOperations implements MapReduceDataStoreOperations {
   private static final Logger LOGGER = LoggerFactory.getLogger(CassandraOperations.class);
+  // a create waits on schema agreement, which routinely outlasts the driver's two-second default
+  // request timeout on a loaded node, and a create that times out client-side leaves the table
+  // missing as far as this store is concerned
+  private static final Duration SCHEMA_CREATE_TIMEOUT = Duration.ofMinutes(1);
   private final CqlSession session;
   private final String gwNamespace;
   private static final int WRITE_RESPONSE_THREAD_SIZE = 16;
@@ -148,7 +152,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
                 "SimpleStrategy",
                 "replication_factor",
                 options.getReplicationFactor())).withDurableWrites(
-                    options.isDurableWrites()).build());
+                    options.isDurableWrites()).build().setTimeout(SCHEMA_CREATE_TIMEOUT));
   }
 
   public CqlSession getSession() {
@@ -160,7 +164,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   private void executeCreateTable(final CreateTable create, final String safeTableName) {
-    session.execute(create.build());
+    session.execute(create.build().setTimeout(SCHEMA_CREATE_TIMEOUT));
     state.tableExistsCache.put(safeTableName, true);
   }
 

@@ -121,11 +121,14 @@ jobs:
             retry_tests: true
           - profile: accumulo-it-server
             retry_tests: true
-          # Cassandra's cluster startup is timing sensitive, hence the retry,
-          # and a full pass takes around 80 minutes, so it paces the matrix. It
-          # has passed every run that was allowed to finish.
+          # No retry. .utility/retry reruns the whole lane -- build and suite --
+          # for up to 120 minutes, and a full cassandra pass takes about an hour,
+          # so one real failure spent the rest of the 150-minute cap on a second
+          # attempt that could not finish, and reported nothing useful. The
+          # failures that retry was hiding were causes, not timing: the
+          # SecurityManager, jamm without its agent, and CREATE TABLE on the
+          # driver's two-second default.
           - profile: cassandra-it
-            retry_tests: true
             continue_on_error: true
           # DynamoDB loses a small number of rows during ingest, so a different
           # assertion fails from run to run -- 2800 rows where 2822 were
