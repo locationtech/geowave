@@ -7,4 +7,18 @@ When a major change is made to the GeoWave codebase that alters the serializatio
 
 For more information about the migration command, see the link:commands.html#util-migrate[`util migrate`] documentation.
 
+==== Changes That Migration Cannot Handle
+
+Some changes alter a store's encoding in a way that `util migrate` cannot read, so the data has to be
+re-ingested.
+
+*Redis data index, GeoWave 3.0.* Earlier versions encoded the data index with `fst`, which was the
+default value of the `--serialization` option. `fst` cannot run on Java 9 or above at all -- it
+reflects into private fields of `java.math.BigDecimal` while building its own configuration -- so
+there is no version of GeoWave 3.0 that can read those entries in order to migrate them. The data
+index is now written with Redisson's `ByteArrayCodec`, which stores the keys and values unchanged,
+and the `--serialization` option has been removed; a store configuration that still sets it will be
+rejected when it is loaded. This affects only the data index, which is written when secondary
+indexing is enabled.
+
 
