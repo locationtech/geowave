@@ -184,11 +184,6 @@ public class TestUtils {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
-  public static boolean isOracleJRE() {
-    return (System.getProperty("java.vm.name") != null)
-        && System.getProperty("java.vm.name").contains("HotSpot");
-  }
-
   public static void writeConfigToFile(final File file, final Configuration config)
       throws IOException {
     try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
