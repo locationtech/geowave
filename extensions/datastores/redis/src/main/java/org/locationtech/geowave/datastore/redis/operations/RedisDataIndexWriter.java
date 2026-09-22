@@ -12,7 +12,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
-import org.locationtech.geowave.datastore.redis.config.RedisOptions.Serialization;
 import org.locationtech.geowave.datastore.redis.util.RedisMapWrapper;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RedissonClient;
@@ -22,20 +21,12 @@ public class RedisDataIndexWriter implements RowWriter {
 
   public RedisDataIndexWriter(
       final RedissonClient client,
-      final Serialization serialization,
       final Compression compression,
       final String namespace,
       final String typeName,
       final boolean visibilityEnabled) {
     super();
-    map =
-        RedisUtils.getDataIndexMap(
-            client,
-            serialization,
-            compression,
-            namespace,
-            typeName,
-            visibilityEnabled);
+    map = RedisUtils.getDataIndexMap(client, compression, namespace, typeName, visibilityEnabled);
   }
 
   @Override

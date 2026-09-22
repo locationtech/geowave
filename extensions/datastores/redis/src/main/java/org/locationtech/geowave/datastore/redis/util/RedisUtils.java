@@ -29,9 +29,9 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
-import org.locationtech.geowave.datastore.redis.config.RedisOptions.Serialization;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.ByteArrayCodec;
 import org.redisson.client.protocol.ScoredEntry;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.MultimapBuilder;
@@ -126,7 +126,6 @@ public class RedisUtils {
 
   public static RedisMapWrapper getDataIndexMap(
       final RedissonClient client,
-      final Serialization serialization,
       final Compression compression,
       final String namespace,
       final String typeName,
@@ -134,7 +133,7 @@ public class RedisUtils {
     return new RedisMapWrapper(
         client,
         getRowSetPrefix(namespace, typeName, DataIndexUtils.DATA_ID_INDEX.getName()),
-        compression.getCodec(serialization.getCodec()),
+        compression.getCodec(ByteArrayCodec.INSTANCE),
         visibilityEnabled);
   }
 
