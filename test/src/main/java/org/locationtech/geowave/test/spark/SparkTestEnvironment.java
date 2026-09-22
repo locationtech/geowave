@@ -35,10 +35,6 @@ public class SparkTestEnvironment implements TestEnvironment {
       final SparkConf addonOptions = new SparkConf();
       addonOptions.setMaster("local[*]");
       addonOptions.setAppName("CoreGeoWaveSparkITs");
-      // Spark's UI is a Jersey 3 application and GeoWave's services are Jersey 2. Spark's
-      // copy is excluded from the classpath for that reason, so the UI could not start
-      // anyway; asking for it would only produce a confusing failure.
-      addonOptions.set("spark.ui.enabled", "false");
       defaultSession = GeoWaveSparkConf.createDefaultSession(addonOptions);
       if (defaultSession == null) {
         LOGGER.error("Unable to create default spark session for tests");
