@@ -177,16 +177,3 @@ jobs:
           path: test/target/failsafe-reports/*.xml
           if-no-files-found: warn
 
-      # MiniAccumuloCluster starts Initialize as a child process and reports only
-      # "Initialize process returned 1. Check the logs in ./target/accumulo_temp/logs",
-      # which do not reach the job output. Without these the only thing the lane says
-      # is that every later attempt found the directory non-empty.
-      - name: Upload mini cluster logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: it-cluster-logs-${{ strategy.job-index }}
-          path: |
-            test/target/accumulo_temp/logs/**
-            test/target/hbase/**/*.log
-          if-no-files-found: ignore
