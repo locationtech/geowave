@@ -101,143 +101,151 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testDataIndexOnly() throws Exception {
-    TestUtils.testLocalIngest(
-        getDataStorePluginOptions(),
-        DimensionalityType.SPATIAL,
-        HAIL_SHAPEFILE_FILE,
-        1);
+    // cleanup runs even when an assertion fails: the next tests share this data-index-only store,
+    // and a leftover type makes them fail in ways unrelated to what actually broke
+    try {
+      TestUtils.testLocalIngest(
+          getDataStorePluginOptions(),
+          DimensionalityType.SPATIAL,
+          HAIL_SHAPEFILE_FILE,
+          1);
 
-    final DataStore store = dataStoreOptions.createDataStore();
-    final DataStore dataIdxStore = dataIdxOnlyDataStoreOptions.createDataStore();
-    final FeatureDataAdapter adapter = (FeatureDataAdapter) store.getTypes()[0];
-    dataIdxStore.addType(adapter);
-    try (Writer<SimpleFeature> writer = dataIdxStore.createWriter(adapter.getTypeName())) {
+      final DataStore store = dataStoreOptions.createDataStore();
+      final DataStore dataIdxStore = dataIdxOnlyDataStoreOptions.createDataStore();
+      final FeatureDataAdapter adapter = (FeatureDataAdapter) store.getTypes()[0];
+      dataIdxStore.addType(adapter);
+      try (Writer<SimpleFeature> writer = dataIdxStore.createWriter(adapter.getTypeName())) {
+        try (CloseableIterator<SimpleFeature> it =
+            store.query(VectorQueryBuilder.newBuilder().build())) {
+          while (it.hasNext()) {
+            writer.write(it.next());
+          }
+        }
+      }
+      Long count =
+          (Long) dataIdxStore.aggregate(
+              VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
+      final Long originalCount =
+          (Long) store.aggregate(
+              VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
+      Assert.assertTrue(count > 0);
+      Assert.assertEquals(originalCount, count);
+      final StatisticQuery<CountValue, Long> query =
+          StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+              adapter.getTypeName()).build();
+      count = dataIdxStore.aggregateStatistics(query).getValue();
+      Assert.assertEquals(originalCount, count);
+      count = 0L;
+      final String[] idsToRemove = new String[3];
+      int idsToRemoveIdx = 0;
       try (CloseableIterator<SimpleFeature> it =
           store.query(VectorQueryBuilder.newBuilder().build())) {
         while (it.hasNext()) {
-          writer.write(it.next());
+          if (idsToRemoveIdx < 3) {
+            idsToRemove[idsToRemoveIdx++] = it.next().getID();
+          } else {
+            it.next();
+          }
+          count++;
         }
       }
-    }
-    Long count =
-        (Long) dataIdxStore.aggregate(
-            VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
-    final Long originalCount =
-        (Long) store.aggregate(
-            VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
-    Assert.assertTrue(count > 0);
-    Assert.assertEquals(originalCount, count);
-    final StatisticQuery<CountValue, Long> query =
-        StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
-            adapter.getTypeName()).build();
-    count = dataIdxStore.aggregateStatistics(query).getValue();
-    Assert.assertEquals(originalCount, count);
-    count = 0L;
-    final String[] idsToRemove = new String[3];
-    int idsToRemoveIdx = 0;
-    try (CloseableIterator<SimpleFeature> it =
-        store.query(VectorQueryBuilder.newBuilder().build())) {
-      while (it.hasNext()) {
-        if (idsToRemoveIdx < 3) {
-          idsToRemove[idsToRemoveIdx++] = it.next().getID();
-        } else {
-          it.next();
-        }
-        count++;
+      Assert.assertEquals(originalCount, count);
+      for (final String id : idsToRemove) {
+        final VectorQueryBuilder idBldr = VectorQueryBuilder.newBuilder();
+        Assert.assertTrue(
+            dataIdxStore.delete(
+                idBldr.constraints(
+                    idBldr.constraintsFactory().dataIds(StringUtils.stringToBinary(id))).build()));
       }
-    }
-    Assert.assertEquals(originalCount, count);
-    for (final String id : idsToRemove) {
-      final VectorQueryBuilder idBldr = VectorQueryBuilder.newBuilder();
-      Assert.assertTrue(
-          dataIdxStore.delete(
-              idBldr.constraints(
-                  idBldr.constraintsFactory().dataIds(StringUtils.stringToBinary(id))).build()));
-    }
 
-    count = dataIdxStore.aggregateStatistics(query).getValue();
-    Assert.assertEquals(originalCount - 3, (long) count);
+      count = dataIdxStore.aggregateStatistics(query).getValue();
+      Assert.assertEquals(originalCount - 3, (long) count);
 
-    TestUtils.deleteAll(dataStoreOptions);
-    TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
+    } finally {
+      TestUtils.deleteAll(dataStoreOptions);
+      TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
+    }
   }
 
   @Test
   public void testDataIndexOnlyOnCustomType() throws Exception {
-    final DataStore dataStore = dataIdxOnlyDataStoreOptions.createDataStore();
-    final LatLonTimeAdapter adapter = new LatLonTimeAdapter();
-    dataStore.addType(adapter);
-    try (Writer<LatLonTime> writer = dataStore.createWriter(adapter.getTypeName())) {
-      for (int i = 0; i < 10; i++) {
-        writer.write(new LatLonTime(i, 100 * i, 0.25f * i, -0.5f * i));
-      }
-    }
-
-    final Set<Integer> expectedIntIds =
-        IntStream.rangeClosed(0, 9).boxed().collect(Collectors.toSet());
-    try (CloseableIterator<LatLonTime> it =
-        (CloseableIterator) dataStore.query(QueryBuilder.newBuilder().build())) {
-      while (it.hasNext()) {
-        Assert.assertTrue(expectedIntIds.remove(it.next().getId()));
-      }
-    }
-    Assert.assertTrue(expectedIntIds.isEmpty());
     try {
-      List<Integer> expectedReversedIntIds =
-          IntStream.rangeClosed(0, 2).boxed().collect(Collectors.toList());
-      ListIterator<Integer> expectedReversedIntIdsIterator =
-          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
-      try (CloseableIterator<LatLonTime> it =
-          (CloseableIterator) dataStore.query(
-              QueryBuilder.newBuilder().constraints(
-                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
-                      null,
-                      Lexicoders.LONG.toByteArray(200L))).build())) {
-        while (it.hasNext()) {
-          Assert.assertEquals(
-              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
-              Integer.valueOf(it.next().getId()));
+      final DataStore dataStore = dataIdxOnlyDataStoreOptions.createDataStore();
+      final LatLonTimeAdapter adapter = new LatLonTimeAdapter();
+      dataStore.addType(adapter);
+      try (Writer<LatLonTime> writer = dataStore.createWriter(adapter.getTypeName())) {
+        for (int i = 0; i < 10; i++) {
+          writer.write(new LatLonTime(i, 100 * i, 0.25f * i, -0.5f * i));
         }
-        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
       }
-      expectedReversedIntIds = IntStream.rangeClosed(7, 9).boxed().collect(Collectors.toList());
-      expectedReversedIntIdsIterator =
-          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+
+      final Set<Integer> expectedIntIds =
+          IntStream.rangeClosed(0, 9).boxed().collect(Collectors.toSet());
       try (CloseableIterator<LatLonTime> it =
-          (CloseableIterator) dataStore.query(
-              QueryBuilder.newBuilder().constraints(
-                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
-                      Lexicoders.LONG.toByteArray(650L),
-                      null)).build())) {
+          (CloseableIterator) dataStore.query(QueryBuilder.newBuilder().build())) {
         while (it.hasNext()) {
-          Assert.assertEquals(
-              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
-              Integer.valueOf(it.next().getId()));
+          Assert.assertTrue(expectedIntIds.remove(it.next().getId()));
         }
-        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
       }
-      expectedReversedIntIds = IntStream.rangeClosed(4, 8).boxed().collect(Collectors.toList());
-      expectedReversedIntIdsIterator =
-          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
-      try (CloseableIterator<LatLonTime> it =
-          (CloseableIterator) dataStore.query(
-              QueryBuilder.newBuilder().constraints(
-                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
-                      Lexicoders.LONG.toByteArray(400L),
-                      Lexicoders.LONG.toByteArray(800L))).build())) {
-        while (it.hasNext()) {
-          Assert.assertEquals(
-              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
-              Integer.valueOf(it.next().getId()));
+      Assert.assertTrue(expectedIntIds.isEmpty());
+      try {
+        List<Integer> expectedReversedIntIds =
+            IntStream.rangeClosed(0, 2).boxed().collect(Collectors.toList());
+        ListIterator<Integer> expectedReversedIntIdsIterator =
+            expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+        try (CloseableIterator<LatLonTime> it =
+            (CloseableIterator) dataStore.query(
+                QueryBuilder.newBuilder().constraints(
+                    QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                        null,
+                        Lexicoders.LONG.toByteArray(200L))).build())) {
+          while (it.hasNext()) {
+            Assert.assertEquals(
+                Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+                Integer.valueOf(it.next().getId()));
+          }
+          Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
         }
-        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+        expectedReversedIntIds = IntStream.rangeClosed(7, 9).boxed().collect(Collectors.toList());
+        expectedReversedIntIdsIterator =
+            expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+        try (CloseableIterator<LatLonTime> it =
+            (CloseableIterator) dataStore.query(
+                QueryBuilder.newBuilder().constraints(
+                    QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                        Lexicoders.LONG.toByteArray(650L),
+                        null)).build())) {
+          while (it.hasNext()) {
+            Assert.assertEquals(
+                Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+                Integer.valueOf(it.next().getId()));
+          }
+          Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+        }
+        expectedReversedIntIds = IntStream.rangeClosed(4, 8).boxed().collect(Collectors.toList());
+        expectedReversedIntIdsIterator =
+            expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+        try (CloseableIterator<LatLonTime> it =
+            (CloseableIterator) dataStore.query(
+                QueryBuilder.newBuilder().constraints(
+                    QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                        Lexicoders.LONG.toByteArray(400L),
+                        Lexicoders.LONG.toByteArray(800L))).build())) {
+          while (it.hasNext()) {
+            Assert.assertEquals(
+                Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+                Integer.valueOf(it.next().getId()));
+          }
+          Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+        }
+      } catch (final UnsupportedOperationException e) {
+        if (((BaseDataStore) dataStore).isReverseIterationSupported()) {
+          Assert.fail(e.getMessage());
+        }
       }
-    } catch (final UnsupportedOperationException e) {
-      if (((BaseDataStore) dataStore).isReverseIterationSupported()) {
-        Assert.fail(e.getMessage());
-      }
+    } finally {
+      TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
     }
-    TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
   }
 
   public static class LatLonTime {
