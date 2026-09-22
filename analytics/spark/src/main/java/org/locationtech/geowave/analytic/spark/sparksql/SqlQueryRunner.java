@@ -138,10 +138,9 @@ public class SqlQueryRunner {
                     if (Objects.equals(
                         condClass,
                         "org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
-                      final String udfName =
-                          condObj.get("name").getAsJsonObject().get("funcName").getAsString();
+                      final String udfName = unresolvedFunctionName(condObj);
                       final UDFNameAndConstructor geomUDF =
-                          UDFRegistrySPI.findFunctionByName(udfName);
+                          udfName == null ? null : UDFRegistrySPI.findFunctionByName(udfName);
                       if (geomUDF != null) {
                         final ExtractedGeomPredicate relevantPredicate =
                             new ExtractedGeomPredicate();
@@ -304,6 +303,33 @@ public class SqlQueryRunner {
 
   private Dataset<Row> runDefaultSQL() {
     return session.sql(sql);
+  }
+
+  /**
+   * Reads the function name out of a serialised UnresolvedFunction. Spark 3 wrote a name object
+   * holding a FunctionIdentifier, so the name was at name.funcName. Spark 4 replaced that with
+   * nameParts, and renders it as a string holding a bracketed list -- "[GeomIntersects]", or "[db,
+   * func]" when qualified. Reading the old shape against Spark 4 gets a null from get("name") and
+   * dereferences it, which is how this surfaced.
+   */
+  private static String unresolvedFunctionName(final JsonObject functionObj) {
+    final JsonElement nameParts = functionObj.get("nameParts");
+    if ((nameParts != null) && nameParts.isJsonPrimitive()) {
+      String parts = nameParts.getAsString().trim();
+      if (parts.startsWith("[") && parts.endsWith("]")) {
+        parts = parts.substring(1, parts.length() - 1);
+      }
+      final String[] split = parts.split(",");
+      return split[split.length - 1].trim();
+    }
+    final JsonElement name = functionObj.get("name");
+    if ((name != null) && name.isJsonObject()) {
+      final JsonElement funcName = name.getAsJsonObject().get("funcName");
+      if (funcName != null) {
+        return funcName.getAsString();
+      }
+    }
+    return null;
   }
 
   private Matcher getFirstPositiveMatcher(final Pattern compiledPattern, final String sql) {
