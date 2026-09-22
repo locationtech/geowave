@@ -529,8 +529,17 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     LOGGER.warn("Total count in table after delete: " + finalFeatures);
     LOGGER.warn("<before> - <after> = " + (allFeatures - finalFeatures));
 
+    // the numbers go in the message because this method's LOGGER output does not reliably reach
+    // the build log, and this assertion fails intermittently on DynamoDB and Accumulo
     Assert.assertTrue(
-        "Unable to delete all features in bulk delete",
+        "Unable to delete all features in bulk delete: "
+            + allFeatures
+            + " before, "
+            + finalFeatures
+            + " after, so "
+            + (allFeatures - finalFeatures)
+            + " removed, but the query matched and deleted "
+            + deletedFeatures,
         (allFeatures - finalFeatures) == deletedFeatures);
   }
 
