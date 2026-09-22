@@ -17,9 +17,10 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
-import org.locationtech.geowave.datastore.redis.util.RedissonClientCache;
+import org.redisson.Redisson;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import redis.embedded.RedisServer;
 
 public class RedisMetadataWriterTest {
@@ -33,7 +34,11 @@ public class RedisMetadataWriterTest {
         RedisServer.builder().port(6379).setting("bind 127.0.0.1").setting(
             "maxmemory 512M").setting("timeout 30000").build();
     server.start();
-    client = RedissonClientCache.getInstance().getClient(null, null, "redis://127.0.0.1:6379");
+    // a client of its own rather than RedissonClientCache's: the cache is shared across the JVM,
+    // and shutting its client down here hands every later test class a dead one
+    final Config config = new Config();
+    config.useSingleServer().setAddress("redis://127.0.0.1:6379");
+    client = Redisson.create(config);
   }
 
   @AfterClass
