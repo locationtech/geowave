@@ -27,7 +27,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -37,6 +36,7 @@ import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.Ind
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Streams;
+import com.google.common.io.BaseEncoding;
 import com.google.common.primitives.UnsignedBytes;
 
 public class FileSystemUtils {
@@ -44,6 +44,14 @@ public class FileSystemUtils {
 
   public static int FILESYSTEM_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int FILESYSTEM_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
+
+  private static final String FILE_EXTENSION = ".bin";
+
+  // Keys become file and directory names under unpadded base32hex (RFC 4648 extended hex alphabet,
+  // 0-9A-V). Both properties of that alphabet are load-bearing: it is single-case, so distinct keys
+  // cannot collide on a case-insensitive filesystem such as macOS APFS or Windows NTFS, and it is
+  // order-preserving, so encoded names sort like the raw key bytes they came from.
+  private static final BaseEncoding KEY_ENCODING = BaseEncoding.base32Hex().omitPadding();
 
   public static SortedSet<Pair<FileSystemKey, Path>> getSortedSet(
       final Path subDirectory,
@@ -277,14 +285,32 @@ public class FileSystemUtils {
     }
   }
 
-  protected static String keyToFileName(final byte[] key) {
-    return ByteArrayUtils.byteArrayToString(key) + ".bin";
+  public static String encodeKey(final byte[] key) {
+    return KEY_ENCODING.encode(key);
   }
 
-  protected static byte[] fileNameToKey(final String key) {
-    if (key.length() < 5) {
+  public static byte[] decodeKey(final String encodedKey) {
+    try {
+      return KEY_ENCODING.decode(encodedKey);
+    } catch (final IllegalArgumentException e) {
+      throw new IllegalArgumentException(
+          "'"
+              + encodedKey
+              + "' is not a base32hex-encoded key. GeoWave 3.0 changed how the filesystem datastore"
+              + " encodes keys into names; a store written by an earlier version has to be"
+              + " re-ingested.",
+          e);
+    }
+  }
+
+  protected static String keyToFileName(final byte[] key) {
+    return encodeKey(key) + FILE_EXTENSION;
+  }
+
+  protected static byte[] fileNameToKey(final String fileName) {
+    if (fileName.length() <= FILE_EXTENSION.length()) {
       return new byte[0];
     }
-    return ByteArrayUtils.byteArrayFromString(key.substring(0, key.length() - 4));
+    return decodeKey(fileName.substring(0, fileName.length() - FILE_EXTENSION.length()));
   }
 }

@@ -39,6 +39,9 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
     final DataTypeAdapter<?> adapter =
         adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId));
 
+    if (adapter == null) {
+      return null;
+    }
     if (adapter instanceof InternalDataAdapter) {
       return (InternalDataAdapter<?>) adapter;
     }

@@ -253,7 +253,11 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
         dataStore.addType(adapter, indices);
         writer = dataStore.createWriter(adapter.getTypeName());
 
-        adapterTypeNameToIndexWriterCache.put(adapter.getTypeName(), writer);
+        // a type with no indices has no writer; caching the null would only make close() throw an
+        // NPE over the error the caller is about to report
+        if (writer != null) {
+          adapterTypeNameToIndexWriterCache.put(adapter.getTypeName(), writer);
+        }
       }
       return writer;
     }
