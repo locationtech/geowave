@@ -22,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -121,6 +122,7 @@ public class BatchedRangeRead<T> {
     final List<CompletionStage<AsyncResultSet>> futures =
         Lists.newArrayListWithExpectedSize(statements.length);
     final BlockingQueue<Object> results = new LinkedBlockingQueue<>(MAX_BOUNDED_READS_ENQUEUED);
+    final AtomicReference<Throwable> readFailure = new AtomicReference<>();
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -153,18 +155,19 @@ public class BatchedRangeRead<T> {
                                   e);
                             }
                           });
+                } catch (final RuntimeException e) {
+                  // a later page fetch or a row's decoding failed, so the rest of this range is
+                  // lost
+                  recordFailure(readFailure, e);
                 } finally {
                   checkFinalize(queryCount, results, readSemaphore);
                 }
               } else if (t != null) {
-                checkFinalize(queryCount, results, readSemaphore);
-
-                // go ahead and wrap in a runtime exception for this case, but you
-                // can do logging or start counting errors.
+                // close() cancels reads it no longer needs
                 if (!(t instanceof CancellationException)) {
-                  LOGGER.error("Failure from async query", t);
-                  throw new RuntimeException(t);
+                  recordFailure(readFailure, t);
                 }
+                checkFinalize(queryCount, results, readSemaphore);
               }
             });
           } catch (final InterruptedException e) {
@@ -195,7 +198,45 @@ public class BatchedRangeRead<T> {
           }
         }
       }
-    }, new RowConsumer(results));
+    }, new FailOnIncompleteResults<>(new RowConsumer<>(results), readFailure));
+  }
+
+  private static void recordFailure(final AtomicReference<Throwable> failure, final Throwable t) {
+    if (failure.compareAndSet(null, t)) {
+      LOGGER.error("Failure from async query", t);
+    }
+  }
+
+  /** Throws at the end of the results, rather than returning them short, if any read failed. */
+  private static class FailOnIncompleteResults<T> implements Iterator<T> {
+    private final Iterator<T> results;
+    private final AtomicReference<Throwable> failure;
+
+    private FailOnIncompleteResults(
+        final Iterator<T> results,
+        final AtomicReference<Throwable> failure) {
+      this.results = results;
+      this.failure = failure;
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (results.hasNext()) {
+        return true;
+      }
+      final Throwable t = failure.get();
+      if (t != null) {
+        throw new IllegalStateException(
+            "A Cassandra read failed, so the results are incomplete",
+            t);
+      }
+      return false;
+    }
+
+    @Override
+    public T next() {
+      return results.next();
+    }
   }
 
   private void checkFinalize(
