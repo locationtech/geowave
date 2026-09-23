@@ -6,7 +6,7 @@
 
 ==== Overview
 
-The documentation is writen in http://www.methods.co.nz/asciidoc/index.html[AsciiDoc^] which is a plain-text markup format that can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.
+The documentation is written in http://www.methods.co.nz/asciidoc/index.html[AsciiDoc^] which is a plain-text markup format that can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.
 
 Helpful Links:
 
@@ -25,14 +25,14 @@ To preview markup as HTML before making a commit, there are plugins available, a
 
 ==== Site
 
-To build all the content used for the entire finished web page or the generated PDF for the link:https://locationtech.github.io/geowave/[GeoWave website, window="_blank"], use the following command.
+To build all the content used for the entire finished web page or the generated PDF for the link:https://locationtech.github.io/geowave/[GeoWave website, window="_blank"], use the following command. Like the rest of the build, it requires JDK 21.
 
 [source, bash]
 ----
 $ cd geowave
-$ mvn -P {FORMAT} install <1>
+$ ./mvnw -P {FORMAT} -pl docs install -DskipTests -Dspotbugs.skip <1>
 ----
 <1> Supported formats include 'pdf' and 'html' (no quotes).
 
-The entire site, including both docs and javadocs, will be available for inspection in the `geowave/target/site/` directory.
+The documentation will be available for inspection in the `geowave/target/site/` directory. See <<015-building.adoc#build-docs, Building Docs>> for building the Javadocs and the Python bindings documentation.
 

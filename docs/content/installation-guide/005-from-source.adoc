@@ -1,0 +1,66 @@
+<<<
+
+:linkattrs:
+
+[[install-from-source]]
+== Installing the Command-Line Tools
+
+GeoWave 3.0 has no standalone installers or RPM packages. From 3.0 on, release binaries, including the command-line tools, are attached to each release on link:https://github.com/locationtech/geowave/releases[GitHub Releases, window="_blank"]. Until a 3.0 release is published, build the tools from source.
+
+=== Prerequisites
+
+* JDK 21. For Java 8, use the link:https://github.com/locationtech/geowave/tree/2.x-jdk8[`2.x-jdk8`, window="_blank"] branch instead.
+* Maven 3.9 or later, or the `./mvnw` wrapper committed in the repository.
+* Git.
+
+On Apple Silicon, the build needs extra configuration for the protocol buffer compilers, and the RocksDB data store cannot run there. See link:devguide.html#building[Building, window="_blank"] in the Developer Guide.
+
+=== Build
+
+[source, bash]
+----
+$ git clone --depth 1 https://github.com/locationtech/geowave.git
+$ cd geowave
+$ ./mvnw package -P geowave-tools-singlejar -Dspotbugs.skip -DskipTests
+----
+
+This produces a single JAR containing the command-line tools at `deploy/target/geowave-deploy-<version>-tools.jar`.
+
+On Apple Silicon, instead run the two build passes described in link:devguide.html#building[Building, window="_blank"], then package the tools from the already-built modules:
+
+[source, bash]
+----
+$ ./mvnw package -pl deploy -P geowave-tools-singlejar -Dspotbugs.skip -DskipTests
+----
+
+=== Run
+
+The JAR is executable:
+
+[source, bash]
+----
+$ java -jar deploy/target/geowave-deploy-<version>-tools.jar help
+----
+
+To use it as the `geowave` command, define an alias. On Mac and Linux, add this to your shell's startup file, such as `~/.zshrc` or `~/.bashrc`, with the path to your build:
+
+[source, bash]
+----
+alias geowave="java -jar /path/to/geowave/deploy/target/geowave-deploy-<version>-tools.jar"
+----
+
+On Windows:
+
+[source, bash]
+----
+doskey geowave=java -jar C:\path\to\geowave\deploy\target\geowave-deploy-<version>-tools.jar $*
+----
+
+Then verify it:
+
+[source, bash]
+----
+$ geowave help
+----
+
+See link:devguide.html#packaging[Packaging GeoWave Builds, window="_blank"] in the Developer Guide for the other artifacts the build can produce, such as the GeoServer plugin.

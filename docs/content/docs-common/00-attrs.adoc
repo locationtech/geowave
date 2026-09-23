@@ -17,7 +17,8 @@
 :store-accumulo: {blob-root}/extensions/datastores/accumulo/{source-root}
 :store-cassandra: {blob-root}/extensions/datastores/cassandra/{source-root}
 :store-dynamodb: {blob-root}/extensions/datastores/dynamodb/{source-root}
-:store-hbase: {blob-root}/extensions/datastores/hbase/{source-root}
+:store-filesystem: {blob-root}/extensions/datastores/filesystem/{source-root}
+:store-hbase: {blob-root}/extensions/datastores/hbase/core/{source-root}
 :store-redis: {blob-root}/extensions/datastores/redis/{source-root}
 :store-rocksdb: {blob-root}/extensions/datastores/rocksdb/{source-root}
 

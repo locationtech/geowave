@@ -8,5 +8,5 @@ This is a buildable maven project that has examples for building your own ingest
 
 ## Data
 
-The data folder contains various useful files, including analytic notebooks (currently [Zeppelin](data/notebooks/zeppelin); Jupyter coming soon).
+The data folder contains various useful files, including analytic notebooks for [Zeppelin](data/notebooks/zeppelin) and [Jupyter](data/notebooks/jupyter), and [GeoServer styles](data/slds) (SLDs).
 

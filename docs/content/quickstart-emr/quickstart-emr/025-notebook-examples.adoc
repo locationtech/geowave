@@ -1,8 +1,0 @@
-<<<
-
-== Notebook Examples
-
-- link:jupyter.html#[Jupyter]
-- link:zeppelin.html#[Zeppelin]
-- link:spatial-join.html#[Spatial Join]
-

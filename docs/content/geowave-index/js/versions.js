@@ -1,19 +1,9 @@
-// When a new version of GeoWave is released, update the previous version to load from S3 and add the new version to the top of the list.
+// When a new version of GeoWave is released, keep the previous version's docs on GitHub Pages under its own path and add the new version to the top of the list.
 
 var _versions = {  
   '2.0.1': 'https://locationtech.github.io/geowave/%%page%%',
-  '2.0.0': 'http://s3.amazonaws.com/geowave/2.0.0/docs/%%page%%',
-  '1.2.0': 'http://s3.amazonaws.com/geowave/1.2.0/docs/%%page%%',
-  '1.1.0': 'http://s3.amazonaws.com/geowave/1.1.0/docs/%%page%%',
-  '1.0.0': 'http://s3.amazonaws.com/geowave/1.0.0/docs/%%page%%',
-  '0.9.8': 'http://s3.amazonaws.com/geowave/0.9.8/docs/%%page%%',
-  '0.9.7': 'http://s3.amazonaws.com/geowave/0.9.7/docs/%%page%%',
-  '0.9.6': 'http://s3.amazonaws.com/geowave/0.9.6/docs/%%page%%',
-  '0.9.5': 'http://s3.amazonaws.com/geowave/0.9.5/docs/%%page%%',
-  '0.9.4': 'http://s3.amazonaws.com/geowave/0.9.4/docs/%%page%%',
-  '0.9.3': 'http://s3.amazonaws.com/geowave/0.9.3/docs/%%page%%',
-  '0.9.2.1': 'http://locationtech.github.io/geowave/previous-versions/0.9.2.1/documentation.html',
-  '0.9.1': 'http://locationtech.github.io/geowave/previous-versions/0.9.1/documentation.html',
+  '0.9.2.1': 'https://locationtech.github.io/geowave/previous-versions/0.9.2.1/documentation.html',
+  '0.9.1': 'https://locationtech.github.io/geowave/previous-versions/0.9.1/documentation.html',
 };
 
 if (typeof versions === 'undefined') {

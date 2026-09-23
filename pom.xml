@@ -195,9 +195,10 @@
 			--add-opens=java.base/sun.util.calendar=ALL-UNNAMED
 			--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED</test.args>
 		<spotbugs.version>4.8.6</spotbugs.version>
-		<!-- 4.8.6.x is the last line built for Java 8; 4.10.x is class-file major 55
-			and would not load on the JDK 8 gate. The plugin and the analysis engine
-			version independently, hence two properties. -->
+		<!-- Pinned to 4.8.6.x, the last line that loads on JDK 8, while the build
+			still gated on it; master builds on JDK 21, so that no longer constrains
+			the version. The plugin and the analysis engine version independently,
+			hence two properties. -->
 		<spotbugs.plugin.version>4.8.6.6</spotbugs.plugin.version>
 		<!-- DoInsideDoPrivileged reports DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED
 			and DP_DO_INSIDE_DO_PRIVILEGED, both of which exist to protect a
@@ -1638,19 +1639,18 @@
 								<requireMavenVersion>
 									<version>[3.9.0,)</version>
 								</requireMavenVersion>
-								<!-- The build targets Java 8 and CI compiles on JDK 8, but a
-									dependency bump can quietly bring in a jar built for a later
-									release: javac then refuses to read it and the failure names a
-									class file version rather than the dependency that caused it.
-									Avro 1.12 is exactly this: Java 11 bytecode, and the bump to it
-									was reviewed on JDK 17 where nothing complained. Check the
-									dependencies against the compiler target instead of finding out
-									from javac. -->
+								<!-- A dependency bump can quietly bring in a jar built for a later
+									Java release than the compiler target: javac then refuses to read
+									it and the failure names a class file version rather than the
+									dependency that caused it. Avro 1.12 did exactly this while the
+									target was Java 8: Java 11 bytecode, reviewed on JDK 17 where
+									nothing complained. Check the dependencies against the compiler
+									target instead of finding out from javac. -->
 								<enforceBytecodeVersion>
 									<maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
 									<ignoreClasses>
 										<!-- Multi-release jars keep newer bytecode under
-											META-INF/versions, which a Java 8 runtime never loads. -->
+											META-INF/versions, which only a runtime that new loads. -->
 										<ignoreClass>META-INF.versions.*</ignoreClass>
 										<ignoreClass>module-info</ignoreClass>
 										<!-- The only pre-existing violation in the whole graph: five
@@ -1897,12 +1897,11 @@
 	</pluginRepositories>
 	<profiles>
 		<profile>
-			<!-- spotbugs-maven-plugin 3.1.10 bundles a Groovy that cannot initialize on
-				JDK 9 or later: the mojo fails to load before it ever reads its own skip
-				parameter, so -Dspotbugs.skip alone cannot avoid it. Binding the execution
-				through a profile means the property deactivates the profile and the plugin
-				is never resolved at all, which is what -Dspotbugs.skip is expected to do.
-				This can go away once the analyzer is upgraded. -->
+			<!-- Binding the execution through a profile means -Dspotbugs.skip deactivates
+				the profile and the plugin is never resolved at all. That was introduced
+				because spotbugs-maven-plugin 3.1.10 could not load on JDK 9 or later, so
+				its own skip parameter was never read; 4.8.6.6 loads fine, but skipping
+				without resolving the plugin is still the cheaper behaviour. -->
 			<id>spotbugs</id>
 			<activation>
 				<property>

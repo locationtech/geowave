@@ -23,7 +23,6 @@ var documentationMenuItems = {
   'GeoWave Overview': 'overview.html',
   'Installation Guide': 'installation-guide.html',
   'Quickstart Guide': 'quickstart.html',
-  'EMR Quickstart Guide': 'quickstart-emr.html',
   'User Guide': 'userguide.html',
   'Developer Guide': 'devguide.html',
   'Command-Line Interface': 'commands.html',
@@ -34,7 +33,6 @@ var documentationMenuItems = {
 
 var supportMenuItems = {
   'GitHub Issues': 'https://github.com/locationtech/geowave/issues',
-  'Gitter': 'https://gitter.im/locationtech/geowave',
   'Mailing List': 'mailto:geowave-dev@eclipse.org',
   'sep1': null,
   'Downloads': 'downloads.html'

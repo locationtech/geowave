@@ -22,11 +22,11 @@ This guide assumes the following:
 GeoWave development requires the following components:
 
 [options="compact"]
-* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
+* link:https://adoptium.net/[Java Development Kit (JDK), window="_blank"] 21
 +
-Requires JDK v1.8 or greater
+Requires JDK 21. Continuous integration builds and tests with link:https://adoptium.net/[Eclipse Temurin, window="_blank"] 21.
 +
-Download from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+Java 8 is supported only by the GeoWave 2.x line, which lives on the link:https://github.com/locationtech/geowave/tree/2.x-jdk8[`2.x-jdk8`, window="_blank"] branch.
 
 * link:http://git-scm.com/[Git, window="_blank"]
 +
@@ -36,7 +36,7 @@ For a complete reference guide for installing and using Git, please reference ch
 
 * link:https://maven.apache.org/[Maven, window="_blank"]
 +
-Requires a version of Maven >= 3.2.1
+Requires Maven 3.9 or later. Alternatively, use the Maven wrapper committed to the repository (`./mvnw`, or `mvnw.cmd` on Windows), which downloads a suitable Maven version. The commands in this guide use the wrapper.
 +
 For a reference guide for getting started with Maven, please reference the online link:https://maven.apache.org/guides/getting-started/[Maven Getting Started Guide, window="_blank"].
 

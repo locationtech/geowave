@@ -14,9 +14,5 @@ include::manpages/raster/geowave-resizemr.txt[]
 
 include::manpages/raster/geowave-resizespark.txt[]
 
-[[raster-installgdal]]
-=== Install GDAL
-
-include::manpages/raster/geowave-installgdal.txt[]
 '''
 
