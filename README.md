@@ -1,49 +1,47 @@
-﻿<p align="center">
-	<a href="http://locationtech.github.io/geowave/">
+<p align="center">
+	<a href="https://locationtech.github.io/geowave/">
 	<img float="center" width="65%" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/geowave-index/images/geowave-logo-transluscent.png" alt="GeoWave"><br/><br/>
 	</a>
 </p>
 
 ## About  
 
-| Continuous Integration | License | Chat |            
-|:------------------:|:-------:|:----:| 
-| <a href="https://github.com/locationtech/geowave/actions?query=workflow%3ATests+branch%3Amaster"><img alt="GitHub Action Test Status" src="https://github.com/locationtech/geowave/workflows/Tests/badge.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| Tests | IP Check | Maven Central | License |
+|:-----:|:--------:|:-------------:|:-------:|
+| [![Tests](https://github.com/locationtech/geowave/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/locationtech/geowave/actions/workflows/test.yml?query=branch%3Amaster) | [![IP Check](https://github.com/locationtech/geowave/actions/workflows/ip-check.yml/badge.svg?branch=master)](https://github.com/locationtech/geowave/actions/workflows/ip-check.yml?query=branch%3Amaster) | [![Maven Central](https://img.shields.io/maven-central/v/org.locationtech.geowave/geowave-core-store)](https://central.sonatype.com/artifact/org.locationtech.geowave/geowave-core-store) | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) |
 
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/), as well as direct FileSystem support)
+  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](https://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/), as well as direct FileSystem support)
   * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
-  * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in various key/value stores to be shared and visualized via OGC standard services
+  * [GeoServer](https://geoserver.org/) plugin to allow geospatial data in various key/value stores to be shared and visualized via OGC standard services
   
 Basically, GeoWave is working to bridge geospatial software with modern key/value stores and distributed compute systems.
 
 ## The Docs
-* [GeoWave](https://locationtech.github.io/geowave/latest/index.html) - Latest snapshot documentation homepage
+The published documentation site was last generated in 2022, for the 2.0.x line. Until publishing resumes, the documentation for the current `master` (3.0, Java 21) lives in this repository under [`docs/content`](docs/content).
+
+* [GeoWave](https://locationtech.github.io/geowave/latest/index.html) - Documentation homepage
 * [GeoWave Overview](https://locationtech.github.io/geowave/latest/overview.html) - Overview of GeoWave's capabilities
-* [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html) - Installation instructions for standalone installers and from RPMs
+* [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html) - Getting the GeoWave command-line tools
 * [Quickstart Guide](https://locationtech.github.io/geowave/latest/quickstart.html) - A quick demo of GeoWave features using the command-line interface
 * [User Guide](https://locationtech.github.io/geowave/latest/userguide.html) - A guide for using GeoWave through the command-line interface and GeoServer plugin
 * [Developer Guide](https://locationtech.github.io/geowave/latest/devguide.html) - A guide for developing applications that utilize GeoWave
 * [Command-Line Interface](https://locationtech.github.io/geowave/latest/commands.html) - Full documentation for the GeoWave CLI
 * [Changelog](https://locationtech.github.io/geowave/latest/changelog.html) - Changes and features for each of our [GitHub releases](https://github.com/locationtech/geowave/releases)
-* The underlying principles employed in GeoWave are outlined in past academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
+* The underlying principles employed in GeoWave are outlined in past academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](https://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
 
 ## The Software
-* We have [multi-platform standalone installers](https://locationtech.github.io/geowave/latest/installation-guide.html#standalone-installers) for the GeoWave's command-line tools to help get started
-  * This is often the quickest and easiest way to get started using GeoWave on your own machine
-* We have a [RPM repository](https://locationtech.github.io/geowave/latest/downloads.html)
-  * This contains various packages including puppet modules, best used for distributed environments.
-  * See the [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html#installation-from-rpm) for more info.
-* Maven artifacts are available on Maven Central
-* And you can always [build from source](https://locationtech.github.io/geowave/latest/devguide.html#development-setup)
+* Released Maven artifacts are on [Maven Central](https://central.sonatype.com/namespace/org.locationtech.geowave). The latest release there is 2.0.1, from the Java 8 line; 3.0 is not published yet, pending the Eclipse Foundation's approval of the `org.locationtech` namespace on the Sonatype Central Portal.
+* From 3.0 on, release binaries such as the command-line tools and the GeoServer plugin will be attached to [GitHub Releases](https://github.com/locationtech/geowave/releases).
+* Until then, [build from source](https://locationtech.github.io/geowave/latest/devguide.html#development-setup). `master` requires JDK 21; for Java 8, use the [`2.x-jdk8`](https://github.com/locationtech/geowave/tree/2.x-jdk8) branch.
 
 ## Community
 
-* Community support is available on [chat](https://gitter.im/locationtech/geowave) and on [our mailing list](mailto:geowave-dev@eclipse.org).
+* Community support is available through [GitHub Issues](https://github.com/locationtech/geowave/issues) and on [our mailing list](mailto:geowave-dev@eclipse.org).
 
 ## Getting Started
 ### Programmatic Access
@@ -74,7 +72,7 @@ DataStore store = DataStoreFactory.createDataStore(<data store options>);
 store.addType(<my data type>, <my index>);
 try(Writer writer = store.createWriter()){
   //write data
-  writer.writer(<data>);
+  writer.write(<data>);
 }
  
 //this just queries everything
@@ -100,8 +98,10 @@ geowave index add -t spatial myStore spatialIdx
 geowave ingest localToGW -f geotools-vector states.shp myStore spatialIdx
 
 # Query all the data in the states type from myStore
-geowave vector query "SELECT * FROM myStore.states"
+geowave query myStore "SELECT * FROM states"
 ```
+RocksDB cannot run on Apple Silicon (the bundled RocksDB library has no macOS arm64 build), so there use `-t filesystem` instead.
+
 See the [CLI documentation](https://locationtech.github.io/geowave/latest/commands.html) for a full list of commands and their options.
 
 ## Some GeoWave rendered eye candy
@@ -115,25 +115,24 @@ See the [CLI documentation](https://locationtech.github.io/geowave/latest/comman
 
 See [Example Screenshots](https://locationtech.github.io/geowave/latest/overview.html#example-screenshots) in the GeoWave Overview for more information.
 
-## Supported versions of core libraries
+## Core library versions
 
-We work to maintain a N and N-1 tested and supported version pace for the following core libraries.
+`master` builds and tests against:
 
-| GeoServer | GeoTools | Accumulo | HBase | Hadoop | Java |
-|:---------:|:--------:|:--------:|:-----:|:------:|:----:|
-| 2.19.x | 25.x | [1.9.x,2.0.x] | 2.4.x | [2.10.x,3.1.x] | Java8 |
+| GeoServer | GeoTools | Accumulo | HBase | Hadoop | Spark | Java |
+|:---------:|:--------:|:--------:|:-----:|:------:|:-----:|:----:|
+| 2.19.x | 25.x | 2.0.x | 2.4.x | 3.1.x | 4.0.x (Scala 2.13) | 21 |
 
-* [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
-
-
+* Building requires JDK 21 and [Apache Maven](https://maven.apache.org/) 3.9 or later, or the committed `./mvnw` wrapper.
+* For Java 8, use the [`2.x-jdk8`](https://github.com/locationtech/geowave/tree/2.x-jdk8) branch.
 
 ## Origin
 
-GeoWave was originally developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (now [Maxar Technologies](https://www.maxar.com/)) and [Booz Allen Hamilton](http://www.boozallen.com/). The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
+GeoWave was originally developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with RadiantBlue Technologies (now [Maxar Technologies](https://www.maxar.com/)) and [Booz Allen Hamilton](https://www.boozallen.com/). The software use, modification, and distribution rights are stipulated within the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html) license.  
 
 
 ## Contributing
 
-All pull request contributions to this project will be released under the Apache 2.0 or compatible license. Contributions are welcome and guidelines are provided [here](https://locationtech.github.io/geowave/latest/devguide.html#how-to-contribute).
+All pull request contributions to this project will be released under the Apache 2.0 or compatible license. Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md), which covers the Eclipse Contributor Agreement and third-party dependency checks, and the [contribution guidelines](https://locationtech.github.io/geowave/latest/devguide.html#how-to-contribute) in the Developer Guide. Please follow the [Code of Conduct](CODE_OF_CONDUCT.md), and report security vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 
 Did I mention our [documentation!](https://locationtech.github.io/geowave/latest/index.html)

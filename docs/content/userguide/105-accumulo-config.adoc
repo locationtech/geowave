@@ -1,6 +1,6 @@
-[[accumulo-config]]
 <<<
 
+[[accumulo-config]]
 === Configuring Accumulo for GeoWave
 
 [[accumulo-config-overview]]
@@ -16,13 +16,17 @@ The recommended Accumulo configuration for GeoWave requires several manual confi
 [[accumulo-config-overview-procedure]]
 ===== Procedure
 
+. Upload the GeoWave Accumulo JAR to HDFS.
 . Create a user and namespace.
 . Grant the user ownership permissions on all tables created within the application namespace.
 . Create an application or data set specific classpath.
 . Configure all tables within the namespace to use the application classpath.
 
+The GeoWave Accumulo JAR is built from source as described in the link:devguide.html#accumulo-jar[Developer Guide^, window="_blank"].
+
 [source, bash]
 ----
+hadoop fs -put geowave-deploy-${project.version}-accumulo.jar /${ACCUMULO_ROOT}/lib/
 accumulo shell -u root
 createuser geowave // <1>
 createnamespace geowave
@@ -33,7 +37,7 @@ exit
 ----
 <1> You'll be prompted for a password.
 <2> Ensure the user has ownership of all tables created within the namespace.
-<3> The Accumulo root path in HDFS varies between hadoop vendors. For Apache and Cloudera it is '/accumulo' and for Hortonworks it is '/apps/accumulo'
+<3> Replace `${ACCUMULO_ROOT}` with Accumulo's root path in HDFS, typically `/accumulo` (see `instance.volumes` in `accumulo.properties`).
 <4> Link the namespace with the application classpath. Adjust the labels as needed if you've used different user or application names
 
 These manual configuration steps have to be performed before attempting to create GeoWave index tables. After the initial configuration, you may elect to do further user and namespace creation and configuring to provide isolation between groups and data sets.
@@ -61,16 +65,12 @@ It's of critical importance to ensure that the various GeoWave components are al
 [[accumulo-config-versioning-basic]]
 ==== Basic
 
-The RPM packaged version of GeoWave puts a timestamp in the name so it's pretty easy to verify that you have a matched set of RPMs installed. After an update of the components, you must restart Accumulo to get vfs to download the new versions and this should keep everything synched.
+The GeoWave Accumulo JAR contains a `build.properties` file with the GeoWave version (`project.version`) and the commit it was built from (`project.scm.revision`).  Compare these with the GeoWave client you are using.  After replacing the JAR in HDFS, you must restart Accumulo so that VFS downloads the new version.
 
-.Compare version and timestamps of installed RPMs
+.Version and commit of a GeoWave Accumulo JAR
 [source, bash]
 ----
-[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
-geowave-${project.version}-apache-core-${project.version}-201602012009.noarch
-geowave-${project.version}-apache-jetty-${project.version}-201602012009.noarch
-geowave-${project.version}-apache-accumulo-${project.version}-201602012009.noarch
-geowave-${project.version}-apache-tools-${project.version}-201602012009.noarch
+unzip -p geowave-deploy-${project.version}-accumulo.jar build.properties | grep -E "project.version|project.scm.revision"
 ----
 
 [[accumulo-config-versioning-advanced]]
@@ -84,29 +84,14 @@ this artifact.
 .Commit hash of the JAR in HDFS
 [source, bash]
 ----
-sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=// <1>
+hadoop fs -get /${ACCUMULO_ROOT}/lib/geowave-deploy-${project.version}-accumulo.jar hdfs-geowave-accumulo.jar
+unzip -p hdfs-geowave-accumulo.jar build.properties | grep scm.revision | sed s/project.scm.revision=//
 ----
-<1> The root directory of Accumulo can vary by distribution, so check with `hadoop fs -ls /` first to ensure you have the correct initial path.
 
 .Compare with the versions downloaded locally
 [source, bash]
 ----
-sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
+sudo find /tmp -name "*geowave*accumulo*.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
 ----
 
-.Example
-[source, bash]
-----
-[spohnae@c1-node-03 ~]$ sudo -u hdfs hadoop fs -cat /${ACCUMULO_ROOT}/lib/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=//
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <1>
-[spohnae@c1-node-03 ~]$ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties  \; | grep scm.revision | sed s/project.scm.revision=//
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <2>
-294ffb267e6691de3b9edc80e312bf5af7b2d23f <2>
-25cf0f895bd0318ce4071a4680d6dd85e0b34f6b
-----
-<1> This is the version loaded into HDFS and should be present on all tablet servers once Accumulo has been restarted.
-<2> The find command will probably locate a number of different versions depending on how often you clean out `/tmp`.
-
-There may be multiple versions present - one per JVM.  An error will occur if a tablet server is missing the correct JAR.
-
-
+The find command will probably locate a number of different versions depending on how often you clean out `/tmp`, one per JVM.  The commit hash of the JAR in HDFS should be present on all tablet servers once Accumulo has been restarted.  An error will occur if a tablet server is missing the correct JAR.

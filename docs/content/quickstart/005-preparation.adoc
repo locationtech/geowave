@@ -6,9 +6,7 @@
 
 === Install GeoWave
 
-This guide assumes that GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html[Installation Guide^, window="_blank"] for help with the installation process.
-
-NOTE: Several commands used in this guide are only available if GeoWave was installed using the standalone installer.
+This guide assumes that GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html#install-from-source[Installation Guide^, window="_blank"] for how to build and install GeoWave from source.
 
 === Create Working Directory
 
@@ -32,8 +30,8 @@ Later in the guide, we will be visualizing some data using GeoServer.  For this,
 
 Download the following styles to your working directory:
 
-* link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/KDEColorMap.sld[KDEColorMap.sld]
-* link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/SubsamplePoints.sld[SubsamplePoints.sld]
+* link:https://raw.githubusercontent.com/locationtech/geowave/master/examples/data/slds/KDEColorMap.sld[KDEColorMap.sld]
+* link:https://raw.githubusercontent.com/locationtech/geowave/master/examples/data/slds/SubsamplePoints.sld[SubsamplePoints.sld]
 
 When finished, you should have a directory structure similar to the one below.
 

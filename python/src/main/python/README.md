@@ -2,15 +2,15 @@
 This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same workflows that are available in the programmatic Java API.
 
 ## Environment
-- Python >=3,<=3.7
-- A virtualenv with `requirements.txt` installed
+- Python 3.8 or later (CI tests against 3.12)
+- A virtual environment with `requirements.txt` installed
 - A running GeoWave Java Gateway
 
 ### Installation From Source
 - Clone GeoWave: `git clone https://github.com/locationtech/geowave.git`
 - Navigate to python directory: `cd geowave/python/src/main/python`
-- Set up virtualenv: `virtualenv -p python3 venv`
-- Activate virtualenv: `source venv/bin/activate`
+- Create a virtual environment: `python3 -m venv venv`
+- Activate the virtual environment: `source venv/bin/activate`
 - Install requirements: `pip install -r requirements.txt`
 
 ## Usage
@@ -35,7 +35,7 @@ from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
 from pygw.query import VectorAggregationQueryBuilder
 
-# Create a RocksDB data store
+# Create a RocksDB data store (see the Apple Silicon note below)
 options = RocksDBOptions()
 options.set_geowave_namespace("geowave.example")
 # NOTE: Directory is relative to the JVM working directory.
@@ -96,10 +96,24 @@ aggregation_query_builder.count(point_type_adapter.get_type_name())
 count = datastore.aggregate(aggregation_query_builder.build())
 print(count)
 ```
+
+**Apple Silicon:** the RocksDB data store cannot run on Apple Silicon Macs, because the `rocksdbjni` 6.19.3 library GeoWave uses has no `osx-arm64` native library.  Use the FileSystem data store instead.  `pygw` has no options class for it, but the Java options can be wrapped directly:
+```python
+from pygw.config import geowave_pkg
+from pygw.store import DataStoreFactory
+from pygw.store import DataStoreOptions
+
+j_options = geowave_pkg.datastore.filesystem.config.FileSystemOptions()
+j_options.setDirectory("./datastore")
+options = DataStoreOptions(j_options)
+options.set_geowave_namespace("geowave.example")
+datastore = DataStoreFactory.create_data_store(options)
+```
+
 ## Dev Notes:
 
 ### Building a distributable wheel
-To build a wheel file for `pygw`, simply execute the command `python setup.py bdist_wheel --python-tag=py3` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
+To build a wheel file for `pygw`, install the build tools with `pip install setuptools wheel`, then execute the command `python setup.py bdist_wheel --python-tag=py3` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
 
 ### Building API documentation
 This project has been documented using Python docstrings.  These can be used to generate full API documentation in HTML form. To generate the documentation, perform the following steps:
@@ -113,16 +127,19 @@ In general each submodule tries to mimic the behavior of the GeoWave Java API.  
 
 The main difference between the two APIs is how the modules are laid out.  The Python bindings use a simplified module structure to avoid bringing in all the unnecessary complexity of the Java packages that the Java variants belong to.
 
+#### gateway
+The `gateway` module includes a singleton object of type GatewayConfiguration called `gateway_config` that manages the connection to the Py4J Java Gateway.  By default it connects to a gateway on the local machine; the `PYGW_GATEWAY_ADDRESS` and `PYGW_GATEWAY_PORT` environment variables point it at a gateway elsewhere.  An existing gateway that has GeoWave on its classpath (such as one from PySpark) can be supplied by calling `gateway_config.set_gateway(<gateway>)` before importing any other `pygw` classes.
+
+NOTE: the GatewayConfiguration has an `init()` method. This is INTENTIONALLY not an `__init__` method. Initialization is attempted when the `config` module is imported.
+
 #### config
-The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the Py4J Java Gateway.  The module includes several shortcut objects to make accessing the gateway more convenient.  These include:
+The `config` module uses `gateway_config` to connect to the Py4J Java Gateway and includes several shortcut objects to make accessing the gateway more convenient.  These include:
 - *`java_gateway`* Py4J Gateway Object
 - *`java_pkg`*: Shortcut for `java_gateway.jvm`.  Can be used to construct JVM objects like `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()`
 - *`geowave_pkg`*: Similar to `java_pkg`, serves as a shortcut for `java_gateway.jvm.org.locationtech.geowave`.
 - *`reflection_util`*: Direct access to the Py4J reflection utility.
 
 These objects can be imported directly using `from pygw.config import <object_name>`.
-
-NOTE: the GeoWaveConfiguration has an `init()` method. This is INTENTIONALLY not an `__init__` method. Initialization is attempted when the configuration is imported.
 
 #### base
 The `base` module includes common classes that are used by other modules.  This includes the base `GeoWaveObject` class that serves as a python wrapper for a java reference.  It also includes a `type_conversions` submodule that can be used to convert Python types to Java types that are commonly used in GeoWave.
@@ -135,6 +152,9 @@ The `index` module contains classes that are used in creating spatial and spatia
 
 #### query
 The `query` module contains classes that are used in constructing queries and their constraints.
+
+#### statistics
+The `statistics` module contains classes for GeoWave statistics, including index, data type, and field statistics, their values, binning strategies, and bin constraints for querying binned statistic values.
 
 #### store
 The `store` module contains classes that can be used to establish connections to the various GeoWave backends.  Each store type has a submodule which contains a class that can be used to connect to that store type.  For example `from pygw.store.accumulo import AccumuloOptions`.  The `DataStore` object can be constructed by passing the options object to the `DataStoreFactory.create_data_store(<options>)` method.

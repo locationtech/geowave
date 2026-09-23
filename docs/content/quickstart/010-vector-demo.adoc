@@ -20,6 +20,8 @@ $ geowave store add -t rocksdb --gwNamespace geowave.gdelt --dir . gdelt
 
 This command adds a connection to a RocksDB data store in the current directory under the name `gdelt` for use in future commands.  It configures the connection to put all data for this named store under the `geowave.gdelt` namespace.  After executing the command, the database is _not_ automatically created.  Instead, GeoWave will only create a new RocksDB database using this configuration when a command is executed that makes a modification to the data store.
 
+NOTE: The RocksDB data store cannot run on Apple Silicon Macs, because the `rocksdbjni` 6.19.3 library GeoWave uses has no `osx-arm64` native library.  On Apple Silicon, use the FileSystem data store instead, which also needs no external services: `geowave store add -t filesystem --gwNamespace geowave.gdelt --dir . gdelt`.
+
 === Add an Index
 
 Before ingesting any data, we need to create an index that describes how the data will be stored in the key/value store.  For this example we will create a simple spatial index.
@@ -172,7 +174,7 @@ Now that we have prepared our vector and KDE data, we can visualize it by using 
 
 [IMPORTANT]
 ====
-Execute the following command in a _new_ terminal window.  This command is only available if GeoWave was installed using the standalone installer with the `Embedded GeoServer` component selected.
+Execute the following command in a _new_ terminal window.  This command is provided by GeoWave's embedded GeoServer, which is not part of the command-line tools JAR described in the link:installation-guide.html#install-from-source[Installation Guide^, window="_blank"].  If it is not available, run a GeoServer with the link:userguide.html#geoserver-plugin[GeoWave GeoServer plugin^, window="_blank"] installed and point the CLI at it with link:commands.html#config-geoserver[`geowave config geoserver`].
 ====
 
 [source, bash]
@@ -184,7 +186,7 @@ After a few moments, GeoServer should be available by browsing to link:localhost
 
 [NOTE]
 ====
-RocksDB only supports a single connection to the database, because of this, you will be unable to perform queries or other data store operations with the CLI while GeoServer maintains a connection to it. If you would like the capability to do both simultaneously, you can use one of the other link:commands.html#standalone-commands[standalone data stores, window="blank"] that are packaged with GeoWave.
+RocksDB only supports a single connection to the database, because of this, you will be unable to perform queries or other data store operations with the CLI while GeoServer maintains a connection to it. If you would like the capability to do both simultaneously, you can use a data store that supports multiple connections, such as one of the link:commands.html#standalone-commands[standalone data stores, window="blank"].
 ====
 
 ==== Add Layers

@@ -5,10 +5,10 @@
 
 Commands that stand up standalone stores for testing and debug purposes.
 
-[[accumulo-runserver]]
+[[standalone-accumulo-runserver]]
 === Run Standalone Accumulo
 
-include::manpages/util/accumulo/geowave-runserver.txt[]
+See <<050-util-accumulo-commands.adoc#accumulo-runserver, Run Standalone>> under Accumulo Commands.
 
 [[cassandra-runserver]]
 === Run Standalone Cassandra

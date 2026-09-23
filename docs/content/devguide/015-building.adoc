@@ -1,41 +1,22 @@
-[[building]]
 <<<
 
 :linkattrs:
 
+[[building]]
 == Building the Source
 
 [[build-geowave]]
 === Building GeoWave
 
-To build the project source, navigate to the root directory of the GeoWave project using a command-line tool and execute the following maven command:
+Building GeoWave requires JDK 21 (see <<005-introduction.adoc#development-requirements, Development Requirements>>). To build the project source, navigate to the root directory of the GeoWave project using a command-line tool and execute the following Maven command:
 
 [source, bash]
 ----
-$ mvn clean install <1>
+$ ./mvnw clean install <1>
 ----
 <1> You can speed up the build by skipping unit tests and bug checks by adding `-Dspotbugs.skip -DskipTests`
 
-NOTE: Use `clean` when rebuilding. The HBase and raster modules generate protobuf sources into `src/main/java`, and the HBase step rewrites the `.proto` files in place before compiling them, so a rebuild over a dirty tree can produce doubled class names such as `AggregationProtosClientClient`.
-
-==== Apple Silicon
-
-Three of the protobuf toolchain pins predate arm64 macOS, so parts of the build cannot run natively on Apple Silicon.
-
-The raster and HBase modules pin protoc to 2.5.0 for HBase wire compatibility, and Google never published an `osx-aarch_64` binary for it, so the build stops with `Unsupported platform: protoc-2.5.0-osx-aarch_64.exe`. The `osx-x86_64` binary runs fine under Rosetta. Extract it from the `protoc-jar` artifact already in your local repository and point the build at it:
-
-[source, bash]
-----
-$ unzip -o -j ~/.m2/repository/com/github/os72/protoc-jar/*/protoc-jar-*.jar \
-    'bin/2.5.0/protoc-2.5.0-osx-x86_64.exe' -d /tmp/protoc
-$ chmod +x /tmp/protoc/protoc-2.5.0-osx-x86_64.exe
-$ mvn clean install -DskipTests -Dspotbugs.skip \
-    -DprotocCommand=/tmp/protoc/protoc-2.5.0-osx-x86_64.exe
-----
-
-That gets the whole reactor as far as `geowave-grpc-protobuf`, which is the rest of the problem: it needs protoc 3.17.1 and `protoc-gen-grpc-java` 1.38.0, and neither publishes an `osx-aarch_64` binary either. `-DprotocCommand` cannot help, because those protos are proto3 and the 2.5.0 compiler only understands proto2. Until the protobuf and gRPC pins move, `geowave-grpc-protobuf`, `geowave-grpc-server` and `geowave-test` have to be built somewhere else.
-
-All three pins lift together with HBase 3, which uses a shaded protobuf 3.x.
+NOTE: Use `clean` when rebuilding. The HBase and raster modules generate protobuf sources into `src/main/java`, and the HBase step rewrites its copies of the `.proto` files under `target` before compiling them, so a rebuild over a dirty tree can produce doubled class names such as `AggregationProtosClientClient`.
 
 After executing the command, Maven will search for all of the projects that need to be built and begin the build process.  The initial output of the command should look something like the following:
 
@@ -56,11 +37,76 @@ After executing the command, Maven will search for all of the projects that need
 
 The build process can take several minutes, but once this is completed, the compiled artifacts for each project will be installed to your local Maven repository. They will also be available in each project's `target` directory.
 
+==== Apple Silicon
+
+All modules build on Apple Silicon, but the protoc compilers and gRPC code generator that the build pins have no `osx-aarch_64` binaries. Their `osx-x86_64` binaries run under Rosetta, so the build has to be pointed at those:
+
+* The raster and HBase modules pin protoc 2.5.0 for HBase wire compatibility. Its x86_64 binary is bundled in the `protoc-jar` artifact.
+* The gRPC modules use protoc 3.17.1 together with the `protoc-gen-grpc-java` 1.38.0 code generator plugin.
+
+Fetch the x86_64 binaries and make them executable:
+
+[source, bash]
+----
+$ mkdir -p /tmp/protoc
+$ curl -fsSL -o /tmp/protoc/protoc-jar-3.11.4.jar \
+    https://repo1.maven.org/maven2/com/github/os72/protoc-jar/3.11.4/protoc-jar-3.11.4.jar
+$ unzip -o -j /tmp/protoc/protoc-jar-3.11.4.jar 'bin/2.5.0/protoc-2.5.0-osx-x86_64.exe' -d /tmp/protoc
+$ curl -fsSL -o /tmp/protoc/protoc-3.17.1-osx-x86_64.exe \
+    https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.17.1/protoc-3.17.1-osx-x86_64.exe
+$ curl -fsSL -o /tmp/protoc/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe \
+    https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.38.0/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe
+$ chmod +x /tmp/protoc/*.exe
+----
+
+IMPORTANT: The executable bit matters. If the file given to `-DprotocCommand` cannot be run, it is silently ignored, as if the property had never been set, and the build falls back to looking for an `osx-aarch_64` protoc. For protoc 2.5.0 that fails with `Unsupported platform`.
+
+The build is pointed at a protoc binary with `-DprotocCommand`, but there is no equivalent property for the gRPC code generator plugin. Instead, put the x86_64 plugin into your local Maven repository under the `osx-aarch_64` classifier, where the build looks for it:
+
+[source, bash]
+----
+$ mkdir -p ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.38.0
+$ cp /tmp/protoc/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe \
+    ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.38.0/protoc-gen-grpc-java-1.38.0-osx-aarch_64.exe
+----
+
+`-DprotocCommand` applies to every module in the build, and the modules need different protoc versions, so a full build takes two passes: protoc 2.5.0 for everything except the gRPC protobuf and server modules and the integration tests, then protoc 3.17.1 for those three.
+
+[source, bash]
+----
+$ ./mvnw clean install -DskipTests -Dspotbugs.skip \
+    -DprotocCommand=/tmp/protoc/protoc-2.5.0-osx-x86_64.exe \
+    -pl '!services/grpc/protobuf,!services/grpc/server,!test'
+$ ./mvnw clean install -DskipTests -Dspotbugs.skip \
+    -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe \
+    -pl services/grpc/protobuf,services/grpc/server,test
+----
+
+[WARNING]
+====
+The raster and HBase modules generate their protobuf sources into `src/main/java` rather than `target`, and the HBase module rewrites the protobuf package in those sources in place, so `clean` cannot remove them. A single build of these modules with the wrong protoc leaves mis-shaded sources behind that break every later build until they are deleted by hand. The symptom is `package org.apache.hadoop.hbase.shaded.com.google.protobuf.GeneratedMessageV3 does not exist`. To recover, delete the generated sources and rebuild:
+
+[source, bash]
+----
+$ rm -rf extensions/adapters/raster/src/main/java/org/locationtech/geowave/adapter/raster/protobuf \
+    extensions/datastores/hbase/core/src/main/java/org/locationtech/geowave/datastore/hbase/coprocessors/protobuf \
+    extensions/datastores/hbase/core/src/main/java/org/locationtech/geowave/datastore/hbase/query/protobuf
+----
+====
+
+The RocksDB data store cannot run on Apple Silicon: `rocksdbjni` 6.19.3 ships no `osx-arm64` native library, so RocksDB fails with an `UnsatisfiedLinkError`. This includes the `rocksdb-it` integration test profile. Use the filesystem data store or one of the other integration test profiles instead. For example, once both passes have completed, the following runs the integration tests against the filesystem data store:
+
+[source, bash]
+----
+$ ./mvnw install -pl test -Pfilesystem-it \
+    -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe
+----
+
 === Running Integration Tests
 
 By default, integration tests are not run as part of the normal build process.  This is because integration tests can be run for a multitude of key/value store backends, and tests for a single backend can take a significant amount of time to complete.  Usually these integration tests are run through link:https://github.com/locationtech/geowave/actions/workflows/test.yml[GitHub Actions, window="_blank"], but it can be useful to run them locally when working on code that could potentially impact one of the tests.
 
-Integration tests are all written in the `geowave-tests` project and are run using a series of Maven profiles.  The following table shows the various profiles available along with a description of the tests that are run:
+Integration tests are all written in the `geowave-test` project and are run using a series of Maven profiles.  The following table shows the various profiles available along with a description of the tests that are run:
 
 [options="header", cols="25%,75%"]
 |======================
@@ -83,14 +129,14 @@ In order to use one of these profiles to run integration tests, use the same com
 
 [source, bash]
 ----
-$ mvn clean install -Procksdb-it
+$ ./mvnw clean install -Procksdb-it
 ----
 
 If you have already built GeoWave, you can skip straight to the integration tests:
 
 [source, bash]
 ----
-$ mvn clean install -rf :geowave-test -Procksdb-it
+$ ./mvnw clean install -rf :geowave-test -Procksdb-it
 ----
 
 [[build-python-bindings]]
@@ -155,7 +201,7 @@ In order to run tests for `pygw`, a GeoWave Py4J Java Gateway needs to be runnin
 $ geowave util python rungateway 
 ----
 
-NOTE: If GeoWave was installed using the standalone installer, this command is only available if the `Python Tools` component was included.
+NOTE: The gateway command is included in the CLI tools JAR. See <<020-packaging.adoc#geowave-cli-tools, GeoWave CLI Tools>> for how to package it and run it as `geowave`.
 
 While this gateway is running, execute the following command to run the tests:
 
@@ -171,11 +217,11 @@ GeoWave documentation consists of several different parts, the main documentatio
 
 ==== GeoWave Documentation
 
-GeoWave documentation is primarily written with link:asciidoctor.org[Asciidoctor] and can be built using a single Maven command from the GeoWave root directory:
+GeoWave documentation is primarily written with link:https://asciidoctor.org[Asciidoctor, window="_blank"] and can be built using a single Maven command from the GeoWave root directory. Like the rest of the build, this requires JDK 21.
 
 [source, bash]
 ----
-$ mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
+$ ./mvnw -P html -pl docs install -DskipTests -Dspotbugs.skip
 ----
 
 This command compiles all documentation as HTML and outputs it to the `target/site` directory.
@@ -188,7 +234,7 @@ Javadocs for all projects can be built using the following command:
 
 [source, bash]
 ----
-$ mvn -q javadoc:aggregate -DskipTests -Dspotbugs.skip
+$ ./mvnw -q javadoc:aggregate -DskipTests -Dspotbugs.skip
 ----
 
 This command will output all of the Javadocs to the `target/site/apidocs` directory.
@@ -203,13 +249,3 @@ $ pdoc --html pygw
 ----
 
 This will generate the Python API documentation in the `python/src/main/python/html/pygw` directory.
-
-=== Docker Build Process
-
-We have support for building both the GeoWave JAR artifacts and RPMs from Docker containers. This capability is useful for a number of different situations:
-
-* Jenkins build workers can run Docker on a variety of host-operating systems and build for others
-* Anyone running Docker will be able to duplicate our build and packaging environments
-* Will allow us to build on existing container clusters instead of single purpose build VMs
-
-If building artifacts using Docker containers interests you, check out the README in link:https://github.com/locationtech/geowave/tree/master/deploy/packaging/docker[`deploy/packaging/docker`, window="_blank"].

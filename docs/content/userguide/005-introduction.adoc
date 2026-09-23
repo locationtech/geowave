@@ -14,16 +14,17 @@ This guide assumes that the reader is familiar with the basics of GeoWave discus
 
 === External Components
 
-Some commands in this guide are intended to be used alongside external third party components.  The following are *not* required, but the versions supported by GeoWave are listed below. The installation and configuration of these external components is outside the scope of this document.
+GeoWave requires Java 21 (for Java 8, use the `2.x-jdk8` branch). Some commands in this guide are intended to be used alongside external third party components.  The following are *not* required, but the versions supported by GeoWave are listed below. The installation and configuration of these external components is outside the scope of this document.
 
 [frame="topbot", width="100%", grid="rows", options="header"]
 |=========================================================
-| Component | Supported Version(s) | 
-| link:http://geoserver.org/[GeoServer, window="_blank"] | 2.14.x |
-| link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] | [ 1.7.x, 1.9.x ] |
-| link:https://hbase.apache.org/[Apache HBase, window="_blank"] | [ 1.1.x, 1.4.x ] |
-| link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] | 2.x |
-| link:https://gdal.org/[GDAL, window="_blank"] | 1.9.2 | 
-| link:http://cloudera.com/content/cloudera/en/home.html[Cloudera CDH5, window="_blank"] | 5.9 |
+| Component | Supported Version(s)
+| link:http://geoserver.org/[GeoServer, window="_blank"] | 2.19.x
+| link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] | 2.0.x
+| link:https://hbase.apache.org/[Apache HBase, window="_blank"] | 2.4.x
+| link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] | 3.1.x
+| link:https://spark.apache.org/[Apache Spark, window="_blank"] | 4.0.x (Scala 2.13)
+| link:https://gdal.org/[GDAL, window="_blank"] | 2.2.x
 |=========================================================
 
+GDAL is only needed for GDAL-backed raster formats. GeoWave does not install it; install GDAL and its Java (JNI) native libraries yourself and make sure they are on the native library path of the JVM running GeoWave (for example, via `LD_LIBRARY_PATH`).

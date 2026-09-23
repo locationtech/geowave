@@ -62,7 +62,7 @@ Available ingest formats currently registered as plugins:
 When ingesting a large amount of data, it can be beneficial to configure the statistics on the data types to be ingested prior to actually ingesting any data in order to avoid having to run full table scans to calculate the initial value of those statistics.  This can be done by performing the following steps:
 
 1. Add the data types for the data that will be ingested by using the link:commands.html#type-add[`type add`] command, which is nearly identical to link:commands.html#ingest-localToGW[`ingest localToGW`], but does not ingest any data.  If the data that is going to be ingested is not local, this command can still be used as long as there is a local source that matches the schema of the data to be ingested, such as a file with a single feature exported from the full data set.
-2. Add any number of statistics to those data types by using the link:commands.html#stat-add[`stat add`] command.
+2. Add any number of statistics to those data types by using the link:commands.html#stat-calc[`stat add`] command.
 3. Ingest the data using any of the ingest commands.
 
 Using this method, the initial values of all added statistics will be calculated during the ingest process.
@@ -76,18 +76,12 @@ Sometimes it is necessary to provide additional configuration information for a 
 
 [source]
 ----
-$ GEOWAVE_TOOL_JAVA_OPT="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json"
-$ geowave ingest localtogw ./ingest_data mystore myindex
+$ JAVA_TOOL_OPTIONS="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json" geowave ingest localtogw ./ingest_data mystore myindex
 ----
 
 [NOTE]
 ====
-If GeoWave was installed using the standalone installer, this property can be supplied to the `geowave` command by prepending it with `-J`:
-
-[source]
-----
-$ geowave -J-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json ingest localtogw ./ingest_data mystore myindex
-----
+`SIMPLE_FEATURE_CONFIG_FILE` is a Java system property, so it must reach the JVM that runs the CLI.  `JAVA_TOOL_OPTIONS` works regardless of how the `geowave` command is set up.  When running the command-line tools JAR directly, the property can instead be passed before `-jar`, e.g. `java -DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json -jar geowave-deploy-<version>-tools.jar ingest localtogw ./ingest_data mystore myindex`.
 ====
 
 This configuration file serves the following purposes:

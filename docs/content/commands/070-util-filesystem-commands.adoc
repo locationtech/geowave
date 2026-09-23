@@ -1,9 +1,9 @@
 <<<
 
 [[filesystem-commands]]
-=== *Python Commands*
+=== *FileSystem Commands*
 
-FileSystem datastore commands
+Utility operations for the FileSystem data store.
 
 [[filesystem-listformats]]
 === List Available FileSystem Data Formats

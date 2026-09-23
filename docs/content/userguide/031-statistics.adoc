@@ -24,7 +24,7 @@ While the various suppported statistics provide some general capabilities, a lot
 
 The list of available binning strategies can be discovered by using the link:commands.html#stat-listtypes[`stat listtypes`] command with the `-b` command line option.
 
-For a full list of GeoWave statistics commands, including examples of each, see the statistics section of the link:commands.html#stat-commands[GeoWave CLI Documentation].
+For a full list of GeoWave statistics commands, including examples of each, see the statistics section of the link:commands.html#statistics-commands[GeoWave CLI Documentation].
 
 === Examples
 

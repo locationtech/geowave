@@ -137,15 +137,19 @@ The link:commands.html#index-commands[`index`] command contains commands for lis
 
 ==== Type Commands
 
-The link:commands.html#type-commands[`type`] command contains commands for listing, describing, and removing types at a data store level.
+The link:commands.html#type-commands[`type`] command contains commands for adding, listing, describing, and removing types at a data store level.
 
 ==== Ingest Commands
 
 The link:commands.html#ingest-commands[`ingest`] command contains commands for ingesting data into a GeoWave data store.
 
+==== Query Command
+
+The link:commands.html#query[`query`] command queries vector data in a GeoWave data store using the <<030-queries.adoc#queries, GeoWave Query Language (GWQL)>> and outputs the results to the console or to a file format such as CSV, shapefile, or GeoJSON.
+
 ==== Statistics Commands
 
-The link:commands.html#statistics-commands[`statistics`] or link:commands.html#statistics-commands[`stat`] command contains commands for listing, removing, or recalculating statistics.
+The link:commands.html#statistics-commands[`statistics`] or link:commands.html#statistics-commands[`stat`] command contains commands for adding, listing, removing, recalculating, and compacting statistics.
 
 ==== Analytic Commands
 

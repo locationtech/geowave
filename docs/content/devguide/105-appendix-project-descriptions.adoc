@@ -30,7 +30,7 @@ The table below outlines the different project hierarchies within the GeoWave pr
 
 1.1+| 4.1+| dev-resources    | GeoWave Development Resources         | Development resources and settings for GeoWave.
 
-1.1+| 4.1+| docs             | GeoWave Documentation                 | Documentation, primarily in the form of asciidoc that can be compiled into a variety of formats including HTML, PDF, EPUB, and others (everything seen on link:http://locationtech.github.io/geowave[http://locationtech.github.io/geowave, window="_blank"] is automatically built and published on each commit).
+1.1+| 4.1+| docs             | GeoWave Documentation                 | Documentation, primarily in the form of asciidoc that can be compiled into a variety of formats including HTML, PDF, EPUB, and others (the site at link:https://locationtech.github.io/geowave/[https://locationtech.github.io/geowave/, window="_blank"] is built from this project and published to GitHub Pages by the `Publish` workflow).
 
 1.1+| 4.1+| examples         | GeoWave Examples                      | Some very basic code examples for reading and writing vector data in GeoWave, and running some basic analytics. This is a great and simple place to contribute if you see a gap that you think should be covered.
 
@@ -42,11 +42,20 @@ The table below outlines the different project hierarchies within the GeoWave pr
 2.1+| 3.1+| cli              | GeoWave Extension CLI's               | Extensions to the GeoWave command-line tools framework.  Contains tools whose sole purpose is to extend the GeoWave command-line tools.
 3.1+| 2.1+| debug            | GeoWave Debug Command-line Tools       | A set of ad-hoc debug tools available through the command-line that can be applied to GeoWave data.
 3.1+| 2.1+| geoserver        | GeoWave GeoServer Command-line Tools   | GeoWave command-line tools for managing GeoServer layers and data stores.
+3.1+| 2.1+| accumulo-embed   | GeoWave Embedded Accumulo             | Adds `geowave util accumulo run` to run a local Accumulo server for development and testing.
+3.1+| 2.1+| cassandra-embed  | GeoWave Cassandra Embedded Server     | Adds `geowave util cassandra run` to run a local Cassandra server for development and testing.
+3.1+| 2.1+| dynamodb-embed   | GeoWave DynamoDB Embedded Server      | Adds `geowave util dynamodb run` to run a local DynamoDB server for development and testing.
+3.1+| 2.1+| geoserver-embed  | GeoWave Embedded GeoServer            | Adds `geowave gs run` to run a local GeoServer for development and testing.
+3.1+| 2.1+| hbase-embed      | GeoWave Embedded HBase                | Adds `geowave util hbase run` to run a local HBase server for development and testing.
+3.1+| 2.1+| redis-embed      | GeoWave Redis Embedded Server         | Adds `geowave util redis run` to run a local Redis server for development and testing.
 2.1+| 3.1+| datastores       | GeoWave Data Stores                   | These extensions contain all of the necessary code to run GeoWave on a particular backend key/value store.  The intent is to keep as much logic out of these extensions as possible to prevent fragmentation of the codebase.
 3.1+| 2.1+| accumulo         | GeoWave Accumulo                      | GeoWave data store on Apache Accumulo.
 3.1+| 2.1+| cassandra        | GeoWave Cassandra                     | GeoWave data store on Apache Cassandra.
 3.1+| 2.1+| dynamodb         | GeoWave DynamoDB                      | GeoWave data store on DynamoDB.
-3.1+| 2.1+| hbase            | GeoWave HBase                         | GeoWave data store on Apache HBase.
+3.1+| 2.1+| filesystem       | GeoWave FileSystem DataStore          | GeoWave data store on a local file system, using Java NIO.
+3.1+| 2.1+| hbase            |                                       | GeoWave HBase projects.
+4.1+| 1.1+| core             | GeoWave HBase                         | GeoWave data store on Apache HBase.
+4.1+| 1.1+| coprocessors     | GeoWave HBase Coprocessors            | HBase coprocessors for GeoWave server-side operations, packaged into the HBase coprocessor JAR.
 3.1+| 2.1+| redis            | GeoWave Redis                         | GeoWave data store on Redis.
 3.1+| 2.1+| rocksdb          | GeoWave RocksDB                       | GeoWave data store on RocksDB.
 2.1+| 3.1+| formats          | GeoWave Extension Formats             | A format plugin in the system is an extension to the command-line ingest framework, providing a means to read data from a particular format of interest and map it to a particular adapter; in the open source project, we provide a variety of vector formats and a single raster format that wraps a popular library; GeoTools (`geotools-vector` format covers all formats supported by GeoTools and `geotools-raster` covers all raster formats supported by GeoTools, each covering a large variety of popular geospatial formats).
@@ -61,6 +70,8 @@ The table below outlines the different project hierarchies within the GeoWave pr
 4.1+| 1.1+| service          | GeoWave STANAG4676 Service            | The GeoWave STANAG4676 service implementation provides a rest endpoint to get the image chips per point and motion event, and stitch videos together per track.
 3.1+| 2.1+| tdrive           | GeoWave T-Drive Format                | GeoWave ingest support for Microsoft Research's T-Drive dataset.
 3.1+| 2.1+| twitter          | GeoWave Twitter Format Support        | GeoWave ingest support for Twitter JSON data.
+
+1.1+| 4.1+| migration        | GeoWave Migrations                    | Adds `geowave util migrate`, which migrates data in a GeoWave data store to be compatible with the CLI version.
 
 1.1+| 4.1+| python           | GeoWave Python Bindings               | GeoWave Python bindings and command-line Py4J Java Gateway.
 

@@ -1,6 +1,6 @@
-[[statistics]]
 <<<
 
+[[statistics]]
 == Statistics
 
 === Overview
@@ -13,15 +13,15 @@ There are three different types of statistics, each of which extend from a diffe
 
 ==== Index Statistics
 
-Index statistics are statistics that are tracked for all rows in a given GeoWave index.  They derive from {core-store}/core/store/statistics/index/IndexStatistic.java[`IndexStatistic`] and include an option that specifies the index name that the statistic belongs to.  These statistics are usually quite broad as they cannot make assumptions about the data types that are included in the index.  Some examples of index statistics are row range histograms, index metadata, and duplicate entry counts.  Many of these statistics are binned using the {core-store}/core/store/statistics/binning/DataTypeBinningStrategy.java[`DataTypeBinningStrategy`] so that information about any of these statistics can be queried on a per-data-type basis if needed.
+Index statistics are statistics that are tracked for all rows in a given GeoWave index.  They derive from {core-store}/core/store/api/IndexStatistic.java[`IndexStatistic`] and include an option that specifies the index name that the statistic belongs to.  These statistics are usually quite broad as they cannot make assumptions about the data types that are included in the index.  Some examples of index statistics are row range histograms, index metadata, and duplicate entry counts.  Many of these statistics are binned using the {core-store}/core/store/statistics/binning/DataTypeBinningStrategy.java[`DataTypeBinningStrategy`] so that information about any of these statistics can be queried on a per-data-type basis if needed.
 
 ==== Data Type Statistics
 
-Data type statistics are statistics that are tracked for all rows for a given data type.  They derive from {core-store}/core/store/statistics/adapter/DataTypeStatistic.java[`DataTypeStatistic`] and include an option that specifies the data type name that the statistic belongs to.  The main example of this type is the count statistic, which simply counts the number of entries in a given data type.
+Data type statistics are statistics that are tracked for all rows for a given data type.  They derive from {core-store}/core/store/api/DataTypeStatistic.java[`DataTypeStatistic`] and include an option that specifies the data type name that the statistic belongs to.  The main example of this type is the count statistic, which simply counts the number of entries in a given data type.
 
 ==== Field Statistics
 
-Field statistics are statistics that are tracked for a given field of a single data type.  They derive from {core-store}/core/store/statistics/field/FieldStatistic.java[`FieldStatistic`] and include options for both the data type name and the field name to use.  Each field statistic includes a method that determines whether or not it is compatible with the java class of a given field.  For example, a numeric mean statistic only supports fields that derive from `Number` so that it can calculate the mean value of the field over the entire data set.  This compatibility check allows statistics to be implemented and re-used across all data types that use the same field class.
+Field statistics are statistics that are tracked for a given field of a single data type.  They derive from {core-store}/core/store/api/FieldStatistic.java[`FieldStatistic`] and include options for both the data type name and the field name to use.  Each field statistic includes a method that determines whether or not it is compatible with the java class of a given field.  For example, a numeric mean statistic only supports fields that derive from `Number` so that it can calculate the mean value of the field over the entire data set.  This compatibility check allows statistics to be implemented and re-used across all data types that use the same field class.
 
 === Binning Strategies
 
@@ -75,7 +75,7 @@ image::stat_merge.svg[scaledwidth="100%",width="100%",alt="Statistics Merge", ti
 
 === Implementing New Statistics and Binning Strategies
 
-New statistics can be implemented by extending the appropriate statistic type ({core-store}/core/store/statistics/index/IndexStatistic.java[`IndexStatistic`], {core-store}/core/store/statistics/adapter/DataTypeStatistic.java[`DataTypeStatistic`], or {core-store}/core/store/statistics/field/FieldStatistic.java[`FieldStatistic`]) and implementing a corresponding {core-store}/core/store/api/StatisticValue.java[`StatisticValue`].  It is recommended that a public static `STATS_TYPE` variable be made available to make the `StatisticType` of the statistic readily available to users.
+New statistics can be implemented by extending the appropriate statistic type ({core-store}/core/store/api/IndexStatistic.java[`IndexStatistic`], {core-store}/core/store/api/DataTypeStatistic.java[`DataTypeStatistic`], or {core-store}/core/store/api/FieldStatistic.java[`FieldStatistic`]) and implementing a corresponding {core-store}/core/store/api/StatisticValue.java[`StatisticValue`].  It is recommended that a public static `STATS_TYPE` variable be made available to make the `StatisticType` of the statistic readily available to users.
 
 New binning strategies can also be added by implementing the {core-store}/core/store/api/StatisticBinningStrategy.java[`StatisticBinningStrategy`] interface.  The binning strategy can use information from the `DataTypeAdapter`, the raw entry, and the `GeoWaveRow`(s) that the entry was serialized to in order to determine the bin that should be used.  It is also recommended to provide some level of support for constraints that would be relevant to the binning strategy to make it easier for end users to constrain statistics queries.
 

@@ -21,12 +21,14 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * link:https://accumulo.apache.org[Apache Accumulo^, window="_blank"]
 * link:https://cassandra.apache.org[Apache Cassandra^, window="_blank"]
 * link:https://hbase.apache.org[Apache HBase^, window="_blank"]
+* link:https://aws.amazon.com/dynamodb/[Amazon DynamoDB^, window="_blank"]
 * link:https://redis.io[Redis^, window="_blank"]
 * link:https://rocksdb.org[RocksDB^, window="_blank"]
+* FileSystem (data stored as files in a local directory)
 
 === Origin
 
-GeoWave was initially developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with link:http://www.radiantblue.com/[RadiantBlue Technologies^, window="_blank"] and link:http://www.boozallen.com/[Booz Allen Hamilton^, window="_blank"]. The government has link:https://github.com/locationtech/geowave/blob/master/NOTICE[unlimited rights^, window="_blank"] and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the link:http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^, window="_blank"] license.
+GeoWave was initially developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with RadiantBlue Technologies and link:http://www.boozallen.com/[Booz Allen Hamilton^, window="_blank"]. The government has link:https://github.com/locationtech/geowave/blob/master/NOTICE[unlimited rights^, window="_blank"] and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the link:http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^, window="_blank"] license.
 
 === Design Principles
 

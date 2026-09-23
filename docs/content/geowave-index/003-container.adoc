@@ -22,10 +22,9 @@
           </p>
 
           <div class="downloads mb-5">
-            <span class="text-white mb-3">Install GeoWave</span> <span class="text-primary pipe mx-2 pl-2"> | </span>
-            <a href="https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.sh" class="p-2 mr-1" data-toggle="tooltip" data-placement="bottom" title="Linux"><img src="images/icon-linux.svg" alt="Linux Icon"></a>
-            <a href="https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_macos_${tag.version}.dmg" class="p-2 m-1" data-toggle="tooltip" data-placement="bottom" title="Mac"><img src="images/icon-apple.svg" alt="Apple Icon"></a>
-            <a href="https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_windows-x64_${tag.version}.exe" class="p-2 m-1" data-toggle="tooltip" data-placement="bottom" title="Windows"><img src="images/icon-windows.svg" alt="Windows Icon"></a>
+            <span class="text-white mb-3">Get GeoWave</span> <span class="text-primary pipe mx-2 pl-2"> | </span>
+            <a href="installation-guide.html" class="p-2 mr-1 text-white">Installation Guide</a>
+            <a href="downloads.html" class="p-2 m-1 text-white">Downloads</a>
           </div>
           <a class="btn btn-primary btn-labeled btn-lg rounded-pill" href="quickstart.html">Get
             started</a>
@@ -68,7 +67,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-5">
-        <a href="userguide.html#vector-queries" class="card h-100 border-0 text-center">
+        <a href="userguide.html#queries" class="card h-100 border-0 text-center">
           <div class="card-body pb-1">
             <img src="images/icon-search.svg" class="p-4" alt="Icon">
             <h4 class="card-title">Queries &amp; Aggregations</h4>
