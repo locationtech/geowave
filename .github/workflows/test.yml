@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [master]
+    branches: [2.x-jdk8]
   pull_request:
     # 'labeled' so that adding run-its to an open pull request actually starts
     # the integration matrix rather than waiting for the next push.
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 # Integration tests spin up real backends and take the bulk of the CI time, so
-# they run on master, on demand, and on pull requests labelled 'run-its' --
+# they run on pushes to 2.x-jdk8, on demand, and on pull requests labelled 'run-its' --
 # rather than on every push to every branch.
 permissions:
   contents: read

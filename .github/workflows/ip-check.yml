@@ -6,7 +6,7 @@ name: IP Check
 
 on:
   push:
-    branches: [master]
+    branches: [2.x-jdk8]
   pull_request:
   workflow_dispatch:
     inputs:
