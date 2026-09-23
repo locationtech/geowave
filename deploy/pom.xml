@@ -66,6 +66,21 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.logging.log4j</groupId>
+							<artifactId>log4j-transform-maven-shade-plugin-extensions</artifactId>
+							<version>0.2.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<profiles>
@@ -220,6 +235,7 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
+												<Multi-Release>true</Multi-Release>
 												<Main-Class>org.locationtech.geowave.core.cli.GeoWaveMain</Main-Class>
 												<Specification-Title>GeoWave</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -230,6 +246,7 @@
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -441,6 +458,7 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
+												<Multi-Release>true</Multi-Release>
 												<Specification-Title>GeoWave-Tools</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
@@ -450,6 +468,7 @@
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -519,6 +538,7 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
+												<Multi-Release>true</Multi-Release>
 												<Specification-Title>GeoWave-Accumulo</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
@@ -528,6 +548,7 @@
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
@@ -601,6 +622,7 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
+												<Multi-Release>true</Multi-Release>
 												<Specification-Title>GeoWave-HBase</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
@@ -610,6 +632,7 @@
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
@@ -673,6 +696,7 @@
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
+												<Multi-Release>true</Multi-Release>
 												<Specification-Title>GeoWave-C++</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
 												<Specification-Version>${project.version}</Specification-Version>
@@ -682,6 +706,7 @@
 											</manifestEntries>
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
