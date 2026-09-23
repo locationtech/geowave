@@ -2011,6 +2011,12 @@
 							<publishingServerId>central</publishingServerId>
 							<autoPublish>true</autoPublish>
 							<waitUntilPublished>true</waitUntilPublished>
+							<!-- The integration-test harness is built and run but not shipped,
+								so its dependencies stay out of Eclipse IP scope; nothing else
+								depends on it. .utility/dash-summary.sh leaves it out to match. -->
+							<excludeArtifacts>
+								<excludeArtifact>geowave-test</excludeArtifact>
+							</excludeArtifacts>
 						</configuration>
 					</plugin>
 					<!-- To generate javadoc -->
