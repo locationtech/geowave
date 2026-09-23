@@ -6,7 +6,7 @@ name: IP Check
 
 on:
   push:
-    branches: [master, '3.0']
+    branches: [master]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -14,6 +14,16 @@ on:
         description: File review requests with the Eclipse IP team for restricted content
         type: boolean
         default: false
+      include_group_ids:
+        description: >-
+          Only file for these comma-separated Maven group IDs (empty files for everything
+          restricted, including content a planned upgrade will replace)
+        type: string
+        default: ''
+      include_artifact_ids:
+        description: Also require one of these comma-separated artifact IDs (empty means any)
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -76,6 +86,8 @@ jobs:
       - name: File review requests
         env:
           DASH_IPLAB_TOKEN: ${{ secrets.DASH_IPLAB_TOKEN }}
+          INCLUDE_GROUP_IDS: ${{ inputs.include_group_ids }}
+          INCLUDE_ARTIFACT_IDS: ${{ inputs.include_artifact_ids }}
         run: |
           if [ -z "$DASH_IPLAB_TOKEN" ]; then
             echo "DASH_IPLAB_TOKEN is not set. A committer must create a"
@@ -83,5 +95,21 @@ jobs:
             echo "and store it as a repository secret."
             exit 1
           fi
+          filter=()
+          if [ -n "$INCLUDE_GROUP_IDS" ]; then
+            filter+=(-DincludeGroupIds="$INCLUDE_GROUP_IDS")
+          fi
+          if [ -n "$INCLUDE_ARTIFACT_IDS" ]; then
+            filter+=(-DincludeArtifactIds="$INCLUDE_ARTIFACT_IDS")
+          fi
           ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated" \
-            -Ddash.iplab.token="$DASH_IPLAB_TOKEN"
+            -Ddash.iplab.token="$DASH_IPLAB_TOKEN" -Ddash.projectId=locationtech.geowave \
+            "${filter[@]}"
+
+      - name: Upload review summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review-summary
+          path: target/dash/review-summary
+          if-no-files-found: ignore

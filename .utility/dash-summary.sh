@@ -3,9 +3,12 @@
 # Generate the Eclipse Dash dependency summary for the whole reactor.
 #
 # license-check is an aggregator goal, so one invocation covers every module.
-# It resolves test-scope dependencies, which means the whole reactor has to
+# It resolves every module's dependencies, which means the whole reactor has to
 # resolve -- run "mvn install" first so GeoWave's own inter-module artifacts are
 # available, otherwise they are silently missing from the summary.
+#
+# geowave-test, the integration-test harness, is left out: it is excluded from
+# publishing, so its dependencies are not part of what GeoWave distributes.
 #
 # Usage: .utility/dash-summary.sh <output-file> [extra mvn args...]
 set -eu -o pipefail
@@ -23,7 +26,7 @@ cd "$(cd "$(dirname "$0")/.." && pwd)"
 ATTEMPTS=${DASH_ATTEMPTS:-4}
 for attempt in $(seq 1 "$ATTEMPTS"); do
   rm -f "$OUT"
-  if mvn -B org.eclipse.dash:license-tool-plugin:license-check -Ddash.summary="$OUT" "$@"; then
+  if mvn -B org.eclipse.dash:license-tool-plugin:license-check -pl '!test' -Ddash.summary="$OUT" "$@"; then
     break
   fi
   if [ "$attempt" -eq "$ATTEMPTS" ]; then
