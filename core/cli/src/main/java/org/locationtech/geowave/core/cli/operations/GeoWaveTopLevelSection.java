@@ -8,14 +8,13 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.apache.logging.log4j.core.layout.PatternLayout.Builder;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -47,16 +46,26 @@ public class GeoWaveTopLevelSection extends DefaultOperation {
 
     super.prepare(inputParams);
 
-    // Up the log level
     if (Boolean.TRUE.equals(verboseFlag)) {
-      Configurator.setRootLevel(Level.DEBUG);
       PatternLayout patternLayout =
           PatternLayout.newBuilder().withPattern("%d{dd MMM HH:mm:ss} %p [%c{2}] - %m%n").build();
-      PatternLayout.createDefaultLayout();
-
       ConsoleAppender consoleApp = ConsoleAppender.createDefaultAppenderForLayout(patternLayout);
+      consoleApp.start();
 
-      ((Logger) LogManager.getRootLogger()).addAppender(consoleApp);
+      final LoggerContext context = LoggerContext.getContext(false);
+      final Configuration config = context.getConfiguration();
+      final LoggerConfig root = config.getRootLogger();
+      // Only the console gets DEBUG; the configured appenders (e.g. the rolling log file) keep the
+      // root's configured level.
+      final Level configuredLevel = root.getLevel();
+      for (final Appender appender : root.getAppenders().values()) {
+        root.removeAppender(appender.getName());
+        root.addAppender(appender, configuredLevel, null);
+      }
+      config.addAppender(consoleApp);
+      root.addAppender(consoleApp, Level.DEBUG, null);
+      root.setLevel(Level.DEBUG);
+      context.updateLoggers();
     }
 
     // Print out the version info if requested.
