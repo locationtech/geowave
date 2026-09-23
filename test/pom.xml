@@ -7,7 +7,6 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 	<properties>
-		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<skipITs>true</skipITs>
 		<!-- Passed to the IT JVM as JAVA_TOOL_OPTIONS, which the JVM reads before the
 			command line and which ProcessBuilder hands on to any JVM it launches. Empty
@@ -597,12 +596,6 @@
 						<executions>
 							<execution>
 								<configuration>
-									<environmentVariables>
-										<LD_LIBRARY_PATH>${gdal.dir}${path.separator}${env.LD_LIBRARY_PATH}</LD_LIBRARY_PATH>
-										<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
-										<GDAL_DIR>${gdal.dir}</GDAL_DIR>
-										<NCS_USER_PREFS />
-									</environmentVariables>
 									<systemPropertyVariables>
 										<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
 										<instance>${instance}</instance>

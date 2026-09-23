@@ -177,6 +177,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: it-reports-${{ strategy.job-index }}
-          path: test/target/failsafe-reports/*.xml
+          # test/pom.xml points failsafe's reportsDirectory at surefire-reports; failsafe-reports
+          # holds only the summary. The XML is worth having: the log masks every "1" in it.
+          path: |
+            test/target/surefire-reports/*.xml
+            test/target/failsafe-reports/*.xml
           if-no-files-found: warn
 

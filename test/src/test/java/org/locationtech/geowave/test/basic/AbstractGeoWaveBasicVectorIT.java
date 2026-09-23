@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -220,14 +221,15 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
       long statisticsResult = 0;
       int duplicates = 0;
+      final Map<String, Long> countsByType = new LinkedHashMap<>();
       final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
       for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
-        AggregationQueryBuilder<?, Long, ?, ?> aggBldr = AggregationQueryBuilder.newBuilder();
-        if (index != null) {
-          aggBldr = aggBldr.indexName(index.getName());
-        }
-        aggBldr = aggBldr.constraints(constraints);
         if (countDuplicates) {
+          AggregationQueryBuilder<?, Long, ?, ?> aggBldr = AggregationQueryBuilder.newBuilder();
+          if (index != null) {
+            aggBldr = aggBldr.indexName(index.getName());
+          }
+          aggBldr = aggBldr.constraints(constraints);
           aggBldr.aggregate(
               internalDataAdapter.getTypeName(),
               (Aggregation) new DuplicateCountAggregation());
@@ -237,16 +239,48 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
             duplicates += countResult.count;
           }
         }
-        aggBldr.count(internalDataAdapter.getTypeName());
-        final Long countResult = geowaveStore.aggregate(aggBldr.build());
+        final Long countResult =
+            count(geowaveStore, index, constraints, internalDataAdapter.getTypeName());
         // results should already be aggregated, there should be
         // exactly one value in this iterator
         Assert.assertNotNull(countResult);
+        countsByType.put(internalDataAdapter.getTypeName(), countResult);
         statisticsResult += countResult;
       }
 
-      Assert.assertEquals(expectedResults.count, statisticsResult - duplicates);
+      if (expectedResults.count != (statisticsResult - duplicates)) {
+        // an immediate recount separates a transient read from a persistent loss
+        final Map<String, Long> recountsByType = new LinkedHashMap<>();
+        for (final String typeName : countsByType.keySet()) {
+          recountsByType.put(typeName, count(geowaveStore, index, constraints, typeName));
+        }
+        Assert.fail(
+            "Count aggregation for "
+                + queryDescription
+                + " expected "
+                + expectedResults.count
+                + ", which the query itself returned, but counted "
+                + countsByType
+                + " less "
+                + duplicates
+                + " duplicates; recounting immediately gave "
+                + recountsByType);
+      }
     }
+  }
+
+  private static Long count(
+      final DataStore store,
+      final Index index,
+      final QueryConstraints constraints,
+      final String typeName) {
+    AggregationQueryBuilder<?, Long, ?, ?> aggBldr = AggregationQueryBuilder.newBuilder();
+    if (index != null) {
+      aggBldr = aggBldr.indexName(index.getName());
+    }
+    aggBldr = aggBldr.constraints(constraints);
+    aggBldr.count(typeName);
+    return store.aggregate(aggBldr.build());
   }
 
   public static class DuplicateCountAggregation implements
