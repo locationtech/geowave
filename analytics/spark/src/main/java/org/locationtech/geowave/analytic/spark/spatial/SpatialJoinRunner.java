@@ -108,7 +108,7 @@ public class SpatialJoinRunner implements Serializable {
 
   public void close() {
     if (session != null) {
-      session.close();
+      session.stop();
       session = null;
     }
   }

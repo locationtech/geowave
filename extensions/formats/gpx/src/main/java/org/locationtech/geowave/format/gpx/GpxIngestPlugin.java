@@ -39,7 +39,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-import jersey.repackaged.com.google.common.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 /**
  * This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as

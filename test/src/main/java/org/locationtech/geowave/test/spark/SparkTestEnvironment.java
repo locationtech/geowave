@@ -46,7 +46,7 @@ public class SparkTestEnvironment implements TestEnvironment {
   @Override
   public void tearDown() throws Exception {
     if (defaultSession != null) {
-      defaultSession.close();
+      defaultSession.stop();
       defaultSession = null;
     }
   }

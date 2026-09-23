@@ -218,23 +218,12 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
     if (ret != 0) {
       final File logDir = MiniAccumuloUtils.getLogDir(config);
       if (logDir != null) {
-        for (final File fileEntry : logDir.listFiles()) {
-          LOGGER.warn("Contents of " + fileEntry.getName());
-          try (final Scanner sc = new Scanner(fileEntry, "UTF-8")) {
-            while (sc.hasNextLine()) {
-              final String s = sc.nextLine();
-              LOGGER.warn(s);
-            }
-          } catch (final Exception e) {
-            LOGGER.warn("Unable to read log file", e);
-          }
-        }
+        // the message carries the logs rather than pointing at them: tearDown deletes this
+        // directory, and the IT JVM's logging is reconfigured often enough that a warn here
+        // does not reliably reach the build output. Without them the failure reads only as
+        // "returned 1", and every later attempt as "directory is not empty".
         throw new RuntimeException(
-            "Initialize process returned "
-                + ret
-                + ". Check the logs in "
-                + logDir
-                + " for errors.");
+            "Initialize process returned " + ret + ". Logs in " + logDir + ":" + readLogs(logDir));
       }
       throw new RuntimeException(
           "Initialize process returned " + ret + ". Cannot find log directory.");
@@ -264,6 +253,25 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
         fileWriter.append(entry.getKey() + "=" + value + "\n");
       }
     }
+  }
+
+  private static String readLogs(final File logDir) {
+    final File[] files = logDir.listFiles();
+    if (files == null) {
+      return " (log directory is unreadable)";
+    }
+    final StringBuilder sb = new StringBuilder();
+    for (final File file : files) {
+      sb.append(System.lineSeparator()).append("--- ").append(file.getName()).append(" ---");
+      try (Scanner sc = new Scanner(file, "UTF-8")) {
+        while (sc.hasNextLine()) {
+          sb.append(System.lineSeparator()).append(sc.nextLine());
+        }
+      } catch (final Exception e) {
+        sb.append(System.lineSeparator()).append("(unreadable: ").append(e).append(")");
+      }
+    }
+    return sb.toString();
   }
 
   @Override

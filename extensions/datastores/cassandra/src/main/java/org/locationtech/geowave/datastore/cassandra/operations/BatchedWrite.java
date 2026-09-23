@@ -8,8 +8,11 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
+import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
 import org.slf4j.Logger;
@@ -36,6 +39,8 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
   // only allow so many outstanding async reads or writes, use this semaphore
   // to control it
   private final Semaphore writeSemaphore = new Semaphore(MAX_CONCURRENT_WRITE);
+  private final AtomicReference<Throwable> firstFailure = new AtomicReference<>();
+  private final AtomicInteger failedWrites = new AtomicInteger();
   private final boolean isDataIndex;
   private final boolean visibilityEnabled;
 
@@ -97,10 +102,14 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
     writeSemaphore.acquire();
     final CompletionStage<AsyncResultSet> future = session.executeAsync(statement);
     future.whenCompleteAsync((result, t) -> {
-      writeSemaphore.release();
+      // record before releasing, so close() cannot see all permits back and miss it
       if (t != null) {
-        throw new RuntimeException(t);
+        failedWrites.incrementAndGet();
+        if (firstFailure.compareAndSet(null, t)) {
+          LOGGER.error("Asynchronous Cassandra write failed", t);
+        }
       }
+      writeSemaphore.release();
     });
   }
 
@@ -116,5 +125,11 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
     // before exiting close() method
     writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
     writeSemaphore.release(MAX_CONCURRENT_WRITE);
+    final Throwable failure = firstFailure.getAndSet(null);
+    if (failure != null) {
+      throw new IOException(
+          failedWrites.getAndSet(0) + " asynchronous Cassandra writes failed",
+          failure);
+    }
   }
 }

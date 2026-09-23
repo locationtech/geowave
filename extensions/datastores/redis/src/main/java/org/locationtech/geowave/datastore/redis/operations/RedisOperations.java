@@ -105,7 +105,6 @@ public class RedisOperations implements MapReduceDataStoreOperations {
   public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
     return new RedisDataIndexWriter(
         client,
-        options.getSerialization(),
         options.getCompression(),
         gwNamespace,
         adapter.getTypeName(),
@@ -208,7 +207,6 @@ public class RedisOperations implements MapReduceDataStoreOperations {
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
     return new RedisReader<>(
         client,
-        options.getSerialization(),
         options.getCompression(),
         readerParams,
         gwNamespace,
@@ -229,7 +227,6 @@ public class RedisOperations implements MapReduceDataStoreOperations {
     final RedisMapWrapper map =
         RedisUtils.getDataIndexMap(
             client,
-            options.getSerialization(),
             options.getCompression(),
             gwNamespace,
             typeName,

@@ -10,12 +10,9 @@ package org.locationtech.geowave.datastore.cassandra.operations;
 
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CassandraWriter implements RowWriter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(CassandraWriter.class);
   private final Object MUTEX = new Object();
   private BatchedWrite batchedWrite = null;
   private final CassandraOperations operations;
@@ -55,7 +52,7 @@ public class CassandraWriter implements RowWriter {
         try {
           batchedWrite.close();
         } catch (final Exception e) {
-          LOGGER.warn("Unable to close batched write", e);
+          throw new RuntimeException("Unable to write to Cassandra table " + tableName, e);
         }
       }
     }

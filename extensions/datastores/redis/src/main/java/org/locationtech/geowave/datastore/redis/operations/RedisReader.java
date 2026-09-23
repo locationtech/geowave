@@ -35,7 +35,6 @@ import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
-import org.locationtech.geowave.datastore.redis.config.RedisOptions.Serialization;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
@@ -70,7 +69,6 @@ public class RedisReader<T> implements RowReader<T> {
 
   public RedisReader(
       final RedissonClient client,
-      final Serialization serialization,
       final Compression compression,
       final DataIndexReaderParams dataIndexReaderParams,
       final String namespace,
@@ -79,7 +77,6 @@ public class RedisReader<T> implements RowReader<T> {
         new Wrapper(
             createIteratorForDataIndexReader(
                 client,
-                serialization,
                 compression,
                 dataIndexReaderParams,
                 namespace,
@@ -221,7 +218,6 @@ public class RedisReader<T> implements RowReader<T> {
 
   private Iterator<GeoWaveRow> createIteratorForDataIndexReader(
       final RedissonClient client,
-      final Serialization serialization,
       final Compression compression,
       final DataIndexReaderParams dataIndexReaderParams,
       final String namespace,
@@ -231,7 +227,6 @@ public class RedisReader<T> implements RowReader<T> {
       retVal =
           new DataIndexRead(
               client,
-              serialization,
               compression,
               namespace,
               dataIndexReaderParams.getInternalAdapterStore().getTypeName(
@@ -243,7 +238,6 @@ public class RedisReader<T> implements RowReader<T> {
       retVal =
           new DataIndexRangeRead(
               client,
-              serialization,
               compression,
               namespace,
               dataIndexReaderParams.getInternalAdapterStore().getTypeName(

@@ -99,7 +99,7 @@ public class KMeansRunner {
 
   public void close() {
     if (session != null) {
-      session.close();
+      session.stop();
       session = null;
     }
   }

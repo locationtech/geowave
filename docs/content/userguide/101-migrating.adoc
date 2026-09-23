@@ -32,3 +32,12 @@ it was never affected by the corruption and its files are intact, so renaming ea
 partition directory from the old encoding to the new one is enough; note that base32hex names are
 about 20% longer, which lowers the longest usable key from roughly 188 bytes to roughly 156 within a
 255-character name limit.
+
+*Redis data index, GeoWave 3.0.* Earlier versions encoded the data index with `fst`, which was the
+default value of the `--serialization` option. `fst` cannot run on Java 9 or above at all -- it
+reflects into private fields of `java.math.BigDecimal` while building its own configuration -- so
+there is no version of GeoWave 3.0 that can read those entries in order to migrate them. The data
+index is now written with Redisson's `ByteArrayCodec`, which stores the keys and values unchanged,
+and the `--serialization` option has been removed; a store configuration that still sets it will be
+rejected when it is loaded. This affects only the data index, which is written when secondary
+indexing is enabled.

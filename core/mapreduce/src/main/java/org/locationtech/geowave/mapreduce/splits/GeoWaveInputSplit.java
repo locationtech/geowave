@@ -51,13 +51,18 @@ public class GeoWaveInputSplit extends InputSplit implements Writable {
    */
   @Override
   public long getLength() throws IOException {
-    long diff = 0;
+    double cardinality = 0;
+    int rangeCount = 0;
     for (final Entry<String, SplitInfo> indexEntry : splitInfo.entrySet()) {
       for (final RangeLocationPair range : indexEntry.getValue().getRangeLocationPairs()) {
-        diff += (long) range.getCardinality();
+        cardinality += range.getCardinality();
+        rangeCount++;
       }
     }
-    return diff;
+    // cardinality is a histogram estimate and is routinely below one for a range that does hold
+    // rows, so never report zero for a split that has something to scan: Spark drops zero-length
+    // splits outright (spark.hadoopRDD.ignoreEmptySplits) and never reads them
+    return rangeCount == 0 ? 0 : Math.max(1, (long) Math.ceil(cardinality));
   }
 
   @Override

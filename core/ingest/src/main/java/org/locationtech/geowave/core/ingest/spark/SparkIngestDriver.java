@@ -11,12 +11,10 @@ package org.locationtech.geowave.core.ingest.spark;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLStreamHandlerFactory;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,13 +30,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.ingest.URLIngestUtils;
-import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
@@ -155,13 +151,16 @@ public class SparkIngestDriver implements Serializable {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
 
+      // Spark's web UI is a Jersey 3 (jakarta) application and GeoWave's services are Jersey 2
+      // (javax). Both ship org.glassfish.jersey.servlet.ServletContainer, so Spark's copy is
+      // excluded and its UI cannot start; leaving it on fails the ingest rather than the page.
       session =
           SparkSession.builder().appName(sparkOptions.getAppName()).master(
               sparkOptions.getMaster()).config("spark.driver.host", sparkOptions.getHost()).config(
                   "spark.jars",
                   jar).config("spark.executor.instances", Integer.toString(numExecutors)).config(
                       "spark.executor.cores",
-                      Integer.toString(numCores)).getOrCreate();
+                      Integer.toString(numCores)).config("spark.ui.enabled", "false").getOrCreate();
 
       jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
     }
@@ -190,13 +189,6 @@ public class SparkIngestDriver implements Serializable {
             console);
       });
     } else if (isHDFS) {
-      try {
-        setHdfsURLStreamHandlerFactory();
-      } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-          | IllegalAccessException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
       fileRDD.foreachPartition(uri -> {
         processInput(
             configFile,
@@ -311,7 +303,7 @@ public class SparkIngestDriver implements Serializable {
 
   public void close(SparkSession session) {
     if (session != null) {
-      session.close();
+      session.stop();
       session = null;
     }
   }
@@ -347,14 +339,6 @@ public class SparkIngestDriver implements Serializable {
 
   public S3FileSystem initializeS3FS(final String s3EndpointUrl) throws URISyntaxException {
 
-    try {
-      URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
-    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-        | IllegalAccessException e1) {
-      LOGGER.error("Error in setting up S3URLStreamHandler Factory", e1);
-      throw new RuntimeException("Error in setting up S3URLStreamHandler Factory", e1);
-    }
-
     return (S3FileSystem) new S3FileSystemProvider().getFileSystem(
         new URI(s3EndpointUrl),
         Collections.singletonMap(
@@ -362,32 +346,4 @@ public class SparkIngestDriver implements Serializable {
             GeoWaveAmazonS3Factory.class.getName()));
   }
 
-  public static void setHdfsURLStreamHandlerFactory() throws NoSuchFieldException,
-      SecurityException, IllegalArgumentException, IllegalAccessException {
-    final Field factoryField = URL.class.getDeclaredField("factory");
-    factoryField.setAccessible(true);
-    // HP Fortify "Access Control" false positive
-    // The need to change the accessibility here is
-    // necessary, has been review and judged to be safe
-
-    final URLStreamHandlerFactory urlStreamHandlerFactory =
-        (URLStreamHandlerFactory) factoryField.get(null);
-
-    if (urlStreamHandlerFactory == null) {
-      URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
-    } else {
-      try {
-        factoryField.setAccessible(true);
-        // HP Fortify "Access Control" false positive
-        // The need to change the accessibility here is
-        // necessary, has been review and judged to be safe
-        factoryField.set(null, new FsUrlStreamHandlerFactory());
-      } catch (final IllegalAccessException e1) {
-        LOGGER.error("Could not access URLStreamHandler factory field on URL class: {}", e1);
-        throw new RuntimeException(
-            "Could not access URLStreamHandler factory field on URL class: {}",
-            e1);
-      }
-    }
-  }
 }

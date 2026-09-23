@@ -36,6 +36,10 @@ public class GeoWaveSparkConf implements Serializable {
         defaultConfig.set(
             "spark.kryo.registrator",
             "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
+    // Spark's web UI is a Jersey 3 (jakarta) application and GeoWave's services are Jersey 2
+    // (javax). Both ship org.glassfish.jersey.servlet.ServletContainer, so Spark's copy is
+    // excluded and its UI cannot start; leaving it on fails the job rather than the page.
+    defaultConfig = defaultConfig.set("spark.ui.enabled", "false");
     return defaultConfig;
   }
 

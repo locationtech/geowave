@@ -42,7 +42,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jersey.repackaged.com.google.common.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 @RunWith(GeoWaveITRunner.class)
 public class BasicDataTypeAdapterQueryIT extends AbstractGeoWaveBasicVectorIT {

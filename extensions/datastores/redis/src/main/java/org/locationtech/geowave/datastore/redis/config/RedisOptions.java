@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.redis.config;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 import org.locationtech.geowave.core.cli.converters.OptionalPasswordConverter;
 import org.locationtech.geowave.core.cli.converters.PasswordConverter;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
@@ -19,9 +18,7 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.client.codec.Codec;
-import org.redisson.codec.FstCodec;
 import org.redisson.codec.LZ4Codec;
-import org.redisson.codec.SerializationCodec;
 import org.redisson.codec.SnappyCodec;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -59,11 +56,6 @@ public class RedisOptions extends StoreFactoryOptions {
       converter = CompressionConverter.class)
   private Compression compression = Compression.SNAPPY;
 
-  @Parameter(
-      names = "--serialization",
-      description = "Can be \"fst\" or \"jdk\". Defaults to fst. Note that this serialization codec is only used for the data index when secondary indexing.",
-      converter = SerializationConverter.class)
-  private Serialization serialization = Serialization.FST;
   @ParametersDelegate
   protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions() {
     @Override
@@ -138,14 +130,6 @@ public class RedisOptions extends StoreFactoryOptions {
     return compression;
   }
 
-  public Serialization getSerialization() {
-    return serialization;
-  }
-
-  public void setSerialization(final Serialization serialization) {
-    this.serialization = serialization;
-  }
-
   public static enum Compression {
     SNAPPY(c -> new SnappyCodec(c)), L4Z(c -> new LZ4Codec(c)), NONE(c -> c);
 
@@ -160,27 +144,6 @@ public class RedisOptions extends StoreFactoryOptions {
     }
   };
 
-  public static enum Serialization {
-    FST(FstCodec::new), JDK(SerializationCodec::new);
-
-    private transient Supplier<Codec> codec;
-
-    private Serialization(final Supplier<Codec> codec) {
-      this.codec = codec;
-    }
-
-    public Codec getCodec() {
-      return codec.get();
-    }
-  };
-
-  public static class SerializationConverter implements IStringConverter<Serialization> {
-
-    @Override
-    public Serialization convert(final String value) {
-      return Serialization.valueOf(value.toUpperCase());
-    }
-  }
   public static class CompressionConverter implements IStringConverter<Compression> {
 
     @Override

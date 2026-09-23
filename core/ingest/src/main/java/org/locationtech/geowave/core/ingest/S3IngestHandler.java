@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.ingest;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
-import org.locationtech.geowave.core.ingest.URLIngestUtils.URLTYPE;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.store.ingest.IngestUrlHandlerSpi;
 import org.slf4j.Logger;
@@ -27,14 +26,6 @@ public class S3IngestHandler implements IngestUrlHandlerSpi {
       throws IOException {
     // If input path is S3
     if (inputPath.startsWith("s3://")) {
-      try {
-        URLIngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
-      } catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-          | IllegalAccessException e1) {
-        LOGGER.error("Error in setting up S3URLStreamHandler Factory", e1);
-        return null;
-      }
-
       if (configProperties == null) {
         LOGGER.error("Unable to load config properties");
         return null;

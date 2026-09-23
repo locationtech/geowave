@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [master]
+    branches: [master, '3.0']
   pull_request:
     # 'labeled' so that adding run-its to an open pull request actually starts
     # the integration matrix rather than waiting for the next push.
@@ -34,11 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 8
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '21'
           cache: maven
 
       - name: Run
@@ -52,61 +52,6 @@ jobs:
           path: "**/target/surefire-reports/*.xml"
           if-no-files-found: warn
 
-  # Non-blocking. The project targets Java 8 today; this is here so that the
-  # work needed to move off it is visible before it is urgent.
-  jdk-canary:
-    runs-on: ubuntu-24.04
-    name: Unit Tests on JDK 21 (informational)
-    continue-on-error: true
-    env:
-      IT_ONLY: false
-      # spotbugs 3.1.10 cannot load on JDK 9+, which would mask whatever this job
-      # is meant to reveal. The point of the job is to enumerate everything Java
-      # 21 breaks in one run, so a failing test must not stop the reactor:
-      # --fail-at-end alone still skips whatever depends on the failed module,
-      # and core/ingest failing is enough to hide a large part of the tree.
-      # maven.test.failure.ignore lets every module run; the step after this one
-      # restores the signal by reading the surefire reports. MAVEN_ARGS needs
-      # Maven 3.9+, which the wrapper pins.
-      MAVEN_ARGS: -Dspotbugs.skip --fail-at-end -Dmaven.test.failure.ignore=true
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '21'
-          cache: maven
-
-      - name: Run
-        run: ./.utility/run-tests.sh
-
-      - name: Summarize what Java 21 broke
-        if: always()
-        run: |
-          failed=$(grep -rlE '^Tests run:.*(Failures: [1-9]|Errors: [1-9])' \
-            --include='*.txt' . 2>/dev/null | sort || true)
-          if [ -z "$failed" ]; then
-            echo "No test failures on JDK 21." | tee -a "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          {
-            echo "### Tests failing on JDK 21"
-            echo
-            for report in $failed; do
-              echo "<details><summary>$(basename "$report" .txt)</summary>"
-              echo
-              echo '```'
-              head -40 "$report"
-              echo '```'
-              echo
-              echo "</details>"
-            done
-          } | tee -a "$GITHUB_STEP_SUMMARY"
-          echo "$(echo "$failed" | wc -l) test classes failed on JDK 21" >&2
-          exit 1
-
   python-tests:
     runs-on: ubuntu-24.04
     name: Python Tests
@@ -116,11 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 8
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '21'
           cache: maven
 
       - name: Run
@@ -146,6 +91,13 @@ jobs:
     # backend. Each of these has a known, understood reason to be failing and
     # is tracked for 3.0.0, where the whole matrix has to be green.
     continue-on-error: ${{ matrix.continue_on_error == true }}
+    # Without a limit a hung lane runs to GitHub's six-hour ceiling before it reports,
+    # which cassandra-it did on #1952 -- six hours to learn nothing. The first cap was
+    # 90 minutes, on the basis that every lane which had ever passed finished in 34 to
+    # 75. That reading was off, because a lane with a failing test stops early: once the
+    # failures were fixed, filesystem-it took 88.6 minutes to pass and eight lanes were
+    # cut off at the cap. 150 still turns a hang into a result well inside the ceiling.
+    timeout-minutes: 150
     strategy:
       fail-fast: false
       matrix:
@@ -169,11 +121,14 @@ jobs:
             retry_tests: true
           - profile: accumulo-it-server
             retry_tests: true
-          # Cassandra's cluster startup is timing sensitive, hence the retry,
-          # and a full pass takes around 80 minutes, so it paces the matrix. It
-          # has passed every run that was allowed to finish.
+          # No retry. .utility/retry reruns the whole lane -- build and suite --
+          # for up to 120 minutes, and a full cassandra pass takes about an hour,
+          # so one real failure spent the rest of the 150-minute cap on a second
+          # attempt that could not finish, and reported nothing useful. The
+          # failures that retry was hiding were causes, not timing: the
+          # SecurityManager, jamm without its agent, and CREATE TABLE on the
+          # driver's two-second default.
           - profile: cassandra-it
-            retry_tests: true
             continue_on_error: true
           # DynamoDB loses a small number of rows during ingest, so a different
           # assertion fails from run to run -- 2800 rows where 2822 were
@@ -199,11 +154,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 8
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '21'
           cache: maven
 
       # Not covered by setup-java's maven cache.
@@ -222,5 +177,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: it-reports-${{ strategy.job-index }}
-          path: test/target/failsafe-reports/*.xml
+          # test/pom.xml points failsafe's reportsDirectory at surefire-reports; failsafe-reports
+          # holds only the summary. The XML is worth having: the log masks every "1" in it.
+          path: |
+            test/target/surefire-reports/*.xml
+            test/target/failsafe-reports/*.xml
           if-no-files-found: warn
+

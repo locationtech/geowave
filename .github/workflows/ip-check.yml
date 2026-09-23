@@ -6,7 +6,7 @@ name: IP Check
 
 on:
   push:
-    branches: [master]
+    branches: [master, '3.0']
   pull_request:
   workflow_dispatch:
     inputs:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
           cache: maven
 
       # Inter-module dependencies do not resolve from the reactor alone, so the
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
           cache: maven
 
       - name: Install artifacts
