@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [master, '3.0']
+    branches: [master]
   pull_request:
     # 'labeled' so that adding run-its to an open pull request actually starts
     # the integration matrix rather than waiting for the next push.
