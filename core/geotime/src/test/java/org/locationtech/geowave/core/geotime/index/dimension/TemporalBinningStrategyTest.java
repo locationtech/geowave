@@ -8,12 +8,23 @@
  */
 package org.locationtech.geowave.core.geotime.index.dimension;
 
+import java.text.NumberFormat;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.numeric.NumericRange;
 
@@ -319,5 +330,109 @@ public class TemporalBinningStrategyTest {
     // the second bin should just contain the epoch
     Assert.assertTrue(ranges[1].getNormalizedMin() == ranges[1].getNormalizedMax());
     Assert.assertTrue(ranges[1].getNormalizedMin() == binStrategy.getBinMin());
+  }
+
+  // 1906 to 2096, in an irregular step so every calendar field takes many values
+  private static final long FIRST_SAMPLE = -2_000_000_000_000L;
+  private static final long LAST_SAMPLE = 4_000_000_000_000L;
+  private static final long SAMPLE_STEP = 285_197_123L;
+
+  @Test
+  public void testBinIdFormat() {
+    Assert.assertEquals(
+        "2021_00_05_13_07",
+        StringUtils.stringFromBinary(
+            new TemporalBinningStrategy(Unit.MINUTE).getBinId(
+                Instant.parse("2021-01-05T13:07:42Z").toEpochMilli())));
+  }
+
+  @Test
+  public void testBinIdsMatchLegacyFormat() {
+    for (final String timezone : new String[] {"GMT", "America/New_York"}) {
+      for (final Unit unit : Unit.values()) {
+        final TemporalBinningStrategy binStrategy = new TemporalBinningStrategy(unit, timezone);
+        for (long millis = FIRST_SAMPLE; millis < LAST_SAMPLE; millis += SAMPLE_STEP) {
+          final String expected = legacyBinId(unit, timezone, millis);
+          Assert.assertArrayEquals(
+              unit + " in " + timezone + " at " + millis + " should be " + expected,
+              StringUtils.stringToBinary(expected),
+              binStrategy.getBinId(millis));
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testBinIdsAreThreadSafe() throws Exception {
+    final TemporalBinningStrategy binStrategy = new TemporalBinningStrategy(Unit.MINUTE);
+    final long[] samples = new long[2000];
+    final byte[][] expected = new byte[samples.length][];
+    for (int i = 0; i < samples.length; i++) {
+      samples[i] = FIRST_SAMPLE + (i * SAMPLE_STEP);
+      expected[i] = binStrategy.getBinId(samples[i]);
+    }
+    final int threads = Math.max(8, Runtime.getRuntime().availableProcessors() * 2);
+    final CyclicBarrier start = new CyclicBarrier(threads);
+    final AtomicInteger mismatches = new AtomicInteger();
+    final ExecutorService executor = Executors.newFixedThreadPool(threads);
+    try {
+      final List<Future<?>> futures = new ArrayList<>();
+      for (int t = 0; t < threads; t++) {
+        futures.add(executor.submit(() -> {
+          start.await();
+          for (int round = 0; round < 20; round++) {
+            // deserializing an index constructs strategies while other threads are binning
+            new TemporalBinningStrategy();
+            for (int i = 0; i < samples.length; i++) {
+              if (!Arrays.equals(expected[i], binStrategy.getBinId(samples[i]))) {
+                mismatches.incrementAndGet();
+              }
+            }
+          }
+          return null;
+        }));
+      }
+      for (final Future<?> future : futures) {
+        future.get();
+      }
+    } finally {
+      executor.shutdownNow();
+    }
+    Assert.assertEquals(0, mismatches.get());
+  }
+
+  /** The bin ID as getBinId formatted it with a NumberFormat, before that formatter was dropped. */
+  private static String legacyBinId(final Unit unit, final String timezone, final long millis) {
+    final NumberFormat twoDigits = NumberFormat.getIntegerInstance();
+    twoDigits.setMinimumIntegerDigits(2);
+    twoDigits.setMaximumIntegerDigits(2);
+    final Calendar value = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+    value.setTimeInMillis(millis);
+    final String year = Integer.toString(value.get(Calendar.YEAR));
+    final String month = twoDigits.format(value.get(Calendar.MONTH));
+    final String day = twoDigits.format(value.get(Calendar.DAY_OF_MONTH));
+    final String hour = twoDigits.format(value.get(Calendar.HOUR_OF_DAY));
+    switch (unit) {
+      case MONTH:
+        return year + "_" + month;
+      case WEEK:
+        return value.getWeekYear() + "_" + twoDigits.format(value.get(Calendar.WEEK_OF_YEAR));
+      case DAY:
+        return year + "_" + month + "_" + day;
+      case HOUR:
+        return year + "_" + month + "_" + day + "_" + hour;
+      case MINUTE:
+        return year
+            + "_"
+            + month
+            + "_"
+            + day
+            + "_"
+            + hour
+            + "_"
+            + twoDigits.format(value.get(Calendar.MINUTE));
+      default:
+        return year;
+    }
   }
 }

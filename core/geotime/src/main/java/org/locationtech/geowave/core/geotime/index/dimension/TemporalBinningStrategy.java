@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.geotime.index.dimension;
 
 import java.nio.ByteBuffer;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -79,12 +78,6 @@ public class TemporalBinningStrategy implements IndexBinningStrategy {
   }
 
   protected static final long MILLIS_PER_DAY = 86400000L;
-  private static final NumberFormat TWO_DIGIT_NUMBER = NumberFormat.getIntegerInstance();
-
-  {
-    TWO_DIGIT_NUMBER.setMinimumIntegerDigits(2);
-    TWO_DIGIT_NUMBER.setMaximumIntegerDigits(2);
-  }
 
   private Unit unit;
   private String timezone;
@@ -232,40 +225,45 @@ public class TemporalBinningStrategy implements IndexBinningStrategy {
         return StringUtils.stringToBinary(
             (Integer.toString(value.get(Calendar.YEAR))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))));
+                + twoDigits(value.get(Calendar.MONTH))));
       case WEEK:
         return StringUtils.stringToBinary(
             Integer.toString(value.getWeekYear())
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.WEEK_OF_YEAR)));
+                + twoDigits(value.get(Calendar.WEEK_OF_YEAR)));
       case DAY:
         return StringUtils.stringToBinary(
             (Integer.toString(value.get(Calendar.YEAR))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))
+                + twoDigits(value.get(Calendar.MONTH))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH))));
+                + twoDigits(value.get(Calendar.DAY_OF_MONTH))));
       case HOUR:
         return StringUtils.stringToBinary(
             (Integer.toString(value.get(Calendar.YEAR))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))
+                + twoDigits(value.get(Calendar.MONTH))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH))
+                + twoDigits(value.get(Calendar.DAY_OF_MONTH))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.HOUR_OF_DAY))));
+                + twoDigits(value.get(Calendar.HOUR_OF_DAY))));
       case MINUTE:
         return StringUtils.stringToBinary(
             (Integer.toString(value.get(Calendar.YEAR))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))
+                + twoDigits(value.get(Calendar.MONTH))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.DAY_OF_MONTH))
+                + twoDigits(value.get(Calendar.DAY_OF_MONTH))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.HOUR_OF_DAY))
+                + twoDigits(value.get(Calendar.HOUR_OF_DAY))
                 + "_"
-                + TWO_DIGIT_NUMBER.format(value.get(Calendar.MINUTE))));
+                + twoDigits(value.get(Calendar.MINUTE))));
     }
+  }
+
+  /** Every field formatted here is between 0 and 59. */
+  private static String twoDigits(final int value) {
+    return value < 10 ? "0" + value : Integer.toString(value);
   }
 
   @SuppressFBWarnings(
