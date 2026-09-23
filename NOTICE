@@ -45,10 +45,12 @@ The project maintains the following source code repository:
 
 ## Third-party Content
 
-The licences of the content GeoWave redistributes are checked with the Eclipse
-Dash license tool, which the `IP Check` workflow runs on every pull request.
-See CONTRIBUTING.md for how to reproduce that check and where its `DEPENDENCIES`
-summary is published.
+The third-party content GeoWave depends on, with the licence and review status
+of each, is listed in the DEPENDENCIES file at the root of the source
+repository. It is generated with the Eclipse Dash license tool, and the
+`IP Check` workflow regenerates it on every pull request and fails when a change
+adds content that needs Eclipse IP review. See CONTRIBUTING.md for how to
+reproduce that check.
 
 ## Cryptography
 

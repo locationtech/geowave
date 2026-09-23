@@ -1,11 +1,11 @@
 Before your contribution can be accepted by the project, you need to create an Eclipse Foundation 
 account and electronically sign the Eclipse Contributor Agreement (ECA).
 
-- http://www.eclipse.org/legal/ECA.php
+- https://www.eclipse.org/legal/eca/
 
 For more information on contributing to GeoWave, please see our developer guide here:
 
-- http://locationtech.github.io/geowave/devguide.html#contributions
+- https://locationtech.github.io/geowave/devguide.html#how-to-contribute
 
 ## Third-party dependencies
 
@@ -17,7 +17,7 @@ tool](https://github.com/eclipse-dash/dash-licenses) checks this, and the
 To reproduce that check locally:
 
 ```
-mvn -B -DskipTests install
+./mvnw -B -DskipTests install
 ./.utility/dash-summary.sh /tmp/DEPENDENCIES.generated
 ./.utility/dash-gate.sh DEPENDENCIES /tmp/DEPENDENCIES.generated
 ```
@@ -36,3 +36,12 @@ ask a committer to file a review request with the Eclipse IP team. Committers
 can file requests by running the `IP Check` workflow manually with
 `file_reviews` enabled, which needs a `gitlab.eclipse.org` personal access token
 with the `api` scope stored as the `DASH_IPLAB_TOKEN` repository secret.
+
+Much of the backlog is pulled in by versions that planned upgrades will replace,
+so file only for content that will stay: `include_group_ids` limits a run to
+the given Maven group IDs, and `include_artifact_ids` narrows it further where
+one group mixes current and outgoing versions.
+
+When a change removes restricted content, the check lists it as resolved.
+Replace `DEPENDENCIES` with the `DEPENDENCIES` artifact from that run so the
+baseline keeps shrinking.
