@@ -132,14 +132,14 @@ maven/mavencentral/commons-beanutils/commons-beanutils/1.11.0, Apache-2.0, appro
 maven/mavencentral/commons-cli/commons-cli/1.1, Apache-2.0, approved, #31491
 maven/mavencentral/commons-cli/commons-cli/1.2, Apache-2.0, approved, CQ4578
 maven/mavencentral/commons-cli/commons-cli/1.4, Apache-2.0, approved, CQ13132
-maven/mavencentral/commons-codec/commons-codec/1.9, Apache-2.0, approved, CQ10595
+maven/mavencentral/commons-codec/commons-codec/1.17.2, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #14583
 maven/mavencentral/commons-collections/commons-collections/3.2.2, Apache-2.0, approved, #15185
 maven/mavencentral/commons-daemon/commons-daemon/1.0.13, Apache-2.0, approved, CQ7635
 maven/mavencentral/commons-dbcp/commons-dbcp/1.4, Apache-2.0, approved, #5105
 maven/mavencentral/commons-fileupload/commons-fileupload/1.3, Apache-2.0, approved, CQ10951
 maven/mavencentral/commons-fileupload/commons-fileupload/1.3.3, Apache-2.0, approved, CQ13884
 maven/mavencentral/commons-httpclient/commons-httpclient/3.1, Apache-2.0, approved, CQ1765
-maven/mavencentral/commons-io/commons-io/2.8.0, Apache-2.0, approved, CQ23182
+maven/mavencentral/commons-io/commons-io/2.18.0, Apache-2.0, approved, #17366
 maven/mavencentral/commons-jxpath/commons-jxpath/1.3, Apache-2.0, approved, CQ10790
 maven/mavencentral/commons-lang/commons-lang/2.6, Apache-2.0, approved, CQ6183
 maven/mavencentral/commons-logging/commons-logging/1.1.3, Apache-2.0, approved, CQ10836
