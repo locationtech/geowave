@@ -84,7 +84,7 @@ public class IngestUtils {
       final Properties configProperties) throws IOException {
     if (urlHandlerList == null) {
       final Iterator<IngestUrlHandlerSpi> handlers =
-          new SPIServiceRegistry(IngestUrlHandlerSpi.class).load(IngestUrlHandlerSpi.class);
+          SPIServiceRegistry.load(IngestUrlHandlerSpi.class);
       urlHandlerList = Lists.newArrayList(handlers);
     }
     for (final IngestUrlHandlerSpi h : urlHandlerList) {
@@ -99,8 +99,7 @@ public class IngestUtils {
   public static synchronized Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins() {
     if (localIngestPlugins == null) {
       final Iterator<LocalFileIngestPluginRegistrySpi> registries =
-          new SPIServiceRegistry(LocalFileIngestPluginRegistrySpi.class).load(
-              LocalFileIngestPluginRegistrySpi.class);
+          SPIServiceRegistry.load(LocalFileIngestPluginRegistrySpi.class);
       localIngestPlugins = new HashMap<>();
       while (registries.hasNext()) {
         localIngestPlugins.putAll(registries.next().getDefaultLocalIngestPlugins());

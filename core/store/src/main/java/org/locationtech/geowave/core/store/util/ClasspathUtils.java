@@ -200,8 +200,7 @@ public class ClasspathUtils {
   public static synchronized ClassLoader transformClassLoader(final ClassLoader classLoader) {
     if (transformerList == null) {
       final Iterator<ClassLoaderTransformerSpi> transformers =
-          new SPIServiceRegistry(ClassLoaderTransformerSpi.class).load(
-              ClassLoaderTransformerSpi.class);
+          SPIServiceRegistry.load(ClassLoaderTransformerSpi.class);
       transformerList = new ArrayList<>();
       while (transformers.hasNext()) {
         transformerList.add(transformers.next());
