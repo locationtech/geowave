@@ -15,10 +15,6 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
-				<exclusion>
 					<artifactId>mockito-all</artifactId>
 					<groupId>org.mockito</groupId>
 				</exclusion>
@@ -41,10 +37,6 @@
 			<artifactId>geowave-adapter-raster</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
-				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
 				<exclusion>
 					<artifactId>mockito-all</artifactId>
 					<groupId>org.mockito</groupId>

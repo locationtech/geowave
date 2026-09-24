@@ -57,10 +57,6 @@
 			<artifactId>hadoop-client</artifactId>
 			<exclusions>
 				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
-				<exclusion>
 					<artifactId>junit</artifactId>
 					<groupId>junit</groupId>
 				</exclusion>
@@ -78,10 +74,6 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-shaded-client</artifactId>
 			<exclusions>
-				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
 				<exclusion>
 					<groupId>org.apache.hadoop</groupId>
 					<artifactId>hadoop-core</artifactId>
