@@ -368,16 +368,13 @@ maven/mavencentral/org.apache.arrow/arrow-memory-core/18.1.0, Apache-2.0, approv
 maven/mavencentral/org.apache.arrow/arrow-memory-netty-buffer-patch/18.1.0, Apache-2.0, approved, #17687
 maven/mavencentral/org.apache.arrow/arrow-memory-netty/18.1.0, Apache-2.0, approved, #17685
 maven/mavencentral/org.apache.arrow/arrow-vector/18.1.0, Apache-2.0, approved, #17684
-maven/mavencentral/org.apache.avro/avro-ipc-jetty/1.11.4, Apache-2.0, approved, #31461
-maven/mavencentral/org.apache.avro/avro-ipc/1.11.4, Apache-2.0 AND (BSD-3-Clause OR GPL-2.0-only OR MIT), approved, #3362
-maven/mavencentral/org.apache.avro/avro-ipc/1.12.0, Apache-2.0 AND MIT AND BSD-3-Clause, approved, #31509
-maven/mavencentral/org.apache.avro/avro-mapred/1.11.4, Apache-2.0, approved, #3413
-maven/mavencentral/org.apache.avro/avro/1.11.4, Apache-2.0, approved, #3393
+maven/mavencentral/org.apache.avro/avro-mapred/1.12.1, Apache-2.0, restricted, clearlydefined
+maven/mavencentral/org.apache.avro/avro/1.12.1, Apache-2.0, approved, #27922
 maven/mavencentral/org.apache.cassandra/cassandra-all/4.0.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-collections4/4.4, Apache-2.0, approved, #17660
 maven/mavencentral/org.apache.commons/commons-compress/1.18, Apache-2.0 AND BSD-3-Clause, approved, CQ17974
-maven/mavencentral/org.apache.commons/commons-compress/1.26.2, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #13288
 maven/mavencentral/org.apache.commons/commons-compress/1.27.1, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #17651
+maven/mavencentral/org.apache.commons/commons-compress/1.28.0, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #22677
 maven/mavencentral/org.apache.commons/commons-configuration2/2.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-crypto/1.0.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-crypto/1.1.0, Apache-2.0, approved, #6563
@@ -513,7 +510,6 @@ maven/mavencentral/org.apache.spark/spark-unsafe_2.13/4.0.1, Apache-2.0, approve
 maven/mavencentral/org.apache.spark/spark-variant_2.13/4.0.1, Apache-2.0 AND BSD-3-Clause AND MIT, approved, clearlydefined
 maven/mavencentral/org.apache.thrift/libthrift/0.12.0, Apache-2.0, approved, #15514
 maven/mavencentral/org.apache.tika/tika-core/1.5, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.velocity/velocity-engine-core/2.3, Apache-2.0, approved, #2478
 maven/mavencentral/org.apache.ws.xmlschema/xmlschema-core/2.3.1, Apache-2.0, approved, #3391
 maven/mavencentral/org.apache.xbean/xbean-asm9-shaded/4.26, Apache-2.0 AND BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/org.apache.xml/xml-commons-resolver/1.2, Apache-2.0, approved, CQ1441

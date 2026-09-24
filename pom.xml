@@ -80,7 +80,13 @@
 		<configuration2.version>2.3</configuration2.version>
 		<hbase.version>2.4.2</hbase.version>
 		<hadoop.version>3.1.2</hadoop.version>
-		<avro.version>1.11.4</avro.version>
+		<!-- Not 1.12.2: it refuses to load any specific record class outside a trusted
+			list (AVRO-4189), which GeoWave's generated records are not on, so reading
+			them throws SecurityException until GeoWave registers them with
+			ClassSecurityValidator. 1.12.1 is the patch release on Spark 4.0.1's 1.12.0
+			and carries the CVE-2025-33042 fix. It already trusts no java-class or
+			java-key-class types by default; GeoWave's schemas use neither. -->
+		<avro.version>1.12.1</avro.version>
 		<extra.enforcer.rules.version>1.10.0</extra.enforcer.rules.version>
 		<maven.compiler.target>21</maven.compiler.target>
 		<!-- 1.11.x calls PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE, which Jackson
@@ -391,13 +397,6 @@
 						<groupId>org.glassfish.hk2.external</groupId>
 						<artifactId>*</artifactId>
 					</exclusion>
-					<!-- Spark's copy carries the hadoop2 classifier, which is a different
-						conflict key from the one GeoWave declares, so Maven mediates neither
-						away and both land on the classpath with the same class names. -->
-					<exclusion>
-						<groupId>org.apache.avro</groupId>
-						<artifactId>avro-mapred</artifactId>
-					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -406,6 +405,11 @@
 				<version>${spark.version}</version>
 				<!-- Same Jersey and HK2 story as spark-core: see the note there. -->
 				<exclusions>
+					<!-- Declared but never referred to by spark-sql; see avro-mapred. -->
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-ipc</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -441,13 +445,6 @@
 					<exclusion>
 						<groupId>org.glassfish.hk2.external</groupId>
 						<artifactId>*</artifactId>
-					</exclusion>
-					<!-- Spark's copy carries the hadoop2 classifier, which is a different
-						conflict key from the one GeoWave declares, so Maven mediates neither
-						away and both land on the classpath with the same class names. -->
-					<exclusion>
-						<groupId>org.apache.avro</groupId>
-						<artifactId>avro-mapred</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -493,13 +490,6 @@
 					<exclusion>
 						<groupId>org.glassfish.hk2.external</groupId>
 						<artifactId>*</artifactId>
-					</exclusion>
-					<!-- Spark's copy carries the hadoop2 classifier, which is a different
-						conflict key from the one GeoWave declares, so Maven mediates neither
-						away and both land on the classpath with the same class names. -->
-					<exclusion>
-						<groupId>org.apache.avro</groupId>
-						<artifactId>avro-mapred</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -1192,6 +1182,19 @@
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-mapred</artifactId>
 				<version>${avro.version}</version>
+				<!-- The only class on any module's classpath that refers to Avro IPC is
+					avro-mapred's tether runner, which runs map and reduce tasks in an
+					external process; GeoWave uses the input and output formats. -->
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-ipc</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.avro</groupId>
+						<artifactId>avro-ipc-jetty</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>com.amazonaws</groupId>
