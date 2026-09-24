@@ -1925,49 +1925,6 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
-			<id>build-installer-plugin</id>
-			<properties>
-				<!-- standalone installer seems to work better at least on windows with 
-					hadoop2 (more compatible with local FS), hbase shaded client is packaged 
-					with 2.10.0, which is what the ITs end up finding first -->
-				<hadoop.version>2.10.0</hadoop.version>
-			</properties>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<artifactId>maven-assembly-plugin</artifactId>
-							<version>3.1.1</version>
-							<configuration>
-								<finalName>installer-plugin</finalName>
-								<appendAssemblyId>false</appendAssemblyId>
-								<descriptorRefs>
-									<descriptorRef>default-installer-plugin</descriptorRef>
-								</descriptorRefs>
-							</configuration>
-							<executions>
-								<execution>
-									<id>make-assembly
-                                    </id> <!-- this is used for inheritance merges -->
-									<phase>package</phase> <!-- bind to the packaging phase -->
-									<goals>
-										<goal>single</goal>
-									</goals>
-								</execution>
-							</executions>
-							<dependencies>
-								<dependency>
-									<groupId>org.locationtech.geowave</groupId>
-									<artifactId>geowave-dev-resources</artifactId>
-									<version>${geowave-dev-resources.version}</version>
-								</dependency>
-							</dependencies>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
 		<!-- skip all code quality tools if specified -->
 		<profile>
 			<id>skip-code-quality</id>

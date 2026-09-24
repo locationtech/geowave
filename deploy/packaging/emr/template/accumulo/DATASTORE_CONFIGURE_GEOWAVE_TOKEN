@@ -1,3 +1,0 @@
-if is_master ; then
-	configure_geowave_accumulo
-fi

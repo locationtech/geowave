@@ -32,21 +32,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>build-installer-plugin</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
-						<configuration>
-							<outputDirectory>${project.build.directory}/installer-plugin</outputDirectory>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

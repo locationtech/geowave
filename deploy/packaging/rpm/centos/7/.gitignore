@@ -1,7 +1,0 @@
-*.jar
-*.zip
-*.tar.gz
-BUILD/
-BUILDROOT/
-RPMS/
-SRPMS/

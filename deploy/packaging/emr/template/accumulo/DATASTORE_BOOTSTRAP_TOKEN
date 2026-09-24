@@ -1,3 +1,0 @@
-# Get Accumulo running
-os_tweaks && configure_zookeeper
-create_accumulo_user && install_accumulo && configure_accumulo

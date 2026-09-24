@@ -26,7 +26,7 @@ The table below outlines the different project hierarchies within the GeoWave pr
 2.1+| 3.1+| mapreduce        | GeoWave MapReduce                     | Builds on the core store module to provide the basic analytic components for running jobs on Hadoop. Primarily, this exposes Hadoop input and output formats for GeoWave that can be used to intelligently distribute jobs across GeoWave data within the context of any distributed processing framework run on Yarn such as Spark or MapReduce.
 2.1+| 3.1+| store            | GeoWave Store                         | Core APIs and functionality for GeoWave, including the {core-store}/core/store/api/DataStore.java[`DataStore`] interface.
 
-1.1+| 4.1+| deploy           | GeoWave Deployment Configurations     | Various scripts for packaging and deploying GeoWave in production.
+1.1+| 4.1+| deploy           | GeoWave Deployment Configurations     | Maven profiles that package the command-line tools JAR, the GeoServer plugin, and the Accumulo and HBase server-side JARs (see <<020-packaging.adoc#packaging, Packaging GeoWave Builds>>).
 
 1.1+| 4.1+| dev-resources    | GeoWave Development Resources         | Development resources and settings for GeoWave.
 
