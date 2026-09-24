@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.service.rest.GeoWaveOperationServiceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,7 +131,7 @@ public class RestFieldFactory {
           delegateInstance = field.get(instance);
           if (delegateInstance == null) {
             delegateInstanceType = field.getType();
-            delegateInstance = delegateInstanceType.newInstance();
+            delegateInstance = InstantiationUtils.newInstance(delegateInstanceType);
           } else {
             delegateInstanceType = delegateInstance.getClass();
             if (delegateInstance instanceof Map) {

@@ -24,8 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.store.adapter.annotation.AnnotatedFieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveFieldAnnotation;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -249,10 +251,11 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
           for (final Annotation a : f.getDeclaredAnnotations()) {
             if (a.annotationType().isAnnotationPresent(GeoWaveFieldAnnotation.class)) {
               try {
-                final FieldDescriptor<?> descriptor =
+                final Class<? extends AnnotatedFieldDescriptorBuilder> builderClass =
                     a.annotationType().getAnnotation(
-                        GeoWaveFieldAnnotation.class).fieldDescriptorBuilder().newInstance().buildFieldDescriptor(
-                            f);
+                        GeoWaveFieldAnnotation.class).fieldDescriptorBuilder();
+                final FieldDescriptor<?> descriptor =
+                    InstantiationUtils.newInstance(builderClass).buildFieldDescriptor(f);
                 checkWriterForClass(normalizeClass(f.getType()));
                 if (addedFields.contains(descriptor.fieldName())) {
                   throw new RuntimeException("Duplicate field name: " + descriptor.fieldName());

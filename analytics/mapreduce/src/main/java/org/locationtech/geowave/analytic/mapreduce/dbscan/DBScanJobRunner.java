@@ -35,6 +35,7 @@ import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.analytic.param.HullParameters.Hull;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters.Partition;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -85,7 +86,7 @@ public class DBScanJobRunner extends NNJobRunner {
       }
       if ((rank < r) && (r <= CodecsRank.length)) {
         try {
-          final CompressionCodec codec = codecClass.newInstance();
+          final CompressionCodec codec = InstantiationUtils.newInstance(codecClass);
           if (Configurable.class.isAssignableFrom(codecClass)) {
             ((Configurable) codec).setConf(conf);
           }

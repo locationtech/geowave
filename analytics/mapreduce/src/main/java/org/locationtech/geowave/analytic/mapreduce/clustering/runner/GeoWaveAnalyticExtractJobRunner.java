@@ -37,6 +37,7 @@ import org.locationtech.geowave.analytic.param.MapReduceParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
@@ -114,7 +115,7 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner impl
       final String namespaceURI,
       @SuppressWarnings("rawtypes") final Class<? extends DimensionExtractor> dimensionExtractorClass)
       throws InstantiationException, IllegalAccessException {
-    final DimensionExtractor<?> extractor = dimensionExtractorClass.newInstance();
+    final DimensionExtractor<?> extractor = InstantiationUtils.newInstance(dimensionExtractorClass);
     return AnalyticFeature.createGeometryFeatureAdapter(
         outputDataTypeID,
         extractor.getDimensionNames(),

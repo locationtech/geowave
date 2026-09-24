@@ -27,6 +27,7 @@ import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
 import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.service.rest.exceptions.MissingArgumentException;
 import org.locationtech.geowave.service.rest.field.RequestParameters;
 import org.locationtech.geowave.service.rest.field.RequestParametersForm;
@@ -160,7 +161,7 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
         if (converter != null) {
           if ((converter != NoConverter.class) && (strValue != null)) {
             try {
-              objValue = converter.newInstance().convert(strValue);
+              objValue = InstantiationUtils.newInstance(converter).convert(strValue);
             } catch (final InstantiationException e) {
               LOGGER.warn(
                   "Cannot convert parameter since converter does not have zero argument constructor",

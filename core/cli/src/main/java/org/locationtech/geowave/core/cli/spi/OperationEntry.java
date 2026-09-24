@@ -18,6 +18,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.Operation;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +94,7 @@ public final class OperationEntry {
 
   public Operation createInstance() {
     try {
-      return (Operation) operationClass.newInstance();
+      return (Operation) InstantiationUtils.newInstance(operationClass);
     } catch (InstantiationException | IllegalAccessException e) {
       LOGGER.error("Unable to create new instance", e);
       return null;

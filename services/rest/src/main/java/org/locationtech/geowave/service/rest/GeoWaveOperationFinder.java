@@ -10,6 +10,7 @@ package org.locationtech.geowave.service.rest;
 
 import java.util.logging.Level;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.Finder;
@@ -33,7 +34,7 @@ public class GeoWaveOperationFinder extends Finder {
       final Response response) {
     try {
       return new GeoWaveOperationServiceWrapper<>(
-          operation.getClass().newInstance(),
+          InstantiationUtils.newInstance(operation.getClass()),
           defaultConfigFile);
     } catch (InstantiationException | IllegalAccessException e) {
       getLogger().log(Level.SEVERE, "Unable to instantiate Service Resource", e);
