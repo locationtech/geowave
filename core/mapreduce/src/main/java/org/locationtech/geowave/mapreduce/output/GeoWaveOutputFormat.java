@@ -250,6 +250,10 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
             LOGGER.warn("Index '" + indexName + "' does not exist");
           }
         }
+        if (i < indices.length) {
+          // before addType, so that a write that fails adds nothing to the store
+          return null;
+        }
         dataStore.addType(adapter, indices);
         writer = dataStore.createWriter(adapter.getTypeName());
 
