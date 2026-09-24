@@ -32,15 +32,16 @@ growing while it is worked down.
 
 If you have added something that trips the check, the options are, in order of
 preference: use a dependency that is already approved, drop the dependency, or
-ask a committer to file a review request with the Eclipse IP team. Committers
-can file requests by running the `IP Check` workflow manually with
-`file_reviews` enabled, which needs a `gitlab.eclipse.org` personal access token
-with the `api` scope stored as the `DASH_IPLAB_TOKEN` repository secret.
+ask a committer to file a review request with the Eclipse IP team. Every push
+to master files requests for all restricted content, skipping anything that
+already has one. Committers can also file by running the `IP Check` workflow
+manually with `file_reviews` enabled. Both need a `gitlab.eclipse.org` personal
+access token with the `api` scope stored as the `DASH_IPLAB_TOKEN` repository
+secret.
 
-Much of the backlog is pulled in by versions that planned upgrades will replace,
-so file only for content that will stay: `include_group_ids` limits a run to
-the given Maven group IDs, and `include_artifact_ids` narrows it further where
-one group mixes current and outgoing versions.
+A manual run can be limited: `include_group_ids` restricts it to the given
+Maven group IDs, and `include_artifact_ids` narrows it further where one group
+mixes current and outgoing versions.
 
 When a change removes restricted content, the check lists it as resolved.
 Replace `DEPENDENCIES` with the `DEPENDENCIES` artifact from that run so the

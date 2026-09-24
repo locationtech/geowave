@@ -65,10 +65,13 @@ jobs:
       - name: Check for newly restricted content
         run: ./.utility/dash-gate.sh DEPENDENCIES "${{ runner.temp }}/DEPENDENCIES.generated"
 
-  # Filing requests needs a committer's token, so it is never run from
-  # pull_request -- a pull request from a fork must not be able to reach it.
+  # Filing requests needs a committer's token, so it runs only for pushes to
+  # master and manual runs, never from pull_request -- a pull request from a
+  # fork must not be able to reach it.
   file-reviews:
-    if: github.event_name == 'workflow_dispatch' && inputs.file_reviews
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      (github.event_name == 'workflow_dispatch' && inputs.file_reviews)
     runs-on: ubuntu-24.04
     environment: eclipse-ip
     steps:
@@ -95,21 +98,25 @@ jobs:
             echo "and store it as a repository secret."
             exit 1
           fi
-          filter=()
-          if [ -n "$INCLUDE_GROUP_IDS" ]; then
-            filter+=(-DincludeGroupIds="$INCLUDE_GROUP_IDS")
+          if [ -z "$INCLUDE_GROUP_IDS$INCLUDE_ARTIFACT_IDS" ]; then
+            ./.utility/dash-file-reviews.sh DEPENDENCIES
+          else
+            filter=()
+            if [ -n "$INCLUDE_GROUP_IDS" ]; then
+              filter+=(-DincludeGroupIds="$INCLUDE_GROUP_IDS")
+            fi
+            if [ -n "$INCLUDE_ARTIFACT_IDS" ]; then
+              filter+=(-DincludeArtifactIds="$INCLUDE_ARTIFACT_IDS")
+            fi
+            ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated" \
+              -Ddash.iplab.token="$DASH_IPLAB_TOKEN" -Ddash.projectId=locationtech.geowave \
+              "${filter[@]}"
           fi
-          if [ -n "$INCLUDE_ARTIFACT_IDS" ]; then
-            filter+=(-DincludeArtifactIds="$INCLUDE_ARTIFACT_IDS")
-          fi
-          ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated" \
-            -Ddash.iplab.token="$DASH_IPLAB_TOKEN" -Ddash.projectId=locationtech.geowave \
-            "${filter[@]}"
 
       - name: Upload review summary
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: review-summary
-          path: target/dash/review-summary
+          path: target/dash/review-summary*
           if-no-files-found: ignore
