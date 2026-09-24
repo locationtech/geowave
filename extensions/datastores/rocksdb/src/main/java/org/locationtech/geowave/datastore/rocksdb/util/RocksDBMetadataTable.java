@@ -186,6 +186,7 @@ public class RocksDBMetadataTable {
     return db.isOpen();
   }
 
+  /** Closes the database and any iterators still open on it. */
   public void close() {
     db.close();
   }

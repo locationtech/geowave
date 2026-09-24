@@ -9,6 +9,8 @@
 package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.io.File;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -23,7 +25,9 @@ import org.slf4j.LoggerFactory;
 /**
  * The RocksDB instance behind one table directory. It opens on first use, and again after close(),
  * so that anything still holding the table keeps working after a store sharing it is closed.
- * close() waits for native calls that are in progress.
+ * close() waits for native calls that are in progress, and closes the iterators still open on the
+ * database before the database itself: RocksDB requires that, and otherwise leaks them or lets them
+ * read freed memory.
  */
 final class ManagedRocksDB {
   @FunctionalInterface
@@ -40,6 +44,7 @@ final class ManagedRocksDB {
   private final String directory;
   private final Opener opener;
   private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+  private final Set<AbstractRocksDBIterator<?>> openIterators = ConcurrentHashMap.newKeySet();
   private RocksDB db;
 
   ManagedRocksDB(final String directory, final Opener opener) {
@@ -75,8 +80,9 @@ final class ManagedRocksDB {
   }
 
   /**
-   * The read options are only created once the database is open, and seekAndWrap must hand them to
-   * the iterator it returns, which closes them.
+   * Opens an iterator that close() will close before closing the database. The read options are
+   * only created once the database is open, and seekAndWrap must hand them to the iterator it
+   * returns, which closes them.
    */
   <T> CloseableIterator<T> iterator(
       final Supplier<ReadOptions> options,
@@ -86,7 +92,9 @@ final class ManagedRocksDB {
         final ReadOptions readOptions = options.get();
         final RocksIterator it =
             readOptions == null ? db.newIterator() : db.newIterator(readOptions);
-        return seekAndWrap.apply(readOptions, it);
+        final AbstractRocksDBIterator<T> iterator = seekAndWrap.apply(readOptions, it);
+        iterator.trackIn(openIterators);
+        return iterator;
       }, CloseableIterator.Empty::new);
     } catch (final RocksDBException e) {
       LOGGER.error("Unable to open '" + directory + "' for reading", e);
@@ -134,6 +142,16 @@ final class ManagedRocksDB {
   void close() {
     lock.writeLock().lock();
     try {
+      if (!openIterators.isEmpty()) {
+        LOGGER.warn(
+            "Closing RocksDB table '"
+                + directory
+                + "' with "
+                + openIterators.size()
+                + " iterator(s) still open; reading from them will fail");
+        openIterators.forEach(AbstractRocksDBIterator::closeWithTable);
+        openIterators.clear();
+      }
       if (db != null) {
         db.close();
         db = null;

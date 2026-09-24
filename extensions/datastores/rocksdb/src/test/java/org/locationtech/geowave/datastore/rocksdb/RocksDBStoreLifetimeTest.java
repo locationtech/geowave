@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.rocksdb;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import java.io.Closeable;
 import java.io.IOException;
 import org.junit.After;
@@ -54,6 +55,28 @@ public class RocksDBStoreLifetimeTest {
     }
     assertEquals(10000, count(other));
     assertEquals(10000, count(createStore(options)));
+  }
+
+  @Test
+  public void testQueryLeftOpenAcrossDeleteAllFails() {
+    final DataStore store = createStore(options());
+    addType(store);
+    try (Writer<POI> writer = store.createWriter(TYPE_NAME)) {
+      write(writer, "a", 2000);
+    }
+    final CloseableIterator<POI> results = store.query(QueryBuilder.newBuilder(POI.class).build());
+    for (int i = 0; i < 10; i++) {
+      results.next();
+    }
+    store.deleteAll();
+    assertThrows(IllegalStateException.class, results::hasNext);
+    results.close();
+
+    addType(store);
+    try (Writer<POI> writer = store.createWriter(TYPE_NAME)) {
+      write(writer, "b", 100);
+    }
+    assertEquals(100, count(store));
   }
 
   private RocksDBOptions options() {

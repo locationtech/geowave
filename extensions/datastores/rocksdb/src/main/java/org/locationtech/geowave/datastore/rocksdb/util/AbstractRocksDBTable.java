@@ -198,7 +198,10 @@ abstract public class AbstractRocksDBTable {
     return db.isOpen();
   }
 
-  /** Closes the database. The table stays usable, and reopens the database when it is next used. */
+  /**
+   * Closes the database and any iterators still open on it. The table stays usable, and reopens the
+   * database when it is next used.
+   */
   public void close() {
     waitForBatchWrite();
     db.close();
