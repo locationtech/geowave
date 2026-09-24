@@ -133,6 +133,26 @@ public class DataStoreUtils {
     return adapter;
   }
 
+  /**
+   * Unlike {@link PersistentAdapterStore#getAdapter(Short)}, fails with a message naming the
+   * missing adapter instead of returning null.
+   */
+  public static InternalDataAdapter<?> getRequiredAdapter(
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final short adapterId) {
+    final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+    if (adapter == null) {
+      final String typeName =
+          internalAdapterStore == null ? null : internalAdapterStore.getTypeName(adapterId);
+      throw new IllegalStateException(
+          (typeName == null ? "Adapter ID " + adapterId
+              : "Type '" + typeName + "' (adapter ID " + adapterId + ")")
+              + " is not in the adapter store");
+    }
+    return adapter;
+  }
+
   public static FlattenedUnreadData aggregateFieldData(
       final GeoWaveKey key,
       final GeoWaveValue value,

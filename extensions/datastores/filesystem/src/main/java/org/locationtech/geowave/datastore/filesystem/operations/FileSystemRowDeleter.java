@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.filesystem.util.FileSystemClient;
 import org.locationtech.geowave.datastore.filesystem.util.FileSystemIndexTable;
 import org.locationtech.geowave.datastore.filesystem.util.FileSystemRow;
@@ -76,7 +77,11 @@ public class FileSystemRowDeleter implements RowDeleter {
         cacheKey.typeName,
         cacheKey.indexName,
         cacheKey.partition,
-        FileSystemUtils.isSortByTime(adapterStore.getAdapter(cacheKey.adapterId)));
+        FileSystemUtils.isSortByTime(
+            DataStoreUtils.getRequiredAdapter(
+                adapterStore,
+                internalAdapterStore,
+                cacheKey.adapterId)));
   }
 
   @Override

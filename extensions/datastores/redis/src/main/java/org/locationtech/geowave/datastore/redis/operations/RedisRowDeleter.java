@@ -14,6 +14,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisPersistedRow;
 import org.locationtech.geowave.datastore.redis.util.GeoWaveRedisRow;
@@ -61,7 +62,11 @@ public class RedisRowDeleter implements RowDeleter {
         client,
         compression,
         setNameAndAdapterId.getLeft(),
-        RedisUtils.isSortByTime(adapterStore.getAdapter(setNameAndAdapterId.getRight())),
+        RedisUtils.isSortByTime(
+            DataStoreUtils.getRequiredAdapter(
+                adapterStore,
+                internalAdapterStore,
+                setNameAndAdapterId.getRight())),
         visibilityEnabled);
   }
 
