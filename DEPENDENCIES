@@ -833,7 +833,7 @@ maven/mavencentral/org.springframework/spring-web/4.3.30.RELEASE, Apache-2.0, ap
 maven/mavencentral/org.springframework/spring-web/5.1.20.RELEASE, Apache-2.0 AND LicenseRef-Public-Domain, approved, CQ18367
 maven/mavencentral/org.springframework/spring-webmvc/4.3.30.RELEASE, Apache-2.0, approved, CQ13024
 maven/mavencentral/org.springframework/spring-webmvc/5.1.20.RELEASE, Apache-2.0, approved, CQ18368
-maven/mavencentral/org.threeten/threeten-extra/1.4, BSD-3-Clause, approved, clearlydefined
+maven/mavencentral/org.threeten/threeten-extra/1.8.0, BSD-3-Clause, approved, #31614
 maven/mavencentral/org.tukaani/xz/1.10, 0BSD, approved, #15823
 maven/mavencentral/org.typelevel/algebra_2.13/2.8.0, MIT, approved, clearlydefined
 maven/mavencentral/org.typelevel/cats-kernel_2.13/2.8.0, MIT AND (Apache-2.0 AND MIT), approved, #4477
