@@ -16,13 +16,9 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.rocksdb.Options;
 import org.rocksdb.ReadOptions;
-import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.RocksIterator;
 import org.rocksdb.Slice;
-import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Streams;
@@ -31,21 +27,13 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBDataIndexTable.class);
 
   public RocksDBDataIndexTable(
-      final Options writeOptions,
-      final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchSize) {
-    super(
-        writeOptions,
-        batchWriteOptions,
-        subDirectory,
-        adapterId,
-        visibilityEnabled,
-        compactOnWrite,
-        batchSize);
+      final int batchSize,
+      final boolean walOnBatchWrite) {
+    super(subDirectory, adapterId, visibilityEnabled, compactOnWrite, batchSize, walOnBatchWrite);
   }
 
   public synchronized void add(final byte[] dataId, final GeoWaveValue value) {
@@ -56,14 +44,13 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     if ((dataIds == null) || (dataIds.length == 0)) {
       return new CloseableIterator.Empty<>();
     }
-    final RocksDB readDb = getDb(true);
-    if (readDb == null) {
-      return new CloseableIterator.Empty<>();
-    }
-
+    final List<byte[]> dataIdsList = Arrays.asList(dataIds);
     try {
-      final List<byte[]> dataIdsList = Arrays.asList(dataIds);
-      final List<byte[]> dataIdxResults = readDb.multiGetAsList(dataIdsList);
+      final List<byte[]> dataIdxResults =
+          getManagedDb().read(db -> db.multiGetAsList(dataIdsList), () -> null);
+      if (dataIdxResults == null) {
+        return new CloseableIterator.Empty<>();
+      }
       if (dataIdsList.size() != dataIdxResults.size()) {
         LOGGER.warn("Result size differs from original keys");
       } else {
@@ -88,39 +75,31 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final byte[] startDataId,
       final byte[] endDataId,
       final boolean reverse) {
-    final RocksDB readDb = getDb(true);
-    if (readDb == null) {
-      return new CloseableIterator.Empty<>();
-    }
-    final RocksIterator it;
     if (reverse) {
-      it = readDb.newIterator();
-      if (endDataId == null) {
-        it.seekToLast();
-      } else {
-        it.seekForPrev(ByteArrayUtils.getNextPrefix(endDataId));
-      }
+      final CloseableIterator<GeoWaveRow> it = iterator(() -> null, (options, rocksIt) -> {
+        if (endDataId == null) {
+          rocksIt.seekToLast();
+        } else {
+          rocksIt.seekForPrev(ByteArrayUtils.getNextPrefix(endDataId));
+        }
+        return new DataIndexReverseRowIterator(rocksIt, adapterId, visibilityEnabled);
+      });
       if (startDataId == null) {
-        return new DataIndexReverseRowIterator(it, adapterId, visibilityEnabled);
+        return it;
       }
-      return new DataIndexBoundedReverseRowIterator(startDataId, it, adapterId, visibilityEnabled);
-    } else {
-      final ReadOptions options;
-      if (endDataId == null) {
-        options = null;
-        it = readDb.newIterator();
-      } else {
-        options =
-            new ReadOptions().setIterateUpperBound(
-                new Slice(ByteArrayUtils.getNextPrefix(endDataId)));
-        it = readDb.newIterator(options);
-      }
-      if (startDataId == null) {
-        it.seekToFirst();
-      } else {
-        it.seek(startDataId);
-      }
-      return new DataIndexForwardRowIterator(options, it, adapterId, visibilityEnabled);
+      return new DataIndexBoundedReverseRowIterator(startDataId, it);
     }
+    return iterator(
+        () -> endDataId == null ? null
+            : new ReadOptions().setIterateUpperBound(
+                new Slice(ByteArrayUtils.getNextPrefix(endDataId))),
+        (options, rocksIt) -> {
+          if (startDataId == null) {
+            rocksIt.seekToFirst();
+          } else {
+            rocksIt.seek(startDataId);
+          }
+          return new DataIndexForwardRowIterator(options, rocksIt, adapterId, visibilityEnabled);
+        });
   }
 }

@@ -19,13 +19,11 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBClient implements Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
@@ -174,9 +172,10 @@ public class RocksDBClient implements Closeable {
   private final int batchWriteSize;
   private final boolean walOnBatchWrite;
 
-  protected static Options indexWriteOptions = null;
-  protected WriteOptions batchWriteOptions = null;
-  protected static Options metadataOptions = null;
+  // Only ever used under the class lock: RocksDB copies what it needs when a database opens, so
+  // holding the lock for the open is enough to keep closeSharedOptions() from freeing them mid-use.
+  private static Options indexOptions = null;
+  private static Options metadataOptions = null;
 
   public RocksDBClient(
       final String subDirectory,
@@ -191,46 +190,68 @@ public class RocksDBClient implements Closeable {
     this.walOnBatchWrite = walOnBatchWrite;
   }
 
+  static synchronized RocksDB openIndexDb(final String directory) throws RocksDBException {
+    if (indexOptions == null) {
+      RocksDB.loadLibrary();
+      final int cores = Runtime.getRuntime().availableProcessors();
+      indexOptions =
+          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+    }
+    return RocksDB.open(indexOptions, directory);
+  }
+
+  static synchronized RocksDB openMetadataDb(final String directory) throws RocksDBException {
+    if (metadataOptions == null) {
+      RocksDB.loadLibrary();
+      metadataOptions = new Options().setCreateIfMissing(true).optimizeForSmallDb();
+    }
+    return RocksDB.open(metadataOptions, directory);
+  }
+
+  static synchronized void closeSharedOptions() {
+    if (metadataOptions != null) {
+      metadataOptions.close();
+      metadataOptions = null;
+    }
+    if (indexOptions != null) {
+      indexOptions.close();
+      indexOptions = null;
+    }
+  }
+
   private RocksDBMetadataTable loadMetadataTable(final CacheKey key) throws RocksDBException {
     final File dir = new File(key.directory);
     if (!dir.exists() && !dir.mkdirs()) {
       LOGGER.error("Unable to create directory for rocksdb store '" + key.directory + "'");
     }
     return new RocksDBMetadataTable(
-        RocksDB.open(metadataOptions, key.directory),
+        key.directory,
+        openMetadataDb(key.directory),
         key.requiresTimestamp,
         visibilityEnabled,
         compactOnWrite);
   }
 
-  @SuppressFBWarnings(
-      value = "IS2_INCONSISTENT_SYNC",
-      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
-        indexWriteOptions,
-        batchWriteOptions,
         key.directory,
         key.adapterId,
         key.partition,
         key.requiresTimestamp,
         visibilityEnabled,
         compactOnWrite,
-        batchWriteSize);
+        batchWriteSize,
+        walOnBatchWrite);
   }
 
-  @SuppressFBWarnings(
-      value = "IS2_INCONSISTENT_SYNC",
-      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
-        indexWriteOptions,
-        batchWriteOptions,
         key.directory,
         key.adapterId,
         visibilityEnabled,
         compactOnWrite,
-        batchWriteSize);
+        batchWriteSize,
+        walOnBatchWrite);
   }
 
   public String getSubDirectory() {
@@ -242,16 +263,6 @@ public class RocksDBClient implements Closeable {
       final short adapterId,
       final byte[] partition,
       final boolean requiresTimestamp) {
-    if (indexWriteOptions == null) {
-      RocksDB.loadLibrary();
-      final int cores = Runtime.getRuntime().availableProcessors();
-      indexWriteOptions =
-          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-    }
-    if (batchWriteOptions == null) {
-      batchWriteOptions =
-          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
-    }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
         (IndexCacheKey) keyCache.get(
@@ -262,26 +273,12 @@ public class RocksDBClient implements Closeable {
   public synchronized RocksDBDataIndexTable getDataIndexTable(
       final String tableName,
       final short adapterId) {
-    if (indexWriteOptions == null) {
-      RocksDB.loadLibrary();
-      final int cores = Runtime.getRuntime().availableProcessors();
-      indexWriteOptions =
-          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-    }
-    if (batchWriteOptions == null) {
-      batchWriteOptions =
-          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
-    }
     final String directory = subDirectory + "/" + tableName;
     return dataIndexTableCache.get(
         (DataIndexCacheKey) keyCache.get(directory, d -> new DataIndexCacheKey(d, adapterId)));
   }
 
   public synchronized RocksDBMetadataTable getMetadataTable(final MetadataType type) {
-    if (metadataOptions == null) {
-      RocksDB.loadLibrary();
-      metadataOptions = new Options().setCreateIfMissing(true).optimizeForSmallDb();
-    }
     final String directory = subDirectory + "/" + type.id();
     return metadataTableCache.get(
         keyCache.get(directory, d -> new CacheKey(d, type.isStatValues())));
@@ -359,20 +356,30 @@ public class RocksDBClient implements Closeable {
     metadataTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
   }
 
+  boolean hasOpenTables() {
+    return indexTableCache.asMap().values().stream().anyMatch(AbstractRocksDBTable::isOpen)
+        || dataIndexTableCache.asMap().values().stream().anyMatch(AbstractRocksDBTable::isOpen)
+        || metadataTableCache.asMap().values().stream().anyMatch(RocksDBMetadataTable::isOpen);
+  }
+
+  /**
+   * Closes every table's database. Other DataStore instances on this directory share this client
+   * and may still hold its tables, so the tables stay registered and reopen when they are used
+   * again.
+   */
   @Override
   public void close() {
-    keyCache.invalidateAll();
     indexTableCache.asMap().values().forEach(db -> db.close());
-    indexTableCache.invalidateAll();
     dataIndexTableCache.asMap().values().forEach(db -> db.close());
-    dataIndexTableCache.invalidateAll();
     metadataTableCache.asMap().values().forEach(db -> db.close());
+  }
+
+  /** Closes and forgets every table, for when their directories are about to be deleted. */
+  void closeAndForgetTables() {
+    keyCache.invalidateAll();
+    close();
+    indexTableCache.invalidateAll();
+    dataIndexTableCache.invalidateAll();
     metadataTableCache.invalidateAll();
-    synchronized (this) {
-      if (batchWriteOptions != null) {
-        batchWriteOptions.close();
-        batchWriteOptions = null;
-      }
-    }
   }
 }

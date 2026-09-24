@@ -15,7 +15,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.RocksIterator;
 import org.rocksdb.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +23,37 @@ import com.google.common.primitives.Longs;
 
 public class RocksDBMetadataTable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBMetadataTable.class);
-  private final RocksDB db;
+  private final ManagedRocksDB db;
   private final boolean requiresTimestamp;
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
   private long prevTime = Long.MAX_VALUE;
 
+  /** The table owns the database, and cannot be used again once closed. */
   public RocksDBMetadataTable(
       final RocksDB db,
+      final boolean requiresTimestamp,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite) {
+    this(new ManagedRocksDB(null, null, db), requiresTimestamp, visibilityEnabled, compactOnWrite);
+  }
+
+  /** The database is open already, and reopens if the table is used after close(). */
+  RocksDBMetadataTable(
+      final String directory,
+      final RocksDB db,
+      final boolean requiresTimestamp,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite) {
+    this(
+        new ManagedRocksDB(directory, RocksDBClient::openMetadataDb, db),
+        requiresTimestamp,
+        visibilityEnabled,
+        compactOnWrite);
+  }
+
+  private RocksDBMetadataTable(
+      final ManagedRocksDB db,
       final boolean requiresTimestamp,
       final boolean visibilityEnabled,
       final boolean compactOnWrite) {
@@ -44,7 +66,10 @@ public class RocksDBMetadataTable {
 
   public void remove(final byte[] key) {
     try {
-      db.singleDelete(key);
+      db.write(rocks -> {
+        rocks.singleDelete(key);
+        return null;
+      });
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to delete metadata", e);
     }
@@ -85,29 +110,24 @@ public class RocksDBMetadataTable {
 
   public void compact() {
     try {
-      db.compactRange();
+      compactRange();
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to force compacting metadata", e);
     }
   }
 
   public CloseableIterator<GeoWaveMetadata> iterator(final ByteArrayRange range) {
-    final ReadOptions options;
-    final RocksIterator it;
-    if (range.getEnd() == null) {
-      options = null;
-      it = db.newIterator();
-    } else {
-      options = new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix()));
-      it = db.newIterator(options);
-    }
-    if (range.getStart() == null) {
-      it.seekToFirst();
-    } else {
-      it.seek(range.getStart());
-    }
-
-    return new RocksDBMetadataIterator(options, it, requiresTimestamp, visibilityEnabled);
+    return db.iterator(
+        () -> range.getEnd() == null ? null
+            : new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix())),
+        (options, it) -> {
+          if (range.getStart() == null) {
+            it.seekToFirst();
+          } else {
+            it.seek(range.getStart());
+          }
+          return new RocksDBMetadataIterator(options, it, requiresTimestamp, visibilityEnabled);
+        });
   }
 
   public CloseableIterator<GeoWaveMetadata> iterator(final byte[] primaryId) {
@@ -121,21 +141,25 @@ public class RocksDBMetadataTable {
   }
 
   private CloseableIterator<GeoWaveMetadata> prefixIterator(final byte[] prefix) {
-    final ReadOptions options = new ReadOptions().setPrefixSameAsStart(true);
-    final RocksIterator it = db.newIterator(options);
-    it.seek(prefix);
-    return new RocksDBMetadataIterator(options, it, requiresTimestamp, visibilityEnabled);
+    return db.iterator(() -> new ReadOptions().setPrefixSameAsStart(true), (options, it) -> {
+      it.seek(prefix);
+      return new RocksDBMetadataIterator(options, it, requiresTimestamp, visibilityEnabled);
+    });
   }
 
   public CloseableIterator<GeoWaveMetadata> iterator() {
-    final RocksIterator it = db.newIterator();
-    it.seekToFirst();
-    return new RocksDBMetadataIterator(it, requiresTimestamp, visibilityEnabled);
+    return db.iterator(() -> null, (options, it) -> {
+      it.seekToFirst();
+      return new RocksDBMetadataIterator(it, requiresTimestamp, visibilityEnabled);
+    });
   }
 
   public void put(final byte[] key, final byte[] value) {
     try {
-      db.put(key, value);
+      db.write(rocks -> {
+        rocks.put(key, value);
+        return null;
+      });
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to add metadata", e);
     }
@@ -144,11 +168,22 @@ public class RocksDBMetadataTable {
   public void flush() {
     if (compactOnWrite) {
       try {
-        db.compactRange();
+        compactRange();
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to compact metadata", e);
       }
     }
+  }
+
+  private void compactRange() throws RocksDBException {
+    db.write(rocks -> {
+      rocks.compactRange();
+      return null;
+    });
+  }
+
+  boolean isOpen() {
+    return db.isOpen();
   }
 
   public void close() {

@@ -136,7 +136,12 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public void deleteAll() throws Exception {
-    close(false);
+    RocksDBClientCache.getInstance().closeAndForgetTables(
+        directory,
+        visibilityEnabled,
+        compactOnWrite,
+        batchWriteSize,
+        walOnBatchWrite);
     FileUtils.deleteDirectory(new File(directory));
   }
 
@@ -247,27 +252,19 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
     return new RocksDBRowDeleter(getClient(), adapterStore, internalAdapterStore, indexName);
   }
 
-  private void close(final boolean invalidateCache) {
+  /**
+   * This is not a typical resource, it references a static RocksDB resource used by all DataStore
+   * instances with common parameters. Closing it closes the databases, which other DataStore
+   * instances with common parameters reopen if they use them again.
+   */
+  @Override
+  public void close() {
     RocksDBClientCache.getInstance().close(
         directory,
         visibilityEnabled,
         compactOnWrite,
         batchWriteSize,
-        walOnBatchWrite,
-        invalidateCache);
-    if (invalidateCache) {
-      client = null;
-    }
-  }
-
-  /**
-   * This is not a typical resource, it references a static RocksDB resource used by all DataStore
-   * instances with common parameters. Closing this is only recommended when the JVM no longer needs
-   * any connection to this RocksDB store with common parameters.
-   */
-  @Override
-  public void close() {
-    close(true);
+        walOnBatchWrite);
   }
 
   @SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
