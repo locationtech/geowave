@@ -40,7 +40,7 @@ GeoWave publishes through the https://central.sonatype.com/[Sonatype Central Por
 
 Publishing is done by the `Publish` workflow, which runs `.utility/publish-artifacts.sh`. That script signs the artifacts with the CI GPG key and runs `./mvnw deploy -Prelease`; the `release` profile activates `central-publishing-maven-plugin`, which uploads a deployment bundle to the Portal and waits for it to be published.
 
-The workflow is currently gated off pending the Eclipse Foundation's approval of the `org.locationtech` namespace on the Portal. It runs only when a committer starts it manually (Run workflow), or on pushes to `master` once the `PUBLISH_ON_MASTER` repository variable is set to `true`. The same workflow also publishes the documentation to link:https://locationtech.github.io/geowave/[GitHub Pages, window="_blank"].
+The workflow is currently gated off pending the Eclipse Foundation's approval of the `org.locationtech` namespace on the Portal. It runs only when a committer starts it manually (Run workflow), or on pushes to `master` once the `PUBLISH_ON_MASTER` repository variable is set to `true`. That variable is read by `master` only; the `2.x-jdk8` branch's copy of the workflow reads its own, `PUBLISH_ON_2X_JDK8`, so publishing a 2.x release does not also start publishing from `master`. The same workflow also publishes the documentation to link:https://locationtech.github.io/geowave/[GitHub Pages, window="_blank"].
 
 Two things must be in place for publishing to work:
 

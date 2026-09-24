@@ -23,6 +23,9 @@ jobs:
     # should happen once the org.locationtech namespace is granted on the Central
     # Portal and SONATYPE_USERNAME/SONATYPE_PASSWORD hold a Portal user token.
     # Until then a committer can still publish deliberately with Run workflow.
+    # Only master reads PUBLISH_ON_MASTER. 2.x-jdk8's copy of this workflow
+    # reads PUBLISH_ON_2X_JDK8, so turning on one branch's releases does not
+    # start publishing from the other.
     if: >-
       github.repository == 'locationtech/geowave' &&
       (github.event_name == 'workflow_dispatch' || vars.PUBLISH_ON_MASTER == 'true')
