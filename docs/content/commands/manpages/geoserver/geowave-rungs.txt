@@ -14,14 +14,29 @@ geowave-gs-run - Runs a standalone GeoServer instance
 [[gs-run-description]]
 ==== DESCRIPTION
 
-This command runs a standalone GeoServer instance.
+This command runs a standalone GeoServer instance, for local evaluation, testing and debugging, with the GeoWave plugin on its classpath.  It needs GeoServer's web application: unpack the GeoServer ${geoserver.version} web archive (WAR) into a directory and pass that directory with `--directory`.  The WAR is published at `https://repo.osgeo.org/repository/release/org/geoserver/web/gs-web-app/${geoserver.version}/gs-web-app-${geoserver.version}.war`.
+
+The WAR must be exactly GeoServer ${geoserver.version}, the version GeoWave is built against.  The command puts the whole tools JAR on the web application's classpath ahead of the WAR's own `WEB-INF/lib`, so GeoServer runs with the tools JAR's copies of the GeoServer, GeoTools and Spring classes, and GeoServer's About page and REST API report the GeoWave version in place of the GeoServer and GeoTools versions.
+
+[WARNING]
+====
+GeoServer ${geoserver.version} has known critical vulnerabilities, for example CVE-2024-36401, which allows unauthenticated remote code execution.  This command is for local evaluation only.  It listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment.
+====
+
+[NOTE]
+====
+GeoServer ${geoserver.version} predates Java 21.  WMS works, but WFS GetFeature requests fail with "Unsupported class file major version 65" until GeoWave moves to a newer GeoServer.  That includes the WFS output formats in GeoServer's Layer Preview, and the GetFeature requests that WFS-T clients use to read features.
+====
 
 [[gs-run-options]]
 ==== OPTIONS
 
 *-d, --directory* _<path>_::
-  The directory to use for GeoServer. Default is `./lib/services/third-party/embedded-geoserver/geoserver`.
+  The directory containing the unpacked GeoServer WAR. Default is `lib/services/third-party/embedded-geoserver/geoserver` under `~/geowave`, or under the directory in the `geowave.home` system property if it is set.
   
+*--host* _<host>_::
+  The host name or IP address for GeoServer to listen on.  Default is `127.0.0.1`, which only this machine can reach.  Listening on another interface makes GeoServer reachable from other machines on that network; see the warning above.
+
 *-i, --interactive*::
   If specified, prompt for user input to end the process.
   
@@ -31,6 +46,10 @@ This command runs a standalone GeoServer instance.
 [[gs-run-examples]]
 ==== EXAMPLES
 
-Run a standalone GeoServer instance:
+Run the GeoServer WAR unpacked in the `geoserver` directory:
 
-  geowave gs run
+  geowave gs run -d geoserver
+
+Run it on port 8000 instead of 8080:
+
+  geowave gs run -d geoserver -p 8000

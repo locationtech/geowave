@@ -168,6 +168,11 @@ Not all SSL configuration settings may be necessary, as it depends on the setup 
 
 === WFS-T
 
+[NOTE]
+====
+When tested under link:commands.html#geoserver-run[`geowave gs run`^, window="_blank"], which runs GeoServer ${geoserver.version} on Java 21, WFS 1.0.0, 1.1.0 and 2.0.0 GetFeature requests all failed with "Unsupported class file major version 65".  Transaction requests were still processed, but a WFS-T client cannot read features back through GetFeature.  GeoServer ${geoserver.version} predates Java 21, so the same failure is expected wherever the GeoWave GeoServer plugin runs in GeoServer ${geoserver.version} on Java 21.  WMS is not affected.
+====
+
 Transactions are initiated through a Transaction operatio, that contains inserts, updates, and deletes to features. WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent use of a provided _Lock ID_. The GeoWave implementation supports transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a transaction may leave the affected data in an intermediary state. Some deletions, updates, or insertions may not be processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response. Operations on single feature instances are atomic.
 
 Inserted features are buffered prior to commit. The features are bulk fed to the data store when the buffer size is exceeded and when the transaction is committed. In support of atomicity and isolation, prior to commit, flushed features are marked in a transient state and are only visible to the controlling transaction. Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided by increasing the buffer size to avoid pre-commit flushes.
