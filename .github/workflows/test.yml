@@ -86,10 +86,8 @@ jobs:
     runs-on: ubuntu-24.04
     name: ${{ matrix.profile }} Integration Tests
     # Lanes listed under `include` with continue_on_error still run and still
-    # report, but do not gate. This is a deliberate 2.1.0 posture: that release
-    # exists to prove the publish mechanics end to end, not to certify every
-    # backend. Each of these has a known, understood reason to be failing and
-    # is tracked for 3.0.0, where the whole matrix has to be green.
+    # report, but do not gate. The lane comments describe the Java 21 record as
+    # of September 2026.
     continue-on-error: ${{ matrix.continue_on_error == true }}
     # Without a limit a hung lane runs to GitHub's six-hour ceiling before it reports,
     # which cassandra-it did on #1952 -- six hours to learn nothing. The first cap was
@@ -97,7 +95,10 @@ jobs:
     # 75. That reading was off, because a lane with a failing test stops early: once the
     # failures were fixed, filesystem-it took 88.6 minutes to pass and eight lanes were
     # cut off at the cap. 150 still turns a hang into a result well inside the ceiling.
-    timeout-minutes: 150
+    # It is now the Run step's timeout-minutes, and this one must stay above that, so
+    # the step's timeout fires first and a lane that runs out of time fails rather
+    # than being cancelled.
+    timeout-minutes: 160
     strategy:
       fail-fast: false
       matrix:
@@ -110,40 +111,36 @@ jobs:
           - 'rocksdb-it,secondary-index-it'
           - 'hbase-it-server,secondary-index-it'
         include:
-          # Both Accumulo lanes fail intermittently, on a different assertion
-          # each time and never twice in a row: "Unable to delete all features
-          # in bulk delete" in GeoWaveCustomCRSSpatialVectorIT on the client
-          # lane, a binned aggregation and a duplicate deletion counting 30
-          # where 23 were expected on the server lane. All three are deletion
-          # or aggregation timing. These lanes still gate, because a
-          # deterministic break fails every attempt and so fails the build.
+          # Both Accumulo lanes fail intermittently, on a count in
+          # GeoWaveBasicSpatialTemporalVectorIT or GeoWaveCustomCRSSpatialVectorIT
+          # or on BAD_AUTHORIZATIONS in GeoWaveVisibilityIT, and so far a second
+          # attempt has always passed. So each gets one retry (see the Run step)
+          # and still gates: a deterministic break fails both attempts.
           - profile: accumulo-it-client
             retry_tests: true
           - profile: accumulo-it-server
             retry_tests: true
-          # No retry. .utility/retry reruns the whole lane -- build and suite --
-          # for up to 120 minutes, and a full cassandra pass takes about an hour,
-          # so one real failure spent the rest of the 150-minute cap on a second
-          # attempt that could not finish, and reported nothing useful. The
-          # failures that retry was hiding were causes, not timing: the
-          # SecurityManager, jamm without its agent, and CREATE TABLE on the
-          # driver's two-second default.
+          # Fails often, each time on a count off by one (in a bulk delete, a
+          # binned aggregation, GeoWaveCustomCRSSpatialVectorIT and
+          # GeoWaveBasicSpatialTemporalVectorIT); the cause is not diagnosed. No
+          # retry: a run takes one to two hours, so a failure and a second attempt
+          # rarely fit in the Run step. The failures an earlier retry was hiding
+          # were causes, not timing: the SecurityManager, jamm without its agent,
+          # and CREATE TABLE on the driver's two-second default.
           - profile: cassandra-it
             continue_on_error: true
-          # DynamoDB loses a small number of rows during ingest, so a different
-          # assertion fails from run to run -- 2800 rows where 2822 were
-          # expected in one run, a binning aggregation in the next. The cause is
-          # not understood and the code is due to be rewritten for AWS SDK v2,
-          # v1 having reached end of support in December 2025. It does pass
-          # some runs, so this is frequency rather than a hard break.
+          # Fails occasionally, in GeoWaveCustomCRSSpatialVectorIT: a bulk delete
+          # that left features behind, and a count aggregation that disagreed
+          # with the query it counted. The cause is not understood, and the code
+          # is due to be rewritten for AWS SDK v2, v1 having reached end of
+          # support in December 2025.
           - profile: dynamodb-it
             continue_on_error: true
-          # Intermittent, like the Accumulo lanes: GeoServerIngestIT got a 400
-          # publishing the GridPoint layer on one run and passed on the next two
-          # with the same code. Non-gating for now because 2.1.0 only has to
-          # prove the publish mechanics; a retry would be the better treatment
-          # and would keep it gating. The secondary-index filesystem lane
-          # gates either way, so the store itself stays covered.
+          # Made non-gating on the Java 8 line after GeoServerIngestIT got a 400
+          # publishing the GridPoint layer. On Java 21 it has failed only on
+          # #1953's first commits, which failed every lane, so it is the next
+          # candidate to gate. The secondary-index filesystem lane gates either
+          # way, so the store itself stays covered.
           - profile: filesystem-it
             continue_on_error: true
     env:
@@ -169,7 +166,16 @@ jobs:
           restore-keys: ${{ runner.os }}-other-
           path: ~/.downloads
 
+      # Keep timeout-minutes below the job's (see there). A retried lane's second
+      # attempt starts however long the first took, and this timeout ends it if
+      # need be; the step then fails and the reports still upload. That is the
+      # cost of the retry: on a deterministic break it can spend up to about one
+      # more lane's runtime, and in September 2026 an Accumulo attempt on master
+      # took 38 to 85 minutes, so a retry after a slow failure may not finish.
       - name: Run
+        timeout-minutes: 150
+        env:
+          RETRY_PRESERVE_DIRS: test/target/surefire-reports test/target/failsafe-reports
         run: ./.utility/retry ./.utility/run-tests.sh
 
       - name: Upload test reports
@@ -179,8 +185,10 @@ jobs:
           name: it-reports-${{ strategy.job-index }}
           # test/pom.xml points failsafe's reportsDirectory at surefire-reports; failsafe-reports
           # holds only the summary. The XML is worth having: the log masks every "1" in it.
+          # attempt-1 holds a retried lane's first attempt, moved there by .utility/retry.
           path: |
             test/target/surefire-reports/*.xml
             test/target/failsafe-reports/*.xml
+            test/target/attempt-1/*/*.xml
           if-no-files-found: warn
 
