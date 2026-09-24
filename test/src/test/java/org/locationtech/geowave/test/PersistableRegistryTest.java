@@ -9,12 +9,21 @@
 package org.locationtech.geowave.test;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableFactory;
+import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
 import org.reflections.Reflections;
 
 public class PersistableRegistryTest {
@@ -33,5 +42,41 @@ public class PersistableRegistryTest {
                     Class[]::new))
             + " are concrete class implementing Persistable but are not registered",
         actual.stream().anyMatch(c -> !c.isInterface() && !Modifier.isAbstract(c.getModifiers())));
+  }
+
+  /**
+   * PersistableFactory keeps the first of two registrations that collide and only logs the other,
+   * which testPersistablesRegistry would report as the second class not being registered at all.
+   */
+  @Test
+  public void testPersistableIdsAreUnique() {
+    final Map<Short, String> byId = new HashMap<>();
+    final Map<Class<?>, String> byClass = new HashMap<>();
+    final List<String> duplicates = new ArrayList<>();
+    final Iterator<PersistableRegistrySpi> registries =
+        new SPIServiceRegistry(PersistableRegistryTest.class).load(PersistableRegistrySpi.class);
+    while (registries.hasNext()) {
+      final PersistableRegistrySpi registry = registries.next();
+      for (final PersistableIdAndConstructor p : registry.getSupportedPersistables()) {
+        // as PersistableFactory does, third-party registries get the negative ID space
+        final short id =
+            registry instanceof InternalPersistableRegistry ? p.getPersistableId()
+                : (short) -Math.abs(p.getPersistableId());
+        final Class<?> persistableClass = p.getPersistableConstructor().get().getClass();
+        final String registration =
+            persistableClass.getName() + " with ID " + id + " by " + registry.getClass().getName();
+        final String sameId = byId.putIfAbsent(id, registration);
+        if (sameId != null) {
+          duplicates.add(sameId + " and " + registration);
+        }
+        final String sameClass = byClass.putIfAbsent(persistableClass, registration);
+        if ((sameClass != null) && (sameId == null)) {
+          duplicates.add(sameClass + " and " + registration);
+        }
+      }
+    }
+    Assert.assertTrue(
+        "Persistables registered more than once: " + String.join("; ", duplicates),
+        duplicates.isEmpty());
   }
 }
