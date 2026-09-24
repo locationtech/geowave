@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.rocksdb.ReadOptions;
+import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
 
 /**
@@ -39,7 +40,20 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
   @Override
   public synchronized boolean hasNext() {
     checkTableOpen();
-    return !closed && it.isValid();
+    if (closed) {
+      return false;
+    }
+    if (it.isValid()) {
+      return true;
+    }
+    // a read error also invalidates the iterator, which would otherwise look like the end of the
+    // results
+    try {
+      it.status();
+    } catch (final RocksDBException e) {
+      throw new IllegalStateException("RocksDB iterator failed", e);
+    }
+    return false;
   }
 
   @Override
