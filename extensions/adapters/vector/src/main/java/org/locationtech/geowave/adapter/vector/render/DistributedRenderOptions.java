@@ -12,9 +12,6 @@ import java.awt.Color;
 import java.awt.image.IndexColorModel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -22,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import org.eclipse.imagen.Interpolation;
 import org.eclipse.imagen.InterpolationNearest;
-import org.eclipse.imagen.media.serialize.SerializableState;
-import org.eclipse.imagen.media.serialize.SerializerFactory;
 import javax.xml.transform.TransformerException;
 import org.geoserver.wms.DefaultWebMapService;
 import org.geoserver.wms.GetMapRequest;
@@ -407,15 +402,7 @@ public class DistributedRenderOptions implements Persistable {
 
     final byte[] paletteBinary;
     if (palette != null) {
-      final SerializableState serializableColorModel = SerializerFactory.getState(palette);
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      try {
-        final ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(serializableColorModel);
-      } catch (final IOException e) {
-        LOGGER.warn("Unable to serialize sample model", e);
-      }
-      paletteBinary = baos.toByteArray();
+      paletteBinary = paletteToBinary(palette);
       bufferSize +=
           (paletteBinary.length + VarintUtils.unsignedIntByteLength(paletteBinary.length));
     } else {
@@ -552,15 +539,9 @@ public class DistributedRenderOptions implements Persistable {
       final byte[] colorModelBinary =
           ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       try {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(colorModelBinary);
-        final ObjectInputStream ois = new ObjectInputStream(bais);
-        final Object o = ois.readObject();
-        if ((o instanceof SerializableState)
-            && (((SerializableState) o).getObject() instanceof IndexColorModel)) {
-          palette = (IndexColorModel) ((SerializableState) o).getObject();
-        }
-      } catch (final Exception e) {
-        LOGGER.warn("Unable to deserialize color model", e);
+        palette = paletteFromBinary(colorModelBinary);
+      } catch (final RuntimeException e) {
+        LOGGER.warn("Unable to read color model", e);
         palette = null;
       }
     } else {
@@ -607,5 +588,44 @@ public class DistributedRenderOptions implements Persistable {
     } else {
       style = null;
     }
+  }
+
+  private static byte[] paletteToBinary(final IndexColorModel palette) {
+    final int[] rgbs = new int[palette.getMapSize()];
+    palette.getRGBs(rgbs);
+    final ByteBuffer buf =
+        ByteBuffer.allocate(
+            VarintUtils.unsignedIntByteLength(palette.getPixelSize())
+                + VarintUtils.unsignedIntByteLength(rgbs.length)
+                + (rgbs.length * 4)
+                + 1
+                + VarintUtils.signedIntByteLength(palette.getTransparentPixel())
+                + VarintUtils.unsignedIntByteLength(palette.getTransferType()));
+    VarintUtils.writeUnsignedInt(palette.getPixelSize(), buf);
+    VarintUtils.writeUnsignedInt(rgbs.length, buf);
+    for (final int rgb : rgbs) {
+      buf.putInt(rgb);
+    }
+    buf.put((byte) (palette.hasAlpha() ? 1 : 0));
+    VarintUtils.writeSignedInt(palette.getTransparentPixel(), buf);
+    VarintUtils.writeUnsignedInt(palette.getTransferType(), buf);
+    return buf.array();
+  }
+
+  private static IndexColorModel paletteFromBinary(final byte[] binary) {
+    final ByteBuffer buf = ByteBuffer.wrap(binary);
+    final int bits = VarintUtils.readUnsignedInt(buf);
+    final int size = VarintUtils.readUnsignedInt(buf);
+    if (size > (buf.remaining() / 4)) {
+      throw new IllegalArgumentException("Palette size " + size + " exceeds its binary");
+    }
+    final int[] rgbs = new int[size];
+    for (int i = 0; i < size; i++) {
+      rgbs[i] = buf.getInt();
+    }
+    final boolean hasAlpha = buf.get() != 0;
+    final int transparentPixel = VarintUtils.readSignedInt(buf);
+    final int transferType = VarintUtils.readUnsignedInt(buf);
+    return new IndexColorModel(bits, size, rgbs, 0, hasAlpha, transparentPixel, transferType);
   }
 }
