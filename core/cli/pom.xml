@@ -10,10 +10,6 @@
 	<name>GeoWave CLI</name>
 	<description>Command Line Interface for GeoWave Tools</description>
 	
-	<properties>
-		<commons-codec.version>1.7</commons-codec.version>
-	</properties>
-	
 	<dependencies>	
 		<dependency>
 			<groupId>org.apache.commons</groupId>
