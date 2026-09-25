@@ -11,11 +11,11 @@ package org.locationtech.geowave.service.client;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.ws.rs.Path;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.uri.UriComponent;
 import org.locationtech.geowave.service.StoreService;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class StoreServiceClient implements StoreService {
   private static final Logger LOGGER = LoggerFactory.getLogger(StoreServiceClient.class);
   private final StoreService storeService;
-  // Jersey 2 web resource proxy client doesn't work well with dynamic
+  // Jersey's web resource proxy client doesn't work well with dynamic
   // key-value pair queryparams such as the generic addStore
   private final WebTarget addStoreTarget;
 
