@@ -15,7 +15,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
@@ -118,8 +117,7 @@ public class RocksDBMetadataTable {
 
   public CloseableIterator<GeoWaveMetadata> iterator(final ByteArrayRange range) {
     return db.iterator(
-        () -> range.getEnd() == null ? null
-            : new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix())),
+        () -> range.getEnd() == null ? null : new UpperBoundReadOptions(range.getEndAsNextPrefix()),
         (options, it) -> {
           if (range.getStart() == null) {
             it.seekToFirst();
