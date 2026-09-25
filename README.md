@@ -100,7 +100,6 @@ geowave ingest localToGW -f geotools-vector states.shp myStore spatialIdx
 # Query all the data in the states type from myStore
 geowave query myStore "SELECT * FROM states"
 ```
-RocksDB cannot run on Apple Silicon (the bundled RocksDB library has no macOS arm64 build), so there use `-t filesystem` instead.
 
 See the [CLI documentation](https://locationtech.github.io/geowave/latest/commands.html) for a full list of commands and their options.
 

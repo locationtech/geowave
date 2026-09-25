@@ -7,6 +7,21 @@ When a major change is made to the GeoWave codebase that alters the serializatio
 
 For more information about the migration command, see the link:commands.html#util-migrate[`util migrate`] documentation.
 
+==== Changes That Cannot Be Rolled Back
+
+*RocksDB library, GeoWave 3.0.* GeoWave 3.0 uses RocksDB 10.10 (`rocksdbjni` 10.10.1.1), where
+GeoWave 2.x used RocksDB 6.19.3. It opens a RocksDB store written by GeoWave 2.x in place, with no
+migration or re-ingest. RocksDB's compatibility policy is that a newer release opens a database
+written by any earlier release, as long as it is opened with unchanged options
+(link:https://github.com/facebook/rocksdb/wiki/RocksDB-Compatibility-Between-Different-Releases[RocksDB Compatibility Between Different Releases, window="_blank"]),
+and GeoWave 3.0 sets the same options as 2.x. It does not work the other way. From 9.0 on, RocksDB
+writes new table files in block-based table `format_version` 6 by default, which RocksDB can only
+read from version 8.6 on, so once GeoWave 3.0 has written a table file into a store, GeoWave 2.x
+fails to open it with `Unknown Footer version. Maybe this file was created with newer version of
+RocksDB?`. Opening a store can be enough to write one, because RocksDB flushes any rows left in the
+write-ahead log to a new table file when it opens a database. If you might need to go back to
+GeoWave 2.x, copy the store's directory before pointing GeoWave 3.0 at it.
+
 ==== Changes That Migration Cannot Handle
 
 Some changes alter a store's encoding in a way that `util migrate` cannot read, so the data has to be
