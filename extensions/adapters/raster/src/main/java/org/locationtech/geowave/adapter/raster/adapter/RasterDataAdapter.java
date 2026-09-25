@@ -23,8 +23,10 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1263,6 +1265,49 @@ public class RasterDataAdapter implements
     return new byte[] {};
   }
 
+  protected static ColorModel getColorModel(final byte[] binary)
+      throws IOException, ClassNotFoundException {
+    try (ObjectInputStream ois = new JaiStateInputStream(new ByteArrayInputStream(binary))) {
+      final Object o = ois.readObject();
+      if ((o instanceof SerializableState)
+          && (((SerializableState) o).getObject() instanceof ColorModel)) {
+        return (ColorModel) ((SerializableState) o).getObject();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Reads color models persisted by GeoWave builds on JAI, whose serialized state classes ImageN
+   * renamed but kept the same serialized form of.
+   */
+  private static class JaiStateInputStream extends ObjectInputStream {
+    private static final Map<String, String> IMAGEN_CLASSES =
+        Map.of(
+            "com.sun.media.jai.rmi.ColorModelState",
+            "org.eclipse.imagen.media.serialize.ColorModelState",
+            "com.sun.media.jai.rmi.SerializableStateImpl",
+            "org.eclipse.imagen.media.serialize.SerializableStateImpl",
+            "com.sun.media.imageioimpl.common.BogusColorSpace",
+            "org.eclipse.imagen.NotAColorSpace",
+            "javax.media.jai.FloatDoubleColorModel",
+            "org.eclipse.imagen.FloatDoubleColorModel",
+            "com.sun.media.jai.codecimpl.util.FloatDoubleColorModel",
+            "org.eclipse.imagen.FloatDoubleColorModel");
+
+    private JaiStateInputStream(final InputStream in) throws IOException {
+      super(in);
+    }
+
+    @Override
+    protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException {
+      final ObjectStreamClass descriptor = super.readClassDescriptor();
+      final String imagenClass = IMAGEN_CLASSES.get(descriptor.getName());
+      return imagenClass == null ? descriptor
+          : ObjectStreamClass.lookupAny(Class.forName(imagenClass));
+    }
+  }
+
   protected static byte[] getNoDataBinary(final double[][] noDataValuesPerBand) {
     if (noDataValuesPerBand != null) {
       int totalBytes = 0;
@@ -1316,13 +1361,7 @@ public class RasterDataAdapter implements
     final int colorModelLength = VarintUtils.readUnsignedInt(buf);
     final byte[] colorModelBinary = ByteArrayUtils.safeRead(buf, colorModelLength);
     try {
-      final ByteArrayInputStream bais = new ByteArrayInputStream(colorModelBinary);
-      final ObjectInputStream ois = new ObjectInputStream(bais);
-      final Object o = ois.readObject();
-      if ((o instanceof SerializableState)
-          && (((SerializableState) o).getObject() instanceof ColorModel)) {
-        colorModel = (ColorModel) ((SerializableState) o).getObject();
-      }
+      colorModel = getColorModel(colorModelBinary);
     } catch (final Exception e) {
       LOGGER.warn("Unable to deserialize color model", e);
     }
