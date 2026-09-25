@@ -17,15 +17,17 @@ env:
 jobs:
   publish:
     # The runner label this job asked for was retired years ago, so it has not
-    # run since; the first push to master that can actually reach a runner would
+    # run since; the first push to 2.x-jdk8 that can actually reach a runner would
     # otherwise publish without anyone deciding to. Publishing stays off until a
-    # committer sets the PUBLISH_ON_MASTER repository variable to true, which
+    # committer sets the PUBLISH_ON_2X_JDK8 repository variable to true, which
     # should happen once the org.locationtech namespace is granted on the Central
     # Portal and SONATYPE_USERNAME/SONATYPE_PASSWORD hold a Portal user token.
     # Until then a committer can still publish deliberately with Run workflow.
+    # master's copy of this workflow reads PUBLISH_ON_MASTER instead, so turning
+    # on one branch's releases does not start publishing from the other.
     if: >-
       github.repository == 'locationtech/geowave' &&
-      (github.event_name == 'workflow_dispatch' || vars.PUBLISH_ON_MASTER == 'true')
+      (github.event_name == 'workflow_dispatch' || vars.PUBLISH_ON_2X_JDK8 == 'true')
     runs-on: ubuntu-24.04
     name: Publish Artifacts and Docs
     env:
@@ -39,7 +41,7 @@ jobs:
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     # Artifacts are still built and published on 8. The docs are not: asciidoctor
     # 2.x runs on JRuby 9.4, whose own dependencies (asm, joni, jcodings,
@@ -47,7 +49,7 @@ jobs:
     # listed last so it stays the default JAVA_HOME and only the docs step opts
     # out.
     - name: Set up JDK 21 and JDK 8
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v6
       with:
         distribution: temurin
         java-version: |

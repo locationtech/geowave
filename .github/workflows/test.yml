@@ -32,10 +32,10 @@ jobs:
     env:
       IT_ONLY: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 8
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '8'
@@ -46,7 +46,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: unit-test-reports
           path: "**/target/surefire-reports/*.xml"
@@ -70,10 +70,10 @@ jobs:
       # Maven 3.9+, which the wrapper pins.
       MAVEN_ARGS: -Dspotbugs.skip --fail-at-end -Dmaven.test.failure.ignore=true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
@@ -114,10 +114,10 @@ jobs:
       IT_ONLY: false
       PYTHON_BUILD: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 8
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '8'
@@ -128,7 +128,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: python-test-reports
           path: python/src/main/python/test-report.xml
@@ -197,10 +197,10 @@ jobs:
       TEST_KERBEROS: ${{ matrix.test_kerberos }}
       RETRY_TESTS: ${{ matrix.retry_tests }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up JDK 8
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '8'
@@ -208,7 +208,7 @@ jobs:
 
       # Not covered by setup-java's maven cache.
       - name: Cache downloaded test resources
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
           restore-keys: ${{ runner.os }}-other-
@@ -219,7 +219,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: it-reports-${{ strategy.job-index }}
           path: test/target/failsafe-reports/*.xml
