@@ -53,50 +53,57 @@ public class RocksDBClientCache {
             walOnBatchWrite));
   }
 
+  /**
+   * Closes the client's databases, as when a DataStore is closed, and releases the options shared
+   * by all clients once no database is open. Other DataStore instances may share the client, so it
+   * stays cached and its tables reopen if they are used again.
+   */
   public synchronized void close(
       final String directory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
       final int batchWriteSize,
-      final boolean walOnBatchWrite,
-      final boolean invalidateCache) {
-    final ClientKey key =
-        new ClientKey(
-            directory,
-            visibilityEnabled,
-            compactOnWrite,
-            batchWriteSize,
-            walOnBatchWrite);
-    final RocksDBClient client = clientCache.getIfPresent(key);
+      final boolean walOnBatchWrite) {
+    final RocksDBClient client =
+        clientCache.getIfPresent(
+            new ClientKey(
+                directory,
+                visibilityEnabled,
+                compactOnWrite,
+                batchWriteSize,
+                walOnBatchWrite));
     if (client != null) {
-      if (invalidateCache) {
-        clientCache.invalidate(key);
-      }
       client.close();
-    }
-    if (clientCache.estimatedSize() == 0) {
-      if (RocksDBClient.metadataOptions != null) {
-        RocksDBClient.metadataOptions.close();
-        RocksDBClient.metadataOptions = null;
-      }
-      if (RocksDBClient.indexWriteOptions != null) {
-        RocksDBClient.indexWriteOptions.close();
-        RocksDBClient.indexWriteOptions = null;
+      if (clientCache.asMap().values().stream().noneMatch(RocksDBClient::hasOpenTables)) {
+        RocksDBClient.closeSharedOptions();
       }
     }
   }
 
+  /** Closes the client's databases and forgets its tables, before its directory is deleted. */
+  public synchronized void closeAndForgetTables(
+      final String directory,
+      final boolean visibilityEnabled,
+      final boolean compactOnWrite,
+      final int batchWriteSize,
+      final boolean walOnBatchWrite) {
+    final RocksDBClient client =
+        clientCache.getIfPresent(
+            new ClientKey(
+                directory,
+                visibilityEnabled,
+                compactOnWrite,
+                batchWriteSize,
+                walOnBatchWrite));
+    if (client != null) {
+      client.closeAndForgetTables();
+    }
+  }
+
   public synchronized void closeAll() {
-    clientCache.asMap().forEach((k, v) -> v.close());
+    clientCache.asMap().forEach((k, v) -> v.closeAndForgetTables());
     clientCache.invalidateAll();
-    if (RocksDBClient.metadataOptions != null) {
-      RocksDBClient.metadataOptions.close();
-      RocksDBClient.metadataOptions = null;
-    }
-    if (RocksDBClient.indexWriteOptions != null) {
-      RocksDBClient.indexWriteOptions.close();
-      RocksDBClient.indexWriteOptions = null;
-    }
+    RocksDBClient.closeSharedOptions();
   }
 
   private static class ClientKey {

@@ -8,15 +8,18 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
-import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
-import org.rocksdb.Options;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
+import org.rocksdb.RocksIterator;
 import org.rocksdb.WriteBatch;
 import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
@@ -38,44 +41,53 @@ abstract public class AbstractRocksDBTable {
 
   private WriteBatch currentBatch;
   private final int batchSize;
-  private RocksDB writeDb;
-  private final Options writeOptions;
-  private final WriteOptions batchWriteOptions;
+  private final ManagedRocksDB db;
+  private final boolean walOnBatchWrite;
   protected final String subDirectory;
-  private boolean exists;
   protected final short adapterId;
   protected boolean visibilityEnabled;
   protected boolean compactOnWrite;
   private final boolean batchWrite;
 
   public AbstractRocksDBTable(
-      final Options writeOptions,
-      final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchSize) {
+      final int batchSize,
+      final boolean walOnBatchWrite) {
     super();
-    this.writeOptions = writeOptions;
-    this.batchWriteOptions = batchWriteOptions;
+    // write batches are created before the database is opened
+    RocksDB.loadLibrary();
     this.subDirectory = subDirectory;
     this.adapterId = adapterId;
-    exists = new File(subDirectory).exists();
+    db = new ManagedRocksDB(subDirectory, RocksDBClient::openIndexDb);
     this.visibilityEnabled = visibilityEnabled;
     this.compactOnWrite = compactOnWrite;
     this.batchSize = batchSize;
+    this.walOnBatchWrite = walOnBatchWrite;
     batchWrite = batchSize > 1;
   }
 
+  protected ManagedRocksDB getManagedDb() {
+    return db;
+  }
+
+  protected <T> CloseableIterator<T> iterator(
+      final Supplier<ReadOptions> options,
+      final BiFunction<ReadOptions, RocksIterator, AbstractRocksDBIterator<T>> seekAndWrap) {
+    return db.iterator(options, seekAndWrap);
+  }
+
   public void delete(final byte[] key) {
-    final RocksDB db = getDb(true);
-    if (db == null) {
-      LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
-      return;
-    }
     try {
-      db.singleDelete(key);
+      final boolean exists = db.read(rocks -> {
+        rocks.singleDelete(key);
+        return true;
+      }, () -> false);
+      if (!exists) {
+        LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
+      }
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to delete key", e);
     }
@@ -106,12 +118,12 @@ abstract public class AbstractRocksDBTable {
           }
         }
       }
-    } else
-
-    {
-      final RocksDB db = getDb(false);
+    } else {
       try {
-        db.put(key, value);
+        db.write(rocks -> {
+          rocks.put(key, value);
+          return null;
+        });
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to write key-value", e);
       }
@@ -122,7 +134,7 @@ abstract public class AbstractRocksDBTable {
     try {
       writeSemaphore.acquire();
       CompletableFuture.runAsync(
-          new BatchWriter(currentBatch, getDb(false), batchWriteOptions, writeSemaphore),
+          new BatchWriter(currentBatch, db, walOnBatchWrite, writeSemaphore),
           BATCH_WRITE_THREADS);
     } catch (final InterruptedException e) {
       LOGGER.warn("async write semaphore interrupted", e);
@@ -147,12 +159,11 @@ abstract public class AbstractRocksDBTable {
 
   protected void internalFlush() {
     if (compactOnWrite) {
-      final RocksDB db = getDb(true);
-      if (db == null) {
-        return;
-      }
       try {
-        db.compactRange();
+        db.read(rocks -> {
+          rocks.compactRange();
+          return null;
+        }, () -> null);
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to compact range", e);
       }
@@ -160,12 +171,11 @@ abstract public class AbstractRocksDBTable {
   }
 
   public void compact() {
-    final RocksDB db = getDb(true);
-    if (db == null) {
-      return;
-    }
     try {
-      db.compactRange();
+      db.read(rocks -> {
+        rocks.compactRange();
+        return null;
+      }, () -> null);
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to force compacting range", e);
     }
@@ -184,70 +194,49 @@ abstract public class AbstractRocksDBTable {
     }
   }
 
+  boolean isOpen() {
+    return db.isOpen();
+  }
+
+  /**
+   * Closes the database and any iterators still open on it. The table stays usable, and reopens the
+   * database when it is next used.
+   */
   public void close() {
     waitForBatchWrite();
-    synchronized (this) {
-      if (writeDb != null) {
-        writeDb.close();
-        writeDb = null;
-      }
-    }
+    db.close();
   }
 
   public String getSubDirectory() {
     return subDirectory;
   }
 
-  @SuppressFBWarnings(
-      justification = "double check for null is intentional to avoid synchronized blocks when not needed.")
-  public RocksDB getDb(final boolean read) {
-    // avoid synchronization if unnecessary by checking for null outside
-    // synchronized block
-    if (writeDb == null) {
-      synchronized (this) {
-        // check again within synchronized block
-        if (writeDb == null) {
-          if (read && !exists) {
-            return null;
-          }
-          try {
-            if (exists || new File(subDirectory).mkdirs()) {
-              exists = true;
-              writeDb = RocksDB.open(writeOptions, subDirectory);
-            } else {
-              LOGGER.error("Unable to open to create directory '" + subDirectory + "'");
-            }
-          } catch (final RocksDBException e) {
-            LOGGER.error("Unable to open for writing", e);
-          }
-        }
-      }
-    }
-    return writeDb;
-  }
-
   private static class BatchWriter implements Runnable {
     private final WriteBatch dataToWrite;
-    private final RocksDB db;
-    private final WriteOptions options;
+    private final ManagedRocksDB db;
+    private final boolean walOnBatchWrite;
     private final Semaphore writeSemaphore;
 
     private BatchWriter(
         final WriteBatch dataToWrite,
-        final RocksDB db,
-        final WriteOptions options,
+        final ManagedRocksDB db,
+        final boolean walOnBatchWrite,
         final Semaphore writeSemaphore) {
       super();
       this.dataToWrite = dataToWrite;
       this.db = db;
-      this.options = options;
+      this.walOnBatchWrite = walOnBatchWrite;
       this.writeSemaphore = writeSemaphore;
     }
 
     @Override
     public void run() {
-      try {
-        db.write(options, dataToWrite);
+      // the write options are this write's own, so nothing else can close them while it runs
+      try (WriteOptions options = new WriteOptions().setDisableWAL(!walOnBatchWrite)) {
+        db.write(rocks -> {
+          rocks.write(options, dataToWrite);
+          return null;
+        });
         dataToWrite.close();
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to write batch", e);
