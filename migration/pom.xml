@@ -11,6 +11,10 @@
 	<name>GeoWave Migrations</name>
 	<dependencies>
 		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>

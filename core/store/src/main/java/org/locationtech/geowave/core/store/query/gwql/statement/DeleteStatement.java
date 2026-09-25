@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.store.query.gwql.statement;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Query;

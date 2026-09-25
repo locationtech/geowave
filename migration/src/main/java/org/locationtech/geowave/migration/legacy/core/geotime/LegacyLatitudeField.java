@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.migration.legacy.core.geotime;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.store.api.Index;

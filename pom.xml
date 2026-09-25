@@ -63,6 +63,7 @@
 		<jts.version>1.18.2</jts.version>
 		<imageio.ext.version>1.3.5</imageio.ext.version>
 		<guava.version>30.1-jre</guava.version>
+		<jspecify.version>1.0.0</jspecify.version>
 		<geoserver.version>2.19.0</geoserver.version>
 		<accumulo.version>2.0.1</accumulo.version>
 		<thrift.version>0.12.0</thrift.version>
@@ -631,6 +632,11 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jspecify</groupId>
+				<artifactId>jspecify</artifactId>
+				<version>${jspecify.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.oath.cyclops</groupId>

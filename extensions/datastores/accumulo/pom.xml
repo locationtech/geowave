@@ -11,6 +11,10 @@
 	<description>Geowave Data Store on Apache Accumulo</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-mapreduce</artifactId>
 			<version>${project.version}</version>

@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.geotime.index;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 import com.beust.jcommander.Parameter;

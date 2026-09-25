@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.store.query.gwql.statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;

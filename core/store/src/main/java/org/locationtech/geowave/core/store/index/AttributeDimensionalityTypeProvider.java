@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.util.ServiceLoader;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.AttributeIndex;
 import org.locationtech.geowave.core.store.api.DataStore;

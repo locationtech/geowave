@@ -10,7 +10,7 @@ package org.locationtech.geowave.migration.legacy.core.geotime;
 
 import java.nio.ByteBuffer;
 import java.util.Set;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;

@@ -10,6 +10,10 @@
 	<name>GeoWave Spatial and Temporal Support</name>
 	<dependencies>
 		<dependency>
+			<groupId>org.jspecify</groupId>
+			<artifactId>jspecify</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.sgr</groupId>
 			<artifactId>s2-geometry-library-java</artifactId>
 			<version>1.0.1</version>

@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.migration.legacy.core.geotime;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -166,7 +166,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final AdapterIndexMappingStore mappingStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final boolean decodePersistenceEncoding) {
-    final @Nullable QueryFilter[] clientFilters = getClientFilters(options);
+    final QueryFilter @Nullable [] clientFilters = getClientFilters(options);
     final DataIndexRetrieval dataIndexRetrieval = getDataIndexRetrieval();
     if ((options == null) || options.requiresClientSideMerging()) {
       final Map<Short, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
