@@ -1,25 +1,35 @@
 #!/usr/bin/env bash
 
+# With RETRY_TESTS=true, a failed command gets exactly one more attempt, made
+# whether or not it can finish in the time left: the caller's timeout ends it
+# if not. Before the retry, each directory in RETRY_PRESERVE_DIRS is moved into
+# an attempt-1 directory beside it, so the second attempt cannot overwrite the
+# first one's reports.
+
 set -euo pipefail
 
 x() {
     echo "+ $*" >&2
     "$@"
 }
-if [[ -z "${RETRY_TESTS}" ]]; then
-    x "$@" && exit 0
-else
-    max_retry_time_seconds=$(( 120 * 60 ))
-    retry_delay_seconds=10
 
-    END=$(( $(date +%s) + ${max_retry_time_seconds} ))
-
-    while (( $(date +%s) < $END )); do
-        x "$@" && exit 0
-        sleep "${retry_delay_seconds}"
-    done
-
-    echo "$0: retrying [$*] timed out" >&2
-    exit 1
+if [[ "${RETRY_TESTS:-}" != true ]]; then
+    x "$@"
+    exit
 fi
 
+status=0
+x "$@" || status=$?
+if (( status == 0 )); then
+    exit 0
+fi
+
+echo "$0: [$*] exited with status $status; retrying once" >&2
+for dir in ${RETRY_PRESERVE_DIRS:-}; do
+    if [[ -d "$dir" ]]; then
+        mkdir -p "$(dirname "$dir")/attempt-1"
+        mv "$dir" "$(dirname "$dir")/attempt-1/"
+    fi
+done
+sleep 10
+x "$@"
