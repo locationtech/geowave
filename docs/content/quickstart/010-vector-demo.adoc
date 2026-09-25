@@ -168,25 +168,48 @@ This command tells GeoWave to perform a Kernel Density Estimation using a local 
 
 === Visualizing the Data
 
-Now that we have prepared our vector and KDE data, we can visualize it by using the GeoServer plugin.  GeoWave provides an embedded GeoServer with the command-line tools.
+Now that we have prepared our vector and KDE data, we can visualize it by using the GeoServer plugin.  The command-line tools can run GeoServer themselves, with GeoWave already available to it.
 
+[[run-geoserver]]
 ==== Run GeoServer
+
+[WARNING]
+====
+GeoServer ${geoserver.version} has known critical vulnerabilities, for example CVE-2024-36401, which allows unauthenticated remote code execution.  `geowave gs run` is for evaluating GeoWave on your own machine only.  It listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment.
+====
+
+[NOTE]
+====
+GeoServer ${geoserver.version} predates Java 21.  The WMS steps in this guide work, but WFS GetFeature requests fail with "Unsupported class file major version 65" until GeoWave moves to a newer GeoServer.  That includes the WFS output formats in GeoServer's Layer Preview, and the GetFeature requests that WFS-T clients use to read features.
+====
+
+The command-line tools do not include GeoServer's web application, so download the GeoServer ${geoserver.version} web archive (WAR), the version GeoWave is built against, and unpack it into a `geoserver` directory in the working directory:
+
+[source, bash]
+----
+$ curl -O https://repo.osgeo.org/repository/release/org/geoserver/web/gs-web-app/${geoserver.version}/gs-web-app-${geoserver.version}.war
+$ unzip -q gs-web-app-${geoserver.version}.war -d geoserver
+----
+
+This only needs to be done once.  GeoServer keeps its configuration, such as the layers and styles added below, in `geoserver/data`.
 
 [IMPORTANT]
 ====
-Execute the following command in a _new_ terminal window.  This command is provided by GeoWave's embedded GeoServer, which is not part of the command-line tools JAR described in the link:installation-guide.html#install-from-source[Installation Guide^, window="_blank"].  If it is not available, run a GeoServer with the link:userguide.html#geoserver-plugin[GeoWave GeoServer plugin^, window="_blank"] installed and point the CLI at it with link:commands.html#config-geoserver[`geowave config geoserver`].
+Execute the following command in a _new_ terminal window, from the working directory.
 ====
 
 [source, bash]
 ----
-$ geowave gs run
+$ geowave gs run -d geoserver
 ----
 
 After a few moments, GeoServer should be available by browsing to link:localhost:8080/geoserver/web/[localhost:8080/geoserver^, window="blank"].  The login credentials for this embedded service are username `admin` and password `geoserver`. The server will remain running until the command-line process is exited.  You can exit the process by pressing Ctrl+C or by closing the terminal window.
 
+If port 8080 is already in use, add `-p <port>` to the command and tell the CLI where GeoServer is with link:commands.html#config-geoserver[`geowave config geoserver`], for example `+geowave config geoserver http://localhost:<port>/geoserver+`.  An existing GeoServer with the link:userguide.html#geoserver-plugin[GeoWave GeoServer plugin^, window="_blank"] installed can be used the same way instead of `geowave gs run`.
+
 [NOTE]
 ====
-RocksDB only supports a single connection to the database, because of this, you will be unable to perform queries or other data store operations with the CLI while GeoServer maintains a connection to it. If you would like the capability to do both simultaneously, you can use a data store that supports multiple connections, such as one of the link:commands.html#standalone-commands[standalone data stores, window="blank"].
+RocksDB only supports a single connection to the database, because of this, you will be unable to perform queries or other data store operations with the CLI while GeoServer maintains a connection to it. If you would like the capability to do both simultaneously, use the FileSystem data store described at the start of this guide, or a data store that runs as its own service, such as Accumulo, HBase, Cassandra or Redis (see link:userguide.html#adding-data-stores[Adding Data Stores^, window="_blank"] in the User Guide).
 ====
 
 ==== Add Layers

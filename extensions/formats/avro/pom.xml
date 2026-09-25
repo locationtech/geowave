@@ -22,16 +22,4 @@
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>build-installer-plugin</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

@@ -5,6 +5,11 @@
 
 Commands that stand up standalone stores for testing and debug purposes.
 
+[NOTE]
+====
+None of these commands are included in the command-line tools JAR.  They come from separate `geowave-cli-<store>-embed` modules, which GeoWave's integration tests use.  To try GeoWave without an external service, use the FileSystem or RocksDB data store; see link:userguide.html#adding-data-stores[Adding Data Stores^, window="_blank"] in the User Guide.
+====
+
 [[standalone-accumulo-runserver]]
 === Run Standalone Accumulo
 

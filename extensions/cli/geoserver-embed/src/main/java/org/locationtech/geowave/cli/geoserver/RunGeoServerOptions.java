@@ -23,6 +23,7 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 public class RunGeoServerOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunGeoServerOptions.class);
@@ -45,8 +46,13 @@ public class RunGeoServerOptions {
   private Integer port = 8080;
 
   @Parameter(
+      names = {"--host"},
+      description = "Select the host name or IP address for GeoServer to listen on (default is 127.0.0.1, which only this machine can reach)")
+  private String host = "127.0.0.1";
+
+  @Parameter(
       names = {"--directory", "-d"},
-      description = "The directory to use for geoserver. Default is the GeoServer in the installation directory.")
+      description = "The unpacked GeoServer WAR to run. Default is lib/services/third-party/embedded-geoserver/geoserver under ~/geowave, or under the geowave.home system property if it is set.")
   private String directory = null;
 
   protected static final int ACCEPT_QUEUE_SIZE = 100;
@@ -70,6 +76,7 @@ public class RunGeoServerOptions {
     jettyServer = new Server();
 
     final ServerConnector conn = new ServerConnector(jettyServer);
+    conn.setHost(host);
     conn.setPort(port);
     conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
     conn.setIdleTimeout(MAX_IDLE_TIME);
@@ -83,6 +90,13 @@ public class RunGeoServerOptions {
           Paths.get(
               System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY),
               DEFAULT_GEOSERVER_DIR).toString();
+    }
+    // Jetty starts an empty context without complaint when the directory is not a webapp
+    if (!Paths.get(directory, "WEB-INF", "web.xml").toFile().isFile()) {
+      throw new ParameterException(
+          "No GeoServer web application found in '"
+              + directory
+              + "'. Unpack the GeoServer WAR into that directory, or point --directory at one.");
     }
     try {
       // make sure geoserver uses a log4j 1.x properties file (log4j 2 is backwards compatible), but
