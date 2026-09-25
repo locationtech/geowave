@@ -395,7 +395,7 @@ public class RasterUtils {
     if (transform instanceof AffineTransform) {
       return (AffineTransform) transform;
     }
-    throw new IllegalStateException(MessageFormat.format(ErrorKeys.NOT_AN_AFFINE_TRANSFORM));
+    throw new IllegalStateException(ErrorKeys.NOT_AN_AFFINE_TRANSFORM);
   }
 
   public static void fillWithNoDataValues(
@@ -816,10 +816,7 @@ public class RasterUtils {
               GeometryUtils.getDefaultCRS());
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
-      mapExtent =
-          new ReferencedEnvelope(
-              new Position2D(westLon, southLat),
-              new Position2D(eastLon, northLat));
+      mapExtent = new ReferencedEnvelope(westLon, eastLon, southLat, northLat, null);
     }
     return gcf.create(coverageName, raster, mapExtent);
   }
@@ -876,10 +873,7 @@ public class RasterUtils {
       mapExtent = new ReferencedEnvelope(westLon, eastLon, southLat, northLat, crs);
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
-      mapExtent =
-          new ReferencedEnvelope(
-              new Position2D(westLon, southLat),
-              new Position2D(eastLon, northLat));
+      mapExtent = new ReferencedEnvelope(westLon, eastLon, southLat, northLat, null);
     }
     final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];
     create(namePerBand, raster.getSampleModel(), minPerBand, maxPerBand, bands);
