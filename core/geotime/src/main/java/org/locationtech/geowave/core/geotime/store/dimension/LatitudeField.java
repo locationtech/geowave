@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.util.Set;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;

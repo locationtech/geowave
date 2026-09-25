@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.geotime.store.field;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;

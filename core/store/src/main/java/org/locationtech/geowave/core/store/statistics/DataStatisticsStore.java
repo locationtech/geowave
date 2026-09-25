@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.statistics;
 
 import java.util.Iterator;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;

@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.geotime.index;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;

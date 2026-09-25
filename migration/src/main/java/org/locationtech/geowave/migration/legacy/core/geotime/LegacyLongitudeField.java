@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.migration.legacy.core.geotime;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.store.api.Index;

@@ -9,8 +9,8 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.util.List;
-import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;

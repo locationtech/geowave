@@ -9,8 +9,8 @@
 package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
-import javax.annotation.Nullable;
 import org.geotools.referencing.CRS;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;

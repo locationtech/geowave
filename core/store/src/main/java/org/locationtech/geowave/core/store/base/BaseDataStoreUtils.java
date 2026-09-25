@@ -28,10 +28,10 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -1140,7 +1140,7 @@ public class BaseDataStoreUtils {
   }
 
   public static List<Pair<Index, List<Short>>> getAdaptersWithMinimalSetOfIndices(
-      final @Nullable String[] typeNames,
+      final String @Nullable [] typeNames,
       final @Nullable String indexName,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
@@ -1171,7 +1171,7 @@ public class BaseDataStoreUtils {
   }
 
   private static List<Pair<Index, Short>> compileIndicesForAdapters(
-      final @Nullable String[] typeNames,
+      final String @Nullable [] typeNames,
       final @Nullable String indexName,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
