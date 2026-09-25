@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.test.services;
 
-import javax.ws.rs.ProcessingException;
+import jakarta.ws.rs.ProcessingException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

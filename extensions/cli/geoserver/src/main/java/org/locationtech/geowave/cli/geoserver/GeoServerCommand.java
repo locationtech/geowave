@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.core.Response;
-import org.apache.spark.status.api.v1.ForbiddenException;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.core.Response;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;

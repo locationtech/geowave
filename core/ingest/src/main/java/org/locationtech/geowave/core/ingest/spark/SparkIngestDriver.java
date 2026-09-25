@@ -151,9 +151,7 @@ public class SparkIngestDriver implements Serializable {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
 
-      // Spark's web UI is a Jersey 3 (jakarta) application and GeoWave's services are Jersey 2
-      // (javax). Both ship org.glassfish.jersey.servlet.ServletContainer, so Spark's copy is
-      // excluded and its UI cannot start; leaving it on fails the ingest rather than the page.
+      // The UI stays off for the reason given in GeoWaveSparkConf.getDefaultConfig.
       session =
           SparkSession.builder().appName(sparkOptions.getAppName()).master(
               sparkOptions.getMaster()).config("spark.driver.host", sparkOptions.getHost()).config(

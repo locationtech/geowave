@@ -11,7 +11,7 @@ package org.locationtech.geowave.service.rest;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
-import javax.ws.rs.BadRequestException;
+import jakarta.ws.rs.BadRequestException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;

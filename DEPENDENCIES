@@ -279,10 +279,10 @@ maven/mavencentral/jakarta.annotation/jakarta.annotation-api/1.3.5, EPL-2.0 OR G
 maven/mavencentral/jakarta.annotation/jakarta.annotation-api/2.1.1, EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #8018
 maven/mavencentral/jakarta.inject/jakarta.inject-api/2.0.1, Apache-2.0, approved, #25006
 maven/mavencentral/jakarta.servlet/jakarta.servlet-api/5.0.0, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.servlet
+maven/mavencentral/jakarta.servlet/jakarta.servlet-api/6.0.0, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.servlet
 maven/mavencentral/jakarta.validation/jakarta.validation-api/2.0.2, Apache-2.0, approved, ee4j.validation
 maven/mavencentral/jakarta.validation/jakarta.validation-api/3.0.2, Apache-2.0, approved, ee4j.validation
-maven/mavencentral/jakarta.ws.rs/jakarta.ws.rs-api/2.1.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.rest
-maven/mavencentral/jakarta.ws.rs/jakarta.ws.rs-api/3.0.0, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.rest
+maven/mavencentral/jakarta.ws.rs/jakarta.ws.rs-api/3.1.0, EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #8019
 maven/mavencentral/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2, BSD-3-Clause, approved, #8016
 maven/mavencentral/javassist/javassist/3.12.1.GA, LGPL-2.1-or-later AND MPL-1.1, approved, #31462
 maven/mavencentral/javax.activation/activation/1.1, CDDL-1.0, approved, CQ134
@@ -304,7 +304,6 @@ maven/mavencentral/javax.servlet/javax.servlet-api/4.0.1, (CDDL-1.1 OR GPL-2.0-o
 maven/mavencentral/javax.validation/validation-api/1.1.0.Final, Apache-2.0, approved, CQ15114
 maven/mavencentral/javax.vecmath/vecmath/1.5.2, GPL-2.0-only WITH Classpath-exception-2.0, restricted, #31445
 maven/mavencentral/javax.ws.rs/javax.ws.rs-api/2.0, (CDDL-1.1 OR GPL-2.0 WITH Classpath-exception-2.0) AND Apache-2.0, approved, CQ9456
-maven/mavencentral/javax.ws.rs/javax.ws.rs-api/2.0.1, (CDDL-1.1 OR GPL-2.0 WITH Classpath-exception-2.0) AND Apache-2.0, approved, CQ9456
 maven/mavencentral/javax.ws.rs/javax.ws.rs-api/2.1.1, (CDDL-1.1 OR GPL-2.0 WITH Classpath-exception-2.0) AND Apache-2.0, approved, CQ18121
 maven/mavencentral/javax.ws.rs/jsr311-api/1.1.1, (CDDL-1.0 OR GPL-2.0 WITH Classpath-exception-2.0) AND Apache-2.0, approved, CQ4512
 maven/mavencentral/javax.xml.bind/jaxb-api/2.1, CDDL-1.0, approved, CQ2686
@@ -628,24 +627,22 @@ maven/mavencentral/org.geotools/gt-wms/25.0, LGPL-2.1-only, approved, #31523
 maven/mavencentral/org.geotools/gt-wmts/25.0, LGPL-2.0-or-later AND LGPL-2.1-only, approved, #31519
 maven/mavencentral/org.geotools/gt-wps/25.0, LGPL-2.0-or-later AND LGPL-2.1-only, approved, #31533
 maven/mavencentral/org.geotools/gt-xml/25.0, (Apache-2.0 AND LGPL-2.1-only), approved, #31532
-maven/mavencentral/org.glassfish.hk2.external/aopalliance-repackaged/2.4.0-b34, CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #1832
+maven/mavencentral/org.glassfish.hk2.external/aopalliance-repackaged/3.0.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
 maven/mavencentral/org.glassfish.hk2.external/jakarta.inject/2.6.1, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
-maven/mavencentral/org.glassfish.hk2.external/javax.inject/2.4.0-b34, Apache-2.0, approved, #1830
-maven/mavencentral/org.glassfish.hk2/hk2-api/2.4.0-b34, CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #1831
-maven/mavencentral/org.glassfish.hk2/hk2-locator/2.4.0-b34, CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #1833
-maven/mavencentral/org.glassfish.hk2/hk2-utils/2.4.0-b34, CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #1829
-maven/mavencentral/org.glassfish.hk2/osgi-resource-locator/1.0.1, CDDL-1.0, approved, CQ10889
+maven/mavencentral/org.glassfish.hk2/hk2-api/3.0.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
+maven/mavencentral/org.glassfish.hk2/hk2-locator/3.0.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
+maven/mavencentral/org.glassfish.hk2/hk2-utils/3.0.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
+maven/mavencentral/org.glassfish.hk2/osgi-resource-locator/1.0.3, CDDL-1.0, approved, CQ10889
 maven/mavencentral/org.glassfish.jaxb/jaxb-core/4.0.5, BSD-3-Clause, approved, ee4j.jaxb-impl
 maven/mavencentral/org.glassfish.jaxb/jaxb-runtime/4.0.5, BSD-3-Clause, approved, ee4j.jaxb-impl
-maven/mavencentral/org.glassfish.jersey.bundles.repackaged/jersey-guava/2.23.1, Apache-2.0 AND LicenseRef-Public-Domain, approved, CQ13272
-maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet-core/2.23.1, CDDL-1.1, approved, CQ11968
-maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet/2.23.1, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
-maven/mavencentral/org.glassfish.jersey.core/jersey-client/2.23.1, CDDL-1.1 OR GPL-2.0, approved, CQ13267
-maven/mavencentral/org.glassfish.jersey.core/jersey-common/2.23.1, CDDL-1.1 OR GPL-2.0, approved, CQ13268
-maven/mavencentral/org.glassfish.jersey.core/jersey-server/2.23.1, , approved, CQ13269
-maven/mavencentral/org.glassfish.jersey.ext/jersey-proxy-client/2.23.1, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
-maven/mavencentral/org.glassfish.jersey.media/jersey-media-jaxb/2.23.1, CDDL-1.1 OR GPL-2.0, approved, CQ13271
-maven/mavencentral/org.glassfish.jersey.media/jersey-media-multipart/2.23.1, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet-core/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.core/jersey-client/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.core/jersey-common/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.core/jersey-server/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.ext/jersey-proxy-client/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.inject/jersey-hk2/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
+maven/mavencentral/org.glassfish.jersey.media/jersey-media-multipart/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
 maven/mavencentral/org.glassfish.web/javax.servlet.jsp/2.3.2, Apache-1.1, approved, CQ1035
 maven/mavencentral/org.glassfish/javax.el/3.0.1-b08, , approved, CQ7384
 maven/mavencentral/org.glassfish/javax.json/1.0.4, CDDL-1.0, approved, CQ8679
@@ -696,7 +693,7 @@ maven/mavencentral/org.json4s/json4s-jackson-core_2.13/4.0.7, Apache-2.0, approv
 maven/mavencentral/org.json4s/json4s-jackson_2.13/4.0.7, Apache-2.0, approved, #20039
 maven/mavencentral/org.json4s/json4s-scalap_2.13/4.0.7, BSD-3-Clause, approved, #20036
 maven/mavencentral/org.jspecify/jspecify/1.0.0, Apache-2.0, approved, #21897
-maven/mavencentral/org.jvnet.mimepull/mimepull/1.9.6, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ21484
+maven/mavencentral/org.jvnet.mimepull/mimepull/1.9.15, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ21484
 maven/mavencentral/org.locationtech.geowave/geowave-adapter-auth/3.0.0-SNAPSHOT, Apache-2.0, approved, locationtech.geowave
 maven/mavencentral/org.locationtech.geowave/geowave-adapter-raster/3.0.0-SNAPSHOT, Apache-2.0, approved, locationtech.geowave
 maven/mavencentral/org.locationtech.geowave/geowave-adapter-vector/3.0.0-SNAPSHOT, Apache-2.0, approved, locationtech.geowave
