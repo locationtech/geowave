@@ -14,10 +14,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
-import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.apache.logging.log4j.Level;
@@ -56,8 +54,6 @@ public class AccumuloMiniCluster {
 
     MiniAccumuloUtils.setRootUserName(miniAccumuloConfig, user);
 
-    MiniAccumuloUtils.setProperty(miniAccumuloConfig, Property.MONITOR_PORT, "9995");
-
     final String geowaveHome =
         System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY);
     final File libDir = new File(geowaveHome, DEFAULT_LIB_DIR);
@@ -83,8 +79,6 @@ public class AccumuloMiniCluster {
             AccumuloMiniCluster.class,
             extraLibraries);
     accumulo.start();
-
-    MiniAccumuloUtils.exec(accumulo, Monitor.class);
 
     System.out.println("starting up ...");
     Thread.sleep(3000);
