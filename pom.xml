@@ -129,6 +129,11 @@
 		<mockito.version>4.11.0</mockito.version>
 		<fasterxml.jackson.version>2.18.2</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.18.2</fasterxml.jackson.databind.version>
+		<!-- GeoTools 35's GeoJSON modules and GeoServer 3's gs-ows use Jackson 3.2, which
+			keeps its annotations in this 2.x artifact and needs 2.22 (JsonSerializeAs, for
+			one). Jackson 2 databind only needs annotations of its own minor version or
+			later, so the 2.18 databind that Spark 4.0.1 requires is unaffected. -->
+		<fasterxml.jackson.annotations.version>2.22</fasterxml.jackson.annotations.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
 		<slf4j.version>2.0.16</slf4j.version>
 		<log4j.version>2.24.3</log4j.version>
@@ -1120,7 +1125,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-annotations</artifactId>
-				<version>${fasterxml.jackson.version}</version>
+				<version>${fasterxml.jackson.annotations.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
