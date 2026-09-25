@@ -21,7 +21,7 @@ import java.awt.image.MultiPixelPackedSampleModel;
 import java.awt.image.PixelInterleavedSampleModel;
 import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
-import javax.media.jai.ComponentSampleModelJAI;
+import org.eclipse.imagen.ComponentSampleModelImageN;
 import org.locationtech.geowave.adapter.raster.protobuf.SampleModelProtos;
 import com.google.common.primitives.Ints;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -41,7 +41,7 @@ public class SampleModelPersistenceUtils {
   /** Flag indicating a MultiPixelPackedSampleModel. */
   private static final int TYPE_MULTI_PIXEL_PACKED = 4;
 
-  /** Flag indicating a ComponentSampleModelJAI. */
+  /** Flag indicating a ComponentSampleModelImageN. */
   private static final int TYPE_COMPONENT_JAI = 5;
 
   /** Flag indicating a generic ComponentSampleModel. */
@@ -57,8 +57,8 @@ public class SampleModelPersistenceUtils {
         sampleModelType = TYPE_PIXEL_INTERLEAVED;
       } else if (sampleModel instanceof BandedSampleModel) {
         sampleModelType = TYPE_BANDED;
-      } else if (((sampleModel instanceof InternalComponentSampleModelJAI)
-          || (sampleModel instanceof ComponentSampleModelJAI))
+      } else if (((sampleModel instanceof InternalComponentSampleModelImageN)
+          || (sampleModel instanceof ComponentSampleModelImageN))
           || (transferType == DataBuffer.TYPE_FLOAT)
           || (transferType == DataBuffer.TYPE_DOUBLE)) {
         sampleModelType = TYPE_COMPONENT_JAI;
@@ -115,7 +115,7 @@ public class SampleModelPersistenceUtils {
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBankIndicesList()),
             DataBufferPersistenceUtils.integerListToPrimitiveArray(sm.getBandOffsetsList()));
       case TYPE_COMPONENT_JAI:
-        return new InternalComponentSampleModelJAI(
+        return new InternalComponentSampleModelImageN(
             sm.getTransferType(),
             sm.getWidth(),
             sm.getHeight(),
@@ -182,7 +182,7 @@ public class SampleModelPersistenceUtils {
               + " doesn't match Bank Indices "
               + bankIndices.length);
     }
-    return new InternalComponentSampleModelJAI(
+    return new InternalComponentSampleModelImageN(
         dataType,
         width,
         height,
@@ -244,7 +244,7 @@ public class SampleModelPersistenceUtils {
       case DataBuffer.TYPE_SHORT:
       case DataBuffer.TYPE_FLOAT:
       case DataBuffer.TYPE_DOUBLE:
-        return new InternalComponentSampleModelJAI(
+        return new InternalComponentSampleModelImageN(
             dataType,
             width,
             height,
@@ -258,11 +258,11 @@ public class SampleModelPersistenceUtils {
 
   /**
    * This is here as an internal class only for package re-naming purposes because hbase
-   * classloading special-cases javax.* causing problems with a package named "javax.media.jai" And
-   * this JAI sample model is best for floating point sample values.
+   * classloading special-cases javax.* causing problems with a package named "org.eclipse.imagen"
+   * And this ImageN sample model is best for floating point sample values.
    */
   /*
-   * $RCSfile: ComponentSampleModelJAI.java,v $
+   * $RCSfile: ComponentSampleModelImageN.java,v $
    *
    * Copyright (c) 2005 Sun Microsystems, Inc. All rights reserved.
    *
@@ -290,7 +290,7 @@ public class SampleModelPersistenceUtils {
    *
    * @see java.awt.image.ComponentSampleModel
    */
-  private static class InternalComponentSampleModelJAI extends ComponentSampleModel {
+  private static class InternalComponentSampleModelImageN extends ComponentSampleModel {
 
     /**
      * Constructs a <code>ComponentSampleModel</code> with the specified parameters. The number of
@@ -304,7 +304,7 @@ public class SampleModelPersistenceUtils {
      * @param scanlineStride The line stride of the region of image data described.
      * @param bandOffsets The offsets of all bands.
      */
-    public InternalComponentSampleModelJAI(
+    public InternalComponentSampleModelImageN(
         final int dataType,
         final int w,
         final int h,
@@ -327,7 +327,7 @@ public class SampleModelPersistenceUtils {
      * @param bankIndices The bank indices of all bands.
      * @param bandOffsets The band offsets of all bands.
      */
-    public InternalComponentSampleModelJAI(
+    public InternalComponentSampleModelImageN(
         final int dataType,
         final int w,
         final int h,
@@ -419,12 +419,12 @@ public class SampleModelPersistenceUtils {
             lStride = bStride + 1;
             pStride = lStride * h;
           } else { // pix > band > line
-            bandOff = JAIorderBands(bandOffsets, lStride * h);
+            bandOff = ImageNorderBands(bandOffsets, lStride * h);
             pStride = bands * lStride * h;
           }
         } else { // band > pix > line
           pStride = lStride * h;
-          bandOff = JAIorderBands(bandOffsets, pStride * w);
+          bandOff = ImageNorderBands(bandOffsets, pStride * w);
         }
       } else {
         if (pStride > bStride) { // line > pix > band
@@ -436,11 +436,11 @@ public class SampleModelPersistenceUtils {
           lStride = pStride * w;
         } else {
           if (lStride > bStride) { // line > band > pix
-            bandOff = JAIorderBands(bandOffsets, pStride * w);
+            bandOff = ImageNorderBands(bandOffsets, pStride * w);
             lStride = bands * pStride * w;
           } else { // band > line > pix
             lStride = pStride * w;
-            bandOff = JAIorderBands(bandOffsets, lStride * h);
+            bandOff = ImageNorderBands(bandOffsets, lStride * h);
           }
         }
       }
@@ -459,7 +459,7 @@ public class SampleModelPersistenceUtils {
       for (int i = 0; i < bands; i++) {
         bandOff[i] += base;
       }
-      return new ComponentSampleModelJAI(dataType, w, h, pStride, lStride, bankIndices, bandOff);
+      return new ComponentSampleModelImageN(dataType, w, h, pStride, lStride, bankIndices, bandOff);
     }
 
     /**
@@ -481,7 +481,7 @@ public class SampleModelPersistenceUtils {
         newBankIndices[i] = bankIndices[b];
         newBandOffsets[i] = bandOffsets[b];
       }
-      return new ComponentSampleModelJAI(
+      return new ComponentSampleModelImageN(
           dataType,
           width,
           height,
@@ -1264,7 +1264,7 @@ public class SampleModelPersistenceUtils {
     @SuppressFBWarnings
     public String toString() {
       String ret =
-          "ComponentSampleModelJAI: "
+          "ComponentSampleModelImageN: "
               + "  dataType="
               + getDataType()
               + "  numBands="

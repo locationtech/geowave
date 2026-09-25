@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.media.jai.Interpolation;
+import org.eclipse.imagen.Interpolation;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.geometry.GeneralBounds;
 import org.geotools.geometry.jts.JTS;

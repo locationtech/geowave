@@ -255,13 +255,13 @@ public class DistributedRenderResult implements Mergeable {
 
   public BufferedImage renderComposite(final DistributedRenderOptions renderOptions) {
     final BufferedImage image =
-        ImageUtils.createImage(
+        ImageUtilities.createImage(
             renderOptions.getMapWidth(),
             renderOptions.getMapHeight(),
             renderOptions.getPalette(),
             renderOptions.isTransparent() || renderOptions.isMetatile());
     final Graphics2D graphics =
-        ImageUtils.prepareTransparency(
+        ImageUtilities.prepareTransparency(
             renderOptions.isTransparent(),
             renderOptions.getBgColor(),
             image,

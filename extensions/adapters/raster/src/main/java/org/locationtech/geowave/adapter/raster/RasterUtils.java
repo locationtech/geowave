@@ -34,15 +34,15 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import javax.media.jai.BorderExtender;
-import javax.media.jai.Histogram;
-import javax.media.jai.Interpolation;
-import javax.media.jai.JAI;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.RasterFactory;
-import javax.media.jai.RenderedImageAdapter;
-import javax.media.jai.RenderedOp;
-import javax.media.jai.TiledImage;
+import org.eclipse.imagen.BorderExtender;
+import org.eclipse.imagen.Histogram;
+import org.eclipse.imagen.Interpolation;
+import org.eclipse.imagen.ImageN;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.RasterFactory;
+import org.eclipse.imagen.RenderedImageAdapter;
+import org.eclipse.imagen.RenderedOp;
+import org.eclipse.imagen.TiledImage;
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -91,7 +91,7 @@ import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
-import com.sun.media.imageioimpl.common.BogusColorSpace;
+import org.eclipse.imagen.NotAColorSpace;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RasterUtils {
@@ -111,7 +111,7 @@ public class RasterUtils {
                           RenderingHints.VALUE_COLOR_RENDER_QUALITY).put(
                               RenderingHints.KEY_DITHERING,
                               RenderingHints.VALUE_DITHER_ENABLE).put(
-                                  JAI.KEY_BORDER_EXTENDER,
+                                  ImageN.KEY_BORDER_EXTENDER,
                                   BorderExtender.createInstance(BorderExtender.BORDER_COPY)).put(
                                       Hints.LENIENT_DATUM_SHIFT,
                                       Boolean.TRUE).build());
@@ -600,7 +600,7 @@ public class RasterUtils {
       final RenderedImageAdapter adaptedResult = new RenderedImageAdapter(result);
       adaptedResult.setProperty("histogram", histogram);
       adaptedResult.setProperty("extrema", computedExtrema);
-      result = JAI.create("matchcdf", adaptedResult, cdFeq);
+      result = ImageN.create("matchcdf", adaptedResult, cdFeq);
     }
     return coverageFactory.create(coverageName, result, resultEnvelope);
   }
@@ -777,7 +777,7 @@ public class RasterUtils {
         coverageName,
         sampleModel,
         new ComponentColorModel(
-            new BogusColorSpace(numBands),
+            new NotAColorSpace(numBands),
             bitsPerSample,
             false,
             false,

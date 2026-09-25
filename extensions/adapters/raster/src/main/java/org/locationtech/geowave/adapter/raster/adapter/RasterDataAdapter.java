@@ -38,13 +38,13 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 import javax.measure.Unit;
-import javax.media.jai.Interpolation;
-import javax.media.jai.InterpolationBicubic2;
-import javax.media.jai.InterpolationBilinear;
-import javax.media.jai.InterpolationNearest;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.remote.SerializableState;
-import javax.media.jai.remote.SerializerFactory;
+import org.eclipse.imagen.Interpolation;
+import org.eclipse.imagen.InterpolationBicubic2;
+import org.eclipse.imagen.InterpolationBilinear;
+import org.eclipse.imagen.InterpolationNearest;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.media.serialize.SerializableState;
+import org.eclipse.imagen.media.serialize.SerializerFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.util.Precision;
 import org.geotools.coverage.Category;
@@ -702,7 +702,7 @@ public class RasterDataAdapter implements
             Interpolation tileInterpolation = defaultInterpolation;
             final int dataType = originalData.getRenderedImage().getSampleModel().getDataType();
 
-            // TODO a JAI bug "workaround" in GeoTools does not
+            // TODO a ImageN bug "workaround" in GeoTools does not
             // work, this is a workaround for the GeoTools bug
             // see https://jira.codehaus.org/browse/GEOT-3585,
             // and
@@ -1234,7 +1234,7 @@ public class RasterDataAdapter implements
   }
 
   protected static byte interpolationToByte(final Interpolation interpolation) {
-    // this is silly because it seems like a translation JAI should provide,
+    // this is silly because it seems like a translation ImageN should provide,
     // but it seems its not provided and its the most efficient approach
     // (rather than serializing class names)
     if (interpolation instanceof InterpolationNearest) {

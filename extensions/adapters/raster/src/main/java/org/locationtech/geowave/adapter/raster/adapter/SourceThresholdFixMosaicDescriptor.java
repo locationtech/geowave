@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import javax.media.jai.JAI;
-import javax.media.jai.OperationRegistry;
-import javax.media.jai.ParameterListDescriptor;
-import javax.media.jai.ParameterListDescriptorImpl;
-import javax.media.jai.PropertyGenerator;
-import javax.media.jai.operator.MosaicDescriptor;
-import com.sun.media.jai.opimage.MosaicRIF;
+import org.eclipse.imagen.ImageN;
+import org.eclipse.imagen.OperationRegistry;
+import org.eclipse.imagen.ParameterListDescriptor;
+import org.eclipse.imagen.ParameterListDescriptorImpl;
+import org.eclipse.imagen.PropertyGenerator;
+import org.eclipse.imagen.media.mosaic.MosaicDescriptor;
+import org.eclipse.imagen.media.opimage.MosaicRIF;
 
 /**
  * this is a workaround because GeoTools resampling will force the source threshold to be 1.0 on
@@ -33,9 +33,9 @@ public class SourceThresholdFixMosaicDescriptor extends MosaicDescriptor {
   /** The parameter class list for this operation. */
   private static final Class[] paramClasses =
       {
-          javax.media.jai.operator.MosaicType.class,
-          javax.media.jai.PlanarImage[].class,
-          javax.media.jai.ROI[].class,
+          org.eclipse.imagen.media.mosaic.MosaicType.class,
+          org.eclipse.imagen.PlanarImage[].class,
+          org.eclipse.imagen.ROI[].class,
           double[][].class,
           double[].class};
 
@@ -55,12 +55,12 @@ public class SourceThresholdFixMosaicDescriptor extends MosaicDescriptor {
 
   public static synchronized void register(final boolean force) {
     if (!registered || force) {
-      final OperationRegistry registry = JAI.getDefaultInstance().getOperationRegistry();
+      final OperationRegistry registry = ImageN.getDefaultInstance().getOperationRegistry();
       registry.unregisterDescriptor(new MosaicDescriptor());
       registry.registerDescriptor(new SourceThresholdFixMosaicDescriptor());
       // there seems to be a bug in jai-ext, line 1211 of
       // concurrentoperationregistry null pointer exception
-      registry.registerFactory("rendered", "Mosaic", "com.sun.media.jai", new MosaicRIF());
+      registry.registerFactory("rendered", "Mosaic", "org.eclipse.imagen.media", new MosaicRIF());
       registered = true;
     }
   }
