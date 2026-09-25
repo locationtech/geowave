@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.index.persist;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Supplier;
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
@@ -24,6 +23,10 @@ public class PersistableFactory {
   private final Map<Class<Persistable>, Short> classRegistry;
 
   private final Map<Short, Supplier<Persistable>> constructorRegistry;
+
+  // the class and registry behind each ID, so that a collision can name both sides of it
+  private final Map<Short, Registration> registrations;
+
   private static PersistableFactory singletonInstance = null;
 
   public static synchronized PersistableFactory getInstance() {
@@ -42,9 +45,10 @@ public class PersistableFactory {
     return singletonInstance;
   }
 
-  private PersistableFactory() {
+  PersistableFactory() {
     classRegistry = new HashMap<>();
     constructorRegistry = new HashMap<>();
+    registrations = new HashMap<>();
   }
 
   protected void addRegistry(final PersistableRegistrySpi registry) {
@@ -52,51 +56,55 @@ public class PersistableFactory {
     final boolean external = !(registry instanceof InternalPersistableRegistry);
     for (final PersistableIdAndConstructor p : persistables) {
       addPersistableType(
+          registry.getClass(),
           external ? (short) (-Math.abs(p.getPersistableId())) : p.getPersistableId(),
           p.getPersistableConstructor());
     }
   }
 
   protected void addPersistableType(
+      final Class<?> registry,
       final short persistableId,
       final Supplier<Persistable> constructor) {
     final Class persistableClass = constructor.get().getClass();
-    if (classRegistry.containsKey(persistableClass)) {
+    final Short existingId = classRegistry.get(persistableClass);
+    if (existingId != null) {
       LOGGER.error(
-          "'"
-              + persistableClass.getCanonicalName()
-              + "' already registered with id '"
-              + classRegistry.get(persistableClass)
-              + "'.  Cannot register '"
-              + persistableClass
-              + "' with id '"
+          persistableClass.getName()
+              + " is registered twice, with persistable ID "
+              + existingId
+              + " by "
+              + registrations.get(existingId).registry.getName()
+              + " and with ID "
               + persistableId
-              + "'");
+              + " by "
+              + registry.getName()
+              + "; only ID "
+              + existingId
+              + " is used");
       return;
     }
-    if (constructorRegistry.containsKey(persistableId)) {
-      String currentClass = "unknown";
-
-      for (final Entry<Class<Persistable>, Short> e : classRegistry.entrySet()) {
-        if (persistableId == e.getValue().shortValue()) {
-          currentClass = e.getKey().getCanonicalName();
-          break;
-        }
-      }
+    final Registration existing = registrations.get(persistableId);
+    if (existing != null) {
       LOGGER.error(
-          "'"
+          "Persistable ID "
               + persistableId
-              + "' already registered for class '"
-              + (currentClass)
-              + "'.  Cannot register '"
-              + persistableClass
-              + "' with id '"
-              + persistableId
-              + "'");
+              + " is registered to both "
+              + existing.persistableClass.getName()
+              + " by "
+              + existing.registry.getName()
+              + " and "
+              + persistableClass.getName()
+              + " by "
+              + registry.getName()
+              + "; "
+              + persistableClass.getName()
+              + " is not registered, so it cannot be persisted or read");
       return;
     }
     classRegistry.put(persistableClass, persistableId);
     constructorRegistry.put(persistableId, constructor);
+    registrations.put(persistableId, new Registration(persistableClass, registry));
   }
 
   public Persistable newInstance(final short id) {
@@ -109,5 +117,15 @@ public class PersistableFactory {
 
   public Map<Class<Persistable>, Short> getClassIdMapping() {
     return classRegistry;
+  }
+
+  private static class Registration {
+    private final Class<?> persistableClass;
+    private final Class<?> registry;
+
+    private Registration(final Class<?> persistableClass, final Class<?> registry) {
+      this.persistableClass = persistableClass;
+      this.registry = registry;
+    }
   }
 }

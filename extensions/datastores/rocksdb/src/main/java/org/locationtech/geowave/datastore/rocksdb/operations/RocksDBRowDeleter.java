@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBIndexTable;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBRow;
@@ -99,7 +100,11 @@ public class RocksDBRowDeleter implements RowDeleter {
         cacheKey.tableName,
         cacheKey.adapterId,
         cacheKey.partition,
-        RocksDBUtils.isSortByTime(adapterStore.getAdapter(cacheKey.adapterId)));
+        RocksDBUtils.isSortByTime(
+            DataStoreUtils.getRequiredAdapter(
+                adapterStore,
+                internalAdapterStore,
+                cacheKey.adapterId)));
   }
 
   @Override

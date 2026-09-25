@@ -8,17 +8,12 @@
  */
 package org.locationtech.geowave.core.store.base.dataidx;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -30,7 +25,6 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Iterators;
 
 public class BatchIndexRetrievalImpl implements BatchDataIndexRetrieval {
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchIndexRetrievalImpl.class);
@@ -67,30 +61,25 @@ public class BatchIndexRetrievalImpl implements BatchDataIndexRetrieval {
 
   @Override
   public GeoWaveValue[] getData(final short adapterId, final byte[] dataId) {
-    try (CloseableIterator<GeoWaveValue[]> it = getData(adapterId, new byte[][] {dataId})) {
-      if (it.hasNext()) {
-        return it.next();
+    try (RowReader<GeoWaveRow> rows = getRows(adapterId, new byte[][] {dataId})) {
+      if (rows.hasNext()) {
+        return rows.next().getFieldValues();
       }
     }
     return null;
   }
 
-  private CloseableIterator<GeoWaveValue[]> getData(final short adapterId, final byte[][] dataIds) {
-    final RowReader<GeoWaveRow> rowReader =
-        DataIndexUtils.getRowReader(
-            operations,
-            adapterStore,
-            mappingStore,
-            internalAdapterStore,
-            fieldSubsets,
-            aggregation,
-            additionalAuthorizations,
-            adapterId,
-            dataIds);
-    return new CloseableIteratorWrapper<>(
-        rowReader,
-        Iterators.transform(rowReader, r -> r.getFieldValues()));
-
+  private RowReader<GeoWaveRow> getRows(final short adapterId, final byte[][] dataIds) {
+    return DataIndexUtils.getRowReader(
+        operations,
+        adapterStore,
+        mappingStore,
+        internalAdapterStore,
+        fieldSubsets,
+        aggregation,
+        additionalAuthorizations,
+        adapterId,
+        dataIds);
   }
 
   @Override
@@ -107,10 +96,6 @@ public class BatchIndexRetrievalImpl implements BatchDataIndexRetrieval {
     CompletableFuture<GeoWaveValue[]> retVal = batch.get(dataIdKey);
     if (retVal == null) {
       retVal = new CompletableFuture<>();
-      retVal = retVal.exceptionally(e -> {
-        LOGGER.error("Unable to retrieve from data index", e);
-        return null;
-      });
       batch.put(dataIdKey, retVal);
       if (batch.size() >= batchSize) {
         flush(adapterId, batch);
@@ -122,46 +107,52 @@ public class BatchIndexRetrievalImpl implements BatchDataIndexRetrieval {
   private void flush(
       final Short adapterId,
       final Map<ByteArray, CompletableFuture<GeoWaveValue[]>> batch) {
-    final byte[][] internalDataIds;
-    final CompletableFuture<GeoWaveValue[]>[] internalSuppliers;
-    internalDataIds = new byte[batch.size()][];
-    internalSuppliers = new CompletableFuture[batch.size()];
-    final Iterator<Entry<ByteArray, CompletableFuture<GeoWaveValue[]>>> it =
-        batch.entrySet().iterator();
-    for (int i = 0; i < internalDataIds.length; i++) {
-      final Entry<ByteArray, CompletableFuture<GeoWaveValue[]>> entry = it.next();
-      internalDataIds[i] = entry.getKey().getBytes();
-      internalSuppliers[i] = entry.getValue();
+    if (batch.isEmpty()) {
+      return;
     }
+    final Map<ByteArray, CompletableFuture<GeoWaveValue[]>> requests = new HashMap<>(batch);
     batch.clear();
-    if (internalSuppliers.length > 0) {
-      CompletableFuture.supplyAsync(() -> getData(adapterId, internalDataIds)).whenComplete(
-          (values, ex) -> {
-            if (values != null) {
-              try {
-                int i = 0;
-                while (values.hasNext() && (i < internalSuppliers.length)) {
-                  // the iterator has to be in order
-                  internalSuppliers[i++].complete(values.next());
-                }
-                if (values.hasNext()) {
-                  LOGGER.warn("There are more data index results than expected");
-                } else if (i < internalSuppliers.length) {
-                  LOGGER.warn("There are less data index results than expected");
-                  while (i < internalSuppliers.length) {
-                    // there should be exactly as many results as suppliers so this shouldn't happen
-                    internalSuppliers[i++].complete(null);
-                  }
-                }
-              } finally {
-                values.close();
-              }
-            } else if (ex != null) {
-              LOGGER.warn("Unable to retrieve from data index", ex);
-              Arrays.stream(internalSuppliers).forEach(s -> s.completeExceptionally(ex));
+    final byte[][] dataIds =
+        requests.keySet().stream().map(ByteArray::getBytes).toArray(byte[][]::new);
+    CompletableFuture.supplyAsync(() -> getRows(adapterId, dataIds)).whenComplete((rows, ex) -> {
+      if (rows != null) {
+        try {
+          // datastores leave out the IDs they have no row for, so a row's position in the results
+          // does not identify its request
+          while (rows.hasNext()) {
+            final GeoWaveRow row = rows.next();
+            final CompletableFuture<GeoWaveValue[]> request =
+                requests.remove(new ByteArray(row.getDataId()));
+            if (request != null) {
+              request.complete(row.getFieldValues());
+            } else {
+              LOGGER.warn("The data index returned a row that was not requested, or was repeated");
             }
-          });
-    }
+          }
+          if (!requests.isEmpty()) {
+            LOGGER.warn(
+                requests.size()
+                    + " of "
+                    + dataIds.length
+                    + " data IDs were not found in the data index for adapter ID "
+                    + adapterId);
+            requests.values().forEach(r -> r.complete(null));
+          }
+        } catch (final Exception e) {
+          LOGGER.warn("Unable to retrieve from data index", e);
+          requests.values().forEach(r -> r.completeExceptionally(e));
+        } finally {
+          try {
+            rows.close();
+          } catch (final Exception e) {
+            LOGGER.warn("Unable to close data index reader", e);
+          }
+        }
+      } else if (ex != null) {
+        LOGGER.warn("Unable to retrieve from data index", ex);
+        requests.values().forEach(r -> r.completeExceptionally(ex));
+      }
+    });
   }
 
   @Override

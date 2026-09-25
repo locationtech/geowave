@@ -32,6 +32,7 @@ import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.IndexFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -176,7 +177,12 @@ public class FileSystemUtils {
   public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
       final RangeReaderParams<?> readerParams,
       final short adapterId) {
-    final boolean sortByTime = isSortByTime(readerParams.getAdapterStore().getAdapter(adapterId));
+    final boolean sortByTime =
+        isSortByTime(
+            DataStoreUtils.getRequiredAdapter(
+                readerParams.getAdapterStore(),
+                readerParams.getInternalAdapterStore(),
+                adapterId));
     return Pair.of(readerParams.isMixedVisibility() || sortByTime, sortByTime);
   }
 

@@ -24,6 +24,7 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.google.common.collect.Streams;
 import com.google.common.primitives.UnsignedBytes;
 
@@ -136,7 +137,12 @@ public class RocksDBUtils {
   public static Pair<Boolean, Boolean> isGroupByRowAndIsSortByTime(
       final RangeReaderParams<?> readerParams,
       final short adapterId) {
-    final boolean sortByTime = isSortByTime(readerParams.getAdapterStore().getAdapter(adapterId));
+    final boolean sortByTime =
+        isSortByTime(
+            DataStoreUtils.getRequiredAdapter(
+                readerParams.getAdapterStore(),
+                readerParams.getInternalAdapterStore(),
+                adapterId));
     return Pair.of(readerParams.isMixedVisibility() || sortByTime, sortByTime);
   }
 
