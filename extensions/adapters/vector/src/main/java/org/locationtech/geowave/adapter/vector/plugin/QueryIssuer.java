@@ -11,8 +11,8 @@ package org.locationtech.geowave.adapter.vector.plugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.filter.Filter;
 
 public interface QueryIssuer {
   CloseableIterator<SimpleFeature> query(

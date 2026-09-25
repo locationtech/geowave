@@ -34,8 +34,8 @@ import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
 import org.geotools.coverage.grid.io.OverviewPolicy;
-import org.geotools.data.DataSourceException;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.api.data.DataSourceException;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
@@ -71,19 +71,19 @@ import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.coverage.grid.Format;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.parameter.GeneralParameterValue;
-import org.opengis.parameter.ParameterDescriptor;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.cs.AxisDirection;
-import org.opengis.referencing.cs.CoordinateSystem;
-import org.opengis.referencing.cs.CoordinateSystemAxis;
-import org.opengis.referencing.datum.PixelInCell;
-import org.opengis.referencing.operation.CoordinateOperationFactory;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.coverage.grid.Format;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridEnvelope;
+import org.geotools.api.parameter.GeneralParameterValue;
+import org.geotools.api.parameter.ParameterDescriptor;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.cs.AxisDirection;
+import org.geotools.api.referencing.cs.CoordinateSystem;
+import org.geotools.api.referencing.cs.CoordinateSystemAxis;
+import org.geotools.api.referencing.datum.PixelInCell;
+import org.geotools.api.referencing.operation.CoordinateOperationFactory;
+import org.geotools.api.referencing.operation.MathTransform;
+import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -313,13 +313,13 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   }
 
   @Override
-  public GeneralEnvelope getOriginalEnvelope() {
+  public GeneralBounds getOriginalEnvelope() {
     throw new UnsupportedOperationException(
         "A coverage name must be provided, there is no support for a default coverage");
   }
 
   @Override
-  public GeneralEnvelope getOriginalEnvelope(final String coverageName) {
+  public GeneralBounds getOriginalEnvelope(final String coverageName) {
     final RasterBoundingBoxValue rasterBbox =
         InternalStatisticsHelper.getDataTypeStatistic(
             geowaveStatisticsStore,
@@ -333,15 +333,15 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
       final double maxX = crs.getCoordinateSystem().getAxis(0).getMaximumValue();
       final double minY = crs.getCoordinateSystem().getAxis(1).getMinimumValue();
       final double maxY = crs.getCoordinateSystem().getAxis(1).getMaximumValue();
-      final GeneralEnvelope env =
-          new GeneralEnvelope(new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY));
+      final GeneralBounds env =
+          new GeneralBounds(new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY));
       env.setCoordinateReferenceSystem(crs);
       return env;
     }
     // try to use both the bounding box and the overview statistics to
     // determine the width and height at the highest resolution
-    final GeneralEnvelope env =
-        new GeneralEnvelope(
+    final GeneralBounds env =
+        new GeneralBounds(
             new Rectangle2D.Double(
                 rasterBbox.getMinX(),
                 rasterBbox.getMinY(),
@@ -426,7 +426,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   /*
    * (non-Javadoc)
    *
-   * @see org.opengis.coverage.grid.GridCoverageReader#read(org.opengis.parameter
+   * @see org.geotools.api.coverage.grid.GridCoverageReader#read(org.geotools.api.parameter
    * .GeneralParameterValue [])
    */
   @Override
@@ -450,7 +450,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
     Rectangle dim = null;
 
-    GeneralEnvelope requestedEnvelope = null;
+    GeneralBounds requestedEnvelope = null;
 
     if (params != null) {
       for (final GeneralParameterValue generalParameterValue : params) {
@@ -459,7 +459,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
         if (param.getDescriptor().getName().getCode().equals(
             AbstractGridFormat.READ_GRIDGEOMETRY2D.getName().toString())) {
           final GridGeometry2D gg = (GridGeometry2D) param.getValue();
-          requestedEnvelope = (GeneralEnvelope) gg.getEnvelope();
+          requestedEnvelope = (GeneralBounds) gg.getEnvelope();
           dim = gg.getGridRange2D().getBounds();
         } else if (param.getDescriptor().getName().getCode().equals(
             GeoWaveGTRasterFormat.OUTPUT_TRANSPARENT_COLOR.getName().toString())) {
@@ -492,7 +492,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   public GridCoverage2D renderGridCoverage(
       final String coverageName,
       final Rectangle dim,
-      final GeneralEnvelope generalEnvelope,
+      final GeneralBounds generalEnvelope,
       Color backgroundColor,
       Color outputTransparentColor,
       final Interpolation interpolation) throws IOException {
@@ -539,7 +539,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
       final Rectangle pixelDimension,
       final GeoWaveRasterReaderState state,
       final CoordinateReferenceSystem crs,
-      final GeneralEnvelope originalEnvelope) throws IOException {
+      final GeneralBounds originalEnvelope) throws IOException {
     transformRequestEnvelope(state, crs);
 
     // /////////////////////////////////////////////////////////////////////
@@ -690,7 +690,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
   private CloseableIterator<GridCoverage> queryForTiles(
       final Rectangle pixelDimension,
-      final GeneralEnvelope requestEnvelope,
+      final GeneralBounds requestEnvelope,
       final double levelResX,
       final double levelResY,
       final RasterDataAdapter adapter) throws IOException {
@@ -817,7 +817,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
                 state.getRequestEnvelopeXformed().getMinimum(0),
                 state.getRequestEnvelopeXformed().getSpan(1),
                 state.getRequestEnvelopeXformed().getSpan(0));
-        state.setRequestEnvelopeXformed(new GeneralEnvelope(tmp));
+        state.setRequestEnvelopeXformed(new GeneralBounds(tmp));
         state.getRequestEnvelopeXformed().setCoordinateReferenceSystem(crs);
       } else if ((indexX == indexRequestedX) && (indexY == indexRequestedY)) {
         // everything is fine

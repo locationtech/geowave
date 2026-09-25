@@ -50,15 +50,15 @@ import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.processing.Operations;
-import org.geotools.geometry.DirectPosition2D;
-import org.geotools.geometry.Envelope2D;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.Position2D;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.image.util.ImageUtilities;
 import org.geotools.metadata.i18n.ErrorKeys;
-import org.geotools.metadata.i18n.Errors;
+import java.text.MessageFormat;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
@@ -76,18 +76,18 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.simplify.DouglasPeuckerSimplifier;
-import org.opengis.coverage.SampleDimension;
-import org.opengis.coverage.SampleDimensionType;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.geometry.Envelope;
-import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.datum.PixelInCell;
-import org.opengis.referencing.operation.CoordinateOperationFactory;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.Matrix;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.coverage.SampleDimension;
+import org.geotools.api.coverage.SampleDimensionType;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.geometry.Bounds;
+import org.geotools.api.geometry.MismatchedDimensionException;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.datum.PixelInCell;
+import org.geotools.api.referencing.operation.CoordinateOperationFactory;
+import org.geotools.api.referencing.operation.MathTransform;
+import org.geotools.api.referencing.operation.Matrix;
+import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
@@ -136,7 +136,7 @@ public class RasterUtils {
       final GridCoverage gridCoverage,
       final CoordinateReferenceSystem targetCrs) {
     final CoordinateReferenceSystem sourceCrs = gridCoverage.getCoordinateReferenceSystem();
-    final Envelope sampleEnvelope = gridCoverage.getEnvelope();
+    final Bounds sampleEnvelope = gridCoverage.getEnvelope();
 
     final ReferencedEnvelope sampleReferencedEnvelope =
         new ReferencedEnvelope(
@@ -162,7 +162,7 @@ public class RasterUtils {
       final ReferencedEnvelope projectedReferenceEnvelope,
       final GridCoverage gridCoverage) {
     try {
-      final Envelope sampleEnvelope = gridCoverage.getEnvelope();
+      final Bounds sampleEnvelope = gridCoverage.getEnvelope();
       final double avgSpan =
           (projectedReferenceEnvelope.getSpan(0) + projectedReferenceEnvelope.getSpan(1)) / 2;
       final MathTransform gridCrsToWorldCrs =
@@ -239,8 +239,8 @@ public class RasterUtils {
         getGridCoordinates(minX, minY, maxX, maxY, numPointsPerSegment);
     final Coordinate[] worldCoordinates = new Coordinate[gridCoordinates.length];
     for (int i = 0; i < gridCoordinates.length; i++) {
-      final DirectPosition2D worldPt = new DirectPosition2D();
-      final DirectPosition2D dp = new DirectPosition2D(gridCoordinates[i]);
+      final Position2D worldPt = new Position2D();
+      final Position2D dp = new Position2D(gridCoordinates[i]);
       gridToCRS.transform(dp, worldPt);
       worldCoordinates[i] = new Coordinate(worldPt.getX(), worldPt.getY());
     }
@@ -353,7 +353,7 @@ public class RasterUtils {
       translate = 0.0;
     } else {
       throw new IllegalStateException(
-          Errors.format(ErrorKeys.ILLEGAL_ARGUMENT_$2, "gridType", gridType));
+          MessageFormat.format(ErrorKeys.ILLEGAL_ARGUMENT_$2, "gridType", gridType));
     }
     final Matrix matrix = MatrixFactory.create(dimension + 1);
     final Double[] minValuesPerDimension = fullBounds.getMinValuesPerDimension();
@@ -395,7 +395,7 @@ public class RasterUtils {
     if (transform instanceof AffineTransform) {
       return (AffineTransform) transform;
     }
-    throw new IllegalStateException(Errors.format(ErrorKeys.NOT_AN_AFFINE_TRANSFORM));
+    throw new IllegalStateException(MessageFormat.format(ErrorKeys.NOT_AN_AFFINE_TRANSFORM));
   }
 
   public static void fillWithNoDataValues(
@@ -448,7 +448,7 @@ public class RasterUtils {
       final Color backgroundColor,
       final Color outputTransparentColor,
       final Rectangle pixelDimension,
-      final GeneralEnvelope requestEnvelope,
+      final GeneralBounds requestEnvelope,
       final double levelResX,
       final double levelResY,
       final double[][] noDataValues,
@@ -495,7 +495,7 @@ public class RasterUtils {
         }
       }
 
-      final Envelope coverageEnv = currentCoverage.getEnvelope();
+      final Bounds coverageEnv = currentCoverage.getEnvelope();
       final RenderedImage coverageImage = currentCoverage.getRenderedImage();
       if (image == null) {
         image = copyImage(imageWidth, imageHeight, backgroundColor, noDataValues, coverageImage);
@@ -518,7 +518,7 @@ public class RasterUtils {
               defaultColorModel);
     }
 
-    GeneralEnvelope resultEnvelope = null;
+    GeneralBounds resultEnvelope = null;
 
     if (xAxisSwitch) {
       final Rectangle2D tmp =
@@ -527,7 +527,7 @@ public class RasterUtils {
               requestEnvelope.getMinimum(0),
               requestEnvelope.getSpan(1),
               requestEnvelope.getSpan(0));
-      resultEnvelope = new GeneralEnvelope(tmp);
+      resultEnvelope = new GeneralBounds(tmp);
       resultEnvelope.setCoordinateReferenceSystem(requestEnvelope.getCoordinateReferenceSystem());
     } else {
       resultEnvelope = requestEnvelope;
@@ -805,7 +805,7 @@ public class RasterUtils {
       final double northLat,
       final WritableRaster raster) {
     final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
-    Envelope mapExtent;
+    Bounds mapExtent;
     try {
       mapExtent =
           new ReferencedEnvelope(
@@ -817,9 +817,9 @@ public class RasterUtils {
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
       mapExtent =
-          new Envelope2D(
-              new DirectPosition2D(westLon, southLat),
-              new DirectPosition2D(eastLon, northLat));
+          new ReferencedEnvelope(
+              new Position2D(westLon, southLat),
+              new Position2D(eastLon, northLat));
     }
     return gcf.create(coverageName, raster, mapExtent);
   }
@@ -859,7 +859,7 @@ public class RasterUtils {
       final WritableRaster raster,
       final String crsCode) {
     final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
-    Envelope mapExtent;
+    Bounds mapExtent;
 
     CoordinateReferenceSystem crs = null;
     if ((crsCode == null) || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
@@ -877,9 +877,9 @@ public class RasterUtils {
     } catch (final IllegalArgumentException e) {
       LOGGER.warn("Unable to use default CRS", e);
       mapExtent =
-          new Envelope2D(
-              new DirectPosition2D(westLon, southLat),
-              new DirectPosition2D(eastLon, northLat));
+          new ReferencedEnvelope(
+              new Position2D(westLon, southLat),
+              new Position2D(eastLon, northLat));
     }
     final GridSampleDimension[] bands = new GridSampleDimension[raster.getNumBands()];
     create(namePerBand, raster.getSampleModel(), minPerBand, maxPerBand, bands);
@@ -910,15 +910,27 @@ public class RasterUtils {
     final int numBands = dst.length;
     if ((min != null) && (min.length != numBands)) {
       throw new IllegalArgumentException(
-          Errors.format(ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3, numBands, min.length, "min[i]"));
+          MessageFormat.format(
+              ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+              numBands,
+              min.length,
+              "min[i]"));
     }
     if ((name != null) && (name.length != numBands)) {
       throw new IllegalArgumentException(
-          Errors.format(ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3, numBands, name.length, "name[i]"));
+          MessageFormat.format(
+              ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+              numBands,
+              name.length,
+              "name[i]"));
     }
     if ((max != null) && (max.length != numBands)) {
       throw new IllegalArgumentException(
-          Errors.format(ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3, numBands, max.length, "max[i]"));
+          MessageFormat.format(
+              ErrorKeys.NUMBER_OF_BANDS_MISMATCH_$3,
+              numBands,
+              max.length,
+              "max[i]"));
     }
     /*
      * Arguments are know to be valids. We now need to compute two ranges:

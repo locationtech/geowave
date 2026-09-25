@@ -9,8 +9,8 @@
 package org.locationtech.geowave.format.geotools.vector;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public interface RetypingVectorDataPlugin {
   public RetypingVectorDataSource getRetypingSource(SimpleFeatureType type);

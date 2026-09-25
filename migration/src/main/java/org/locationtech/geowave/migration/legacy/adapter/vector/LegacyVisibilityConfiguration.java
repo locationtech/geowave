@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfigura
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.type.AttributeDescriptor;
 
 /**
  * Describes which attribute in a feature contains the visibility constraints, interpreted by a

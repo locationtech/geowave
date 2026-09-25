@@ -11,8 +11,8 @@ package org.locationtech.geowave.analytic.extract;
 import java.util.Calendar;
 import java.util.Date;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.type.AttributeDescriptor;
 
 /** A default implementation that averages all time attributes. */
 public class TimeDimensionExtractor extends SimpleFeatureGeometryExtractor implements

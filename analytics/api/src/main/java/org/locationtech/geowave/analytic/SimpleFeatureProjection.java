@@ -12,7 +12,7 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /** Assumes two-dimensional simple feature without time dimensions. */
 public class SimpleFeatureProjection implements Projection<SimpleFeature> {

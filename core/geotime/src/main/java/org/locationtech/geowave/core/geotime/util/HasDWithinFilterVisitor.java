@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.geotime.util;
 
 import org.geotools.filter.visitor.NullFilterVisitor;
-import org.opengis.filter.spatial.DWithin;
+import org.geotools.api.filter.spatial.DWithin;
 
 public class HasDWithinFilterVisitor extends NullFilterVisitor {
   private boolean hasDWithin = false;

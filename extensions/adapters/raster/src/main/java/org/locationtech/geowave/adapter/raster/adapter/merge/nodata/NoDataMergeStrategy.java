@@ -16,7 +16,7 @@ import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMetadata.SampleIndex;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

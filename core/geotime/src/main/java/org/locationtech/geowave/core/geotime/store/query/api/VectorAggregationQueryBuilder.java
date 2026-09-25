@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorAggrega
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * An aggregation query builder particular for vector data. This should be preferentially used to

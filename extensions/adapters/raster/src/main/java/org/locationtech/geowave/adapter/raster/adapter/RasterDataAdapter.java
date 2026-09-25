@@ -57,7 +57,7 @@ import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.processing.Operations;
 import org.geotools.coverage.util.CoverageUtilities;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -120,17 +120,17 @@ import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.opengis.coverage.ColorInterpretation;
-import org.opengis.coverage.SampleDimension;
-import org.opengis.coverage.SampleDimensionType;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.geometry.Envelope;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.datum.PixelInCell;
-import org.opengis.referencing.operation.TransformException;
-import org.opengis.util.InternationalString;
+import org.geotools.api.coverage.ColorInterpretation;
+import org.geotools.api.coverage.SampleDimension;
+import org.geotools.api.coverage.SampleDimensionType;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridEnvelope;
+import org.geotools.api.geometry.Bounds;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.datum.PixelInCell;
+import org.geotools.api.referencing.operation.TransformException;
+import org.geotools.api.util.InternationalString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.internal.Lists;
@@ -447,7 +447,7 @@ public class RasterDataAdapter implements
     if (indexStrategy != null) {
       final CoordinateReferenceSystem sourceCrs = gridCoverage.getCoordinateReferenceSystem();
 
-      final Envelope sampleEnvelope = gridCoverage.getEnvelope();
+      final Bounds sampleEnvelope = gridCoverage.getEnvelope();
 
       final ReferencedEnvelope sampleReferencedEnvelope =
           new ReferencedEnvelope(
@@ -622,7 +622,7 @@ public class RasterDataAdapter implements
             }
           }
 
-          final Envelope originalEnvelope = new GeneralEnvelope(minDP, maxDP);
+          final Bounds originalEnvelope = new GeneralBounds(minDP, maxDP);
           final Double[] minsPerDimension = rangePerDimension.getMinValuesPerDimension();
           final Double[] maxesPerDimension = rangePerDimension.getMaxValuesPerDimension();
           final ReferencedEnvelope mapExtent =
@@ -710,7 +710,7 @@ public class RasterDataAdapter implements
             // org.geotools.coverage.processing.operation.Resampler2D
             // (gt-coverage-12.1)
             if ((dataType == DataBuffer.TYPE_FLOAT) || (dataType == DataBuffer.TYPE_DOUBLE)) {
-              final Envelope tileEnvelope = insertionIdGeometry.getEnvelope();
+              final Bounds tileEnvelope = insertionIdGeometry.getEnvelope();
               final ReferencedEnvelope tileReferencedEnvelope =
                   new ReferencedEnvelope(
                       new org.locationtech.jts.geom.Envelope(
@@ -1607,7 +1607,7 @@ public class RasterDataAdapter implements
 
       @Override
       public GridCoverageWritable toWritable(final GridCoverage entry) {
-        final Envelope env = entry.getEnvelope();
+        final Bounds env = entry.getEnvelope();
         final DataBuffer dataBuffer =
             entry.getRenderedImage().copyData(
                 new InternalWritableRaster(

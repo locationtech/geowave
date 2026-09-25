@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.geotime.util;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**

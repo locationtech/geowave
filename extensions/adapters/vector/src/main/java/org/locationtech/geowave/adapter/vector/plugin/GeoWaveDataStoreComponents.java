@@ -35,9 +35,9 @@ import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandl
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 import com.google.common.collect.Maps;
 
 public class GeoWaveDataStoreComponents {

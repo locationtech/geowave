@@ -11,13 +11,13 @@ package org.locationtech.geowave.adapter.raster.plugin.gdal;
 import java.util.Collections;
 import java.util.HashMap;
 import org.geotools.coverageio.gdal.BaseGDALGridFormat;
-import org.geotools.data.DataSourceException;
+import org.geotools.api.data.DataSourceException;
 import org.geotools.parameter.DefaultParameterDescriptorGroup;
 import org.geotools.parameter.ParameterGroup;
 import org.geotools.util.factory.Hints;
-import org.opengis.coverage.grid.Format;
-import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.parameter.GeneralParameterDescriptor;
+import org.geotools.api.coverage.grid.Format;
+import org.geotools.api.geometry.MismatchedDimensionException;
+import org.geotools.api.parameter.GeneralParameterDescriptor;
 import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 
 public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {

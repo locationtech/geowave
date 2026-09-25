@@ -31,8 +31,8 @@ import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.type.AttributeDescriptor;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 
@@ -60,8 +60,8 @@ class GeoWaveGTPluginUtils {
   protected static boolean accepts(
       final DataStatisticsStore statisticsStore,
       final DataTypeAdapter<?> adapter,
-      final org.opengis.feature.FeatureVisitor visitor,
-      final org.opengis.util.ProgressListener progress,
+      final org.geotools.api.feature.FeatureVisitor visitor,
+      final org.geotools.api.util.ProgressListener progress,
       final SimpleFeatureType featureType) throws IOException {
     if ((visitor instanceof MinVisitor)) {
       final ExtractAttributesFilter filter = new ExtractAttributesFilter();

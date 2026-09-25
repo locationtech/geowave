@@ -12,7 +12,7 @@ import org.geotools.factory.CommonFactoryFinder;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.store.api.Index;
-import org.opengis.filter.Filter;
+import org.geotools.api.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class SpatialTemporalQuery extends AbstractVectorConstraints<ExplicitSpat
       LOGGER.warn("Temporal filter does not apply to type '" + adapter.getTypeName() + "'");
       return null;
     }
-    return CommonFactoryFinder.getFilterFactory2().and(spatialFilter, temporalFilter);
+    return CommonFactoryFinder.getFilterFactory().and(spatialFilter, temporalFilter);
   }
 
 }

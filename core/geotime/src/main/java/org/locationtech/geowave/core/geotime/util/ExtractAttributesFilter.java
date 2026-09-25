@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.geotools.filter.visitor.DefaultFilterVisitor;
-import org.opengis.filter.expression.PropertyName;
+import org.geotools.api.filter.expression.PropertyName;
 
 /** This class can be used to get the list of attributes used in a query */
 public class ExtractAttributesFilter extends DefaultFilterVisitor {

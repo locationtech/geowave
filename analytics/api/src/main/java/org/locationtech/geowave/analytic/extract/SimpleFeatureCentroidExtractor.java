@@ -10,7 +10,7 @@ package org.locationtech.geowave.analytic.extract;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * Extract a set of points representing critical points for a simple feature that me be

@@ -30,7 +30,7 @@ import org.locationtech.geowave.analytic.kmeans.serial.StatsMap;
 import org.locationtech.geowave.analytic.sample.BahmanEtAlSampleProbabilityFn;
 import org.locationtech.geowave.analytic.sample.Sampler;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class KMeansParallelInitializeTest {
   final KMeansParallelInitialize<SimpleFeature> initializer = new KMeansParallelInitialize<>();

@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptor
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class Stanag4676Utils {
   public static final String TRACK_POINT = "track_point";

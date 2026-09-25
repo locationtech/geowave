@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
 import org.apache.hadoop.util.ToolRunner;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.junit.After;
@@ -56,7 +56,7 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.annotation.NamespaceOverride;
 import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.locationtech.jts.geom.Envelope;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,8 +178,8 @@ public class CustomCRSKDERasterResizeIT {
     final double cellOriginYMinLevel = Math.round(TARGET_MIN_LAT / decimalDegreesPerCellMinLevel);
     final double numCellsMinLevel =
         Math.round(TARGET_DECIMAL_DEGREES_SIZE / decimalDegreesPerCellMinLevel);
-    final GeneralEnvelope queryEnvelope =
-        new GeneralEnvelope(
+    final GeneralBounds queryEnvelope =
+        new GeneralBounds(
             new double[] {
                 // this is exactly on a tile boundary, so there will be no
                 // scaling on the tile composition/rendering
@@ -359,7 +359,7 @@ public class CustomCRSKDERasterResizeIT {
   private double[][][] testSamplesMatch(
       final String coverageNamePrefix,
       final int numCoverages,
-      final GeneralEnvelope queryEnvelope,
+      final GeneralBounds queryEnvelope,
       final Rectangle pixelDimensions,
       double[][][] expectedResults) throws Exception {
     final StringBuilder str =

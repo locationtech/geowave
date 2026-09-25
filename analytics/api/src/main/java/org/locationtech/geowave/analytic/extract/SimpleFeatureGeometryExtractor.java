@@ -10,9 +10,9 @@ package org.locationtech.geowave.analytic.extract;
 
 import java.util.Iterator;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.referencing.ReferenceIdentifier;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.referencing.ReferenceIdentifier;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /** Extract a Geometry from a Simple Feature. */
 public class SimpleFeatureGeometryExtractor extends EmptyDimensionExtractor<SimpleFeature>

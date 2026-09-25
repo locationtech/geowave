@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query.filter.expression.spat
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.jts.geom.Envelope;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Predicate that passes when the first operand is within the bounding box of the second operand.

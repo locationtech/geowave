@@ -43,8 +43,8 @@ import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticT
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.Polygon;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.parameter.ParameterValueGroup;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.parameter.ParameterValueGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

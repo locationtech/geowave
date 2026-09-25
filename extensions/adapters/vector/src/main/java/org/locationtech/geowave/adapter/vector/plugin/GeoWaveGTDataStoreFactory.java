@@ -18,8 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFactorySpi;
+import org.geotools.api.data.DataStore;
+import org.geotools.api.data.DataStoreFactorySpi;
 import org.geotools.util.factory.FactoryIteratorProvider;
 import org.geotools.util.factory.GeoTools;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
@@ -32,7 +32,7 @@ import com.google.common.collect.Iterators;
 /**
  * This factory is injected by GeoTools using Java SPI and is used to expose GeoWave as a DataStore
  * to GeoTools. It should be defined within a file
- * META-INF/services/org.geotools.data.DataStoreFactorySpi to inject this into GeoTools.
+ * META-INF/services/org.geotools.api.data.DataStoreFactorySpi to inject this into GeoTools.
  */
 public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   private static class DataStoreCacheEntry {

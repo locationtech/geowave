@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.lock;
 
-import org.geotools.data.LockingManager;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.LockingManager;
+import org.geotools.api.data.Transaction;
 import org.geotools.data.shapefile.index.LockManager;
 
 /**

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.jts.geom.Point;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 /**
  * This is a convenience class for performing common GDELT static utility methods such as schema

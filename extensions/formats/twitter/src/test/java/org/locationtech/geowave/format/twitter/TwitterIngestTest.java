@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class TwitterIngestTest {
   private TwitterIngestPlugin ingester;

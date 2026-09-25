@@ -10,7 +10,7 @@ package org.locationtech.geowave.format.geotools.vector.retyping.date;
 
 import java.util.Map;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class DateFieldRetypingPlugin implements RetypingVectorDataPlugin {
 

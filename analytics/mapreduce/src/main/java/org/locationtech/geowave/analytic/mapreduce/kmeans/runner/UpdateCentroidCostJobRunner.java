@@ -22,7 +22,7 @@ import org.locationtech.geowave.analytic.mapreduce.kmeans.UpdateCentroidCostMapR
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /** Update the centroid with its cost, measured by the average distance of assigned points. */
 public class UpdateCentroidCostJobRunner extends GeoWaveAnalyticJobRunner implements

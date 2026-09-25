@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.analytic.AnalyticFeature.ClusterFeatureAttribute;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 
 public class SimpleFeatureItemWrapperFactory implements AnalyticItemWrapperFactory<SimpleFeature> {

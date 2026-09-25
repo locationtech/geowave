@@ -27,9 +27,9 @@ import org.locationtech.geowave.core.store.statistics.field.HyperLogLogStatistic
 import org.locationtech.geowave.core.store.statistics.field.HyperLogLogStatistic.HyperLogLogPlusValue;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.type.AttributeDescriptor;
 
 public class HyperLogLogStaticticsTest {
 

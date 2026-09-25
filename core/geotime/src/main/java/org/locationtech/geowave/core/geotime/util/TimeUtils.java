@@ -19,12 +19,12 @@ import org.geotools.temporal.object.DefaultPosition;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory2;
-import org.opengis.temporal.Period;
-import org.opengis.temporal.Position;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.filter.Filter;
+import org.geotools.api.filter.FilterFactory;
+import org.geotools.api.temporal.Period;
+import org.geotools.api.temporal.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
@@ -68,7 +68,7 @@ public class TimeUtils {
       final long startTimeMillis,
       final long endTimeMillis,
       final String singleTimeField) {
-    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    final FilterFactory factory = CommonFactoryFinder.getFilterFactory();
     final Position ip1 = new DefaultPosition(new Date(startTimeMillis - 1));
     final Position ip2 = new DefaultPosition(new Date(endTimeMillis));
     final Period period = new DefaultPeriod(new DefaultInstant(ip1), new DefaultInstant(ip2));
@@ -80,7 +80,7 @@ public class TimeUtils {
       final long endTimeMillis,
       final String startTimeField,
       final String endTimeField) {
-    final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    final FilterFactory factory = CommonFactoryFinder.getFilterFactory();
     if (startTimeField.equals(endTimeField)) {
       return factory.and(
           factory.greaterOrEqual(
@@ -237,8 +237,8 @@ public class TimeUtils {
     if (timeObject instanceof Instant) {
       return (Instant) timeObject;
     }
-    if (timeObject instanceof org.opengis.temporal.Instant) {
-      return ((org.opengis.temporal.Instant) timeObject).getPosition().getDate().toInstant();
+    if (timeObject instanceof org.geotools.api.temporal.Instant) {
+      return ((org.geotools.api.temporal.Instant) timeObject).getPosition().getDate().toInstant();
     }
     if (timeObject instanceof Date) {
       return Instant.ofEpochMilli(((Date) timeObject).getTime());

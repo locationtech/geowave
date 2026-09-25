@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.geotime.store.query.VectorQueryBuilderImpl;
 import org.locationtech.geowave.core.geotime.store.query.VectorQueryConstraintsFactoryImpl;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * A QueryBuilder for vector (SimpleFeature) data. This should be preferred as the mechanism for
