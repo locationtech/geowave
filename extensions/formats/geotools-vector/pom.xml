@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
   			<groupId>org.geotools</groupId>
-			<artifactId>gt-geojsondatastore</artifactId>
+			<artifactId>gt-geojson-store</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.geotools</groupId>
