@@ -362,7 +362,7 @@ public class SampleModelPersistenceUtils {
     }
 
     /** Preserves band ordering with new step factor... */
-    private int[] JAIorderBands(final int orig[], final int step) {
+    private int[] ImageNorderBands(final int orig[], final int step) {
       final int map[] = new int[orig.length];
       final int ret[] = new int[orig.length];
 

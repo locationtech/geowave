@@ -50,8 +50,7 @@ public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {
                 mInfo,
                 new GeneralParameterDescriptor[] {
                     READ_GRIDGEOMETRY2D,
-                    USE_JAI_IMAGEREAD,
-                    USE_MULTITHREADING,
+                    USE_IMAGEN_IMAGEREAD,
                     SUGGESTED_TILE_SIZE}));
   }
 

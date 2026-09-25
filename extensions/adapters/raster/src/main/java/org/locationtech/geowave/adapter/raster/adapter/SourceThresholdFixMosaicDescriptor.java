@@ -14,7 +14,7 @@ import org.eclipse.imagen.ParameterListDescriptor;
 import org.eclipse.imagen.ParameterListDescriptorImpl;
 import org.eclipse.imagen.PropertyGenerator;
 import org.eclipse.imagen.media.mosaic.MosaicDescriptor;
-import org.eclipse.imagen.media.opimage.MosaicRIF;
+import org.eclipse.imagen.media.mosaic.MosaicRIF;
 
 /**
  * this is a workaround because GeoTools resampling will force the source threshold to be 1.0 on
