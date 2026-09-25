@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.rocksdb;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -80,6 +81,7 @@ public class RocksDBLockfileTest {
     store.addIndex(POI_TYPE_NAME, latAttributeIndex);
     final DataStore store2 =
         new RocksDBStoreFactoryFamily().getDataStoreFactory().createStore(options);
+    // collected before joining, so that every thread starts before any is waited for
     IntStream.range(0, numThreads).mapToObj(i -> CompletableFuture.runAsync(() -> {
       double offset = i * numThreads;
       try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
@@ -133,7 +135,7 @@ public class RocksDBLockfileTest {
           Assert.assertTrue(Iterators.size(poiIt) >= 3);
         }
       }
-    }));
+    })).collect(Collectors.toList()).forEach(CompletableFuture::join);
     store.deleteAll();
   }
 

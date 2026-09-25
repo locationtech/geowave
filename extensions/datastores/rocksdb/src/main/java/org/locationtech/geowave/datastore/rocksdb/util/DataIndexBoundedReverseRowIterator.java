@@ -11,23 +11,21 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 import java.util.NoSuchElementException;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.rocksdb.RocksIterator;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 import com.google.common.primitives.UnsignedBytes;
 
 public class DataIndexBoundedReverseRowIterator implements CloseableIterator<GeoWaveRow> {
-  private final DataIndexReverseRowIterator delegate;
+  private final CloseableIterator<GeoWaveRow> delegate;
   private final PeekingIterator<GeoWaveRow> peekingIterator;
   private final byte[] startDataId;
+  private boolean closed = false;
   boolean hasNext = true;
 
   public DataIndexBoundedReverseRowIterator(
       final byte[] startDataId,
-      final RocksIterator it,
-      final short adapterId,
-      final boolean visiblityEnabled) {
-    delegate = new DataIndexReverseRowIterator(it, adapterId, visiblityEnabled);
+      final CloseableIterator<GeoWaveRow> delegate) {
+    this.delegate = delegate;
     this.startDataId = startDataId;
     // because there is no RocksDB option to set a lower bound this needs to be a peeking iterator
     // to check for passing the start data ID
@@ -36,7 +34,7 @@ public class DataIndexBoundedReverseRowIterator implements CloseableIterator<Geo
 
   @Override
   public boolean hasNext() {
-    if (!delegate.closed
+    if (!closed
         && peekingIterator.hasNext()
         && (UnsignedBytes.lexicographicalComparator().compare(
             startDataId,
@@ -58,6 +56,7 @@ public class DataIndexBoundedReverseRowIterator implements CloseableIterator<Geo
   @Override
   public void close() {
     delegate.close();
+    closed = true;
     hasNext = false;
   }
 

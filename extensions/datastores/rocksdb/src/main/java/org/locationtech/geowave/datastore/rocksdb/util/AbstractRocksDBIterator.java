@@ -9,14 +9,21 @@
 package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksIterator;
 
+/**
+ * Methods are synchronized because the table can close this iterator from another thread when the
+ * table itself is closed.
+ */
 public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T> {
   protected boolean closed = false;
   protected ReadOptions options;
   protected RocksIterator it;
+  private Set<AbstractRocksDBIterator<?>> openIterators;
+  private boolean closedWithTable = false;
 
   public AbstractRocksDBIterator(final ReadOptions options, final RocksIterator it) {
     super();
@@ -24,13 +31,20 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
     this.it = it;
   }
 
+  synchronized void trackIn(final Set<AbstractRocksDBIterator<?>> openIterators) {
+    this.openIterators = openIterators;
+    openIterators.add(this);
+  }
+
   @Override
-  public boolean hasNext() {
+  public synchronized boolean hasNext() {
+    checkTableOpen();
     return !closed && it.isValid();
   }
 
   @Override
-  public T next() {
+  public synchronized T next() {
+    checkTableOpen();
     if (closed) {
       throw new NoSuchElementException();
     }
@@ -40,6 +54,14 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
     return retVal;
   }
 
+  private void checkTableOpen() {
+    if (closedWithTable) {
+      // ending the scan quietly here would silently truncate the results
+      throw new IllegalStateException(
+          "The RocksDB table was closed while this iterator was still open");
+    }
+  }
+
   protected void advance() {
     it.next();
   }
@@ -47,7 +69,23 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
   protected abstract T readRow(byte[] key, byte[] value);
 
   @Override
-  public void close() {
+  public synchronized void close() {
+    if (openIterators != null) {
+      openIterators.remove(this);
+      openIterators = null;
+    }
+    release();
+  }
+
+  synchronized void closeWithTable() {
+    if (!closed) {
+      closedWithTable = true;
+      openIterators = null;
+      release();
+    }
+  }
+
+  private void release() {
     closed = true;
     if (it != null) {
       it.close();

@@ -13,13 +13,9 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.rocksdb.Options;
 import org.rocksdb.ReadOptions;
-import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.RocksIterator;
 import org.rocksdb.Slice;
-import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
@@ -32,36 +28,29 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   private final byte[] partition;
 
   public RocksDBIndexTable(
-      final Options writeOptions,
-      final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
       final byte[] partition,
       final boolean requiresTimestamp,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchSize) {
-    super(
-        writeOptions,
-        batchWriteOptions,
-        subDirectory,
-        adapterId,
-        visibilityEnabled,
-        compactOnWrite,
-        batchSize);
+      final int batchSize,
+      final boolean walOnBatchWrite) {
+    super(subDirectory, adapterId, visibilityEnabled, compactOnWrite, batchSize, walOnBatchWrite);
     this.requiresTimestamp = requiresTimestamp;
     this.partition = partition;
   }
 
   public void delete(final byte[] sortKey, final byte[] dataId) {
-    final RocksDB db = getDb(false);
-    if (db == null) {
-      LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
-      return;
-    }
+    final byte[] prefix = Bytes.concat(sortKey, dataId);
     try {
-      final byte[] prefix = Bytes.concat(sortKey, dataId);
-      db.deleteRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
+      final boolean exists = getManagedDb().read(db -> {
+        db.deleteRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
+        return true;
+      }, () -> false);
+      if (!exists) {
+        LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
+      }
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to delete by sort key and data ID", e);
     }
@@ -109,48 +98,35 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
 
 
   public CloseableIterator<GeoWaveRow> iterator() {
-    final RocksDB readDb = getDb(true);
-    if (readDb == null) {
-      return new CloseableIterator.Empty<>();
-    }
-    final ReadOptions options = new ReadOptions().setFillCache(false);
-    final RocksIterator it = readDb.newIterator(options);
-    it.seekToFirst();
-    return new RocksDBRowIterator(
-        options,
-        it,
-        adapterId,
-        partition,
-        requiresTimestamp,
-        visibilityEnabled);
+    return iterator(() -> new ReadOptions().setFillCache(false), (options, it) -> {
+      it.seekToFirst();
+      return new RocksDBRowIterator(
+          options,
+          it,
+          adapterId,
+          partition,
+          requiresTimestamp,
+          visibilityEnabled);
+    });
   }
 
   public CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
-    final RocksDB readDb = getDb(true);
-    if (readDb == null) {
-      return new CloseableIterator.Empty<>();
-    }
-    final ReadOptions options;
-    final RocksIterator it;
-    if (range.getEnd() == null) {
-      options = null;
-      it = readDb.newIterator();
-    } else {
-      options = new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix()));
-      it = readDb.newIterator(options);
-    }
-    if (range.getStart() == null) {
-      it.seekToFirst();
-    } else {
-      it.seek(range.getStart());
-    }
-
-    return new RocksDBRowIterator(
-        options,
-        it,
-        adapterId,
-        partition,
-        requiresTimestamp,
-        visibilityEnabled);
+    return iterator(
+        () -> range.getEnd() == null ? null
+            : new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix())),
+        (options, it) -> {
+          if (range.getStart() == null) {
+            it.seekToFirst();
+          } else {
+            it.seek(range.getStart());
+          }
+          return new RocksDBRowIterator(
+              options,
+              it,
+              adapterId,
+              partition,
+              requiresTimestamp,
+              visibilityEnabled);
+        });
   }
 }
