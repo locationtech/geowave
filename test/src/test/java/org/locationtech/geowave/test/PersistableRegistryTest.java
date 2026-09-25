@@ -54,7 +54,7 @@ public class PersistableRegistryTest {
     final Map<Class<?>, String> byClass = new HashMap<>();
     final List<String> duplicates = new ArrayList<>();
     final Iterator<PersistableRegistrySpi> registries =
-        new SPIServiceRegistry(PersistableRegistryTest.class).load(PersistableRegistrySpi.class);
+        SPIServiceRegistry.load(PersistableRegistrySpi.class);
     while (registries.hasNext()) {
       final PersistableRegistrySpi registry = registries.next();
       for (final PersistableIdAndConstructor p : registry.getSupportedPersistables()) {
