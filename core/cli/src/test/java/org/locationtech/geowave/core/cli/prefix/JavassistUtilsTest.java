@@ -10,6 +10,14 @@ package org.locationtech.geowave.core.cli.prefix;
 
 import static org.junit.Assert.fail;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.junit.Assert;
 import org.junit.Test;
 import javassist.CannotCompileException;
@@ -141,6 +149,34 @@ public class JavassistUtilsTest {
     final String unique2 = JavassistUtils.getNextUniqueFieldName();
 
     Assert.assertFalse(unique1.equals(unique2));
+  }
+
+  @Test
+  public void testGetNextUniqueFieldNameConcurrently() throws Exception {
+    final int threads = 16;
+    final int namesPerThread = 20000;
+    final Set<String> names = ConcurrentHashMap.newKeySet();
+    final CountDownLatch start = new CountDownLatch(1);
+    final ExecutorService pool = Executors.newFixedThreadPool(threads);
+    try {
+      final List<Future<?>> futures = new ArrayList<>();
+      for (int t = 0; t < threads; t++) {
+        futures.add(pool.submit(() -> {
+          start.await();
+          for (int i = 0; i < namesPerThread; i++) {
+            names.add(JavassistUtils.getNextUniqueFieldName());
+          }
+          return null;
+        }));
+      }
+      start.countDown();
+      for (final Future<?> f : futures) {
+        f.get();
+      }
+    } finally {
+      pool.shutdown();
+    }
+    Assert.assertEquals(threads * namesPerThread, names.size());
   }
 
   @Test

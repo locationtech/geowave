@@ -8,8 +8,15 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
@@ -62,6 +69,74 @@ public class JCommanderPropertiesTransformerTest {
     Assert.assertEquals("blah", props.get("abc.password"));
     Assert.assertEquals("user", props.get("abc.username"));
     Assert.assertEquals("add", props.get("additional"));
+  }
+
+  @Test
+  public void testTransformFromMapConcurrently() throws Exception {
+    final Map<String, String> props = new HashMap<>();
+    for (int i = 0; i < 8; i++) {
+      props.put("field" + i, "value" + i);
+    }
+    final int threads = 16;
+    final AtomicInteger incomplete = new AtomicInteger();
+    final CountDownLatch start = new CountDownLatch(1);
+    final ExecutorService pool = Executors.newFixedThreadPool(threads);
+    try {
+      final List<Future<?>> futures = new ArrayList<>();
+      for (int t = 0; t < threads; t++) {
+        futures.add(pool.submit(() -> {
+          start.await();
+          for (int i = 0; i < 2000; i++) {
+            final ManyArgs args = new ManyArgs();
+            final JCommanderPropertiesTransformer transformer =
+                new JCommanderPropertiesTransformer();
+            transformer.addObject(args);
+            transformer.transformFromMap(props);
+            if (!args.isComplete()) {
+              incomplete.incrementAndGet();
+            }
+          }
+          return null;
+        }));
+      }
+      start.countDown();
+      for (final Future<?> f : futures) {
+        f.get();
+      }
+    } finally {
+      pool.shutdown();
+    }
+    Assert.assertEquals(0, incomplete.get());
+  }
+
+  public static class ManyArgs {
+    @Parameter(names = "--field0")
+    private String field0;
+    @Parameter(names = "--field1")
+    private String field1;
+    @Parameter(names = "--field2")
+    private String field2;
+    @Parameter(names = "--field3")
+    private String field3;
+    @Parameter(names = "--field4")
+    private String field4;
+    @Parameter(names = "--field5")
+    private String field5;
+    @Parameter(names = "--field6")
+    private String field6;
+    @Parameter(names = "--field7")
+    private String field7;
+
+    private boolean isComplete() {
+      return "value0".equals(field0)
+          && "value1".equals(field1)
+          && "value2".equals(field2)
+          && "value3".equals(field3)
+          && "value4".equals(field4)
+          && "value5".equals(field5)
+          && "value6".equals(field6)
+          && "value7".equals(field7);
+    }
   }
 
   public class Args {
