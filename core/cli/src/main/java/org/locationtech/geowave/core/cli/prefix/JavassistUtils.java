@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javassist.ClassPool;
@@ -39,7 +40,7 @@ public class JavassistUtils {
   public static final String PREFIX_PACKAGE = "org.locationtech.geowave.core.cli.parsed";
 
   private static final String uniqueId;
-  private static int objectCounter = 0;
+  private static final AtomicInteger objectCounter = new AtomicInteger();
 
   static {
     uniqueId = UUID.randomUUID().toString().replace('-', '_');
@@ -173,7 +174,7 @@ public class JavassistUtils {
    * @return the unique class name
    */
   public static String getNextUniqueClassName() {
-    return String.format("%s.cli_%s_%d", PREFIX_PACKAGE, uniqueId, objectCounter++);
+    return String.format("%s.cli_%s_%d", PREFIX_PACKAGE, uniqueId, objectCounter.getAndIncrement());
   }
 
   /**
@@ -182,7 +183,7 @@ public class JavassistUtils {
    * @return the unique field name
    */
   public static String getNextUniqueFieldName() {
-    return String.format("field_%d", objectCounter++);
+    return String.format("field_%d", objectCounter.getAndIncrement());
   }
 
   /**
