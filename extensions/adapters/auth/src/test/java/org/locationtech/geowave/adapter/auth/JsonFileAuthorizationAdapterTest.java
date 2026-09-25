@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.adapter.auth;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -72,5 +74,14 @@ public class JsonFileAuthorizationAdapterTest {
         new JsonFileAuthorizationFactory().create(
             new URL("file://" + cwd.getAbsolutePath() + "/src/test/resources/jsonAuthfile.json"));
     assertTrue(Arrays.equals(new String[] {"1", "2", "3"}, authProvider.getAuthorizations()));
+  }
+
+  @Test
+  public void testNoFile() {
+    final SecurityContext context = new SecurityContextImpl();
+    context.setAuthentication(new UsernamePasswordAuthenticationToken("fred", "barney"));
+    SecurityContextHolder.setContext(context);
+    final AuthorizationSPI authProvider = new JsonFileAuthorizationFactory().create(null);
+    assertEquals(0, authProvider.getAuthorizations().length);
   }
 }

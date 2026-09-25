@@ -59,6 +59,11 @@ public class JsonFileAuthorizationProvider implements AuthorizationSPI {
 
   @Override
   public String[] getAuthorizations() {
+    // Nobody has authorizations without a file, which is the vector data store's default, so
+    // that case must not need Spring Security on the classpath.
+    if (authorizationSet.getAuthorizationSet().isEmpty()) {
+      return new String[0];
+    }
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       return new String[0];

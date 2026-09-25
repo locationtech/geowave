@@ -814,6 +814,7 @@ maven/mavencentral/org.springframework.security/spring-security-web/4.2.20.RELEA
 maven/mavencentral/org.springframework.security/spring-security-web/5.1.13.RELEASE, Apache-2.0, approved, CQ18354
 maven/mavencentral/org.springframework/spring-aop/4.3.30.RELEASE, Apache-2.0, approved, CQ14678
 maven/mavencentral/org.springframework/spring-aop/5.1.18.RELEASE, Apache-2.0, approved, CQ18355
+maven/mavencentral/org.springframework/spring-aop/5.1.20.RELEASE, Apache-2.0, approved, CQ18355
 maven/mavencentral/org.springframework/spring-beans/4.3.30.RELEASE, Apache-2.0, approved, CQ14677
 maven/mavencentral/org.springframework/spring-beans/5.1.18.RELEASE, Apache-2.0, approved, CQ18357
 maven/mavencentral/org.springframework/spring-beans/5.1.20.RELEASE, Apache-2.0, approved, CQ18357
@@ -826,6 +827,7 @@ maven/mavencentral/org.springframework/spring-core/5.1.18.RELEASE, Apache-2.0 AN
 maven/mavencentral/org.springframework/spring-core/5.1.20.RELEASE, Apache-2.0 AND BSD-3-Clause, approved, CQ18360
 maven/mavencentral/org.springframework/spring-expression/4.3.30.RELEASE, Apache-2.0, approved, CQ14681
 maven/mavencentral/org.springframework/spring-expression/5.1.18.RELEASE, Apache-2.0, approved, CQ18361
+maven/mavencentral/org.springframework/spring-expression/5.1.20.RELEASE, Apache-2.0, approved, CQ18361
 maven/mavencentral/org.springframework/spring-jcl/5.1.18.RELEASE, Apache-2.0, approved, CQ18362
 maven/mavencentral/org.springframework/spring-jcl/5.1.20.RELEASE, Apache-2.0, approved, CQ18362
 maven/mavencentral/org.springframework/spring-jdbc/5.1.20.RELEASE, Apache-2.0, approved, CQ18363

@@ -209,5 +209,7 @@ The provided implementations include the following:
 
 In this example, the user `fred` has three authorization labels. The user `barney` has just one.
 
+NOTE: When its JSON file lists any users, the JSON provider (`jsonFile`) reads the requester from Spring Security's `SecurityContextHolder`, so Spring Security (`spring-security-core`) must then be on the classpath. GeoServer provides it, and the GeoWave tools JAR includes it with GeoServer's libraries, but `geowave-adapter-auth` declares it as a provided dependency and does not bring it along. Without an _Authorization Data URL_ the provider grants no authorizations and does not need Spring Security. That is what the vector data store uses when no _Authorization Management Provider_ is set, since `jsonFile` is the first provider it finds.
+
 NOTE: Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the {adapter-auth}/adapter/auth/AuthorizationFactorySPI.java[`AuthorizationFactorySPI`] interface. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
 
