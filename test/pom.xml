@@ -255,10 +255,6 @@
 			<artifactId>hadoop-minicluster</artifactId>
 			<exclusions>
 				<exclusion>
-					<artifactId>jdk.tools</artifactId>
-					<groupId>jdk.tools</groupId>
-				</exclusion>
-				<exclusion>
 					<groupId>hsqldb</groupId>
 					<artifactId>hsqldb</artifactId>
 				</exclusion>

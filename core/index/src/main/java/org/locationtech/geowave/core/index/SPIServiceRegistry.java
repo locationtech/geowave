@@ -19,52 +19,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Compensate for VFSClassloader's failure to discovery SPI registered classes (used by JBOSS and
- * Accumulo).
+ * Looks up SPI providers across several class loaders, to compensate for VFS-based class loaders,
+ * such as those in Accumulo and JBoss, that do not expose SPI registrations to
+ * {@link ServiceLoader} on their own.
  *
- * <p> To Use:
- *
- * <p> (1) Register class loaders:
- *
- * <p> (2) Look up SPI providers:
- *
- * <p> final Iterator<FieldSerializationProviderSpi> serializationProviders = new
- * SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
- * FieldSerializationProviderSpi.class);
+ * <p> Providers are found with
+ * {@code SPIServiceRegistry.load(FieldSerializationProviderSpi.class)}. Class loaders that are not
+ * otherwise visible can be added with {@link #registerClassLoader(ClassLoader)}.
  */
-public class SPIServiceRegistry {
+public final class SPIServiceRegistry {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SPIServiceRegistry.class);
-
-  public SPIServiceRegistry() {}
-
-  /**
-   * @param category retained for source compatibility; the service class is supplied to
-   *        {@link #load(Class)} instead and this argument is ignored
-   */
-  public SPIServiceRegistry(final Class<?> category) {}
-
-  /**
-   * @param categories retained for source compatibility; the service class is supplied to
-   *        {@link #load(Class)} instead and this argument is ignored
-   */
-  public SPIServiceRegistry(final Iterator<Class<?>> categories) {}
 
   private static final Set<ClassLoader> ClassLoaders =
       Collections.synchronizedSet(new HashSet<ClassLoader>());
 
-  private final Set<ClassLoader> localClassLoaders =
-      Collections.synchronizedSet(new HashSet<ClassLoader>());
+  private SPIServiceRegistry() {}
 
   public static void registerClassLoader(final ClassLoader loader) {
     ClassLoaders.add(loader);
   }
 
-  public void registerLocalClassLoader(final ClassLoader loader) {
-    localClassLoaders.add(loader);
-  }
-
-  public <T> Iterator<T> load(final Class<T> service) {
+  public static <T> Iterator<T> load(final Class<T> service) {
 
     final Set<ClassLoader> checkset = new HashSet<>();
     final Set<ClassLoader> clSet = getClassLoaders();
@@ -107,8 +83,7 @@ public class SPIServiceRegistry {
    * <li>{@linkplain Thread#getContextClassLoader The thread context class loader}
    * <li>{@linkplain ClassLoader#getSystemClassLoader The system class loader} </ul>
    *
-   * Both locally registered (this instance) and globally registered classloaders are included it
-   * the search.
+   * Class loaders added with {@link #registerClassLoader(ClassLoader)} are included in the search.
    *
    * <p> Redundancies and parent classloaders are removed where possible. Possible error conditions
    * include security exceptions. Security exceptions are not logger UNLESS the set of searchable
@@ -116,7 +91,7 @@ public class SPIServiceRegistry {
    *
    * @return Classloaders to be used for scanning plugins.
    */
-  public final Set<ClassLoader> getClassLoaders() {
+  public static Set<ClassLoader> getClassLoaders() {
     final List<String> exceptions = new LinkedList<>();
     final Set<ClassLoader> loaders = new HashSet<>();
 
@@ -149,7 +124,6 @@ public class SPIServiceRegistry {
     }
 
     loaders.addAll(ClassLoaders);
-    loaders.addAll(localClassLoaders);
 
     /** Remove those loaders that are parents to other loaders. */
     final ClassLoader[] loaderSet = loaders.toArray(new ClassLoader[loaders.size()]);

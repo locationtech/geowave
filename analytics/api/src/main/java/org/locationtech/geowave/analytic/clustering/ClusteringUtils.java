@@ -20,6 +20,7 @@ import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
@@ -137,6 +138,6 @@ public class ClusteringUtils {
             BasicFeatureTypes.DEFAULT_NAMESPACE),
         ((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
             propertyManagement)).getDataStoreOptions().createAdapterStore(),
-        dimensionExtractorClass.newInstance().getDimensionNames());
+        InstantiationUtils.newInstance(dimensionExtractorClass).getDimensionNames());
   }
 }

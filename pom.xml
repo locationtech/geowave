@@ -793,10 +793,6 @@
 				<version>${hbase.version}</version>
 				<exclusions>
 					<exclusion>
-						<artifactId>jdk.tools</artifactId>
-						<groupId>jdk.tools</groupId>
-					</exclusion>
-					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
 					</exclusion>

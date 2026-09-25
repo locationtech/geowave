@@ -38,6 +38,7 @@ import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
@@ -161,7 +162,8 @@ public class GeoWaveITRunner extends Suite {
         }
       }
 
-      final Object testClassInstance = getTestClass().getJavaClass().newInstance();
+      final Object testClassInstance =
+          InstantiationUtils.newInstance(getTestClass().getJavaClass());
 
       for (final Pair<Field, GeoWaveTestStore> field : fieldsAndStorePairs) {
         final GeoWaveStoreType type = fieldNameStoreTypePair.get(field.getLeft().getName());

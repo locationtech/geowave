@@ -386,15 +386,15 @@ public class GeoWavePluginConfig {
   }
 
   private static Iterator<LockingManagementFactory> getLockManagementFactoryList() {
-    return new SPIServiceRegistry(GeoWavePluginConfig.class).load(LockingManagementFactory.class);
+    return SPIServiceRegistry.load(LockingManagementFactory.class);
   }
 
   private static Iterator<AuthorizationFactorySPI> getAuthorizationFactoryList() {
-    return new SPIServiceRegistry(GeoWavePluginConfig.class).load(AuthorizationFactorySPI.class);
+    return SPIServiceRegistry.load(AuthorizationFactorySPI.class);
   }
 
   private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
-    return new SPIServiceRegistry(GeoWavePluginConfig.class).load(IndexQueryStrategySPI.class);
+    return SPIServiceRegistry.load(IndexQueryStrategySPI.class);
   }
 
   private static class GeoWaveConfigOptionToGeoToolsConfigOption implements

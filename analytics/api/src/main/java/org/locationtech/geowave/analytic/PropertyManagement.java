@@ -19,6 +19,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -216,7 +217,7 @@ public class PropertyManagement implements Serializable {
                 + " does not implement "
                 + property.getHelper().getBaseClass().toString());
       }
-      return (T) clazz.newInstance();
+      return (T) InstantiationUtils.newInstance(clazz);
     } catch (final ClassNotFoundException e) {
       LOGGER.error("Class for property " + property.self().toString() + " is not found", e);
       throw new InstantiationException(property.self().toString());

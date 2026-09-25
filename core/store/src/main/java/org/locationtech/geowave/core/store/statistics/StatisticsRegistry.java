@@ -45,7 +45,7 @@ public class StatisticsRegistry {
 
   private StatisticsRegistry() {
     final Iterator<StatisticsRegistrySPI> spiIter =
-        new SPIServiceRegistry(StatisticsRegistry.class).load(StatisticsRegistrySPI.class);
+        SPIServiceRegistry.load(StatisticsRegistrySPI.class);
     while (spiIter.hasNext()) {
       final StatisticsRegistrySPI providedStats = spiIter.next();
       Arrays.stream(providedStats.getRegisteredStatistics()).forEach(this::putStat);

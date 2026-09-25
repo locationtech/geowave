@@ -9,6 +9,7 @@
 package org.locationtech.geowave.analytic;
 
 import org.apache.hadoop.conf.Configuration;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.slf4j.Logger;
@@ -67,10 +68,11 @@ public class ScopedJobConfiguration {
         }
         logger.warn("Using default for property " + propName);
       }
-      return jobConfiguration.getClass(
-          GeoWaveConfiguratorBase.enumToConfKey(scope, property),
-          defaultValue,
-          iface).newInstance();
+      return InstantiationUtils.newInstance(
+          jobConfiguration.getClass(
+              GeoWaveConfiguratorBase.enumToConfKey(scope, property),
+              defaultValue,
+              iface));
     } catch (final Exception ex) {
       logger.error("Cannot instantiate " + GeoWaveConfiguratorBase.enumToConfKey(scope, property));
       throw ex;

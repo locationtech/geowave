@@ -37,6 +37,7 @@ import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
@@ -157,6 +158,8 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
           propertyManagement.getPropertyAsClass(
               CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
               AnalyticItemWrapperFactory.class);
+      final AnalyticItemWrapperFactory<SimpleFeature> analyticItemWrapperFactory =
+          InstantiationUtils.newInstance(analyticItemWrapperFC);
 
       /**
        * Associate the batch id with the best set of groups so the caller can find the clusters for
@@ -164,7 +167,7 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
        */
       final int result =
           distortionGroupManagement.retainBestGroups(
-              (AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
+              analyticItemWrapperFactory,
               propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
               propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME),
               currentBatchId,

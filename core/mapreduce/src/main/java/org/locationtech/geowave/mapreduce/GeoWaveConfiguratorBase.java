@@ -11,6 +11,7 @@ package org.locationtech.geowave.mapreduce;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.MRJobConfig;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
@@ -81,9 +82,8 @@ public class GeoWaveConfiguratorBase {
       final Enum<?> e,
       final JobContext context,
       final Class<T> interfaceClass) throws InstantiationException, IllegalAccessException {
-    return (T) getConfiguration(context).getClass(
-        enumToConfKey(implementingClass, e),
-        interfaceClass).newInstance();
+    return (T) InstantiationUtils.newInstance(
+        getConfiguration(context).getClass(enumToConfKey(implementingClass, e), interfaceClass));
   }
 
   public static final <T> T getInstance(
@@ -92,10 +92,11 @@ public class GeoWaveConfiguratorBase {
       final JobContext context,
       final Class<T> interfaceClass,
       final Class<? extends T> defaultClass) throws InstantiationException, IllegalAccessException {
-    return getConfiguration(context).getClass(
-        enumToConfKey(implementingClass, e),
-        defaultClass,
-        interfaceClass).newInstance();
+    return InstantiationUtils.newInstance(
+        getConfiguration(context).getClass(
+            enumToConfKey(implementingClass, e),
+            defaultClass,
+            interfaceClass));
   }
 
   public static DataStore getDataStore(final Class<?> implementingClass, final JobContext context) {

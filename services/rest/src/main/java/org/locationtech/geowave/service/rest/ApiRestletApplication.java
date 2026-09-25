@@ -29,6 +29,7 @@ import javax.management.QueryExp;
 import javax.servlet.ServletContext;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.cli.utils.InstantiationUtils;
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Restlet;
@@ -89,7 +90,7 @@ public class ApiRestletApplication extends Application {
         "org.locationtech.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
       try {
         if (!Modifier.isAbstract(operation.getModifiers())) {
-          availableRoutes.add(new RestRoute(operation.newInstance()));
+          availableRoutes.add(new RestRoute(InstantiationUtils.newInstance(operation)));
         }
       } catch (InstantiationException | IllegalAccessException e) {
         getLogger().log(Level.SEVERE, "Unable to instantiate Service Resource", e);

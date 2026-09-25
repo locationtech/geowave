@@ -81,7 +81,7 @@ public class GWQLQuery extends DefaultOperation implements Command {
   public boolean prepare(final OperationParams params) {
     super.prepare(params);
     final Iterator<QueryOutputFormatSpi> spiIter =
-        new SPIServiceRegistry(GWQLQuery.class).load(QueryOutputFormatSpi.class);
+        SPIServiceRegistry.load(QueryOutputFormatSpi.class);
     boolean outputFound = false;
     while (spiIter.hasNext()) {
       final QueryOutputFormatSpi format = spiIter.next();
