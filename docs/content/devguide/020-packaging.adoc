@@ -41,7 +41,7 @@ $ doskey geowave=java -cp %GEOWAVE_HOME%/deploy/target/geowave-deploy-${project.
 
 After the alias has been created, you will be able to use the GeoWave CLI with the `geowave` command. For a full list of these commands, please see the link:commands.html[GeoWave CLI Appendix, window="_blank"].
 
-Of the commands that run a local server for testing, the tools JAR includes only `geowave gs run` (from `extensions/cli/geoserver-embed`).  It does not bundle GeoServer itself: it runs a GeoServer ${geoserver.version} WAR unpacked on disk, with the tools JAR ahead of the WAR's own `WEB-INF/lib` on the web application's classpath, as described in link:quickstart.html#run-geoserver[Run GeoServer^, window="_blank"].  It listens on 127.0.0.1 by default, and is meant for local evaluation only.  The Accumulo, Cassandra, DynamoDB, HBase and Redis `util <store> run` commands are not packaged into the tools JAR; their `geowave-cli-<store>-embed` modules are used by the integration tests.
+Of the commands that run a local server for testing, the tools JAR includes only `geowave gs run` (from `extensions/cli/geoserver-embed`).  It does not bundle GeoServer itself: it runs a GeoServer ${geoserver.version} WAR unpacked on disk, on Jetty 12.1, with the tools JAR after the WAR's own `WEB-INF/lib` on the web application's classpath, as described in link:quickstart.html#run-geoserver[Run GeoServer^, window="_blank"].  It listens on 127.0.0.1 by default, and is meant for local evaluation only.  The Accumulo, Cassandra, DynamoDB, HBase and Redis `util <store> run` commands are not packaged into the tools JAR; their `geowave-cli-<store>-embed` modules are used by the integration tests.
 
 === GeoServer Plugin
 

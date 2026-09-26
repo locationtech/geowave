@@ -16,16 +16,11 @@ geowave-gs-run - Runs a standalone GeoServer instance
 
 This command runs a standalone GeoServer instance, for local evaluation, testing and debugging, with the GeoWave plugin on its classpath.  It needs GeoServer's web application: unpack the GeoServer ${geoserver.version} web archive (WAR) into a directory and pass that directory with `--directory`.  The WAR is published at `https://repo.osgeo.org/repository/release/org/geoserver/web/gs-web-app/${geoserver.version}/gs-web-app-${geoserver.version}.war`.
 
-The WAR must be exactly GeoServer ${geoserver.version}, the version GeoWave is built against.  The command puts the whole tools JAR on the web application's classpath ahead of the WAR's own `WEB-INF/lib`, so GeoServer runs with the tools JAR's copies of the GeoServer, GeoTools and Spring classes, and GeoServer's About page and REST API report the GeoWave version in place of the GeoServer and GeoTools versions.
+Use GeoServer ${geoserver.version}, the version GeoWave is built against.  GeoServer runs on Jetty 12.1 (Jakarta Servlet 6.1), and the command adds the tools JAR to the web application's classpath after the WAR's own `WEB-INF/lib`, where an installed plugin would be: GeoServer runs on the libraries it ships with, and takes GeoWave's classes, and anything else it does not have, from the tools JAR.
 
 [WARNING]
 ====
-GeoServer ${geoserver.version} has known critical vulnerabilities, for example CVE-2024-36401, which allows unauthenticated remote code execution.  This command is for local evaluation only.  It listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment.
-====
-
-[NOTE]
-====
-GeoServer ${geoserver.version} predates Java 21.  WMS works, but WFS GetFeature requests fail with "Unsupported class file major version 65" until GeoWave moves to a newer GeoServer.  That includes the WFS output formats in GeoServer's Layer Preview, and the GetFeature requests that WFS-T clients use to read features.
+This command is for local evaluation only.  GeoServer starts with its default administrator account (user `admin`, password `geoserver`) and a configuration that has not been secured.  The command listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment; for that, install the GeoWave GeoServer plugin in a GeoServer that is kept up to date with its security releases.
 ====
 
 [[gs-run-options]]
