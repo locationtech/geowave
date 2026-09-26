@@ -569,6 +569,9 @@
 										<testStoreOptions>${testStoreOptions}</testStoreOptions>
 										<testServerEnabled>${testServerEnabled}</testServerEnabled>
 										<geoserver.version>${geoserver.version}</geoserver.version>
+										<!-- The ITs never need Spark's UI, and below Spark 4.2 it cannot
+											share a JVM with Jetty 12 (see GeoWaveSparkConf). -->
+										<spark.ui.enabled>false</spark.ui.enabled>
 										<log4j.configurationFile>
 											file:${project.build.testOutputDirectory}/log4j-test.properties
 										</log4j.configurationFile>
