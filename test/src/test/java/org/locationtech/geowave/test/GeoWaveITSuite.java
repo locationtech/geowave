@@ -53,6 +53,7 @@ import org.locationtech.geowave.test.services.GeoServerIT;
 import org.locationtech.geowave.test.services.GeoServerIngestIT;
 import org.locationtech.geowave.test.services.IndexServicesIT;
 import org.locationtech.geowave.test.services.IngestIT;
+import org.locationtech.geowave.test.services.RestApiIT;
 import org.locationtech.geowave.test.services.StatServicesIT;
 import org.locationtech.geowave.test.services.StoreServicesIT;
 import org.locationtech.geowave.test.services.TypeServicesIT;
@@ -120,6 +121,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     TypeServicesIT.class,
     IngestIT.class,
     FileUploadIT.class,
+    RestApiIT.class,
     SplitsProviderIT.class //
 })
 public class GeoWaveITSuite {

@@ -8,56 +8,53 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 import org.locationtech.geowave.service.rest.operations.RestOperationStatusMessage;
-import org.restlet.ext.jackson.JacksonRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** ServerResource that returns the status of async REST operations submitted to the server */
-public class AsyncOperationStatusResource extends ServerResource {
+/** Reports the status of an operation started with runAsync(), always with a 200. */
+@Singleton
+@Path("v0/operation_status")
+public class AsyncOperationStatusResource {
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncOperationStatusResource.class);
 
-  @Get("json")
-  public Representation getStatus(final Representation request) {
+  private final AsyncOperations asyncOperations;
 
+  @Inject
+  public AsyncOperationStatusResource(final AsyncOperations asyncOperations) {
+    this.asyncOperations = asyncOperations;
+  }
+
+  @GET
+  public Response getStatus(@QueryParam("id") final String id) {
+    final Future<?> future = asyncOperations.get(id);
+    if (future == null) {
+      return JsonResponses.of(
+          Response.Status.OK,
+          JsonResponses.error("no operation found for ID: " + id, null));
+    }
     final RestOperationStatusMessage status = new RestOperationStatusMessage();
-    ConcurrentHashMap<String, Future<?>> opStatuses = null;
-    final String id = getQueryValue("id");
+    if (!future.isDone()) {
+      status.status = RestOperationStatusMessage.StatusType.RUNNING;
+      return JsonResponses.of(Response.Status.OK, status);
+    }
     try {
-      // look up the operation status
-      opStatuses =
-          (ConcurrentHashMap<String, Future<?>>) getApplication().getContext().getAttributes().get(
-              "asyncOperationStatuses");
-      if (opStatuses.get(id) != null) {
-        final Future<?> future = opStatuses.get(id);
-
-        if (future.isDone()) {
-          status.status = RestOperationStatusMessage.StatusType.COMPLETE;
-          status.message = "operation success";
-          status.data = future.get();
-          opStatuses.remove(id);
-        } else {
-          status.status = RestOperationStatusMessage.StatusType.RUNNING;
-        }
-        return new JacksonRepresentation<>(status);
-      }
+      status.data = future.get();
+      status.status = RestOperationStatusMessage.StatusType.COMPLETE;
+      status.message = "operation success";
+      return JsonResponses.of(Response.Status.OK, status);
     } catch (final Exception e) {
       LOGGER.error("Error exception: ", e);
-      status.status = RestOperationStatusMessage.StatusType.ERROR;
-      status.message = "exception occurred";
-      status.data = e;
-      if (opStatuses != null) {
-        opStatuses.remove(id);
-      }
-      return new JacksonRepresentation<>(status);
+      return JsonResponses.of(Response.Status.OK, JsonResponses.error("exception occurred", e));
+    } finally {
+      asyncOperations.remove(id);
     }
-    status.status = RestOperationStatusMessage.StatusType.ERROR;
-    status.message = "no operation found for ID: " + id;
-    return new JacksonRepresentation<>(status);
   }
 }

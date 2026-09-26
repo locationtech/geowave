@@ -14,12 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.restlet.data.MediaType;
-import org.restlet.representation.Representation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -37,42 +32,16 @@ public class RequestParametersJsonTest {
   private final List<String> testList = new ArrayList<>(Arrays.asList("bar", "baz"));
   private final String[] testArray = {"foo", "bar"};
 
-  private Representation mockedJsonRequest(final String jsonString) throws IOException {
-    final Representation request = mockedRequest(MediaType.APPLICATION_JSON);
-
-    Mockito.when(request.getText()).thenReturn(jsonString);
-
-    return request;
-  }
-
-  private Representation mockedRequest(final MediaType mediaType) {
-
-    final Representation request = Mockito.mock(Representation.class);
-
-    Mockito.when(request.getMediaType()).thenReturn(mediaType);
-
-    return request;
-  }
-
-  @Before
-  public void setUp() throws Exception {}
-
-  @After
-  public void tearDown() throws Exception {}
-
   @Test
   public void instantiationSuccessfulWithJson() throws Exception {
-    final Representation request = mockedJsonRequest("{}");
-
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson("{}");
   }
 
   @Test
   public void getValueReturnsJsonString() throws Exception {
     testJSON = MAPPER.createObjectNode();
     testJSON.put(testKey, testString);
-    final Representation request = mockedJsonRequest(testJSON.toString());
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson(testJSON.toString());
 
     assertEquals(testString, classUnderTest.getValue(testKey));
   }
@@ -82,8 +51,7 @@ public class RequestParametersJsonTest {
     testJSON = MAPPER.createObjectNode();
 
     testJSON.put(testKey, testString);
-    final Representation request = mockedJsonRequest(testJSON.toString());
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson(testJSON.toString());
 
     assertEquals(testString, classUnderTest.getString(testKey));
   }
@@ -93,8 +61,7 @@ public class RequestParametersJsonTest {
     testJSON = MAPPER.createObjectNode();
 
     testJSON.set(testKey, MAPPER.valueToTree(testList));
-    final Representation request = mockedJsonRequest(testJSON.toString());
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson(testJSON.toString());
 
     assertEquals(testList, classUnderTest.getList(testKey));
   }
@@ -104,8 +71,7 @@ public class RequestParametersJsonTest {
     testJSON = MAPPER.createObjectNode();
 
     testJSON.set(testKey, MAPPER.valueToTree(testArray));
-    final Representation request = mockedJsonRequest(testJSON.toString());
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson(testJSON.toString());
 
     assertArrayEquals(testArray, classUnderTest.getArray(testKey));
   }
@@ -115,9 +81,13 @@ public class RequestParametersJsonTest {
     testJSON = MAPPER.createObjectNode();
 
     testJSON.put(testKey, testNumber);
-    final Representation request = mockedJsonRequest(testJSON.toString());
-    classUnderTest = new RequestParametersJson(request);
+    classUnderTest = new RequestParametersJson(testJSON.toString());
 
     assertEquals(testNumber, classUnderTest.getValue(testKey));
+  }
+
+  @Test(expected = IOException.class)
+  public void malformedJsonIsRejected() throws Exception {
+    new RequestParametersJson("{not json");
   }
 }

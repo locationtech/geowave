@@ -8,19 +8,41 @@
  */
 package org.locationtech.geowave.service.rest.field;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import org.restlet.data.Form;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 
 public class RequestParametersForm extends RequestParameters {
 
-  public RequestParametersForm(final Form form) {
+  /** @param form query or form parameters; only the first value of each is used */
+  public RequestParametersForm(final MultivaluedMap<String, String> form) {
     super();
-    for (final String key : form.getNames()) {
-      // For each parameter in the form, add the parameter name and value
-      // to the Map<String, Object>.
-      keyValuePairs.put(key, form.getFirst(key).getValue());
+    for (final String key : form.keySet()) {
+      keyValuePairs.put(key, form.getFirst(key));
     }
+  }
+
+  /**
+   * Parses an application/x-www-form-urlencoded body, as UTF-8.
+   *
+   * @throws IllegalArgumentException if the body is not validly encoded
+   */
+  public static RequestParametersForm fromUrlEncoded(final String body) {
+    final MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+    for (final String pair : body.split("&")) {
+      if (!pair.isEmpty()) {
+        final int equals = pair.indexOf('=');
+        final String name = (equals < 0) ? pair : pair.substring(0, equals);
+        final String value = (equals < 0) ? "" : pair.substring(equals + 1);
+        form.add(
+            URLDecoder.decode(name, StandardCharsets.UTF_8),
+            URLDecoder.decode(value, StandardCharsets.UTF_8));
+      }
+    }
+    return new RequestParametersForm(form);
   }
 
   @Override

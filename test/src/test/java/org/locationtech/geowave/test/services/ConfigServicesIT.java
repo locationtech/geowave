@@ -9,10 +9,8 @@
 package org.locationtech.geowave.test.services;
 
 import static org.junit.Assert.assertEquals;
+import java.io.IOException;
 import jakarta.ws.rs.core.Response;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,12 +25,15 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SERVICES})
 public class ConfigServicesIT extends BaseServiceIT {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServicesIT.class);
+  private static final ObjectMapper MAPPER = new ObjectMapper();
   private static ConfigServiceClient configServiceClient;
 
   @GeoWaveTestStore({
@@ -68,17 +69,15 @@ public class ConfigServicesIT extends BaseServiceIT {
   }
 
   @Test
-  public void testSet() throws ParseException {
+  public void testSet() throws IOException {
     // Should always return 200
     final Response set = configServiceClient.set("Property", "Value");
     TestUtils.assertStatusCode("Should Set Property", 200, set);
     final String list = configServiceClient.list().readEntity(String.class);
-    final JSONParser parser = new JSONParser();
-    final JSONObject json = (JSONObject) parser.parse(list);
-    final JSONObject values = (JSONObject) json.get("data");
+    final JsonNode values = MAPPER.readTree(list).get("data");
 
     // check to make sure that property was actually set
-    assertEquals("The property was not set correctly", "Value", values.get("Property"));
+    assertEquals("The property was not set correctly", "Value", values.get("Property").asText());
   }
 
   @Test
@@ -89,17 +88,18 @@ public class ConfigServicesIT extends BaseServiceIT {
   }
 
   @Test
-  public void testConfigGeoServer() throws ParseException {
+  public void testConfigGeoServer() throws IOException {
     // Should always return 200
     final Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
     TestUtils.assertStatusCode("Should Configure Geoserver", 200, configGeoserver);
     final String list = configServiceClient.list().readEntity(String.class);
-    final JSONParser parser = new JSONParser();
-    final JSONObject json = (JSONObject) parser.parse(list);
-    final JSONObject values = (JSONObject) json.get("data");
+    final JsonNode values = MAPPER.readTree(list).get("data");
 
     // check to make sure that geoserver was actually set
-    assertEquals("GeoServer was not set correctly", "test-geoserver", values.get("geoserver.url"));
+    assertEquals(
+        "GeoServer was not set correctly",
+        "test-geoserver",
+        values.get("geoserver.url").asText());
   }
 
   @Override

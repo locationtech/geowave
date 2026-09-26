@@ -10,18 +10,13 @@ package org.locationtech.geowave.service.rest.field;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.junit.After;
-import org.junit.Before;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.restlet.data.Form;
-import org.restlet.data.Parameter;
 
 public class RequestParametersFormTest {
 
@@ -32,74 +27,58 @@ public class RequestParametersFormTest {
   private final List<String> testList = new ArrayList<>(Arrays.asList("bar", "baz"));
   private final String[] testArray = {"foo", "bar"};
 
-  private Form mockedForm(final Map<String, String> inputKeyValuePairs) {
-    final String keyName;
-    final Form form = Mockito.mock(Form.class);
-    Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
-    Mockito.when(form.getFirst(ArgumentMatchers.anyString())).thenAnswer(
-        i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
-
+  private static MultivaluedMap<String, String> form(final String key, final String... values) {
+    final MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
+    form.addAll(key, values);
     return form;
   }
 
-  private Parameter mockedFormParameter(final String value) {
-    final Parameter param = Mockito.mock(Parameter.class);
-
-    Mockito.when(param.getValue()).thenReturn(value);
-
-    return param;
-  }
-
-  @Before
-  public void setUp() throws Exception {}
-
-  @After
-  public void tearDown() throws Exception {}
-
   @Test
   public void instantiationSuccessfulWithForm() throws Exception {
-    final Map<String, String> testKVP = new HashMap<>();
-
-    final Form form = mockedForm(testKVP);
-
-    classUnderTest = new RequestParametersForm(form);
+    classUnderTest = new RequestParametersForm(new MultivaluedHashMap<>());
+    assertNull(classUnderTest.getString(testKey));
   }
 
   @Test
   public void getStringReturnsFormString() throws Exception {
-    final Map<String, String> testKVP = new HashMap<>();
+    classUnderTest = new RequestParametersForm(form(testKey, testString));
 
-    final Form form = mockedForm(testKVP);
-    testKVP.put(testKey, testString);
+    assertEquals(testString, classUnderTest.getString(testKey));
+  }
 
-    classUnderTest = new RequestParametersForm(form);
+  @Test
+  public void getStringReturnsFirstValue() throws Exception {
+    classUnderTest = new RequestParametersForm(form(testKey, testString, "other"));
 
     assertEquals(testString, classUnderTest.getString(testKey));
   }
 
   @Test
   public void getListReturnsFormList() throws Exception {
-    final Map<String, String> testKVP = new HashMap<>();
-
-    final String testJoinedString = String.join(",", testList);
-    final Form form = mockedForm(testKVP);
-    testKVP.put(testKey, testJoinedString);
-
-    classUnderTest = new RequestParametersForm(form);
+    classUnderTest = new RequestParametersForm(form(testKey, String.join(",", testList)));
 
     assertEquals(testList, classUnderTest.getList(testKey));
   }
 
   @Test
   public void getArrayReturnsFormArray() throws Exception {
-    final Map<String, String> testKVP = new HashMap<>();
-
-    final String testJoinedString = String.join(",", testArray);
-    final Form form = mockedForm(testKVP);
-    testKVP.put(testKey, testJoinedString);
-
-    classUnderTest = new RequestParametersForm(form);
+    classUnderTest = new RequestParametersForm(form(testKey, String.join(",", testArray)));
 
     assertArrayEquals(testArray, classUnderTest.getArray(testKey));
+  }
+
+  @Test
+  public void urlEncodedBodyIsDecoded() throws Exception {
+    classUnderTest = RequestParametersForm.fromUrlEncoded("foo=a%2Cb+c&empty=&flag&foo=ignored");
+
+    assertEquals("a,b c", classUnderTest.getString("foo"));
+    assertEquals(Arrays.asList("a", "b c"), classUnderTest.getList("foo"));
+    assertEquals("", classUnderTest.getString("empty"));
+    assertEquals("", classUnderTest.getString("flag"));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void malformedUrlEncodedBodyIsRejected() throws Exception {
+    RequestParametersForm.fromUrlEncoded("foo=%zz");
   }
 }

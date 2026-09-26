@@ -73,22 +73,12 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.ws.rs</groupId>
-					<artifactId>javax.ws.rs-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.restlet.osgi</groupId>
-					<artifactId>org.restlet.ext.jaxrs</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>
-                        org.springframework.security.oauth
-                    </groupId>
-					<artifactId>spring-security-oauth2</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<!-- Hosts the REST services for ServicesTestEnvironment, next to GeoServer on Jetty 9.4,
+			which cannot share a JVM with the Jetty 12 a Jakarta servlet container would need. -->
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-jdk-http</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -559,30 +549,6 @@
 											</outputDirectory>
 										</artifactItem>
 									</artifactItems>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.0.2</version>
-						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}/restservices
-									</outputDirectory>
-									<resources>
-										<resource>
-											<directory>
-												${project.basedir}/../services/rest/src/main/webapp
-											</directory>
-										</resource>
-									</resources>
 								</configuration>
 							</execution>
 						</executions>

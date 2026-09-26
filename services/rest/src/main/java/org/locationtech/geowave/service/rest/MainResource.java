@@ -8,63 +8,50 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import java.util.ArrayList;
-import javax.servlet.ServletContext;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.locationtech.geowave.service.rest.security.ApiKeyFilter;
 
-public class MainResource extends ServerResource {
-  private static final Logger LOGGER = LoggerFactory.getLogger(MainResource.class);
+/**
+ * The main page (essentially index.html): the list of routes and, when the request was
+ * authenticated and API keys are enabled, the user's API key.
+ */
+@Singleton
+@Path("/")
+public class MainResource {
+  private final RestRoutes routes;
 
-  /**
-   * This is the main resource (essentially index.html) it displays the user's API Key and the list
-   * of mapped commands, it also displays the user's apiKey if the GeoWaveApiKeyFilter and
-   * GeoWaveApiKeySetterFilter
-   */
-  @Get("html")
-  public String listResources() {
-    String output = "";
-    try {
-      final StringBuilder routeStringBuilder = new StringBuilder();
-      final ServletContext servletContext =
-          (ServletContext) getContext().getAttributes().get(
-              "org.restlet.ext.servlet.ServletContext");
-      final String userName = (String) servletContext.getAttribute("userName");
-      final String apiKey = (String) servletContext.getAttribute("apiKey");
-      final ArrayList<RestRoute> availableRoutes =
-          (ArrayList<RestRoute>) getContext().getAttributes().get("availableRoutes");
-
-      routeStringBuilder.append("Available Routes:<br>");
-
-      for (final RestRoute route : availableRoutes) {
-        routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
-      }
-
-      if ((userName != null) && !userName.equals("")) {
-        output =
-            "<b>Welcome "
-                + userName
-                + "!</b><br><b>API key:</b> "
-                + apiKey
-                + "<br><br>"
-                + routeStringBuilder.toString();
-      } else {
-        output = routeStringBuilder.toString();
-      }
-    } catch (final Exception e) {
-      LOGGER.error("Error listing resources", e);
-    }
-    return output;
+  @Inject
+  public MainResource(final RestRoutes routes) {
+    this.routes = routes;
   }
 
-  /** A simple ServerResource to show if the route's operation does not extend ServerResource */
-  public static class NonResourceCommand extends ServerResource {
-    @Override
-    @Get("html")
-    public String toString() {
-      return "The route exists, but the command does not extend ServerResource";
+  @GET
+  public Response listResources(@Context final ContainerRequestContext request) {
+    final StringBuilder output = new StringBuilder();
+    final Object userName = request.getProperty(ApiKeyFilter.USER_NAME_PROPERTY);
+    if (userName != null) {
+      output.append("<b>Welcome ").append(escape(userName)).append(
+          "!</b><br><b>API key:</b> ").append(
+              escape(request.getProperty(ApiKeyFilter.API_KEY_PROPERTY))).append("<br><br>");
     }
+    output.append("Available Routes:<br>");
+    for (final RestRoute route : routes.list()) {
+      output.append(route.getPath()).append(" --> ").append(
+          route.getOperation().getClass().getName()).append("<br>");
+    }
+    return Response.ok(output.toString(), MediaType.TEXT_HTML_TYPE).build();
+  }
+
+  private static String escape(final Object value) {
+    return String.valueOf(value).replace("&", "&amp;").replace("<", "&lt;").replace(
+        ">",
+        "&gt;").replace("\"", "&quot;");
   }
 }
