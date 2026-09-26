@@ -8,23 +8,31 @@
  */
 package org.locationtech.geowave.service.rest;
 
+import java.util.Arrays;
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
 import jakarta.ws.rs.container.PreMatching;
+import jakarta.ws.rs.core.Configuration;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 
 /**
- * Lets pages from any origin call the API, with credentials. The origin is echoed back, because
- * browsers do not accept a wildcard origin together with credentials. Preflight requests are
+ * Lets pages from any origin call the API without credentials, and pages from the origins listed in
+ * {@link GeoWaveRestApplication#CORS_ALLOWED_ORIGINS_PROPERTY} with them. Credentials are not
+ * offered to every origin because authentication is the container's: a browser would then let any
+ * site a logged-in user visits make calls as that user and read the replies. Preflight requests are
  * answered here, before any other filter sees them.
  */
 @PreMatching
 public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilter {
   private static final String ALLOWED_METHODS = "GET, POST, PUT, PATCH, DELETE, OPTIONS";
+
+  @Context
+  private Configuration configuration;
 
   @Override
   public void filter(final ContainerRequestContext request) {
@@ -42,8 +50,13 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
       return;
     }
     final MultivaluedMap<String, Object> headers = response.getHeaders();
-    headers.putSingle("Access-Control-Allow-Origin", origin);
-    headers.putSingle("Access-Control-Allow-Credentials", "true");
+    if (isCredentialedOrigin(origin)) {
+      // browsers do not accept a wildcard origin together with credentials
+      headers.putSingle("Access-Control-Allow-Origin", origin);
+      headers.putSingle("Access-Control-Allow-Credentials", "true");
+    } else {
+      headers.putSingle("Access-Control-Allow-Origin", "*");
+    }
     headers.add("Vary", "Origin");
     if (isPreflight(request)) {
       headers.putSingle("Access-Control-Allow-Methods", ALLOWED_METHODS);
@@ -52,6 +65,13 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         headers.putSingle("Access-Control-Allow-Headers", requestedHeaders);
       }
     }
+  }
+
+  private boolean isCredentialedOrigin(final String origin) {
+    final Object origins =
+        configuration.getProperty(GeoWaveRestApplication.CORS_ALLOWED_ORIGINS_PROPERTY);
+    return (origins != null)
+        && Arrays.stream(origins.toString().split(",")).map(String::trim).anyMatch(origin::equals);
   }
 
   private static boolean isPreflight(final ContainerRequestContext request) {

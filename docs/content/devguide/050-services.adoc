@@ -23,7 +23,7 @@ The `geowave-service-rest` project serves the same commands over HTTP. It is a J
 
 ==== Deploying
 
-`mvn package -P rest-services-war` in `services/rest` builds a WAR for a Jakarta Servlet 6 container, such as Tomcat 10.1 or later or Jetty 12. Its `WEB-INF/web.xml` deploys the application through Jersey's `ServletContainer`, and init parameters set the GeoWave config file that requests use (`config_file`), the host and port given in the Swagger description (`host_port`), and the API key database (`api_key_db`).
+`mvn package -P rest-services-war` in `services/rest` builds a WAR for a Jakarta Servlet 6 container, such as Tomcat 10.1 or later or Jetty 12. Its `WEB-INF/web.xml` deploys the application through Jersey's `ServletContainer`, and init parameters set the GeoWave config file that requests use (`config_file`), the host and port given in the Swagger description (`host_port`), the API key database (`api_key_db`), and the origins whose pages may call the API with the user's credentials (`cors_allowed_origins`, comma-separated). Pages from any other origin can call it only without credentials, so that a site a logged-in user happens to visit cannot act as that user.
 
 ==== Security
 

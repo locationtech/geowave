@@ -38,6 +38,13 @@
 			<param-value>/path/to/ApiKeys.db</param-value>
 		</init-param>
 		-->
+		<!-- Origins whose pages may call the API with the user's credentials, comma-separated.
+			Pages from any other origin may call it only without credentials.
+		<init-param>
+			<param-name>cors_allowed_origins</param-name>
+			<param-value>https://app.example.com</param-value>
+		</init-param>
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

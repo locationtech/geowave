@@ -165,15 +165,39 @@ public class GeoWaveRestApplicationTest {
   }
 
   @Test
-  public void corsEchoesTheOrigin() throws Exception {
+  public void corsAllowsAnyOriginWithoutCredentials() throws Exception {
     final Result result =
         app.request("GET", "v0/config/list").header("Origin", "http://example.com").send();
     assertEquals(200, result.status());
-    assertEquals("http://example.com", result.header("Access-Control-Allow-Origin"));
-    assertEquals("true", result.header("Access-Control-Allow-Credentials"));
+    assertEquals("*", result.header("Access-Control-Allow-Origin"));
+    assertNull(result.header("Access-Control-Allow-Credentials"));
 
     final Result noOrigin = app.request("GET", "v0/config/list").send();
     assertNull(noOrigin.header("Access-Control-Allow-Origin"));
+  }
+
+  @Test
+  public void corsOffersCredentialsOnlyToConfiguredOrigins() throws Exception {
+    final InMemoryRequests configured =
+        new InMemoryRequests(
+            new GeoWaveRestApplication(routes).property(
+                GeoWaveRestApplication.CONFIG_FILE_PROPERTY,
+                new File(TEMP.getRoot(), "config.properties").getAbsolutePath()).property(
+                    GeoWaveRestApplication.CORS_ALLOWED_ORIGINS_PROPERTY,
+                    "https://app.example.com, https://other.example.com"));
+    final Result trusted =
+        configured.request("GET", "v0/config/list").header(
+            "Origin",
+            "https://other.example.com").send();
+    assertEquals("https://other.example.com", trusted.header("Access-Control-Allow-Origin"));
+    assertEquals("true", trusted.header("Access-Control-Allow-Credentials"));
+
+    final Result untrusted =
+        configured.request("GET", "v0/config/list").header(
+            "Origin",
+            "https://evil.example.com").send();
+    assertEquals("*", untrusted.header("Access-Control-Allow-Origin"));
+    assertNull(untrusted.header("Access-Control-Allow-Credentials"));
   }
 
   @Test
@@ -183,7 +207,7 @@ public class GeoWaveRestApplicationTest {
             "Access-Control-Request-Method",
             "POST").header("Access-Control-Request-Headers", "content-type").send();
     assertEquals(200, result.status());
-    assertEquals("http://example.com", result.header("Access-Control-Allow-Origin"));
+    assertEquals("*", result.header("Access-Control-Allow-Origin"));
     assertTrue(result.header("Access-Control-Allow-Methods").contains("POST"));
     assertEquals("content-type", result.header("Access-Control-Allow-Headers"));
   }

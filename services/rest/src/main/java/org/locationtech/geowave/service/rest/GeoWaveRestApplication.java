@@ -40,6 +40,11 @@ public class GeoWaveRestApplication extends ResourceConfig {
    * under /v0 needs a valid apiKey query parameter.
    */
   public static final String API_KEY_DB_PROPERTY = "api_key_db";
+  /**
+   * Comma-separated origins (for example https://app.example.com) whose pages may call the API with
+   * the user's credentials. Pages from any other origin may call it only without credentials.
+   */
+  public static final String CORS_ALLOWED_ORIGINS_PROPERTY = "cors_allowed_origins";
 
   public GeoWaveRestApplication() {
     this(RestRoutes.find());
@@ -61,7 +66,7 @@ public class GeoWaveRestApplication extends ResourceConfig {
     register(OperationResource.class);
     register(AsyncOperationStatusResource.class);
     register(FileUploadResource.class);
-    register(new CorsFilter());
+    register(CorsFilter.class);
     register(MultiPartFeature.class);
     register(ApiKeyFeature.class);
     register(new ContainerLifecycleListener() {
