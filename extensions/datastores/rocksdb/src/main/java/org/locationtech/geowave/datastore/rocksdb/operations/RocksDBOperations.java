@@ -12,6 +12,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.io.FileUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -40,18 +41,18 @@ import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBOperations implements MapReduceDataStoreOperations, Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBOperations.class);
-  private static final Object CLIENT_MUTEX = new Object();
   private static final boolean READER_ASYNC = true;
-  private RocksDBClient client;
+  private final RocksDBClient client;
   private String directory;
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
   private final boolean walOnBatchWrite;
   private final int batchWriteSize;
+  private final AtomicBoolean holdingClient = new AtomicBoolean();
+  private volatile boolean closed = false;
 
   public RocksDBOperations(final RocksDBOptions options) {
     // attempt to make the directory string as unique for a given file system as possible by using
@@ -136,6 +137,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public void deleteAll() throws Exception {
+    checkOpen();
     RocksDBClientCache.getInstance().closeAndForgetTables(
         directory,
         visibilityEnabled,
@@ -253,37 +255,37 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   }
 
   /**
-   * This is not a typical resource, it references a static RocksDB resource used by all DataStore
-   * instances with common parameters. Closing it closes the databases, which other DataStore
-   * instances with common parameters reopen if they use them again.
+   * Keeps the databases that every store on this directory shares open until this is closed. A
+   * RocksDBDataStore takes this hold. The metadata stores a store family creates on their own never
+   * take it, since they cannot be closed to give it back.
+   */
+  public void holdClient() {
+    checkOpen();
+    if (holdingClient.compareAndSet(false, true)) {
+      RocksDBClientCache.getInstance().hold(client);
+    }
+  }
+
+  /**
+   * Gives back this store's hold, if it has one; the shared databases close once no store holds
+   * them. The store cannot be used afterwards.
    */
   @Override
   public void close() {
-    RocksDBClientCache.getInstance().close(
-        directory,
-        visibilityEnabled,
-        compactOnWrite,
-        batchWriteSize,
-        walOnBatchWrite);
+    closed = true;
+    if (holdingClient.compareAndSet(true, false)) {
+      RocksDBClientCache.getInstance().release(client);
+    }
   }
 
-  @SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
   public RocksDBClient getClient() {
-    if (client != null) {
-      return client;
-    } else {
-      synchronized (CLIENT_MUTEX) {
-        if (client == null) {
-          client =
-              RocksDBClientCache.getInstance().getClient(
-                  directory,
-                  visibilityEnabled,
-                  compactOnWrite,
-                  batchWriteSize,
-                  walOnBatchWrite);
-        }
-        return client;
-      }
+    checkOpen();
+    return client;
+  }
+
+  private void checkOpen() {
+    if (closed) {
+      throw new IllegalStateException("The RocksDB store at '" + directory + "' is closed");
     }
   }
 }

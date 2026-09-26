@@ -12,6 +12,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,6 +61,59 @@ public class RocksDBStoreLifetimeTest {
     }
     assertEquals(10000, count(other));
     assertEquals(10000, count(createStore(options)));
+  }
+
+  @Test
+  public void testQueriesAndWritesContinueWhileOtherStoresOnTheDirectoryAreClosed()
+      throws Exception {
+    final RocksDBOptions options = options();
+    final DataStore store = createStore(options);
+    addType(store);
+    try (Writer<POI> writer = store.createWriter(TYPE_NAME)) {
+      write(writer, "a", 2000);
+    }
+    final AtomicBoolean done = new AtomicBoolean();
+    final ExecutorService pool = Executors.newFixedThreadPool(4);
+    try {
+      final List<Future<?>> others = new ArrayList<>();
+      for (int t = 0; t < 4; t++) {
+        // as concurrent GeoServer requests do, through GeoServerRestClient and GeoWaveGTDataStore
+        others.add(pool.submit(() -> {
+          while (!done.get()) {
+            final DataStore other = createStore(options);
+            assertEquals(1, other.getTypes().length);
+            ((Closeable) other).close();
+          }
+          return null;
+        }));
+      }
+      int expected = 2000;
+      for (int i = 0; i < 20; i++) {
+        assertEquals(expected, count(store));
+        try (Writer<POI> writer = store.createWriter(TYPE_NAME)) {
+          write(writer, "b" + i + "_", 100);
+        }
+        expected += 100;
+      }
+      done.set(true);
+      for (final Future<?> other : others) {
+        other.get();
+      }
+    } finally {
+      done.set(true);
+      pool.shutdown();
+    }
+    assertEquals(4000, count(store));
+  }
+
+  @Test
+  public void testStoreFailsOnceClosed() throws IOException {
+    final DataStore store = createStore(options());
+    addType(store);
+    final DataStore other = createStore(options());
+    ((Closeable) store).close();
+    assertThrows(IllegalStateException.class, () -> count(store));
+    assertEquals(0, count(other));
   }
 
   @Test
