@@ -348,6 +348,11 @@
 											<exclude>com.sun.jersey:*</exclude>
 											<exclude>*:servlet*:*</exclude>
 											<exclude>*:javax.servlet*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<!-- Spark's web UI stack, which never runs in GeoServer -->
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 											<exclude>*:jsp*:*</exclude>
 											<exclude>*:jetty*:*</exclude>
 											<exclude>*:commons-httpclient:*</exclude>
@@ -439,6 +444,13 @@
 									<artifactSet>
 										<excludes>
 											<exclude>org.slf4j:*</exclude>
+											<!-- The web servers and UI of Hadoop and Spark, which never
+												run in a tablet server -->
+											<exclude>*:jetty*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>
@@ -514,6 +526,13 @@
 											<exclude>org.slf4j:*</exclude>
 											<exclude>com.google.protobuf:*</exclude>
 											<exclude>org.apache.hadoop:*</exclude>
+											<!-- The web servers and UI of Hadoop and Spark, which never
+												run in a region server -->
+											<exclude>*:jetty*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>
