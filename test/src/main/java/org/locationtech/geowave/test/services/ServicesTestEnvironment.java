@@ -156,13 +156,17 @@ public class ServicesTestEnvironment implements TestEnvironment {
     }
   }
 
-  public void restartServices() throws Exception {
+  /** Stops GeoServer, which disposes its data stores, and the REST services. */
+  public void stopServices() throws Exception {
     if (jettyServer != null) {
       stopRestServices();
       jettyServer.stop();
       jettyServer = null;
-      doSetup();
     }
+  }
+
+  public void startServices() {
+    doSetup();
   }
 
   private void stopRestServices() {

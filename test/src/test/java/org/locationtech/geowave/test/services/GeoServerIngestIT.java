@@ -185,6 +185,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
             StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
                 fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
                     "MERCATOR_BOUNDS").build());
+    // GeoServer runs its own copy of GeoWave, and two RocksDB instances in one JVM do not lock a
+    // directory against each other, so if both have it open they corrupt it. This store lets go
+    // of the databases before GeoServer opens them.
+    release(ds);
     TestUtils.assertStatusCode(
         "Should Create 'testomatic' Workspace",
         201,
@@ -340,9 +344,17 @@ public class GeoServerIngestIT extends BaseServiceIT {
             true);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
-    // Test subsampling with only the spatial-temporal index
-    ds.removeIndex(spatialIdx.getName());
-    ServicesTestEnvironment.getInstance().restartServices();
+    // Test subsampling with only the spatial-temporal index. Stopping GeoServer closes its data
+    // store, so the index is removed while nothing else has the databases open.
+    final ServicesTestEnvironment services = ServicesTestEnvironment.getInstance();
+    services.stopServices();
+    try {
+      final DataStore store = dataStorePluginOptions.createDataStore();
+      store.removeIndex(spatialIdx.getName());
+      release(store);
+    } finally {
+      services.startServices();
+    }
 
     biSubsamplingWithoutError =
         getWMSSingleTile(
@@ -387,6 +399,12 @@ public class GeoServerIngestIT extends BaseServiceIT {
             null,
             true);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
+  }
+
+  private static void release(final DataStore store) throws IOException {
+    if (store instanceof Closeable) {
+      ((Closeable) store).close();
+    }
   }
 
   private static BufferedImage getWMSSingleTile(
