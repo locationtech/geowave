@@ -13,7 +13,7 @@ GeoWave 3.0 has no standalone installers or RPM packages. From 3.0 on, release b
 * Maven 3.9 or later, or the `./mvnw` wrapper committed in the repository.
 * Git.
 
-On Apple Silicon, the build needs extra configuration for the protocol buffer compilers, and the RocksDB data store cannot run there. See link:devguide.html#building[Building, window="_blank"] in the Developer Guide.
+On Apple Silicon, the build needs extra configuration for the protocol buffer compilers. See link:devguide.html#building[Building, window="_blank"] in the Developer Guide.
 
 === Build
 

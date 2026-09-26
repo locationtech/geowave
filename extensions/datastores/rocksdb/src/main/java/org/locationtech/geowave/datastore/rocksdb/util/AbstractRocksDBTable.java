@@ -237,10 +237,10 @@ abstract public class AbstractRocksDBTable {
           rocks.write(options, dataToWrite);
           return null;
         });
-        dataToWrite.close();
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to write batch", e);
       } finally {
+        dataToWrite.close();
         writeSemaphore.release();
       }
     }

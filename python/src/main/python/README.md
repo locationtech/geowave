@@ -35,7 +35,7 @@ from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
 from pygw.query import VectorAggregationQueryBuilder
 
-# Create a RocksDB data store (see the Apple Silicon note below)
+# Create a RocksDB data store
 options = RocksDBOptions()
 options.set_geowave_namespace("geowave.example")
 # NOTE: Directory is relative to the JVM working directory.
@@ -97,7 +97,7 @@ count = datastore.aggregate(aggregation_query_builder.build())
 print(count)
 ```
 
-**Apple Silicon:** the RocksDB data store cannot run on Apple Silicon Macs, because the `rocksdbjni` 6.19.3 library GeoWave uses has no `osx-arm64` native library.  Use the FileSystem data store instead.  `pygw` has no options class for it, but the Java options can be wrapped directly:
+**FileSystem data store:** `pygw` has no options class for it, but the Java options can be wrapped directly:
 ```python
 from pygw.config import geowave_pkg
 from pygw.store import DataStoreFactory

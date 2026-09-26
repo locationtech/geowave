@@ -15,7 +15,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
@@ -112,8 +111,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
 
   public CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
     return iterator(
-        () -> range.getEnd() == null ? null
-            : new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix())),
+        () -> range.getEnd() == null ? null : new UpperBoundReadOptions(range.getEndAsNextPrefix()),
         (options, it) -> {
           if (range.getStart() == null) {
             it.seekToFirst();

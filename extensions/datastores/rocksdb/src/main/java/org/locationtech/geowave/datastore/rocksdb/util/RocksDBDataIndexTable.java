@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDBException;
-import org.rocksdb.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Streams;
@@ -91,8 +90,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     }
     return iterator(
         () -> endDataId == null ? null
-            : new ReadOptions().setIterateUpperBound(
-                new Slice(ByteArrayUtils.getNextPrefix(endDataId))),
+            : new UpperBoundReadOptions(ByteArrayUtils.getNextPrefix(endDataId)),
         (options, rocksIt) -> {
           if (startDataId == null) {
             rocksIt.seekToFirst();

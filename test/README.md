@@ -38,4 +38,10 @@ CI also puts Hadoop's native libraries for the build's `hadoop.version` on `LD_L
 
 ## Apple Silicon
 
-The RocksDB data store cannot run on Apple Silicon Macs, because `rocksdbjni` 6.19.3 has no `osx-arm64` native library. There, run the ITs with another store profile, such as `-Pfilesystem-it`. Note that `secondary-index-it` on its own, without a store profile, falls back to RocksDB.
+The ITs, including `rocksdb-it`, run on Apple Silicon Macs, but the build needs x86_64 protoc binaries and two passes; see [Building](https://locationtech.github.io/geowave/latest/devguide.html#building) in the Developer Guide. Build both passes first, then run the ITs without `-am`, which would rebuild the raster and HBase modules with the gRPC modules' protoc:
+
+```
+./mvnw verify -pl test -Procksdb-it -Dtest=SkipUnitTests -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dspotbugs.skip -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe
+```
+
+Hadoop's native libraries are Linux-only, and the ITs do not need them.

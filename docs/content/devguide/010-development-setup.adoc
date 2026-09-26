@@ -146,7 +146,7 @@ One of the simplest ways to debug GeoWave source code and analyze system interac
 
 . Set the "Test Class" field to `org.locationtech.geowave.test.GeoWaveITSuite` (or any other test class that is preferred).
 
-. Navigate to the arguments tab and set values for the "VM arguments" field. Example: `-ea -DtestStoreType=ROCKSDB -DtestStoreOptions=enableServerSideLibrary=false` will run the test suite with RocksDB as the data store. RocksDB is also the default when `testStoreType` is not set, but it cannot run on Apple Silicon; use `-DtestStoreType=FILESYSTEM` there instead. Note: The `enableServerSideLibrary` option only applies to Accumulo and HBase and is true by default.
+. Navigate to the arguments tab and set values for the "VM arguments" field. Example: `-ea -DtestStoreType=ROCKSDB -DtestStoreOptions=enableServerSideLibrary=false` will run the test suite with RocksDB as the data store. RocksDB is also the default when `testStoreType` is not set. Note: The `enableServerSideLibrary` option only applies to Accumulo and HBase and is true by default.
 
 . Click the "Apply" button to save the changes and then "Debug" to start the actual process.
 
