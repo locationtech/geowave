@@ -10,7 +10,7 @@ package org.locationtech.geowave.service.rest;
 
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 
-/** Holds necessary information to create a Restlet route */
+/** A path of the REST services, and the operation that serves it */
 public class RestRoute implements Comparable<RestRoute> {
   private final String path;
   private final ServiceEnabledCommand<?> operation;

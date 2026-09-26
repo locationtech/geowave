@@ -11,16 +11,15 @@ package org.locationtech.geowave.service.rest.field;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import org.restlet.representation.Representation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RequestParametersJson extends RequestParameters {
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
-  public RequestParametersJson(final Representation request) throws IOException {
+  public RequestParametersJson(final String json) throws IOException {
     super();
-    injectJsonParams(request.getText());
+    injectJsonParams(json);
   }
 
   @Override

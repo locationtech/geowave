@@ -1,52 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0">
-	<display-name>Geowave Rest API</display-name>
+	xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+	id="WebApp_ID" version="6.0">
+	<display-name>GeoWave REST API</display-name>
 
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-	    	<!-- this defaults to no security, and can be changed to utilize oauth2 (see facebook oauth2 example) or any other security configuration-->
-	        /WEB-INF/security-servlet.xml
-	    </param-value>
-	</context-param>
+	<!-- The war's one jar shades every dependency in. None of their servlet container initializers
+		or web fragments is needed, and scanning that jar for them takes most of the startup time. -->
+	<absolute-ordering />
 
-	<!-- listener required to expose requests to scoped security beans such 
-		as rest-template -->
-	<listener>
-		<listener-class>
-			org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-
-	<!-- Restlet Adapter -->
 	<servlet>
-		<servlet-name>RestletServlet</servlet-name>
-		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+		<servlet-name>geowave-rest</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
-			<param-name>org.restlet.application</param-name>
-			<param-value>org.locationtech.geowave.service.rest.ApiRestletApplication</param-value>
+			<param-name>jakarta.ws.rs.Application</param-name>
+			<param-value>org.locationtech.geowave.service.rest.GeoWaveRestApplication</param-value>
 		</init-param>
+		<!-- The GeoWave config file that requests use unless they name one. Without it, the
+			default config file of the user running the container is used.
+		<init-param>
+			<param-name>config_file</param-name>
+			<param-value>/path/to/config.properties</param-value>
+		</init-param>
+		-->
+		<!-- The host and port for the Swagger description at /api, when they are not the ones
+			requests arrive at, for example behind a proxy.
+		<init-param>
+			<param-name>host_port</param-name>
+			<param-value>geowave.example.com:443</param-value>
+		</init-param>
+		-->
+		<!-- Require an apiKey query parameter on every request under /v0. Keys are kept in this
+			SQLite database file, which is created if needed, and a user the container has
+			authenticated sees their key on the main page.
+		<init-param>
+			<param-name>api_key_db</param-name>
+			<param-value>/path/to/ApiKeys.db</param-value>
+		</init-param>
+		-->
+		<!-- Origins whose pages may call the API with the user's credentials, comma-separated.
+			Pages from any other origin may call it only without credentials.
+		<init-param>
+			<param-name>cors_allowed_origins</param-name>
+			<param-value>https://app.example.com</param-value>
+		</init-param>
+		-->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
-	<!-- Catch all base requests -->
 	<servlet-mapping>
-		<servlet-name>RestletServlet</servlet-name>
+		<servlet-name>geowave-rest</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- security filter -->
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	<!-- Authentication is left to the container, or to a proxy in front of it. For example, to
+		require every request to log in with HTTP Basic against the container's own users (Tomcat's
+		tomcat-users.xml, or a Jetty login service), in the role "geowave":
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>GeoWave REST API</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>geowave</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>GeoWave</realm-name>
+	</login-config>
+	<security-role>
+		<role-name>geowave</role-name>
+	</security-role>
+	-->
 </web-app>

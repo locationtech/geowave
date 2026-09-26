@@ -8,147 +8,88 @@
  */
 package org.locationtech.geowave.service.rest;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * Builds the Swagger 2.0 description of the API: one path per {@link RestRoute}, described by
+ * {@link SwaggerOperationParser}, plus the file upload service.
+ */
 public class SwaggerApiParser {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerApiParser.class);
+  private static final JsonNodeFactory NODES = JsonNodeFactory.instance;
+  static final String FILE_UPLOAD_PATH = "/v0/fileupload";
 
-  /**
-   * Reads RestRoute(s) and operations and parses class fields for particular annotations
-   * ( @Parameter and @ParametersDelegate from JCommander) The parsed data is then used to build up
-   * JSON objects that can be written to file and used by Swagger for API documentation and
-   * generation
-   */
-  private final JsonObject routesJson;
-
-  private final String swaggerHeader;
-  private final String fileUpload;
+  private final String apiVersion;
+  private final String apiTitle;
+  private final String apiDescription;
+  private final ObjectNode paths = NODES.objectNode();
 
   public SwaggerApiParser(
-      final String host,
-      final String path,
       final String apiVersion,
       final String apiTitle,
       final String apiDescription) {
-    routesJson = new JsonObject();
-    swaggerHeader =
-        "{\"swagger\": \"2.0\","
-            + "\"info\": {"
-            + "\"version\": \""
-            + apiVersion
-            + "\","
-            + "\"title\": \""
-            + apiTitle
-            + "\","
-            + "\"description\": \""
-            + apiDescription
-            + "\","
-            + "\"termsOfService\": \"https://github.com/locationtech/geowave\","
-            + "\"contact\": {"
-            + "\"name\": \"GeoWave Team\""
-            + "},"
-            + "\"license\": {"
-            + "\"name\": \"Apache2\""
-            + "}"
-            + "},"
-            + "\"host\": \""
-            + host
-            + "\","
-            + "\"basePath\": \""
-            + path
-            + "\","
-            + "\"schemes\": ["
-            + "\"http\""
-            + "],"
-            + "\"consumes\": ["
-            + "\"application/json\",\"multipart/form-data\""
-            + "],"
-            + "\"produces\": ["
-            + "\"application/json\""
-            + "],"
-            + "\"paths\":";
-
-    fileUpload =
-        ",\"/v0/fileupload\": {\"post\":{\"operationId\": \"fileupload\",\"consumes\": [\"multipart/form-data\""
-            + "],"
-            + "\"description\": \"Get the version of GeoWave running on the instance of a remote datastore\",\"parameters\": [{\"name\": \"body\",\"description\": \"file detail\",\"required\": false,\"type\": \"file\",\"paramType\": \"body\",\"in\": \"formData\",\"allowMultiple\": false	}],	\"responses\": {		\"200\": {	\"description\": \"success\"	},\"404\": {	\"description\": \"route not found\"},\"500\": {	\"description\": \"invalid or null parameter\"}	},\"tags\": [\"fileupload\"]}}}";
+    this.apiVersion = apiVersion;
+    this.apiTitle = apiTitle;
+    this.apiDescription = apiDescription;
   }
 
   public void addRoute(final RestRoute route) {
     final ServiceEnabledCommand<?> instance = route.getOperation();
-    // iterate over routes and paths here
     LOGGER.info("OPERATION: " + route.getPath() + " : " + instance.getClass().getName());
-    final SwaggerOperationParser parser = new SwaggerOperationParser<>(instance);
-    final JsonObject op_json = parser.getJsonObject();
-
-    final JsonObject method_json = new JsonObject();
-    final String method = instance.getMethod().toString();
-
-    final JsonArray tags_json = new JsonArray();
-    final String[] path_toks = route.getPath().split("/");
-    final JsonPrimitive tag = new JsonPrimitive(path_toks[1]);
-    tags_json.add(tag);
-
-    op_json.add("tags", tags_json);
-
-    method_json.add(method.toLowerCase(), op_json);
-
-    routesJson.add("/" + route.getPath(), method_json);
+    final ObjectNode op = new SwaggerOperationParser<>(instance).getJsonObject();
+    op.putArray("tags").add(route.getPath().split("/")[1]);
+    paths.putObject("/" + route.getPath()).set(instance.getMethod().toString().toLowerCase(), op);
   }
 
-  public boolean serializeSwaggerJson(final String filename) {
-    Writer writer = null;
-    try {
-      writer = new OutputStreamWriter(new FileOutputStream(filename), "UTF-8");
-    } catch (final IOException e) {
-      LOGGER.warn("Unable to write swagger json", e);
-    }
-    if (writer == null) {
-      return false;
-    }
-
-    final Gson gson = new GsonBuilder().create();
-
-    try {
-      writer.write(swaggerHeader);
-      final StringWriter strWriter = new StringWriter();
-      gson.toJson(routesJson, strWriter);
-      // TODO make this a bit cleaner, for now just remove the closing
-      // brace within the routes so that the file upload service can be
-      // appended and then re-add the closing brace
-      strWriter.getBuffer().deleteCharAt(strWriter.getBuffer().length() - 1);
-      writer.write(strWriter.getBuffer().toString());
-      writer.write(fileUpload);
-      writer.write('}');
-      writer.close();
-    } catch (final IOException e1) {
-      e1.printStackTrace();
-    } finally {
-      safeClose(writer);
-    }
-
-    return true;
+  /**
+   * @param host the host and port the API is served from
+   * @param basePath the path the API is served under
+   * @param scheme the scheme the API is served with
+   * @return the Swagger document
+   */
+  public ObjectNode getSwagger(final String host, final String basePath, final String scheme) {
+    final ObjectNode swagger = NODES.objectNode();
+    swagger.put("swagger", "2.0");
+    final ObjectNode info = swagger.putObject("info");
+    info.put("version", apiVersion);
+    info.put("title", apiTitle);
+    info.put("description", apiDescription);
+    info.put("termsOfService", "https://github.com/locationtech/geowave");
+    info.putObject("contact").put("name", "GeoWave Team");
+    info.putObject("license").put("name", "Apache2");
+    swagger.put("host", host);
+    swagger.put("basePath", basePath);
+    swagger.putArray("schemes").add(scheme);
+    swagger.putArray("consumes").add("application/json").add("multipart/form-data");
+    swagger.putArray("produces").add("application/json");
+    final ObjectNode allPaths = swagger.putObject("paths");
+    allPaths.setAll(paths);
+    allPaths.set(FILE_UPLOAD_PATH, fileUpload());
+    return swagger;
   }
 
-  public static void safeClose(final Writer writer) {
-    if (writer != null) {
-      try {
-        writer.close();
-      } catch (final IOException e) {
-        LOGGER.warn("Unable to close Writer", e);
-      }
-    }
+  private static ObjectNode fileUpload() {
+    final ObjectNode path = NODES.objectNode();
+    final ObjectNode post = path.putObject("post");
+    post.put("operationId", "fileupload");
+    post.putArray("consumes").add("multipart/form-data");
+    post.put("description", "Upload a file to the server's temporary directory");
+    final ObjectNode parameter = post.putArray("parameters").addObject();
+    parameter.put("name", "file");
+    parameter.put("description", "the file to upload");
+    parameter.put("required", true);
+    parameter.put("type", "file");
+    parameter.put("in", "formData");
+    final ObjectNode responses = post.putObject("responses");
+    responses.putObject("201").put("description", "success");
+    responses.putObject("400").put("description", "not exactly one file");
+    responses.putObject("415").put("description", "not multipart/form-data");
+    responses.putObject("500").put("description", "the file could not be stored");
+    post.putArray("tags").add("fileupload");
+    return path;
   }
 }

@@ -17,3 +17,18 @@ During the build process, GeoWave auto-generates protobuf message files (`.proto
 
 The gRPC server discovers and loads all GeoWave gRPC service implementations via the {grpc-server}/service/grpc/GeoWaveGrpcServiceSpi.java[`GeoWaveGrpcServiceSpi`] interface. The server code and gRPC service implementations may be found in the `geowave-grpc-server` project. This project also contains definitions for a few CLI commands to start and stop the server. 
 
+=== REST
+
+The `geowave-service-rest` project serves the same commands over HTTP. It is a Jakarta REST application on Jersey 3.1, {blob-root}/services/rest/{source-root}/service/rest/GeoWaveRestApplication.java[`GeoWaveRestApplication`]. At startup it finds every concrete `ServiceEnabledCommand` on the classpath and serves it at the path its `getPath()` gives, which starts with `v0/`, with the HTTP method its `getMethod()` gives. Each request is handled by a fresh instance of the command, whose parameters are taken from the query string, a JSON body or a form body. A command that says it should `runAsync()` answers with an ID, and `/v0/operation_status?id=<id>` reports its progress and then its result. The API is described in Swagger 2.0 at `/api`, `/v0/fileupload` accepts a multipart file upload, and the main page lists the routes. The `geowave-service-client` project has Java clients for these services.
+
+==== Deploying
+
+`mvn package -P rest-services-war` in `services/rest` builds a WAR for a Jakarta Servlet 6 container, such as Tomcat 10.1 or later or Jetty 12. Its `WEB-INF/web.xml` deploys the application through Jersey's `ServletContainer`, and init parameters set the GeoWave config file that requests use (`config_file`), the host and port given in the Swagger description (`host_port`), the API key database (`api_key_db`), and the origins whose pages may call the API with the user's credentials (`cors_allowed_origins`, comma-separated). Pages from any other origin can call it only without credentials, so that a site a logged-in user happens to visit cannot act as that user.
+
+==== Security
+
+The REST services do not authenticate users themselves. Protect them with the container's authentication -- a `security-constraint` and `login-config` in `web.xml`, for which the file has a commented example -- or with a reverse proxy in front of the container.
+
+API keys can be required as well. With `api_key_db` set to a SQLite database file, every request under `/v0` needs a valid `apiKey` query parameter, and a request without one, or with a key the database does not hold, is rejected with `401 Unauthorized`. A user the container has authenticated is given a key the first time they are seen, and the main page shows it to them. The WAR includes the SQLite driver.
+
+Before GeoWave 3.0 the REST services used Spring Security; see the link:userguide.html#other-changes-3-0[migration notes].

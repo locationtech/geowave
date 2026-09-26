@@ -9,11 +9,9 @@
 package org.locationtech.geowave.test.services;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import jakarta.ws.rs.core.Response;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -39,6 +37,8 @@ import org.locationtech.geowave.test.kafka.KafkaTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SERVICES})
@@ -57,7 +57,7 @@ public class IngestIT extends BaseServiceIT {
 
   private final String storeName = "existent-store";
   private final String spatialIndex = "spatialIndex";
-  private static JSONParser parser;
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private static final String testName = "IngestIT";
 
@@ -83,7 +83,6 @@ public class IngestIT extends BaseServiceIT {
     indexServiceClient = new IndexServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     ingestServiceClient = new IngestServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     baseServiceClient = new BaseServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
-    parser = new JSONParser();
 
     try {
       extractTestFiles();
@@ -128,19 +127,19 @@ public class IngestIT extends BaseServiceIT {
       Response r,
       final int sleepTime /* in milliseconds */) {
 
-    JSONObject json = null;
+    JsonNode json = null;
     String operationID = null;
     String status = null;
 
     try {
-      json = (JSONObject) parser.parse(r.readEntity(String.class));
-      status = (String) (json.get("status"));
+      json = MAPPER.readTree(r.readEntity(String.class));
+      status = json.get("status").asText();
       if (!status.equals("STARTED")) {
         Assert.assertTrue(msg, status.equals(expectedStatus));
         return;
       }
-      operationID = (String) (json.get("data"));
-    } catch (final ParseException e) {
+      operationID = json.get("data").textValue();
+    } catch (final IOException e) {
       Assert.fail("Error occurred while parsing JSON response: '" + e.getMessage() + "'");
     }
 
@@ -152,9 +151,9 @@ public class IngestIT extends BaseServiceIT {
             Assert.fail("Entered an error handling a request.");
           }
           try {
-            json = (JSONObject) parser.parse(r.readEntity(String.class));
-            status = (String) (json.get("status"));
-          } catch (final ParseException e) {
+            json = MAPPER.readTree(r.readEntity(String.class));
+            status = json.get("status").asText();
+          } catch (final IOException e) {
             Assert.fail("Entered an error while parsing JSON response: '" + e.getMessage() + "'");
           }
 

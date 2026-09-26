@@ -10,20 +10,23 @@ package org.locationtech.geowave.test.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.locationtech.geowave.service.rest.GeoWaveRestApplication;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestEnvironment;
 import org.locationtech.geowave.test.kafka.KafkaTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.sun.net.httpserver.HttpServer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class ServicesTestEnvironment implements TestEnvironment {
@@ -39,7 +42,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
   }
 
   private static String[] PARENT_CLASSLOADER_LIBRARIES =
-      new String[] {"hbase", "hadoop", "protobuf", "guava", "restlet", "spring"};
+      new String[] {"hbase", "hadoop", "protobuf", "guava", "spring"};
 
   protected static final int JETTY_PORT = 9011;
   protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
@@ -54,11 +57,14 @@ public class ServicesTestEnvironment implements TestEnvironment {
   protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
   protected static final String GEOSERVER_BASE_URL = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH;
   protected static final String GEOSERVER_REST_PATH = GEOSERVER_BASE_URL + "/rest";
-  protected static final String GEOWAVE_WAR_DIR = "target/restservices";
+  // The REST services are Jakarta EE, which GeoServer's Jetty 9.4 cannot host, and a Jetty 12
+  // cannot share its JVM, so they run on Jersey's JDK HTTP server on a port of their own.
+  protected static final int REST_PORT = 9012;
   protected static final String GEOWAVE_CONTEXT_PATH = "/restservices";
-  protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
+  protected static final String GEOWAVE_BASE_URL =
+      "http://localhost:" + REST_PORT + GEOWAVE_CONTEXT_PATH;
 
-  protected static final String GEOWAVE_CONFIG_FILE = GEOWAVE_WAR_DIR + "/config.properties";
+  protected static final String GEOWAVE_CONFIG_FILE = "target/restservices/config.properties";
   protected static final String GEOWAVE_WORKSPACE_PATH =
       GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
   protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
@@ -83,6 +89,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
       TEST_STYLE_PATH + TEST_STYLE_NAME_DISTRIBUTED_RENDER + ".sld";
 
   private Server jettyServer;
+  private HttpServer restServer;
 
   @SuppressFBWarnings(
       value = {"SWL_SLEEP_WITH_LOCK_HELD"},
@@ -162,17 +169,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
         // classes (until hadoop updates guava support to a later
         // version, slated for hadoop 3.x)
         gsWebapp.setParentLoaderPriority(false);
-        final File configFile = new File(GEOWAVE_CONFIG_FILE);
-        if (configFile.exists()) {
-          if (!configFile.delete()) {
-            LOGGER.warn("Unable to delete config file");
-          }
-        }
-        final WebAppContext restWebapp = new WebAppContext();
-        restWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
-        restWebapp.setWar(GEOWAVE_WAR_DIR);
-        restWebapp.setInitParameter("config_file", GEOWAVE_CONFIG_FILE);
-        jettyServer.setHandler(new ContextHandlerCollection(gsWebapp, restWebapp));
+        jettyServer.setHandler(gsWebapp);
         // // this allows to send large SLD's from the styles form
         gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
             MAX_FORM_CONTENT_SIZE);
@@ -182,6 +179,17 @@ public class ServicesTestEnvironment implements TestEnvironment {
           Thread.sleep(1000);
         }
 
+        final File configFile = new File(GEOWAVE_CONFIG_FILE);
+        FileUtils.forceMkdirParent(configFile);
+        if (configFile.exists() && !configFile.delete()) {
+          LOGGER.warn("Unable to delete config file");
+        }
+        restServer =
+            JdkHttpServerFactory.createHttpServer(
+                URI.create(GEOWAVE_BASE_URL + "/"),
+                new GeoWaveRestApplication().property(
+                    GeoWaveRestApplication.CONFIG_FILE_PROPERTY,
+                    GEOWAVE_CONFIG_FILE));
       } catch (final RuntimeException e) {
         throw e;
       } catch (final Exception e) {
@@ -200,9 +208,17 @@ public class ServicesTestEnvironment implements TestEnvironment {
 
   public void restartServices() throws Exception {
     if (jettyServer != null) {
+      stopRestServices();
       jettyServer.stop();
       jettyServer = null;
       doSetup();
+    }
+  }
+
+  private void stopRestServices() {
+    if (restServer != null) {
+      restServer.stop(0);
+      restServer = null;
     }
   }
 
@@ -212,6 +228,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
       if (!GeoWaveITRunner.DEFER_CLEANUP.get()) {
         if (jettyServer != null) {
           try {
+            stopRestServices();
             jettyServer.stop();
             jettyServer = null;
             if (!new File(GEOWAVE_CONFIG_FILE).delete()) {
