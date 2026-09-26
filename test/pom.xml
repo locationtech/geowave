@@ -537,9 +537,18 @@
 											</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>xalan</groupId>
-											<artifactId>serializer</artifactId>
-											<version>2.7.1</version>
+											<groupId>org.geotools</groupId>
+											<artifactId>gt-csv</artifactId>
+											<version>${geotools.version}</version>
+											<overWrite>true</overWrite>
+											<outputDirectory>
+												${project.build.directory}/geoserver/WEB-INF/lib
+											</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.opencsv</groupId>
+											<artifactId>opencsv</artifactId>
+											<version>5.12.0</version>
 											<overWrite>true</overWrite>
 											<outputDirectory>
 												${project.build.directory}/geoserver/WEB-INF/lib
