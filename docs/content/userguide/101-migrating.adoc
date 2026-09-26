@@ -41,3 +41,26 @@ index is now written with Redisson's `ByteArrayCodec`, which stores the keys and
 and the `--serialization` option has been removed; a store configuration that still sets it will be
 rejected when it is loaded. This affects only the data index, which is written when secondary
 indexing is enabled.
+
+[[other-changes-3-0]]
+==== Other Changes in GeoWave 3.0
+
+*REST services no longer use Spring Security, GeoWave 3.0.* The REST web application
+(`geowave-service-rest`) moved from Restlet to Jakarta REST (Jersey 3.1) and no longer uses Spring
+or Spring Security. Its WAR needs a Jakarta Servlet 6 container, such as Tomcat 10.1 or later or
+Jetty 12, rather than a `javax.servlet` one. The Spring Security configuration
+(`security-servlet.xml`) and the Facebook OAuth2 example are gone; the example could not be loaded
+by any Spring version GeoWave has shipped with. Configure authentication in the container instead,
+with a `security-constraint` and `login-config` in `web.xml` (the file has a commented example), or
+with a reverse proxy in front of it.
+
+API keys still work, configured by the servlet's `api_key_db` init parameter, which names the
+SQLite database file and replaces the `apiKeyDB` bean. The table is unchanged, so an existing
+`ApiKeys.db` keeps its keys. When it is set, every request under `/v0` needs a valid `apiKey` query
+parameter. A request with a missing or unknown key is now rejected with `401 Unauthorized`; before,
+it got an empty response. The main page now shows each user only their own key; before, it showed
+the key of whichever user had last loaded it.
+
+The paths, parameters and JSON responses of the services are unchanged, so clients, including
+`geowave-service-client`, need no change. A path that is not a service now returns `404 Not Found`
+rather than the main page.
