@@ -9,13 +9,13 @@
 package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.Transaction;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.util.factory.Hints;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.filter.Filter;
 
 /**
  * Commit changes immediately

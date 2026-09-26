@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 import net.openhft.chronicle.wire.TriConsumer;
 
 abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVectorIT {

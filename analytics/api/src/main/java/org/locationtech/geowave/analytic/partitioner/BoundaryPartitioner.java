@@ -20,8 +20,8 @@ import org.locationtech.geowave.analytic.extract.SimpleFeatureGeometryExtractor;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /** Partition on the boundary of polygons (the hull); not on the interior space. */
 public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> {

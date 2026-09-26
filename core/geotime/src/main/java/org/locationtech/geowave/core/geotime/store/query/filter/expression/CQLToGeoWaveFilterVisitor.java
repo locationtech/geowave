@@ -40,8 +40,8 @@ import org.locationtech.geowave.core.store.query.filter.expression.text.TextFiel
 import org.locationtech.geowave.core.store.query.filter.expression.text.TextLiteral;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.filter.FilterVisitor;
-import org.opengis.filter.expression.ExpressionVisitor;
+import org.geotools.api.filter.FilterVisitor;
+import org.geotools.api.filter.expression.ExpressionVisitor;
 
 /**
  * This filter attempts to convert a CQL filter into a GeoWave filter. Since GeoWave filters are a
@@ -62,13 +62,15 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.NilExpression expression,
+      final org.geotools.api.filter.expression.NilExpression expression,
       final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.expression.Add expression, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.expression.Add expression,
+      final Object extraData) {
     final Object expr1 = expression.getExpression1().accept(this, ExpressionType.NUMERIC);
     final Object expr2 = expression.getExpression2().accept(this, ExpressionType.NUMERIC);
     if ((expr1 instanceof NumericExpression) && (expr2 instanceof NumericExpression)) {
@@ -79,7 +81,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.Subtract expression,
+      final org.geotools.api.filter.expression.Subtract expression,
       final Object extraData) {
     final Object expr1 = expression.getExpression1().accept(this, ExpressionType.NUMERIC);
     final Object expr2 = expression.getExpression2().accept(this, ExpressionType.NUMERIC);
@@ -91,7 +93,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.Multiply expression,
+      final org.geotools.api.filter.expression.Multiply expression,
       final Object extraData) {
     final Object expr1 = expression.getExpression1().accept(this, ExpressionType.NUMERIC);
     final Object expr2 = expression.getExpression2().accept(this, ExpressionType.NUMERIC);
@@ -104,7 +106,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.Divide expression,
+      final org.geotools.api.filter.expression.Divide expression,
       final Object extraData) {
     final Object expr1 = expression.getExpression1().accept(this, ExpressionType.NUMERIC);
     final Object expr2 = expression.getExpression2().accept(this, ExpressionType.NUMERIC);
@@ -116,7 +118,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.Function expression,
+      final org.geotools.api.filter.expression.Function expression,
       final Object extraData) {
     // TODO: Add support for commonly used functions (abs, strConcat, strEndsWith,
     // strEqualsIgnoreCase, strStartsWith)
@@ -125,7 +127,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.Literal expression,
+      final org.geotools.api.filter.expression.Literal expression,
       final Object extraData) {
     final Object value = expression.getValue();
     if ((extraData != null) && (extraData instanceof ExpressionType)) {
@@ -168,7 +170,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.expression.PropertyName expression,
+      final org.geotools.api.filter.expression.PropertyName expression,
       final Object extraData) {
     String value = expression.getPropertyName();
     FieldDescriptor<?> descriptor = adapter.getFieldDescriptor(value);
@@ -232,17 +234,17 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.ExcludeFilter filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.ExcludeFilter filter, final Object extraData) {
     return Filter.exclude();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.IncludeFilter filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.IncludeFilter filter, final Object extraData) {
     return Filter.include();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.And filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.And filter, final Object extraData) {
     final Filter[] children =
         filter.getChildren().stream().map(f -> f.accept(this, extraData)).filter(
             f -> f instanceof Filter).toArray(Filter[]::new);
@@ -253,7 +255,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.Or filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.Or filter, final Object extraData) {
     final Filter[] children =
         filter.getChildren().stream().map(f -> f.accept(this, extraData)).filter(
             f -> f instanceof Filter).toArray(Filter[]::new);
@@ -264,7 +266,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.Not filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.Not filter, final Object extraData) {
     final Object transformed = filter.getFilter().accept(this, extraData);
     if (transformed instanceof Filter) {
       return new Not((Filter) transformed);
@@ -273,12 +275,14 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.Id filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.Id filter, final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsBetween filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.PropertyIsBetween filter,
+      final Object extraData) {
     final Object expression = filter.getExpression().accept(this, ExpressionType.ANY);
     final Object lowerBound = filter.getLowerBoundary().accept(this, ExpressionType.ANY);
     final Object upperBound = filter.getUpperBoundary().accept(this, ExpressionType.ANY);
@@ -291,7 +295,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsEqualTo filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.PropertyIsEqualTo filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
     if ((expression1 instanceof Expression) && (expression2 instanceof Expression)) {
@@ -302,7 +308,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.PropertyIsNotEqualTo filter,
+      final org.geotools.api.filter.PropertyIsNotEqualTo filter,
       final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
@@ -314,7 +320,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.PropertyIsGreaterThan filter,
+      final org.geotools.api.filter.PropertyIsGreaterThan filter,
       final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
@@ -327,7 +333,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.PropertyIsGreaterThanOrEqualTo filter,
+      final org.geotools.api.filter.PropertyIsGreaterThanOrEqualTo filter,
       final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
@@ -339,7 +345,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsLessThan filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.PropertyIsLessThan filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
     if ((expression1 instanceof ComparableExpression)
@@ -351,7 +359,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.PropertyIsLessThanOrEqualTo filter,
+      final org.geotools.api.filter.PropertyIsLessThanOrEqualTo filter,
       final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.ANY);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.ANY);
@@ -363,7 +371,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsLike filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.PropertyIsLike filter, final Object extraData) {
     final Object expression = filter.getExpression().accept(this, ExpressionType.TEXT);
     if (!(expression instanceof TextExpression)) {
       throw new CQLToGeoWaveConversionException();
@@ -403,7 +411,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsNull filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.PropertyIsNull filter, final Object extraData) {
     final Object expression = filter.getExpression().accept(this, ExpressionType.ANY);
     if (expression instanceof Expression) {
       return ((Expression<?>) expression).isNull();
@@ -412,7 +420,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.PropertyIsNil filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.PropertyIsNil filter, final Object extraData) {
     final Object expression = filter.getExpression().accept(this, ExpressionType.ANY);
     if (expression instanceof Expression) {
       return ((Expression<?>) expression).isNull();
@@ -421,7 +429,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.BBOX filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.spatial.BBOX filter, final Object extraData) {
     final Object expression = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     if (expression instanceof SpatialExpression) {
       return ((SpatialExpression) expression).bbox(
@@ -435,12 +443,14 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Beyond filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.spatial.Beyond filter, final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Contains filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Contains filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -450,7 +460,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Crosses filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Crosses filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -460,7 +472,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Disjoint filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Disjoint filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -470,12 +484,14 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.DWithin filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.DWithin filter,
+      final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Equals filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.spatial.Equals filter, final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -485,7 +501,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Intersects filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Intersects filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -495,7 +513,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Overlaps filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Overlaps filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -505,7 +525,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Touches filter, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.spatial.Touches filter,
+      final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -515,7 +537,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.spatial.Within filter, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.spatial.Within filter, final Object extraData) {
     final Object expression1 = filter.getExpression1().accept(this, ExpressionType.SPATIAL);
     final Object expression2 = filter.getExpression2().accept(this, ExpressionType.SPATIAL);
     if ((expression1 instanceof SpatialExpression) && (expression2 instanceof SpatialExpression)) {
@@ -525,7 +547,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.After after, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.temporal.After after, final Object extraData) {
     final Object expression1 = after.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = after.getExpression2().accept(this, ExpressionType.TEMPORAL);
     if ((expression1 instanceof TemporalExpression)
@@ -537,7 +559,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.temporal.AnyInteracts anyInteracts,
+      final org.geotools.api.filter.temporal.AnyInteracts anyInteracts,
       final Object extraData) {
     final Object expression1 = anyInteracts.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = anyInteracts.getExpression2().accept(this, ExpressionType.TEMPORAL);
@@ -549,7 +571,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.Before before, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.Before before,
+      final Object extraData) {
     final Object expression1 = before.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = before.getExpression2().accept(this, ExpressionType.TEMPORAL);
     if ((expression1 instanceof TemporalExpression)
@@ -560,17 +584,23 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.Begins begins, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.Begins begins,
+      final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.BegunBy begunBy, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.BegunBy begunBy,
+      final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.During during, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.During during,
+      final Object extraData) {
     final Object expression1 = during.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = during.getExpression2().accept(this, ExpressionType.TEMPORAL);
     if ((expression1 instanceof TemporalExpression)
@@ -581,35 +611,37 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.EndedBy endedBy, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.EndedBy endedBy,
+      final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.Ends ends, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.temporal.Ends ends, final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.Meets meets, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.temporal.Meets meets, final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.MetBy metBy, final Object extraData) {
+  public Object visit(final org.geotools.api.filter.temporal.MetBy metBy, final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
   public Object visit(
-      final org.opengis.filter.temporal.OverlappedBy overlappedBy,
+      final org.geotools.api.filter.temporal.OverlappedBy overlappedBy,
       final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }
 
   @Override
   public Object visit(
-      final org.opengis.filter.temporal.TContains contains,
+      final org.geotools.api.filter.temporal.TContains contains,
       final Object extraData) {
     final Object expression1 = contains.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = contains.getExpression2().accept(this, ExpressionType.TEMPORAL);
@@ -622,7 +654,9 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
   }
 
   @Override
-  public Object visit(final org.opengis.filter.temporal.TEquals equals, final Object extraData) {
+  public Object visit(
+      final org.geotools.api.filter.temporal.TEquals equals,
+      final Object extraData) {
     final Object expression1 = equals.getExpression1().accept(this, ExpressionType.TEMPORAL);
     final Object expression2 = equals.getExpression2().accept(this, ExpressionType.TEMPORAL);
     if ((expression1 instanceof Expression) && (expression2 instanceof Expression)) {
@@ -633,7 +667,7 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
 
   @Override
   public Object visit(
-      final org.opengis.filter.temporal.TOverlaps contains,
+      final org.geotools.api.filter.temporal.TOverlaps contains,
       final Object extraData) {
     throw new CQLToGeoWaveConversionException();
   }

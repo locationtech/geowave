@@ -15,7 +15,7 @@ import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public abstract class SimpleAbstractMergeStrategy<T extends Persistable> implements
     RasterTileMergeStrategy<T> {

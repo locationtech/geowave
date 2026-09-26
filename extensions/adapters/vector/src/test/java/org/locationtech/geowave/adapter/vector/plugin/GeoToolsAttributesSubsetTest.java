@@ -10,13 +10,13 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import static org.junit.Assert.assertFalse;
 import java.io.IOException;
-import org.geotools.data.DataStore;
+import org.geotools.api.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
-import org.geotools.data.FeatureReader;
-import org.geotools.data.FeatureWriter;
-import org.geotools.data.Query;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.FeatureReader;
+import org.geotools.api.data.FeatureWriter;
+import org.geotools.api.data.Query;
+import org.geotools.api.data.Transaction;
 import org.geotools.feature.SchemaException;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
@@ -26,8 +26,8 @@ import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.jts.geom.Coordinate;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class GeoToolsAttributesSubsetTest extends BaseDataStoreTest {
   private DataStore geotoolsDataStore;

@@ -15,10 +15,10 @@ import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.locationtech.jts.densify.Densifier;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.NoSuchAuthorityCodeException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.operation.MathTransform;
 
 public class PolygonAreaCalculator {
   private static final double DEFAULT_DENSIFY_VERTEX_COUNT = 1000.0;

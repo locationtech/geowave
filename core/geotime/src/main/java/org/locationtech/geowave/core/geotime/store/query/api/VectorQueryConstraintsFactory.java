@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.geotime.store.query.api;
 
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.opengis.filter.Filter;
+import org.geotools.api.filter.Filter;
 
 /** A constraints factory for building constraints for SimpleFeature data. */
 public interface VectorQueryConstraintsFactory extends QueryConstraintsFactory {

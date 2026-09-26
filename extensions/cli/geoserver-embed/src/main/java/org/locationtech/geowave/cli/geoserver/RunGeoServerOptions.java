@@ -8,38 +8,19 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.webapp.WebAppClassLoader;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 public class RunGeoServerOptions {
-  private static final Logger LOGGER = LoggerFactory.getLogger(RunGeoServerOptions.class);
   private static final String DEFAULT_GEOSERVER_DIR =
       "lib/services/third-party/embedded-geoserver/geoserver";
 
-  private static final String[] PARENT_CLASSLOADER_LIBRARIES =
-      new String[] {
-          "hbase",
-          "hadoop",
-          "protobuf",
-          "guava",
-          "restlet",
-          "spring",
-          "slf4j",
-          "log4j-1.2-api"};
   @Parameter(
       names = {"--port", "-p"},
       description = "Select the port for GeoServer to listen on (default is port 8080)")
@@ -57,34 +38,23 @@ public class RunGeoServerOptions {
 
   protected static final int ACCEPT_QUEUE_SIZE = 100;
   protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
-  protected static final int SO_LINGER_TIME = -1;
-  protected static final int MAX_FORM_CONTENT_SIZE = 1024 * 1024 * 2;
-  protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
 
   public void setPort(final int port) {
     this.port = port;
   }
 
   public Server getServer() throws Exception {
-
-    Server jettyServer;
     // Prevent "Unauthorized class found" error
     System.setProperty("GEOSERVER_XSTREAM_WHITELIST", "org.geoserver.wfs.**;org.geoserver.wms.**");
 
-
-    // delete old workspace configuration if it's still there
-    jettyServer = new Server();
-
+    final Server jettyServer = new Server();
     final ServerConnector conn = new ServerConnector(jettyServer);
     conn.setHost(host);
     conn.setPort(port);
     conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
     conn.setIdleTimeout(MAX_IDLE_TIME);
-    conn.setSoLingerTime(SO_LINGER_TIME);
     jettyServer.setConnectors(new Connector[] {conn});
 
-    final WebAppContext gsWebapp = new WebAppContext();
-    gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
     if (directory == null) {
       directory =
           Paths.get(
@@ -98,68 +68,10 @@ public class RunGeoServerOptions {
               + directory
               + "'. Unpack the GeoServer WAR into that directory, or point --directory at one.");
     }
-    try {
-      // make sure geoserver uses a log4j 1.x properties file (log4j 2 is backwards compatible), but
-      // currently geoserver requires log4j 1.2, and geoserver requires it to be in the ./data/logs
-      // directory
-      FileUtils.copyToFile(
-          RunGeoServerOptions.class.getClassLoader().getResourceAsStream(
-              "log4j-geoserver.properties"),
-          new File(
-              directory
-                  + File.separator
-                  + "data"
-                  + File.separator
-                  + "logs"
-                  + File.separator
-                  + "DEFAULT_LOGGING.properties"));
-    } catch (final Exception e) {
-      LOGGER.info("Unable to copy log file to geoserver", e);
-    }
-    gsWebapp.setResourceBase(directory);
-
-    final WebAppClassLoader classLoader = new WebAppClassLoader(gsWebapp);
-    final String classpath = System.getProperty("java.class.path").replace(":", ";");
-    final String[] individualEntries = classpath.split(";");
-    final StringBuffer str = new StringBuffer();
-    for (final String e : individualEntries) {
-      // HBase has certain static initializers that use reflection
-      // to get annotated values
-
-      // because Class instances are not equal if they are loaded
-      // by different class loaders this HBase initialization
-      // fails
-
-      // furthermore HBase's runtime dependencies need to
-      // be loaded by the same classloader, the webapp's parent
-      // class loader
-
-      // but geowave hbase datastore implementation must be loaded
-      // by the same classloader as geotools or the SPI loader
-      // won't work
-
-      boolean addLibraryToWebappContext = true;
-      if (!e.contains("geowave")) {
-        for (final String parentLoaderLibrary : PARENT_CLASSLOADER_LIBRARIES) {
-          if (e.contains(parentLoaderLibrary)) {
-            addLibraryToWebappContext = false;
-            break;
-          }
-        }
-      }
-      if (addLibraryToWebappContext) {
-        str.append(e).append(";");
-      }
-    }
-    classLoader.addClassPath(str.toString());
-    gsWebapp.setClassLoader(classLoader);
-    // this has to be false for geoserver to load the correct guava
-    // classes (until hadoop updates guava support to a later
-    // version, slated for hadoop 3.x)
-    gsWebapp.setParentLoaderPriority(false);
-    jettyServer.setHandler(new ContextHandlerCollection(gsWebapp));
-    // // this allows to send large SLD's from the styles form
-    gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(MAX_FORM_CONTENT_SIZE);
+    final GeoServerWebAppContext geoserver = new GeoServerWebAppContext(Paths.get(directory));
+    // fail rather than keep serving 503s when GeoServer does not start
+    geoserver.setThrowUnavailableOnStartupException(true);
+    jettyServer.setHandler(geoserver);
     return jettyServer;
   }
 }

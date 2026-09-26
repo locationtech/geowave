@@ -9,16 +9,15 @@
 package org.locationtech.geowave.test.services;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.webapp.WebAppClassLoader;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.locationtech.geowave.cli.geoserver.GeoServerWebAppContext;
 import org.locationtech.geowave.service.rest.GeoWaveRestApplication;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestEnvironment;
@@ -41,24 +40,17 @@ public class ServicesTestEnvironment implements TestEnvironment {
     return singletonInstance;
   }
 
-  private static String[] PARENT_CLASSLOADER_LIBRARIES =
-      new String[] {"hbase", "hadoop", "protobuf", "guava", "spring"};
-
   protected static final int JETTY_PORT = 9011;
   protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
   protected static final int ACCEPT_QUEUE_SIZE = 100;
   protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
-  protected static final int SO_LINGER_TIME = -1;
-  protected static final int MAX_FORM_CONTENT_SIZE = 1024 * 1024 * 2;
   protected static final String GEOSERVER_USER = "admin";
   protected static final String GEOSERVER_PASS = "geoserver";
   protected static final String TEST_WORKSPACE = "geowave_test";
   protected static final String GEOSERVER_WAR_DIR = "target/geoserver";
-  protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
+  protected static final String GEOSERVER_CONTEXT_PATH = GeoServerWebAppContext.CONTEXT_PATH;
   protected static final String GEOSERVER_BASE_URL = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH;
   protected static final String GEOSERVER_REST_PATH = GEOSERVER_BASE_URL + "/rest";
-  // The REST services are Jakarta EE, which GeoServer's Jetty 9.4 cannot host, and a Jetty 12
-  // cannot share its JVM, so they run on Jersey's JDK HTTP server on a port of their own.
   protected static final int REST_PORT = 9012;
   protected static final String GEOWAVE_CONTEXT_PATH = "/restservices";
   protected static final String GEOWAVE_BASE_URL =
@@ -111,14 +103,12 @@ public class ServicesTestEnvironment implements TestEnvironment {
             "GEOSERVER_XSTREAM_WHITELIST",
             "org.geoserver.wfs.**;org.geoserver.wms.**");
 
-        // delete old workspace configuration if it's still there
         jettyServer = new Server();
 
         final ServerConnector conn = new ServerConnector(jettyServer);
         conn.setPort(JETTY_PORT);
         conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
         conn.setIdleTimeout(MAX_IDLE_TIME);
-        conn.setSoLingerTime(SO_LINGER_TIME);
         jettyServer.setConnectors(new Connector[] {conn});
         FileUtils.copyFile(
             new File(TEST_GEOSERVER_LOGGING_PATH),
@@ -126,57 +116,17 @@ public class ServicesTestEnvironment implements TestEnvironment {
         FileUtils.copyFile(
             new File(TEST_LOG_PROPERTIES_PATH),
             new File(TEST_GEOSERVER_LOG_PROPERTIES_PATH));
-        final WebAppContext gsWebapp = new WebAppContext();
-        gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
-        gsWebapp.setResourceBase(GEOSERVER_WAR_DIR);
-
-        final WebAppClassLoader classLoader = new WebAppClassLoader(gsWebapp);
-        final String classpath = System.getProperty("java.class.path").replace(":", ";");
-        final String[] individualEntries = classpath.split(";");
-        final StringBuffer str = new StringBuffer();
-        for (final String e : individualEntries) {
-          // HBase has certain static initializers that use reflection
-          // to get annotated values
-
-          // because Class instances are not equal if they are loaded
-          // by different class loaders this HBase initialization
-          // fails
-
-          // furthermore HBase's runtime dependencies need to
-          // be loaded by the same classloader, the webapp's parent
-          // class loader
-
-          // but geowave hbase datastore implementation must be loaded
-          // by the same classloader as geotools or the SPI loader
-          // won't work
-
-          boolean addLibraryToWebappContext = true;
-          if (!e.contains("geowave")) {
-            for (final String parentLoaderLibrary : PARENT_CLASSLOADER_LIBRARIES) {
-              if (e.contains(parentLoaderLibrary)) {
-                addLibraryToWebappContext = false;
-                break;
-              }
-            }
-          }
-          if (addLibraryToWebappContext) {
-            str.append(e).append(";");
-          }
-        }
-        classLoader.addClassPath(str.toString());
-        gsWebapp.setClassLoader(classLoader);
-        // this has to be false for geoserver to load the correct guava
-        // classes (until hadoop updates guava support to a later
-        // version, slated for hadoop 3.x)
-        gsWebapp.setParentLoaderPriority(false);
-        jettyServer.setHandler(gsWebapp);
-        // // this allows to send large SLD's from the styles form
-        gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
-            MAX_FORM_CONTENT_SIZE);
+        final GeoServerWebAppContext geoserver =
+            new GeoServerWebAppContext(Paths.get(GEOSERVER_WAR_DIR));
+        jettyServer.setHandler(geoserver);
 
         jettyServer.start();
         while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
           Thread.sleep(1000);
+        }
+        // Jetty reports this at WARN, which the tests' logging does not show
+        if (geoserver.getUnavailableException() != null) {
+          LOGGER.error("GeoServer did not start", geoserver.getUnavailableException());
         }
 
         final File configFile = new File(GEOWAVE_CONFIG_FILE);

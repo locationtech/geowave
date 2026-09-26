@@ -34,8 +34,8 @@ import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.aggregate.FieldSumAggregation;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 

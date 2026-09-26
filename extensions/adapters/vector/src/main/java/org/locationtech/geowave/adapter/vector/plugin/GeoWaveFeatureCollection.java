@@ -11,8 +11,8 @@ package org.locationtech.geowave.adapter.vector.plugin;
 import java.io.IOException;
 import java.util.Iterator;
 import org.geotools.data.DataUtilities;
-import org.geotools.data.FeatureReader;
-import org.geotools.data.Query;
+import org.geotools.api.data.FeatureReader;
+import org.geotools.api.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -31,12 +31,12 @@ import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
-import org.opengis.geometry.BoundingBox;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.filter.Filter;
+import org.geotools.api.geometry.BoundingBox;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -288,8 +288,8 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   @Override
   public void accepts(
-      final org.opengis.feature.FeatureVisitor visitor,
-      final org.opengis.util.ProgressListener progress) throws IOException {
+      final org.geotools.api.feature.FeatureVisitor visitor,
+      final org.geotools.api.util.ProgressListener progress) throws IOException {
     if (!GeoWaveGTPluginUtils.accepts(
         reader.getComponents().getStatsStore(),
         reader.getComponents().getAdapter(),

@@ -24,7 +24,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.jaitools.jts.CoordinateSequence2D;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
@@ -50,9 +49,11 @@ import org.locationtech.geowave.format.stanag4676.parser.TrackFileReader;
 import org.locationtech.geowave.format.stanag4676.parser.util.EarthVector;
 import org.locationtech.geowave.format.stanag4676.parser.util.Length;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
@@ -466,14 +467,14 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
       // create line coordinate sequence
       final Double[] xy = coord_sequence.toArray(new Double[] {});
       if ((firstEvent != null) && (lastEvent != null) && (xy.length >= 4)) {
-        final CoordinateSequence2D coordinateSequence =
-            new CoordinateSequence2D(ArrayUtils.toPrimitive(xy));
+        final CoordinateSequence coordinateSequence =
+            new PackedCoordinateSequence.Double(ArrayUtils.toPrimitive(xy), 2, 0);
         final LineString lineString =
             GeometryUtils.GEOMETRY_FACTORY.createLineString(coordinateSequence);
 
         final Double[] dxy = detail_coord_sequence.toArray(new Double[] {});
-        final CoordinateSequence2D detailCoordinateSequence =
-            new CoordinateSequence2D(ArrayUtils.toPrimitive(dxy));
+        final CoordinateSequence detailCoordinateSequence =
+            new PackedCoordinateSequence.Double(ArrayUtils.toPrimitive(dxy), 2, 0);
         LineString detailLineString = null;
         if (detailCoordinateSequence.size() > 0) {
           detailLineString =

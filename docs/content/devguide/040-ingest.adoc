@@ -52,7 +52,7 @@ Leveraging the GeoTools infrastructure, GeoWave supports ingesting any DataSourc
 * geojson
 * wfs
 
-For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 25.0).
+For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 35.1).
 
 NOTE: GDAL-backed raster formats such as `imageio-ext-gdal` need the GDAL native libraries, which GeoWave does not install. Install GDAL yourself if you need these formats.
 

@@ -19,7 +19,11 @@
 			before it runs, and the cluster reports only "Initialize process returned 1" with
 			the real error in a child log that never reaches the build output.
 			IgnoreUnrecognizedVMOptions is read first and makes the dead flags survivable.
-			Accumulo 2.1 dropped them, so this goes away with 4.2's bump. -->
+			Accumulo 2.1 dropped them, so this goes away with 4.2's bump.
+
+			The cluster's ZooKeeper is one of those JVMs, and the IT JVM's system properties do
+			not reach it, so the lanes also turn its admin server off here (see
+			zookeeper.admin.enableServer below). -->
 		<it.child.jvm.options />
 		<!-- Extra arguments for the IT JVM itself, set per lane. Empty except on cassandra-it. -->
 		<it.jvm.args />
@@ -58,24 +62,20 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-geoserver-embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Hosts the REST services for ServicesTestEnvironment, next to GeoServer on Jetty 9.4,
-			which cannot share a JVM with the Jetty 12 a Jakarta servlet container would need. -->
+		<!-- Hosts the REST services for ServicesTestEnvironment. -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-jdk-http</artifactId>
@@ -448,9 +448,6 @@
 											<overWrite>true</overWrite>
 											<outputDirectory>${project.build.directory}/geoserver
 											</outputDirectory>
-											<excludes>
-												**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/guava*.jar
-											</excludes>
 										</artifactItem>
 									</artifactItems>
 								</configuration>
@@ -540,9 +537,18 @@
 											</outputDirectory>
 										</artifactItem>
 										<artifactItem>
-											<groupId>xalan</groupId>
-											<artifactId>serializer</artifactId>
-											<version>2.7.1</version>
+											<groupId>org.geotools</groupId>
+											<artifactId>gt-csv</artifactId>
+											<version>${geotools.version}</version>
+											<overWrite>true</overWrite>
+											<outputDirectory>
+												${project.build.directory}/geoserver/WEB-INF/lib
+											</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.opencsv</groupId>
+											<artifactId>opencsv</artifactId>
+											<version>5.12.0</version>
 											<overWrite>true</overWrite>
 											<outputDirectory>
 												${project.build.directory}/geoserver/WEB-INF/lib
@@ -569,6 +575,13 @@
 										<testStoreOptions>${testStoreOptions}</testStoreOptions>
 										<testServerEnabled>${testServerEnabled}</testServerEnabled>
 										<geoserver.version>${geoserver.version}</geoserver.version>
+										<!-- The ITs never need Spark's UI, and below Spark 4.2 it cannot
+											share a JVM with Jetty 12 (see GeoWaveSparkConf). -->
+										<spark.ui.enabled>false</spark.ui.enabled>
+										<!-- ZooKeeper's admin server is built on Jetty 9, so next to
+											Jetty 12 it fails to load, and ZooKeeper logs that and
+											carries on without it. Nothing here uses it. -->
+										<zookeeper.admin.enableServer>false</zookeeper.admin.enableServer>
 										<log4j.configurationFile>
 											file:${project.build.testOutputDirectory}/log4j-test.properties
 										</log4j.configurationFile>
@@ -645,7 +658,7 @@
 		<profile>
 			<id>accumulo-it-server</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions</it.child.jvm.options>
+				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
@@ -654,7 +667,7 @@
 		<profile>
 			<id>accumulo-it-kerberos</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions</it.child.jvm.options>
+				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
@@ -664,7 +677,7 @@
 		<profile>
 			<id>accumulo-it-client</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions</it.child.jvm.options>
+				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=false</testStoreOptions>
@@ -673,7 +686,7 @@
 		<profile>
 			<id>accumulo-it-all</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions</it.child.jvm.options>
+				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false

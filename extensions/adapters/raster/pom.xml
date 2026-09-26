@@ -62,7 +62,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
-			<artifactId>gt-opengis</artifactId>
+			<artifactId>gt-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
@@ -74,7 +74,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.geoserver</groupId>
-			<artifactId>gs-wms</artifactId>
+			<artifactId>gs-wms-core</artifactId>
 			<exclusions>
 				<exclusion>
 					<artifactId>gt-epsg-hsql</artifactId>

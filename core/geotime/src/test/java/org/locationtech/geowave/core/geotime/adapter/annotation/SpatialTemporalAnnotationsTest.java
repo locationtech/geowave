@@ -24,9 +24,9 @@ import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveField;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.NoSuchAuthorityCodeException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 public class SpatialTemporalAnnotationsTest {
 

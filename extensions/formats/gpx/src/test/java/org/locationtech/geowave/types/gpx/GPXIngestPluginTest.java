@@ -22,7 +22,7 @@ import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin;
 import org.locationtech.geowave.types.HelperClass;
 import org.locationtech.geowave.types.ValidateObject;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class GPXIngestPluginTest {
 

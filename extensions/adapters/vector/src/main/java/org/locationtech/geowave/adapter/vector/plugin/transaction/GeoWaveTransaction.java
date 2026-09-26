@@ -10,8 +10,8 @@ package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.filter.Filter;
 
 /**
  * Represent the Writer's pluggable strategy of a transaction

@@ -22,9 +22,9 @@ import org.geotools.referencing.CRS;
 import org.locationtech.geowave.analytic.spark.sparksql.GeoWaveSpatialEncoders;
 import org.locationtech.geowave.analytic.spark.sparksql.SimpleFeatureDataType;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.referencing.FactoryException;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.type.AttributeDescriptor;
+import org.geotools.api.referencing.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -18,9 +18,9 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.opengis.geometry.DirectPosition;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.geometry.Position;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.units.indriya.unit.Units;
@@ -59,14 +59,14 @@ public class GeometryCalculations {
     geoCalc.setStartingGeographicPoint(coordinate.x, coordinate.y);
     try {
       geoCalc.setDirection(0, unit.getConverterTo(Units.METRE).convert(distances[1]));
-      final DirectPosition north = geoCalc.getDestinationPosition();
+      final Position north = geoCalc.getDestinationPosition();
       geoCalc.setDirection(90, unit.getConverterTo(Units.METRE).convert(distances[0]));
-      final DirectPosition east = geoCalc.getDestinationPosition();
+      final Position east = geoCalc.getDestinationPosition();
       geoCalc.setStartingGeographicPoint(coordinate.x, coordinate.y);
       geoCalc.setDirection(-90, unit.getConverterTo(Units.METRE).convert(distances[0]));
-      final DirectPosition west = geoCalc.getDestinationPosition();
+      final Position west = geoCalc.getDestinationPosition();
       geoCalc.setDirection(180, unit.getConverterTo(Units.METRE).convert(distances[1]));
-      final DirectPosition south = geoCalc.getDestinationPosition();
+      final Position south = geoCalc.getDestinationPosition();
 
       final double x1 = west.getOrdinate(0);
       final double x2 = east.getOrdinate(0);

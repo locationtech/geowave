@@ -14,11 +14,11 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.UUID;
-import org.geotools.data.DataStore;
+import org.geotools.api.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.DefaultTransaction;
-import org.geotools.data.FeatureWriter;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.FeatureWriter;
+import org.geotools.api.data.Transaction;
 import org.geotools.feature.SchemaException;
 import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
@@ -33,8 +33,8 @@ import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class TemporalRangeTest extends BaseDataStoreTest {
   DataStore dataStore;

@@ -13,7 +13,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Collections;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,10 +29,10 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.geometry.MismatchedDimensionException;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.NoSuchAuthorityCodeException;
 
 public class WebMercatorRasterTest {
   public static final String CRS_STR = "EPSG:3857";
@@ -101,8 +101,8 @@ public class WebMercatorRasterTest {
         new GeoWaveRasterReader(GeoWaveRasterConfig.createConfig(Collections.EMPTY_MAP, ""));
     for (int xTile = 1; xTile < xTiles; xTile++) {
       for (int yTile = 1; yTile < yTiles; yTile++) {
-        final GeneralEnvelope queryEnvelope =
-            new GeneralEnvelope(
+        final GeneralBounds queryEnvelope =
+            new GeneralBounds(
                 new double[] {
                     // this is exactly on a tile boundary, so there
                     // will be no

@@ -9,7 +9,7 @@
 package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
-import org.geotools.data.Transaction.State;
+import org.geotools.api.data.Transaction.State;
 
 public interface GeoWaveTransactionState extends State {
   public GeoWaveTransaction getGeoWaveTransaction(String typeName) throws IOException;

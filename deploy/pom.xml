@@ -249,18 +249,9 @@
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
+										<!-- merges META-INF/registryFile.imagen entries instead of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
+											<resource>META-INF/registryFile.imagen</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
@@ -353,10 +344,15 @@
 											<!-- and commons-lang3 is also necessary due to different classes 
 												<exclude>org.apache.commons:commons-lang3</exclude> -->
 											<exclude>tomcat:*</exclude>
-											<exclude>javax.media:jai*:*</exclude>
+											<exclude>org.eclipse.imagen:*</exclude>
 											<exclude>com.sun.jersey:*</exclude>
 											<exclude>*:servlet*:*</exclude>
 											<exclude>*:javax.servlet*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<!-- Spark's web UI stack, which never runs in GeoServer -->
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 											<exclude>*:jsp*:*</exclude>
 											<exclude>*:jetty*:*</exclude>
 											<exclude>*:commons-httpclient:*</exclude>
@@ -404,18 +400,9 @@
 										</transformer>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
+										<!-- merges META-INF/registryFile.imagen entries instead of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
+											<resource>META-INF/registryFile.imagen</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
@@ -457,6 +444,13 @@
 									<artifactSet>
 										<excludes>
 											<exclude>org.slf4j:*</exclude>
+											<!-- The web servers and UI of Hadoop and Spark, which never
+												run in a tablet server -->
+											<exclude>*:jetty*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>
@@ -485,18 +479,9 @@
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
+										<!-- merges META-INF/registryFile.imagen entries instead of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
+											<resource>META-INF/registryFile.imagen</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>
@@ -541,6 +526,13 @@
 											<exclude>org.slf4j:*</exclude>
 											<exclude>com.google.protobuf:*</exclude>
 											<exclude>org.apache.hadoop:*</exclude>
+											<!-- The web servers and UI of Hadoop and Spark, which never
+												run in a region server -->
+											<exclude>*:jetty*:*</exclude>
+											<exclude>jakarta.servlet:*</exclude>
+											<exclude>jakarta.ws.rs:*</exclude>
+											<exclude>org.glassfish.jersey*:*</exclude>
+											<exclude>org.glassfish.hk2*:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>
@@ -569,18 +561,9 @@
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 										<transformer implementation="org.apache.logging.log4j.maven.plugins.shade.transformer.Log4j2PluginCacheFileTransformer" />
 
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
+										<!-- merges META-INF/registryFile.imagen entries instead of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
+											<resource>META-INF/registryFile.imagen</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>

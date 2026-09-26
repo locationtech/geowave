@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * An adapter field descriptor that also contains a `CoordinateReferenceSystem`. This is used for

@@ -9,7 +9,7 @@
 package org.locationtech.geowave.adapter.raster.stats;
 
 import java.util.Map;
-import javax.media.jai.Histogram;
+import org.eclipse.imagen.Histogram;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic.RasterBoundingBoxValue;
 import org.locationtech.geowave.adapter.raster.stats.RasterFootprintStatistic.RasterFootprintValue;

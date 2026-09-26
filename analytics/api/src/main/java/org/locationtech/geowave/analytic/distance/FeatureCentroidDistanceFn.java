@@ -10,12 +10,12 @@ package org.locationtech.geowave.analytic.distance;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * Calculate distance between two SimpleFeatures, assuming has a Geometry.
  *
- * @see org.opengis.feature.simple.SimpleFeature
+ * @see org.geotools.api.feature.simple.SimpleFeature
  */
 public class FeatureCentroidDistanceFn implements DistanceFn<SimpleFeature> {
 

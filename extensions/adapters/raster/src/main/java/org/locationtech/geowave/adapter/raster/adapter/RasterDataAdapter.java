@@ -23,8 +23,10 @@ import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,13 +40,13 @@ import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 import javax.measure.Unit;
-import javax.media.jai.Interpolation;
-import javax.media.jai.InterpolationBicubic2;
-import javax.media.jai.InterpolationBilinear;
-import javax.media.jai.InterpolationNearest;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.remote.SerializableState;
-import javax.media.jai.remote.SerializerFactory;
+import org.eclipse.imagen.Interpolation;
+import org.eclipse.imagen.InterpolationBicubic2;
+import org.eclipse.imagen.InterpolationBilinear;
+import org.eclipse.imagen.InterpolationNearest;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.media.serialize.SerializableState;
+import org.eclipse.imagen.media.serialize.SerializerFactory;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.util.Precision;
 import org.geotools.coverage.Category;
@@ -57,7 +59,7 @@ import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.processing.Operations;
 import org.geotools.coverage.util.CoverageUtilities;
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.geotools.geometry.jts.GeometryClipper;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
@@ -120,17 +122,17 @@ import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.opengis.coverage.ColorInterpretation;
-import org.opengis.coverage.SampleDimension;
-import org.opengis.coverage.SampleDimensionType;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.geometry.Envelope;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.datum.PixelInCell;
-import org.opengis.referencing.operation.TransformException;
-import org.opengis.util.InternationalString;
+import org.geotools.api.coverage.ColorInterpretation;
+import org.geotools.api.coverage.SampleDimension;
+import org.geotools.api.coverage.SampleDimensionType;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridEnvelope;
+import org.geotools.api.geometry.Bounds;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.datum.PixelInCell;
+import org.geotools.api.referencing.operation.TransformException;
+import org.geotools.api.util.InternationalString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.internal.Lists;
@@ -447,7 +449,7 @@ public class RasterDataAdapter implements
     if (indexStrategy != null) {
       final CoordinateReferenceSystem sourceCrs = gridCoverage.getCoordinateReferenceSystem();
 
-      final Envelope sampleEnvelope = gridCoverage.getEnvelope();
+      final Bounds sampleEnvelope = gridCoverage.getEnvelope();
 
       final ReferencedEnvelope sampleReferencedEnvelope =
           new ReferencedEnvelope(
@@ -622,7 +624,7 @@ public class RasterDataAdapter implements
             }
           }
 
-          final Envelope originalEnvelope = new GeneralEnvelope(minDP, maxDP);
+          final Bounds originalEnvelope = new GeneralBounds(minDP, maxDP);
           final Double[] minsPerDimension = rangePerDimension.getMinValuesPerDimension();
           final Double[] maxesPerDimension = rangePerDimension.getMaxValuesPerDimension();
           final ReferencedEnvelope mapExtent =
@@ -702,7 +704,7 @@ public class RasterDataAdapter implements
             Interpolation tileInterpolation = defaultInterpolation;
             final int dataType = originalData.getRenderedImage().getSampleModel().getDataType();
 
-            // TODO a JAI bug "workaround" in GeoTools does not
+            // TODO a ImageN bug "workaround" in GeoTools does not
             // work, this is a workaround for the GeoTools bug
             // see https://jira.codehaus.org/browse/GEOT-3585,
             // and
@@ -710,7 +712,7 @@ public class RasterDataAdapter implements
             // org.geotools.coverage.processing.operation.Resampler2D
             // (gt-coverage-12.1)
             if ((dataType == DataBuffer.TYPE_FLOAT) || (dataType == DataBuffer.TYPE_DOUBLE)) {
-              final Envelope tileEnvelope = insertionIdGeometry.getEnvelope();
+              final Bounds tileEnvelope = insertionIdGeometry.getEnvelope();
               final ReferencedEnvelope tileReferencedEnvelope =
                   new ReferencedEnvelope(
                       new org.locationtech.jts.geom.Envelope(
@@ -1234,7 +1236,7 @@ public class RasterDataAdapter implements
   }
 
   protected static byte interpolationToByte(final Interpolation interpolation) {
-    // this is silly because it seems like a translation JAI should provide,
+    // this is silly because it seems like a translation ImageN should provide,
     // but it seems its not provided and its the most efficient approach
     // (rather than serializing class names)
     if (interpolation instanceof InterpolationNearest) {
@@ -1261,6 +1263,49 @@ public class RasterDataAdapter implements
       LOGGER.warn("Unable to serialize sample model", e);
     }
     return new byte[] {};
+  }
+
+  protected static ColorModel getColorModel(final byte[] binary)
+      throws IOException, ClassNotFoundException {
+    try (ObjectInputStream ois = new JaiStateInputStream(new ByteArrayInputStream(binary))) {
+      final Object o = ois.readObject();
+      if ((o instanceof SerializableState)
+          && (((SerializableState) o).getObject() instanceof ColorModel)) {
+        return (ColorModel) ((SerializableState) o).getObject();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Reads color models persisted by GeoWave builds on JAI, whose serialized state classes ImageN
+   * renamed but kept the same serialized form of.
+   */
+  private static class JaiStateInputStream extends ObjectInputStream {
+    private static final Map<String, String> IMAGEN_CLASSES =
+        Map.of(
+            "com.sun.media.jai.rmi.ColorModelState",
+            "org.eclipse.imagen.media.serialize.ColorModelState",
+            "com.sun.media.jai.rmi.SerializableStateImpl",
+            "org.eclipse.imagen.media.serialize.SerializableStateImpl",
+            "com.sun.media.imageioimpl.common.BogusColorSpace",
+            "org.eclipse.imagen.NotAColorSpace",
+            "javax.media.jai.FloatDoubleColorModel",
+            "org.eclipse.imagen.FloatDoubleColorModel",
+            "com.sun.media.jai.codecimpl.util.FloatDoubleColorModel",
+            "org.eclipse.imagen.FloatDoubleColorModel");
+
+    private JaiStateInputStream(final InputStream in) throws IOException {
+      super(in);
+    }
+
+    @Override
+    protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException {
+      final ObjectStreamClass descriptor = super.readClassDescriptor();
+      final String imagenClass = IMAGEN_CLASSES.get(descriptor.getName());
+      return imagenClass == null ? descriptor
+          : ObjectStreamClass.lookupAny(Class.forName(imagenClass));
+    }
   }
 
   protected static byte[] getNoDataBinary(final double[][] noDataValuesPerBand) {
@@ -1316,13 +1361,7 @@ public class RasterDataAdapter implements
     final int colorModelLength = VarintUtils.readUnsignedInt(buf);
     final byte[] colorModelBinary = ByteArrayUtils.safeRead(buf, colorModelLength);
     try {
-      final ByteArrayInputStream bais = new ByteArrayInputStream(colorModelBinary);
-      final ObjectInputStream ois = new ObjectInputStream(bais);
-      final Object o = ois.readObject();
-      if ((o instanceof SerializableState)
-          && (((SerializableState) o).getObject() instanceof ColorModel)) {
-        colorModel = (ColorModel) ((SerializableState) o).getObject();
-      }
+      colorModel = getColorModel(colorModelBinary);
     } catch (final Exception e) {
       LOGGER.warn("Unable to deserialize color model", e);
     }
@@ -1607,7 +1646,7 @@ public class RasterDataAdapter implements
 
       @Override
       public GridCoverageWritable toWritable(final GridCoverage entry) {
-        final Envelope env = entry.getEnvelope();
+        final Bounds env = entry.getEnvelope();
         final DataBuffer dataBuffer =
             entry.getRenderedImage().copyData(
                 new InternalWritableRaster(

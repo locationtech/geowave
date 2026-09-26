@@ -43,8 +43,8 @@ import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticT
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.Polygon;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.parameter.ParameterValueGroup;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.parameter.ParameterValueGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,9 +114,9 @@ public class RasterHistogramStatistic extends
   }
 
   public static class RasterHistogramValue extends
-      StatisticValue<Map<Resolution, javax.media.jai.Histogram>> implements
+      StatisticValue<Map<Resolution, org.eclipse.imagen.Histogram>> implements
       StatisticsIngestCallback {
-    private final Map<Resolution, javax.media.jai.Histogram> histograms = new HashMap<>();
+    private final Map<Resolution, org.eclipse.imagen.Histogram> histograms = new HashMap<>();
     private HistogramConfig histogramConfig;
 
     public RasterHistogramValue() {
@@ -133,7 +133,7 @@ public class RasterHistogramStatistic extends
       return histograms.keySet();
     }
 
-    public javax.media.jai.Histogram getHistogram(final Resolution resolution) {
+    public org.eclipse.imagen.Histogram getHistogram(final Resolution resolution) {
       return histograms.get(resolution);
     }
 
@@ -143,11 +143,11 @@ public class RasterHistogramStatistic extends
         final Set<Resolution> resolutions = new HashSet<>(getResolutions());
         resolutions.addAll(((RasterHistogramValue) merge).getResolutions());
         for (final Resolution res : resolutions) {
-          final javax.media.jai.Histogram otherHistogram =
+          final org.eclipse.imagen.Histogram otherHistogram =
               ((RasterHistogramValue) merge).getHistogram(res);
-          final javax.media.jai.Histogram thisHistogram = getHistogram(res);
+          final org.eclipse.imagen.Histogram thisHistogram = getHistogram(res);
           if (otherHistogram != null) {
-            javax.media.jai.Histogram mergedHistogram;
+            org.eclipse.imagen.Histogram mergedHistogram;
             if (thisHistogram != null) {
               mergedHistogram = mergeHistograms(thisHistogram, otherHistogram);
             } else {
@@ -202,7 +202,7 @@ public class RasterHistogramStatistic extends
     }
 
     @Override
-    public Map<Resolution, javax.media.jai.Histogram> getValue() {
+    public Map<Resolution, org.eclipse.imagen.Histogram> getValue() {
       return histograms;
     }
 
@@ -221,12 +221,12 @@ public class RasterHistogramStatistic extends
       try {
 
         final GridCoverage2D coverage = (GridCoverage2D) op.doOperation(params, null);
-        final javax.media.jai.Histogram histogram =
-            (javax.media.jai.Histogram) coverage.getProperty(
+        final org.eclipse.imagen.Histogram histogram =
+            (org.eclipse.imagen.Histogram) coverage.getProperty(
                 Histogram.GT_SYNTHETIC_PROPERTY_HISTOGRAM);
 
-        javax.media.jai.Histogram mergedHistogram;
-        final javax.media.jai.Histogram resolutionHistogram = histograms.get(resolution);
+        org.eclipse.imagen.Histogram mergedHistogram;
+        final org.eclipse.imagen.Histogram resolutionHistogram = histograms.get(resolution);
         if (resolutionHistogram != null) {
           mergedHistogram = mergeHistograms(resolutionHistogram, histogram);
         } else {
@@ -245,9 +245,9 @@ public class RasterHistogramStatistic extends
       }
     }
 
-    private static javax.media.jai.Histogram mergeHistograms(
-        final javax.media.jai.Histogram histogram1,
-        final javax.media.jai.Histogram histogram2) {
+    private static org.eclipse.imagen.Histogram mergeHistograms(
+        final org.eclipse.imagen.Histogram histogram1,
+        final org.eclipse.imagen.Histogram histogram2) {
       final int numBands = Math.min(histogram1.getNumBands(), histogram2.getNumBands());
       final double[] lowValue1 = histogram1.getLowValue();
       final double[] lowValue2 = histogram2.getLowValue();
@@ -267,8 +267,8 @@ public class RasterHistogramStatistic extends
       for (int b = 0; b < numBands; b++) {
         numBins[b] = Math.min(bins1[b].length, bins2[b].length);
       }
-      final javax.media.jai.Histogram histogram =
-          new javax.media.jai.Histogram(numBins, lowValue, highValue);
+      final org.eclipse.imagen.Histogram histogram =
+          new org.eclipse.imagen.Histogram(numBins, lowValue, highValue);
       for (int b = 0; b < numBands; b++) {
         // this is a bit of a hack, but the only way to interact with the
         // counts in a mutable way is by getting an array of the bin counts
@@ -285,7 +285,7 @@ public class RasterHistogramStatistic extends
     public byte[] toBinary() {
       final List<byte[]> perEntryBinary = new ArrayList<>();
       int totalBytes = 0;
-      for (final Entry<Resolution, javax.media.jai.Histogram> entry : histograms.entrySet()) {
+      for (final Entry<Resolution, org.eclipse.imagen.Histogram> entry : histograms.entrySet()) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] keyBytes;
         byte[] valueBytes = new byte[] {};
@@ -343,14 +343,14 @@ public class RasterHistogramStatistic extends
           key = (Resolution) PersistenceUtils.fromBinary(keyBytes);
         }
         final int valueLength = VarintUtils.readUnsignedInt(buf);
-        javax.media.jai.Histogram histogram = null;
+        org.eclipse.imagen.Histogram histogram = null;
         if (valueLength > 0) {
 
           final byte[] valueBytes = ByteArrayUtils.safeRead(buf, valueLength);
           ObjectInputStream ois;
           try {
             ois = new ObjectInputStream(new ByteArrayInputStream(valueBytes));
-            histogram = (javax.media.jai.Histogram) ois.readObject();
+            histogram = (org.eclipse.imagen.Histogram) ois.readObject();
           } catch (IOException | ClassNotFoundException e) {
             LOGGER.warn("Unable to read histogram", e);
           }

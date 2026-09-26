@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import org.geotools.feature.SchemaException;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class FeatureDataUtilsTest {
 

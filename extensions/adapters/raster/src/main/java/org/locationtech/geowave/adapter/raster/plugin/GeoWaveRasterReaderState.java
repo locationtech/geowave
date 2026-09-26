@@ -8,14 +8,14 @@
  */
 package org.locationtech.geowave.adapter.raster.plugin;
 
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 
 /** This class allows us to make the GeoWaveRasterReader thread safe by storing its state here */
 public class GeoWaveRasterReaderState {
   private final String coverageName;
   private boolean axisSwap = false;
-  private GeneralEnvelope requestedEnvelope = null;
-  private GeneralEnvelope requestEnvelopeXformed;
+  private GeneralBounds requestedEnvelope = null;
+  private GeneralBounds requestEnvelopeXformed;
 
   public GeoWaveRasterReaderState(final String coverageName) {
     this.coverageName = coverageName;
@@ -37,22 +37,22 @@ public class GeoWaveRasterReaderState {
   }
 
   /** @return the requestedEnvelope */
-  public GeneralEnvelope getRequestedEnvelope() {
+  public GeneralBounds getRequestedEnvelope() {
     return requestedEnvelope;
   }
 
   /** @param requestedEnvelope the requestedEnvelope to set */
-  public void setRequestedEnvelope(final GeneralEnvelope requestedEnvelope) {
+  public void setRequestedEnvelope(final GeneralBounds requestedEnvelope) {
     this.requestedEnvelope = requestedEnvelope;
   }
 
   /** @return the requestEnvelopeXformed */
-  public GeneralEnvelope getRequestEnvelopeXformed() {
+  public GeneralBounds getRequestEnvelopeXformed() {
     return requestEnvelopeXformed;
   }
 
   /** @param requestEnvelopeXformed the requestEnvelopeXformed to set */
-  public void setRequestEnvelopeXformed(final GeneralEnvelope requestEnvelopeXformed) {
+  public void setRequestEnvelopeXformed(final GeneralBounds requestEnvelopeXformed) {
     this.requestEnvelopeXformed = requestEnvelopeXformed;
   }
 }

@@ -22,7 +22,7 @@ public class GDALGeoTiffFormatFactory extends BaseGridFormatFactorySPI {
     boolean available = true;
 
     // if these classes are here, then the runtime environment has
-    // access to JAI and the JAI ImageI/O toolbox.
+    // access to ImageN and the ImageN ImageI/O toolbox.
     try {
       Class.forName("it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi");
       available = new GeoTiffImageReaderSpi().isAvailable();
