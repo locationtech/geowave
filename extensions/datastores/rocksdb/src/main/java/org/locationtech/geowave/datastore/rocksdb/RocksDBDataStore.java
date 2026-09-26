@@ -30,12 +30,13 @@ public class RocksDBDataStore extends BaseMapReduceDataStore implements Closeabl
         options,
         new InternalAdapterStoreImpl(operations),
         new PropertyStoreImpl(operations, options));
+    operations.holdClient();
   }
 
   /**
-   * This is not a typical resource, it references a static RocksDB resource used by all DataStore
-   * instances with common parameters. Closing it closes the databases, which other DataStore
-   * instances with common parameters reopen if they use them again.
+   * The store shares its RocksDB databases with every other DataStore on the same directory.
+   * Closing it gives back its hold on them, and they close once no open DataStore holds them. The
+   * store cannot be used afterwards.
    */
   @Override
   public void close() {

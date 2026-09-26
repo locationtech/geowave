@@ -10,6 +10,8 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -35,6 +37,7 @@ public class RocksDBClientCache {
             subDirectoryVisiblityPair.batchSize,
             subDirectoryVisiblityPair.walOnBatchWrite);
       });
+  private final Map<RocksDBClient, Integer> holds = new HashMap<>();
 
   protected RocksDBClientCache() {}
 
@@ -53,34 +56,38 @@ public class RocksDBClientCache {
             walOnBatchWrite));
   }
 
+  /** Keeps the client's databases open until the hold is given back with release(). */
+  public synchronized void hold(final RocksDBClient client) {
+    holds.merge(client, 1, Integer::sum);
+  }
+
   /**
-   * Closes the client's databases, as when a DataStore is closed, and releases the options shared
-   * by all clients once no database is open. Other DataStore instances may share the client, so it
-   * stays cached and its tables reopen if they are used again.
+   * Gives back a hold. Once none remain, closes the client's databases, closing any iterators still
+   * open on them first, and releases the options shared by all clients once no database is open.
+   * The client stays cached, so that anything still using it reopens the same tables rather than
+   * opening new ones beside them, which would fail on RocksDB's LOCK.
    */
-  public synchronized void close(
-      final String directory,
-      final boolean visibilityEnabled,
-      final boolean compactOnWrite,
-      final int batchWriteSize,
-      final boolean walOnBatchWrite) {
-    final RocksDBClient client =
-        clientCache.getIfPresent(
-            new ClientKey(
-                directory,
-                visibilityEnabled,
-                compactOnWrite,
-                batchWriteSize,
-                walOnBatchWrite));
-    if (client != null) {
-      client.close();
-      if (clientCache.asMap().values().stream().noneMatch(RocksDBClient::hasOpenTables)) {
-        RocksDBClient.closeSharedOptions();
-      }
+  public synchronized void release(final RocksDBClient client) {
+    final Integer held = holds.get(client);
+    if (held == null) {
+      // closeAll() has closed it already
+      return;
+    }
+    if (held > 1) {
+      holds.put(client, held - 1);
+      return;
+    }
+    holds.remove(client);
+    client.close();
+    if (clientCache.asMap().values().stream().noneMatch(RocksDBClient::hasOpenTables)) {
+      RocksDBClient.closeSharedOptions();
     }
   }
 
-  /** Closes the client's databases and forgets its tables, before its directory is deleted. */
+  /**
+   * Closes the client's databases, whoever holds them, and forgets its tables, before its directory
+   * is deleted.
+   */
   public synchronized void closeAndForgetTables(
       final String directory,
       final boolean visibilityEnabled,
@@ -103,6 +110,7 @@ public class RocksDBClientCache {
   public synchronized void closeAll() {
     clientCache.asMap().forEach((k, v) -> v.closeAndForgetTables());
     clientCache.invalidateAll();
+    holds.clear();
     RocksDBClient.closeSharedOptions();
   }
 

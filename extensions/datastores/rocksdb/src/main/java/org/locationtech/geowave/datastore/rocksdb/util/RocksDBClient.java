@@ -363,9 +363,8 @@ public class RocksDBClient implements Closeable {
   }
 
   /**
-   * Closes every table's database, closing any iterators still open on them first. Other DataStore
-   * instances on this directory share this client and may still hold its tables, so the tables stay
-   * registered and reopen when they are used again.
+   * Closes every table's database, closing any iterators still open on them first. The tables stay
+   * registered, and reopen if they are used again.
    */
   @Override
   public void close() {

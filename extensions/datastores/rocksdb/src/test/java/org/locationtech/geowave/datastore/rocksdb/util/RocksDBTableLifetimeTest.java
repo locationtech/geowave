@@ -11,6 +11,7 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,6 +22,9 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.rocksdb.RocksDBDataStore;
+import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
+import org.locationtech.geowave.datastore.rocksdb.operations.RocksDBOperations;
 import org.rocksdb.RocksIterator;
 import com.google.common.collect.Iterators;
 import com.google.common.primitives.Ints;
@@ -78,6 +82,30 @@ public class RocksDBTableLifetimeTest {
     try (CloseableIterator<GeoWaveRow> reopened = table.iterator()) {
       assertEquals(500, Iterators.size(reopened));
     }
+  }
+
+  @Test
+  public void testDatabasesCloseWhenTheLastStoreOnTheDirectoryCloses() {
+    final RocksDBOptions options = new RocksDBOptions();
+    options.setDirectory(folder.getRoot().getAbsolutePath());
+    final RocksDBOperations operations = new RocksDBOperations(options);
+    final RocksDBDataStore store = new RocksDBDataStore(operations, options.getStoreOptions());
+    final RocksDBDataStore other =
+        new RocksDBDataStore(new RocksDBOperations(options), options.getStoreOptions());
+    final RocksDBIndexTable table =
+        operations.getClient().getIndexTable("table", (short) 0, null, false);
+    add(table, 0, 500);
+    final CloseableIterator<GeoWaveRow> rows = table.iterator();
+    rows.next();
+
+    other.close();
+    assertTrue(table.isOpen());
+    rows.next();
+
+    store.close();
+    assertFalse(table.isOpen());
+    assertThrows(IllegalStateException.class, rows::hasNext);
+    rows.close();
   }
 
   private static void add(final RocksDBIndexTable table, final int start, final int count) {
