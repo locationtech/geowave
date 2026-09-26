@@ -134,7 +134,9 @@
 			one). Jackson 2 databind only needs annotations of its own minor version or
 			later, so the 2.18 databind that Spark 4.0.1 requires is unaffected. -->
 		<fasterxml.jackson.annotations.version>2.22</fasterxml.jackson.annotations.version>
-		<spring-security.version>5.1.13.RELEASE</spring-security.version>
+		<!-- The versions GeoServer 3.0.1 ships -->
+		<spring.version>7.0.8</spring.version>
+		<spring-security.version>7.1.0</spring-security.version>
 		<slf4j.version>2.0.16</slf4j.version>
 		<log4j.version>2.24.3</log4j.version>
 		<jna.version>5.7.0</jna.version>
@@ -1160,10 +1162,18 @@
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
+				<artifactId>spring-security-bom</artifactId>
 				<version>${spring-security.version}</version>
-				<scope>${geotools.scope}</scope>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.lz4</groupId>

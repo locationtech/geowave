@@ -752,20 +752,16 @@ maven/mavencentral/org.slf4j/jul-to-slf4j/2.0.16, MIT, approved, #7698
 maven/mavencentral/org.slf4j/slf4j-api/2.0.16, MIT, approved, #5915
 maven/mavencentral/org.springframework.security/spring-security-access/7.1.0, Apache-2.0, approved, #31871
 maven/mavencentral/org.springframework.security/spring-security-config/7.1.0, Apache-2.0, approved, #28695
-maven/mavencentral/org.springframework.security/spring-security-core/5.1.13.RELEASE, Apache-2.0 AND ISC AND LicenseRef-Public-Domain, approved, CQ18352
+maven/mavencentral/org.springframework.security/spring-security-core/4.2.20.RELEASE, Apache-2.0 AND ISC AND LicenseRef-Public-Domain, approved, CQ14820
+maven/mavencentral/org.springframework.security/spring-security-core/7.1.0, Apache-2.0, approved, #28744
 maven/mavencentral/org.springframework.security/spring-security-crypto/7.1.0, Apache-2.0 AND ISC, approved, #28738
 maven/mavencentral/org.springframework.security/spring-security-web/7.1.0, Apache-2.0, approved, #28731
-maven/mavencentral/org.springframework/spring-aop/5.1.18.RELEASE, Apache-2.0, approved, CQ18355
 maven/mavencentral/org.springframework/spring-aop/7.0.8, Apache-2.0, approved, #24985
-maven/mavencentral/org.springframework/spring-beans/5.1.18.RELEASE, Apache-2.0, approved, CQ18357
 maven/mavencentral/org.springframework/spring-beans/7.0.8, Apache-2.0, approved, #24991
 maven/mavencentral/org.springframework/spring-context-support/7.0.8, Apache-2.0, approved, #26103
-maven/mavencentral/org.springframework/spring-context/5.1.18.RELEASE, Apache-2.0, approved, CQ18358
 maven/mavencentral/org.springframework/spring-context/7.0.8, Apache-2.0, approved, #24986
-maven/mavencentral/org.springframework/spring-core/5.1.18.RELEASE, Apache-2.0 AND BSD-3-Clause, approved, CQ18360
 maven/mavencentral/org.springframework/spring-core/7.0.8, Apache-2.0 AND BSD-3-Clause, approved, #24992
-maven/mavencentral/org.springframework/spring-expression/5.1.18.RELEASE, Apache-2.0, approved, CQ18361
-maven/mavencentral/org.springframework/spring-jcl/5.1.18.RELEASE, Apache-2.0, approved, CQ18362
+maven/mavencentral/org.springframework/spring-expression/7.0.8, Apache-2.0, approved, #24988
 maven/mavencentral/org.springframework/spring-jdbc/7.0.8, Apache-2.0, approved, #25610
 maven/mavencentral/org.springframework/spring-tx/7.0.8, Apache-2.0, approved, #25615
 maven/mavencentral/org.springframework/spring-web/7.0.8, Apache-2.0, approved, #24989
