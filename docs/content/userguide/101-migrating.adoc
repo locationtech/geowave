@@ -79,3 +79,21 @@ the key of whichever user had last loaded it.
 The paths, parameters and JSON responses of the services are unchanged, so clients, including
 `geowave-service-client`, need no change. A path that is not a service now returns `404 Not Found`
 rather than the main page.
+
+*GeoServer 3.0 and GeoTools 35, GeoWave 3.0.* GeoWave 3.0 is built against GeoTools 35.1 and
+GeoServer 3.0.1, where GeoWave 2.x used GeoTools 25.0 and GeoServer 2.19. The GeoServer plugin
+therefore needs GeoServer 3.0.x and cannot be installed in GeoServer 2.x. GeoServer 3.0 runs on a
+Jakarta Servlet 6.1 container, such as Jetty 12.1 or Tomcat 11, and `geowave gs run` runs a
+GeoServer 3.0.1 WAR.
+
+* Java code built on GeoTools' `org.opengis` API has to move to `org.geotools.api`, the package
+GeoTools 30 renamed it to. GeoTools ships an Ant script, `remove-opengis.xml`, that does the rename.
+* Imaging moved from Sun JAI to Eclipse ImageN. Raster data and raster types written by GeoWave 2.x
+still read.
+* GeoServer 3.0 reads an unqualified geometry in a `CQL_FILTER` in the axis order of the request's
+CRS. For a WFS 1.1.0 request with `srsName=EPSG:4326`, or with no `srsName`, that is
+latitude/longitude, so a box such as `BBOX(geometry,-73,18,-72,19)` written as longitude/latitude
+matches nothing. Name the CRS in the filter, for example
+`BBOX(geometry,-73,18,-72,19,'CRS:84')`, to give coordinates as longitude/latitude.
+* GeoWave code running inside GeoServer uses GeoServer's ANTLR, which is older than the one GWQL
+needs, so GWQL queries are not available there. GeoServer itself does not use GWQL.
