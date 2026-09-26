@@ -62,24 +62,20 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-geoserver-embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Hosts the REST services for ServicesTestEnvironment, next to GeoServer on Jetty 9.4,
-			which cannot share a JVM with the Jetty 12 a Jakarta servlet container would need. -->
+		<!-- Hosts the REST services for ServicesTestEnvironment. -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-jdk-http</artifactId>
@@ -452,9 +448,6 @@
 											<overWrite>true</overWrite>
 											<outputDirectory>${project.build.directory}/geoserver
 											</outputDirectory>
-											<excludes>
-												**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/guava*.jar
-											</excludes>
 										</artifactItem>
 									</artifactItems>
 								</configuration>
