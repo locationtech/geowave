@@ -87,6 +87,7 @@ public class AccumuloMiniCluster {
             AccumuloMiniCluster.class,
             extraLibraries);
     accumulo.start();
+    MiniAccumuloUtils.createServerContext(accumulo);
 
     System.out.println("starting up ...");
     Thread.sleep(3000);
