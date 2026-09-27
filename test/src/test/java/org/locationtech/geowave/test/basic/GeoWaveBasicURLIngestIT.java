@@ -11,6 +11,7 @@ package org.locationtech.geowave.test.basic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
+import org.locationtech.geowave.test.MockS3;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -46,10 +48,11 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicURLIngestIT.class);
 
-  private static final String S3URL = "s3.amazonaws.com";
-  protected static final String GDELT_INPUT_FILE_URL =
-      "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
-  private static final int GDELT_URL_COUNT = 224482;
+  // Not the object itself: s3fs-nio reads an object's owner from its ACL, which s3mock cannot
+  // serve, and a directory listing carries its objects' attributes instead.
+  protected static final String GDELT_INPUT_URL = "s3://geowave-test/data/gdelt";
+  private static final int GDELT_URL_COUNT = 14056;
+  private static MockS3 s3;
 
   @GeoWaveTestStore(
       value = {
@@ -63,7 +66,12 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
   private static Stopwatch stopwatch = new Stopwatch();
 
   @BeforeClass
-  public static void reportTestStart() {
+  public static void reportTestStart() throws IOException {
+    s3 = new MockS3();
+    s3.put(
+        "geowave-test",
+        "data/gdelt/" + TestUtils.GDELT_SAMPLE.getName(),
+        TestUtils.GDELT_SAMPLE);
     stopwatch.reset();
     stopwatch.start();
     LOGGER.warn("-----------------------------------------");
@@ -74,7 +82,8 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   @AfterClass
-  public static void reportTestFinish() {
+  public static void reportTestFinish() throws IOException {
+    s3.close();
     stopwatch.stop();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
@@ -90,14 +99,15 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.testS3LocalIngest(
         dataStore,
         DimensionalityType.SPATIAL,
-        S3URL,
-        GDELT_INPUT_FILE_URL,
+        s3.endpoint(),
+        GDELT_INPUT_URL,
         "gdelt",
         4);
 
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
     final DataStore ds = dataStore.createDataStore();
     final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    assertTrue("nothing was ingested", adapters.length > 0);
     for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
       final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 

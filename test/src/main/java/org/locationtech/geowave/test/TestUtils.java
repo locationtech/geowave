@@ -179,6 +179,9 @@ public class TestUtils {
 
   public static final String S3_INPUT_PATH = "s3://geowave-test/data/gdelt";
   public static final String S3URL = "s3.amazonaws.com";
+  /** The GDELT format's own sample, a day of events, for ITs that ingest GDELT from S3. */
+  public static final File GDELT_SAMPLE =
+      new File("../extensions/formats/gdelt/src/test/resources/20130401.export.CSV.zip");
 
   public static boolean isYarn() {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;

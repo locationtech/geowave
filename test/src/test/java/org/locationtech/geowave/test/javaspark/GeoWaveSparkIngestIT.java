@@ -10,6 +10,7 @@ package org.locationtech.geowave.test.javaspark;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
+import org.locationtech.geowave.test.MockS3;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -45,9 +47,9 @@ import org.slf4j.LoggerFactory;
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkIngestIT.class);
-  private static final String S3URL = "s3.amazonaws.com";
   protected static final String GDELT_INPUT_FILES = "s3://geowave-test/data/gdelt";
-  private static final int GDELT_COUNT = 448675;
+  private static final int GDELT_COUNT = 14056;
+  private static MockS3 s3;
 
   @GeoWaveTestStore(
       value = {
@@ -63,7 +65,12 @@ public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
   private static Stopwatch stopwatch = new Stopwatch();
 
   @BeforeClass
-  public static void reportTestStart() {
+  public static void reportTestStart() throws IOException {
+    s3 = new MockS3();
+    s3.put(
+        "geowave-test",
+        "data/gdelt/" + TestUtils.GDELT_SAMPLE.getName(),
+        TestUtils.GDELT_SAMPLE);
     stopwatch.reset();
     stopwatch.start();
     LOGGER.warn("-----------------------------------------");
@@ -74,7 +81,8 @@ public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   @AfterClass
-  public static void reportTestFinish() {
+  public static void reportTestFinish() throws IOException {
+    s3.close();
     stopwatch.stop();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
@@ -91,13 +99,14 @@ public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.testSparkIngest(
         dataStore,
         DimensionalityType.SPATIAL,
-        S3URL,
+        s3.endpoint(),
         GDELT_INPUT_FILES,
         "gdelt");
 
     final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
     final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    assertTrue("nothing was ingested", adapters.length > 0);
     for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
       final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 
