@@ -364,23 +364,24 @@
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-minikdc</artifactId>
 		</dependency>
+		<!-- Kafka's KRaft test cluster, which brings the broker with it. -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>${kafka.artifact}</artifactId>
+			<artifactId>kafka-test-common-runtime</artifactId>
 			<version>${kafka.version}</version>
-			<classifier>test</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-clients</artifactId>
-			<version>${kafka.version}</version>
-			<classifier>test</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-streams</artifactId>
-			<version>${kafka.version}</version>
-			<classifier>test</classifier>
+			<exclusions>
+				<!-- Only its JUnit 5 extension uses these. On the classpath they would make
+					failsafe run the JUnit Platform, which with no vintage engine finds none of
+					these JUnit 4 tests. -->
+				<exclusion>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.junit.platform</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
