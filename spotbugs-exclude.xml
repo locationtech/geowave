@@ -55,6 +55,55 @@
 	</Match>
 
 	<!--
+	  Caffeine 2.9 marks LoadingCache.get and Cache.get(key, function) @Nullable,
+	  because a loader or function may return null. The loaders and functions
+	  here all create or open what they are asked for, so these gets never do.
+	  2.6.2, which GeoWave used before s3fs-nio needed 2.9, had no annotations.
+	-->
+	<Match>
+		<Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
+		<Or>
+			<And>
+				<Class name="org.locationtech.geowave.core.store.callback.DeleteOtherIndicesCallback" />
+				<Method name="entryDeleted" />
+			</And>
+			<And>
+				<Class
+					name="org.locationtech.geowave.datastore.filesystem.operations.FileSystemWriter" />
+				<Method name="write" />
+			</And>
+			<And>
+				<Class
+					name="org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead$1" />
+				<Method name="run" />
+			</And>
+			<And>
+				<Class name="org.locationtech.geowave.datastore.redis.operations.RedisRowDeleter" />
+				<Method name="delete" />
+			</And>
+			<And>
+				<Class name="org.locationtech.geowave.datastore.redis.operations.RedisWriter" />
+				<Or>
+					<Method name="write" />
+					<Method name="internalWrite" />
+				</Or>
+			</And>
+			<And>
+				<Class name="org.locationtech.geowave.datastore.rocksdb.operations.RocksDBWriter" />
+				<Method name="write" />
+			</And>
+			<And>
+				<Class name="org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient" />
+				<Or>
+					<Method name="getIndexTable" />
+					<Method name="getDataIndexTable" />
+					<Method name="getMetadataTable" />
+				</Or>
+			</And>
+		</Or>
+	</Match>
+
+	<!--
 	  Catching NullPointerException is normally wrong, but each of these sits in
 	  a multi-catch around reflective or parser code where a null is one of
 	  several equivalent malformed-input signals and the handler reports all of

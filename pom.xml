@@ -459,9 +459,10 @@
 				<version>${paranamer.version}</version>
 			</dependency>
 			<dependency>
+				<!-- s3fs-nio's attribute cache calls Caffeine.evictionListener, added in 2.9. -->
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
-				<version>2.6.2</version>
+				<version>2.9.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.locationtech.jts</groupId>
