@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

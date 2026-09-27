@@ -11,7 +11,7 @@ package org.locationtech.geowave.adapter.vector.index;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.text.TextIndexEntryConverter;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class VectorTextIndexEntryConverter implements TextIndexEntryConverter<SimpleFeature> {
   private int attributeIndex;

@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 

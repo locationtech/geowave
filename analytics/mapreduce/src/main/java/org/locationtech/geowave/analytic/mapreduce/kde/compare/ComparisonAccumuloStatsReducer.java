@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class ComparisonAccumuloStatsReducer extends
     Reducer<ComparisonCellData, LongWritable, GeoWaveOutputKey, GridCoverage> {

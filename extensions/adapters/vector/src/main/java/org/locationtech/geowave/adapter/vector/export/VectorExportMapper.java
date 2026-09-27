@@ -20,8 +20,8 @@ import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureUtils;
 import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

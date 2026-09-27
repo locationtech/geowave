@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.geotools.data.DataSourceException;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.DataSourceException;
+import org.geotools.api.data.Transaction;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
 
@@ -99,7 +99,7 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
     return Arrays.binarySearch(types, typeName) != -1;
   }
 
-  /** @see org.geotools.data.Transaction.State#addAuthorization(java.lang.String) */
+  /** @see org.geotools.api.data.Transaction.State#addAuthorization(java.lang.String) */
   @Override
   public synchronized void addAuthorization(final String AuthID) throws IOException {
     // not required
@@ -108,7 +108,7 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
   /**
    * Will apply differences to store.
    *
-   * @see org.geotools.data.Transaction.State#commit()
+   * @see org.geotools.api.data.Transaction.State#commit()
    */
   @Override
   public synchronized void commit() throws IOException {
@@ -175,7 +175,7 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
     }
   }
 
-  /** @see org.geotools.data.Transaction.State#rollback() */
+  /** @see org.geotools.api.data.Transaction.State#rollback() */
   @Override
   public synchronized void rollback() throws IOException {
     Entry<String, GeoWaveTransactionManagement> entry;

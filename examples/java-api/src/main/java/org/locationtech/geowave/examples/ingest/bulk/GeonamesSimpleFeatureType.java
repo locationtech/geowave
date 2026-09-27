@@ -11,7 +11,7 @@ package org.locationtech.geowave.examples.ingest.bulk;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 /** Provides a static method to obtain an instance of a SimpleFeatureType for Geonames data */
 public class GeonamesSimpleFeatureType {

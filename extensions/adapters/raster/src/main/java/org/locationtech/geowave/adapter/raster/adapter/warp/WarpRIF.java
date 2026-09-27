@@ -21,19 +21,19 @@ import java.awt.RenderingHints;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.ParameterBlock;
 import java.awt.image.renderable.RenderedImageFactory;
-import javax.media.jai.ImageLayout;
-import javax.media.jai.Interpolation;
-import javax.media.jai.JAI;
-import javax.media.jai.OperationRegistry;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.ROI;
-import javax.media.jai.Warp;
-import javax.media.jai.registry.RenderedRegistryMode;
-import com.sun.media.jai.opimage.RIFUtil;
+import org.eclipse.imagen.ImageLayout;
+import org.eclipse.imagen.Interpolation;
+import org.eclipse.imagen.ImageN;
+import org.eclipse.imagen.OperationRegistry;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.ROI;
+import org.eclipse.imagen.Warp;
+import org.eclipse.imagen.registry.RenderedRegistryMode;
+import org.eclipse.imagen.media.opimage.RIFUtil;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.geosolutions.jaiext.interpolators.InterpolationNearest;
-import it.geosolutions.jaiext.range.Range;
-import it.geosolutions.jaiext.range.RangeFactory;
+import org.eclipse.imagen.media.interpolators.InterpolationNearest;
+import org.eclipse.imagen.media.range.Range;
+import org.eclipse.imagen.media.range.RangeFactory;
 
 /**
  * This is code entirely intended to get around an issue on line 265 of WarpOpImage in jai-ext. The
@@ -43,18 +43,18 @@ import it.geosolutions.jaiext.range.RangeFactory;
  * <p> roiTile = roi.intersect(new ROIShape(srcRectExpanded));
  */
 @SuppressFBWarnings
-public class WarpRIF extends it.geosolutions.jaiext.warp.WarpRIF {
+public class WarpRIF extends org.eclipse.imagen.media.warp.WarpRIF {
   static boolean registered = false;
 
   public static synchronized void register(final boolean force) {
     if (!registered || force) {
-      final OperationRegistry registry = JAI.getDefaultInstance().getOperationRegistry();
+      final OperationRegistry registry = ImageN.getDefaultInstance().getOperationRegistry();
 
       final RenderedImageFactory rif = new WarpRIF();
       registry.registerFactory(
           RenderedRegistryMode.MODE_NAME,
           "Warp",
-          "it.geosolutions.jaiext",
+          "org.eclipse.imagen.media",
           rif);
       registered = true;
     }
@@ -72,7 +72,7 @@ public class WarpRIF extends it.geosolutions.jaiext.warp.WarpRIF {
   public RenderedImage create(final ParameterBlock paramBlock, final RenderingHints renderHints) {
     final Interpolation interp = (Interpolation) paramBlock.getObjectParameter(1);
     if ((interp instanceof InterpolationNearest)
-        || (interp instanceof javax.media.jai.InterpolationNearest)) {
+        || (interp instanceof org.eclipse.imagen.InterpolationNearest)) {
       // Get ImageLayout from renderHints if any.
       final ImageLayout layout = RIFUtil.getImageLayoutHint(renderHints);
 

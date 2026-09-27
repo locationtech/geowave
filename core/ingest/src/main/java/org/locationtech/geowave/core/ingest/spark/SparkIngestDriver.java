@@ -151,14 +151,17 @@ public class SparkIngestDriver implements Serializable {
         LOGGER.error("Unable to set jar location in spark configuration", e);
       }
 
-      // The UI stays off for the reason given in GeoWaveSparkConf.getDefaultConfig.
+      // The UI and the metrics servlet stay off for the reason given in
+      // GeoWaveSparkConf.getDefaultConfig.
       session =
           SparkSession.builder().appName(sparkOptions.getAppName()).master(
               sparkOptions.getMaster()).config("spark.driver.host", sparkOptions.getHost()).config(
                   "spark.jars",
                   jar).config("spark.executor.instances", Integer.toString(numExecutors)).config(
                       "spark.executor.cores",
-                      Integer.toString(numCores)).config("spark.ui.enabled", "false").getOrCreate();
+                      Integer.toString(numCores)).config("spark.ui.enabled", "false").config(
+                          HandlerlessMetricsServlet.DRIVER_SINK_PROPERTY,
+                          HandlerlessMetricsServlet.class.getName()).getOrCreate();
 
       jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
     }

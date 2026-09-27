@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class KMeansIterationsJobRunnerTest {
 

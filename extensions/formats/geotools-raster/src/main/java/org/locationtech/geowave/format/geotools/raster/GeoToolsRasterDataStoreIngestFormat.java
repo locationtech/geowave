@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 /**
  * This represents an ingest format plugin provider for GeoTools grid coverage (raster) formats. It

@@ -65,7 +65,7 @@ $ geowave help
 
 === Running GeoServer Locally
 
-The JAR also includes `geowave gs run`, which runs GeoServer with GeoWave on its classpath for local evaluation, testing and debugging.  It needs the GeoServer ${geoserver.version} web archive (WAR) unpacked on disk, and listens on 127.0.0.1 by default.  See link:quickstart.html#run-geoserver[Run GeoServer^, window="_blank"] in the Quickstart Guide, including its warning about the known vulnerabilities in that GeoServer version.
+The JAR also includes `geowave gs run`, which runs GeoServer with GeoWave on its classpath for local evaluation, testing and debugging.  It needs the GeoServer ${geoserver.version} web archive (WAR) unpacked on disk, and listens on 127.0.0.1 by default.  See link:quickstart.html#run-geoserver[Run GeoServer^, window="_blank"] in the Quickstart Guide, including its warning against exposing it to other machines.
 
 The `geowave util <store> run` commands that start standalone data stores are not included in the JAR; see link:commands.html#standalone-commands[Standalone Store Commands^, window="_blank"].
 

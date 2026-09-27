@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.annotation.AnnotatedFieldDescriptorBuilder;
-import org.opengis.referencing.FactoryException;
+import org.geotools.api.referencing.FactoryException;
 
 /**
  * Builds spatial field descriptors for fields annotated with `@GeoWaveSpatialField`.

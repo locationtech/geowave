@@ -11,8 +11,8 @@ package org.locationtech.geowave.core.geotime.store;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
 import org.locationtech.geowave.core.store.api.VisibilityHandler;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class InternalGeotoolsDataAdapterWrapper<T extends SimpleFeature> extends
     InternalDataAdapterImpl<T> implements

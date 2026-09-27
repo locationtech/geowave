@@ -13,6 +13,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.SparkSession.Builder;
 import org.locationtech.geowave.analytic.spark.sparksql.GeoWaveSpatialEncoders;
+import org.locationtech.geowave.core.ingest.spark.HandlerlessMetricsServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,14 @@ public class GeoWaveSparkConf implements Serializable {
         defaultConfig.set(
             "spark.kryo.registrator",
             "org.locationtech.geowave.analytic.spark.GeoWaveRegistrator");
-    // Spark 4.0 and 4.1 serve their web UI from a shaded Jetty 11 on the Servlet 5 API, which
-    // cannot share a JVM with the Jetty 12 and Servlet 6.1 that GeoServer 3 needs. Spark 4.2
-    // moves the UI to Jetty 12; until then it stays off.
+    // Spark 4.0 and 4.1 serve their web UI and the driver's metrics servlet from a shaded Jetty 11
+    // on the Servlet 5 API, which cannot share a JVM with the Jetty 12 and Servlet 6.1 that
+    // GeoServer 3 needs. Spark 4.2 moves them to Jetty 12; until then both stay off.
     defaultConfig = defaultConfig.set("spark.ui.enabled", "false");
+    defaultConfig =
+        defaultConfig.set(
+            HandlerlessMetricsServlet.DRIVER_SINK_PROPERTY,
+            HandlerlessMetricsServlet.class.getName());
     return defaultConfig;
   }
 

@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.UUID;
 import org.geotools.data.DefaultTransaction;
-import org.geotools.data.FeatureLock;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.FeatureLock;
+import org.geotools.api.data.Transaction;
 import org.junit.Test;
 
 public class MemoryLockManagerTest {

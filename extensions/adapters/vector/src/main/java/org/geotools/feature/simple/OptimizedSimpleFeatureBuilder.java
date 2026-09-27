@@ -8,7 +8,7 @@
  */
 package org.geotools.feature.simple;
 
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 /**
  * Variation of SimpleFeatureBuilder that skips object conversion, since GeoWave handles that

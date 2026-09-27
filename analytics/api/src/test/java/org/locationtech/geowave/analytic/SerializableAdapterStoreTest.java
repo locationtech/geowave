@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 public class SerializableAdapterStoreTest {
   @Test

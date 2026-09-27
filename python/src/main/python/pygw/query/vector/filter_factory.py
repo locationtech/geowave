@@ -20,7 +20,7 @@ from pygw.config import reflection_util
 
 
 def _j_match_action(match_action):
-    return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
+    return java_pkg.org.geotools.api.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
 
 
 # These functions are needed in order to invoke java methods that are named with
@@ -41,7 +41,7 @@ def _invoke_filter_list_method_by_name(j_filter_factory, name, filters):
 
 def _invoke_filter_method_by_name(j_filter_factory, name, filter_object):
     filter_factory_class = j_filter_factory.getClass()
-    filter_class = reflection_util.classForName("org.opengis.filter.Filter")
+    filter_class = reflection_util.classForName("org.geotools.api.filter.Filter")
     class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
     class_array[0] = filter_class
     method = filter_factory_class.getMethod(name, class_array)
@@ -70,7 +70,7 @@ class FilterFactory(GeoWaveObject):
         Returns:
             A Filter with the given feature IDs.
         """
-        j_fids = java_gateway.new_array(java_pkg.org.opengis.filter.identity.FeatureId, len(fids))
+        j_fids = java_gateway.new_array(java_pkg.org.geotools.api.filter.identity.FeatureId, len(fids))
         for idx, fid in enumerate(fids):
             if isinstance(fid, str):
                 j_fids[idx] = self.feature_id(fid)
@@ -195,7 +195,7 @@ class FilterFactory(GeoWaveObject):
         Returns:
             An Expression which represents the result of the function.
         """
-        j_expressions = java_gateway.new_array(java_pkg.org.opengis.filter.expression.Expression, len(expressions))
+        j_expressions = java_gateway.new_array(java_pkg.org.geotools.api.filter.expression.Expression, len(expressions))
         for idx, expression in enumerate(expressions):
             j_expressions[idx] = expression
         return self._java_ref.function(name, j_expressions)

@@ -11,7 +11,7 @@ package org.locationtech.geowave.analytic.spark;
 import java.io.Serializable;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class GeoWaveRasterRDD implements Serializable {
   /**

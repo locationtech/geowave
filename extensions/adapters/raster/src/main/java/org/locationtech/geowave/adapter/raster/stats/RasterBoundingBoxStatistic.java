@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.adapter.raster.stats;
 
-import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.GeneralBounds;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.core.geotime.store.statistics.AbstractBoundingBoxValue;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
 import org.locationtech.jts.geom.Envelope;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class RasterBoundingBoxStatistic extends
     DataTypeStatistic<RasterBoundingBoxStatistic.RasterBoundingBoxValue> {
@@ -63,8 +63,9 @@ public class RasterBoundingBoxStatistic extends
         final T entry,
         final GeoWaveRow... rows) {
       if (entry instanceof GridCoverage) {
-        final org.opengis.geometry.Envelope indexedEnvelope = ((GridCoverage) entry).getEnvelope();
-        final org.opengis.geometry.Envelope originalEnvelope;
+        final org.geotools.api.geometry.Bounds indexedEnvelope =
+            ((GridCoverage) entry).getEnvelope();
+        final org.geotools.api.geometry.Bounds originalEnvelope;
         if (entry instanceof FitToIndexGridCoverage) {
           originalEnvelope = ((FitToIndexGridCoverage) entry).getOriginalEnvelope();
         } else {
@@ -73,7 +74,7 @@ public class RasterBoundingBoxStatistic extends
         // we don't want to accumulate the envelope outside of the original if
         // it is fit to the index, so compute the intersection with the original
         // envelope
-        final org.opengis.geometry.Envelope resultingEnvelope =
+        final org.geotools.api.geometry.Bounds resultingEnvelope =
             getIntersection(originalEnvelope, indexedEnvelope);
         if (resultingEnvelope != null) {
           return new Envelope(
@@ -88,9 +89,9 @@ public class RasterBoundingBoxStatistic extends
 
   }
 
-  private static org.opengis.geometry.Envelope getIntersection(
-      final org.opengis.geometry.Envelope originalEnvelope,
-      final org.opengis.geometry.Envelope indexedEnvelope) {
+  private static org.geotools.api.geometry.Bounds getIntersection(
+      final org.geotools.api.geometry.Bounds originalEnvelope,
+      final org.geotools.api.geometry.Bounds indexedEnvelope) {
     if (originalEnvelope == null) {
       return indexedEnvelope;
     }
@@ -107,6 +108,6 @@ public class RasterBoundingBoxStatistic extends
       minDP[d] = Math.max(originalEnvelope.getMinimum(d), indexedEnvelope.getMinimum(d));
       maxDP[d] = Math.min(originalEnvelope.getMaximum(d), indexedEnvelope.getMaximum(d));
     }
-    return new GeneralEnvelope(minDP, maxDP);
+    return new GeneralBounds(minDP, maxDP);
   }
 }

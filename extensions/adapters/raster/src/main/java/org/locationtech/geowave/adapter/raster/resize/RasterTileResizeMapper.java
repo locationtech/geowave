@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableOutputMapper;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class RasterTileResizeMapper extends
     GeoWaveWritableOutputMapper<GeoWaveInputKey, GridCoverage> {

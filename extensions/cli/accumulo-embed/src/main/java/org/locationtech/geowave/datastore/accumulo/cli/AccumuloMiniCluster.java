@@ -16,8 +16,9 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
@@ -69,11 +70,13 @@ public class AccumuloMiniCluster {
             instanceName).setZooKeeperPort(2181);
 
     MiniAccumuloUtils.setRootUserName(miniAccumuloConfig, user);
-    // MiniAccumulo waits for its ZooKeeper to answer "ruok", which ZooKeeper 3.5+ ignores unless
-    // whitelisted; these properties are passed to every process the cluster launches
-    MiniAccumuloUtils.setSystemProperties(
-        miniAccumuloConfig,
-        Collections.singletonMap("zookeeper.4lw.commands.whitelist", "ruok"));
+    // These properties are passed to every process the cluster launches. MiniAccumulo waits for
+    // its ZooKeeper to answer "ruok", which ZooKeeper 3.5+ ignores unless whitelisted. ZooKeeper's
+    // admin server, which nothing here uses, is built on Jetty 9, and GeoWave manages Jetty at 12.
+    final Map<String, String> systemProperties = new HashMap<>();
+    systemProperties.put("zookeeper.4lw.commands.whitelist", "ruok");
+    systemProperties.put("zookeeper.admin.enableServer", "false");
+    MiniAccumuloUtils.setSystemProperties(miniAccumuloConfig, systemProperties);
 
     final String geowaveHome =
         System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY);

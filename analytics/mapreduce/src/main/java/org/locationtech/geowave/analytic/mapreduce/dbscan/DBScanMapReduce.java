@@ -47,7 +47,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

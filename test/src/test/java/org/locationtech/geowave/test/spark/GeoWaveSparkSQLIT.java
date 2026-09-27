@@ -34,7 +34,7 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import org.locationtech.jts.util.Stopwatch;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

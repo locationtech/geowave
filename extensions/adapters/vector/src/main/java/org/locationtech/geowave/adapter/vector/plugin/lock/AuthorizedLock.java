@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import org.geotools.data.Transaction;
-import org.geotools.data.Transaction.State;
+import org.geotools.api.data.Transaction;
+import org.geotools.api.data.Transaction.State;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**

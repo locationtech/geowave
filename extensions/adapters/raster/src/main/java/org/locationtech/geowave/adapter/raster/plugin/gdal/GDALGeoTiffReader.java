@@ -10,10 +10,10 @@ package org.locationtech.geowave.adapter.raster.plugin.gdal;
 
 import org.geotools.coverageio.gdal.BaseGDALGridCoverage2DReader;
 import org.geotools.coverageio.gdal.dted.DTEDReader;
-import org.geotools.data.DataSourceException;
+import org.geotools.api.data.DataSourceException;
 import org.geotools.util.factory.Hints;
-import org.opengis.coverage.grid.Format;
-import org.opengis.coverage.grid.GridCoverageReader;
+import org.geotools.api.coverage.grid.Format;
+import org.geotools.api.coverage.grid.GridCoverageReader;
 import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 
 public class GDALGeoTiffReader extends BaseGDALGridCoverage2DReader implements GridCoverageReader {
@@ -40,7 +40,7 @@ public class GDALGeoTiffReader extends BaseGDALGridCoverage2DReader implements G
     super(input, hints, worldFileExt, new GeoTiffImageReaderSpi());
   }
 
-  /** @see org.opengis.coverage.grid.GridCoverageReader#getFormat() */
+  /** @see org.geotools.api.coverage.grid.GridCoverageReader#getFormat() */
   @Override
   public Format getFormat() {
     return new GDALGeoTiffFormat();

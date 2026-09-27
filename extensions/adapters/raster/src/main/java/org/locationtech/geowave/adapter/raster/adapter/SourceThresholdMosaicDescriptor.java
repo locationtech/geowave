@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import javax.media.jai.ParameterListDescriptor;
-import javax.media.jai.ParameterListDescriptorImpl;
-import javax.media.jai.PropertyGenerator;
-import javax.media.jai.operator.MosaicDescriptor;
+import org.eclipse.imagen.ParameterListDescriptor;
+import org.eclipse.imagen.ParameterListDescriptorImpl;
+import org.eclipse.imagen.PropertyGenerator;
+import org.eclipse.imagen.media.mosaic.MosaicDescriptor;
 
 public class SourceThresholdMosaicDescriptor extends MosaicDescriptor {
 
@@ -22,9 +22,9 @@ public class SourceThresholdMosaicDescriptor extends MosaicDescriptor {
   /** The parameter class list for this operation. */
   private static final Class[] paramClasses =
       {
-          javax.media.jai.operator.MosaicType.class,
-          javax.media.jai.PlanarImage[].class,
-          javax.media.jai.ROI[].class,
+          org.eclipse.imagen.media.mosaic.MosaicType.class,
+          org.eclipse.imagen.PlanarImage[].class,
+          org.eclipse.imagen.ROI[].class,
           double[][].class,
           double[].class};
 

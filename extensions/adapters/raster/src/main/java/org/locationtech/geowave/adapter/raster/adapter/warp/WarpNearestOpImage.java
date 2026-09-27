@@ -23,16 +23,16 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.util.Map;
-import javax.media.jai.ImageLayout;
-import javax.media.jai.Interpolation;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.ROI;
-import javax.media.jai.RasterAccessor;
-import javax.media.jai.Warp;
-import javax.media.jai.iterator.RandomIter;
+import org.eclipse.imagen.ImageLayout;
+import org.eclipse.imagen.Interpolation;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.ROI;
+import org.eclipse.imagen.RasterAccessor;
+import org.eclipse.imagen.Warp;
+import org.eclipse.imagen.iterator.RandomIter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import it.geosolutions.jaiext.iterators.RandomIterFactory;
-import it.geosolutions.jaiext.range.Range;
+import org.eclipse.imagen.media.iterators.RandomIterFactory;
+import org.eclipse.imagen.media.range.Range;
 
 /**
  * This is code entirely intended to get around an issue on line 265 of WarpOpImage in jai-ext. The
@@ -42,7 +42,8 @@ import it.geosolutions.jaiext.range.Range;
  * <p> roiTile = roi.intersect(new ROIShape(srcRectExpanded));
  *
  * <p> An <code>OpImage</code> implementing the general "Warp" operation as described in <code>
- * javax.media.jai.operator.WarpDescriptor</code>. It supports the nearest-neighbor interpolation.
+ * org.eclipse.imagen.media.warp.WarpDescriptor</code>. It supports the nearest-neighbor
+ * interpolation.
  *
  * <p> The layout for the destination image may be specified via the <code>ImageLayout</code>
  * parameter. However, only those settings suitable for this operation will be used. The unsuitable
@@ -51,9 +52,9 @@ import it.geosolutions.jaiext.range.Range;
  * pixel value is a background value.
  *
  * @since EA2
- * @see javax.media.jai.Warp
- * @see javax.media.jai.WarpOpImage
- * @see javax.media.jai.operator.WarpDescriptor
+ * @see org.eclipse.imagen.Warp
+ * @see org.eclipse.imagen.WarpOpImage
+ * @see org.eclipse.imagen.media.warp.WarpDescriptor
  * @see WarpRIF
  */
 @SuppressWarnings("unchecked")

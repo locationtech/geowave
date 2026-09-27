@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 /**
  * A collection of statistics configurations targeted to a specific attribute. Each configuration

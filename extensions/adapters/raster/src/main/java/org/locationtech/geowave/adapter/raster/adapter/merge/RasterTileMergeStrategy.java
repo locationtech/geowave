@@ -12,7 +12,7 @@ import java.awt.image.SampleModel;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public interface RasterTileMergeStrategy<T extends Persistable> extends Persistable {
   public void merge(RasterTile<T> thisTile, RasterTile<T> nextTile, SampleModel sampleModel);

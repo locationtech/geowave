@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.Date;
-import org.geotools.data.Query;
+import org.geotools.api.data.Query;
 import org.geotools.filter.FilterFactoryImpl;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
@@ -26,8 +26,8 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
-import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory;
+import org.geotools.api.filter.Filter;
+import org.geotools.api.filter.FilterFactory;
 
 public class ExtractTimeFilterVisitorTest {
   final ExtractTimeFilterVisitor visitorWithDescriptor = new ExtractTimeFilterVisitor();

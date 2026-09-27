@@ -11,7 +11,7 @@ package org.locationtech.geowave.analytic.spark;
 import java.io.Serializable;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class GeoWaveRDD implements Serializable {
   /**

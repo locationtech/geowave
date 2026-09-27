@@ -19,7 +19,7 @@ GeoWave requires Java 21 (for Java 8, use the `2.x-jdk8` branch). Some commands 
 [frame="topbot", width="100%", grid="rows", options="header"]
 |=========================================================
 | Component | Supported Version(s)
-| link:http://geoserver.org/[GeoServer, window="_blank"] | 2.19.x
+| link:http://geoserver.org/[GeoServer, window="_blank"] | 3.0.x
 | link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] | 2.0.x
 | link:https://hbase.apache.org/[Apache HBase, window="_blank"] | 2.4.x
 | link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] | 3.1.x

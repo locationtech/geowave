@@ -24,7 +24,7 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class GeoWaveRDDExample {
   public GeoWaveRDDExample() {}

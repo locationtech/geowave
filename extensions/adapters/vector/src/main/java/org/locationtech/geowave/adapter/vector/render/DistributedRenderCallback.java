@@ -17,15 +17,15 @@ import org.geotools.map.Layer;
 import org.geotools.process.Processors;
 import org.geotools.process.function.DistributedRenderProcessUtils;
 import org.geotools.process.function.ProcessFunction;
-import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.RasterSymbolizer;
-import org.geotools.styling.Rule;
-import org.geotools.styling.Style;
-import org.geotools.styling.StyleFactory;
+import org.geotools.api.style.FeatureTypeStyle;
+import org.geotools.api.style.RasterSymbolizer;
+import org.geotools.api.style.Rule;
+import org.geotools.api.style.Style;
+import org.geotools.api.style.StyleFactory;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.locationtech.geowave.adapter.vector.plugin.DistributedRenderProcess;
 import org.locationtech.geowave.adapter.vector.plugin.InternalProcessFactory;
-import org.opengis.filter.expression.Expression;
+import org.geotools.api.filter.expression.Expression;
 
 /**
  * The purpose of this callback is completely to get the layer Style accessible from the query, in

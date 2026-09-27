@@ -22,7 +22,7 @@ import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /** Run 'K' means one time to move the centroids towards the mean. */
 public class KMeansJobRunner extends GeoWaveAnalyticJobRunner implements MapReduceJobRunner {

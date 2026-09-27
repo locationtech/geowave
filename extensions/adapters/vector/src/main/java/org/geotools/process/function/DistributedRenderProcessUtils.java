@@ -10,7 +10,7 @@ package org.geotools.process.function;
 
 import java.util.Collections;
 import java.util.Map;
-import org.geotools.data.Parameter;
+import org.geotools.api.data.Parameter;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.LiteralExpressionImpl;
 import org.geotools.process.ProcessFactory;
@@ -20,8 +20,8 @@ import org.geotools.process.factory.AnnotatedBeanProcessFactory;
 import org.geotools.text.Text;
 import org.locationtech.geowave.adapter.vector.plugin.InternalProcessFactory;
 import org.locationtech.geowave.adapter.vector.render.InternalDistributedRenderProcess;
-import org.opengis.feature.type.Name;
-import org.opengis.filter.expression.Expression;
+import org.geotools.api.feature.type.Name;
+import org.geotools.api.filter.expression.Expression;
 
 public class DistributedRenderProcessUtils {
   private static Expression SINGLETON_RENDER_PROCESS = null;

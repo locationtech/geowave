@@ -9,7 +9,7 @@
 package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
-import org.geotools.data.Transaction;
+import org.geotools.api.data.Transaction;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveFeatureSource;
 
@@ -24,7 +24,7 @@ public class GeoWaveAutoCommitTransactionState implements GeoWaveTransactionStat
   @Override
   public void setTransaction(final Transaction transaction) {}
 
-  /** @see org.geotools.data.Transaction.State#addAuthorization(java.lang.String) */
+  /** @see org.geotools.api.data.Transaction.State#addAuthorization(java.lang.String) */
   @Override
   public void addAuthorization(final String AuthID) throws IOException {
     // not required for
@@ -33,14 +33,14 @@ public class GeoWaveAutoCommitTransactionState implements GeoWaveTransactionStat
   /**
    * Will apply differences to store.
    *
-   * @see org.geotools.data.Transaction.State#commit()
+   * @see org.geotools.api.data.Transaction.State#commit()
    */
   @Override
   public void commit() throws IOException {
     // not required for
   }
 
-  /** @see org.geotools.data.Transaction.State#rollback() */
+  /** @see org.geotools.api.data.Transaction.State#rollback() */
   @Override
   public void rollback() throws IOException {}
 

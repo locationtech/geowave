@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.ReduceContext;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.mapreduce.GeoWaveReducer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class RasterTileResizeCombiner extends GeoWaveReducer {
   private RasterTileResizeHelper helper;

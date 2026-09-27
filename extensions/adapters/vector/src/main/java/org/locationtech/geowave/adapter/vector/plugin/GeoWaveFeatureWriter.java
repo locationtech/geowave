@@ -12,13 +12,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import org.geotools.data.FeatureWriter;
+import org.geotools.api.data.FeatureWriter;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.util.Utilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.type.AttributeDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

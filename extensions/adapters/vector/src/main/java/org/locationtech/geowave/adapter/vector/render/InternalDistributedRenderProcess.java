@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
-import org.geotools.data.Query;
+import org.geotools.api.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.process.ProcessException;
@@ -20,8 +20,8 @@ import org.geotools.process.factory.DescribeParameter;
 import org.geotools.process.factory.DescribeProcess;
 import org.geotools.process.factory.DescribeResult;
 import org.geotools.util.factory.GeoTools;
-import org.opengis.coverage.grid.GridGeometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.coverage.grid.GridGeometry;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * This class can be used as a GeoTools Render Transform ('geowave:DistributedRender') within an SLD

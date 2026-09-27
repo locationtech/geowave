@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.adapter;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * A field descriptor builder that includes helper functions for spatial indexing hints and

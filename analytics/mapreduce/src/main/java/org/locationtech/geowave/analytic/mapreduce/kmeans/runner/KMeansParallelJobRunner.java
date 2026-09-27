@@ -28,7 +28,7 @@ import org.locationtech.geowave.analytic.param.FormatConfiguration;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.SampleParameters;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * The KMeans Parallel algorithm,labeled Algorithm 2 within in section 3.3 of

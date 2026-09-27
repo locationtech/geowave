@@ -173,12 +173,7 @@ Now that we have prepared our vector and KDE data, we can visualize it by using 
 
 [WARNING]
 ====
-GeoServer ${geoserver.version} has known critical vulnerabilities, for example CVE-2024-36401, which allows unauthenticated remote code execution.  `geowave gs run` is for evaluating GeoWave on your own machine only.  It listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment.
-====
-
-[NOTE]
-====
-GeoServer ${geoserver.version} predates Java 21.  The WMS steps in this guide work, but WFS GetFeature requests fail with "Unsupported class file major version 65" until GeoWave moves to a newer GeoServer.  That includes the WFS output formats in GeoServer's Layer Preview, and the GetFeature requests that WFS-T clients use to read features.
+`geowave gs run` is for evaluating GeoWave on your own machine only.  GeoServer starts with its default administrator account and a configuration that has not been secured.  The command listens on 127.0.0.1 by default, and it must not be exposed to untrusted networks or used as a deployment.
 ====
 
 The command-line tools do not include GeoServer's web application, so download the GeoServer ${geoserver.version} web archive (WAR), the version GeoWave is built against, and unpack it into a `geoserver` directory in the working directory:

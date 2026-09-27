@@ -13,10 +13,10 @@ import static org.junit.Assert.assertNull;
 import org.geotools.referencing.CRS;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.NoSuchAuthorityCodeException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.operation.MathTransform;
 
 public class BoundingBoxStatisticTest {
 

@@ -31,10 +31,6 @@
 				</exclusion>
 				<exclusion>
 					<groupId>it.geosolutions.imageio-ext</groupId>
-					<artifactId>imageio-ext-imagereadmt</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>it.geosolutions.imageio-ext</groupId>
 					<artifactId>imageio-ext-utilities</artifactId>
 				</exclusion>
 				<exclusion>

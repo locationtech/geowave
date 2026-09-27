@@ -13,10 +13,10 @@ import org.geotools.filter.LiteralExpressionImpl;
 import org.geotools.filter.spatial.IntersectsImpl;
 import org.geotools.filter.visitor.DuplicatingFilterVisitor;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.filter.expression.Literal;
-import org.opengis.filter.expression.PropertyName;
-import org.opengis.filter.spatial.DWithin;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.filter.expression.Literal;
+import org.geotools.api.filter.expression.PropertyName;
+import org.geotools.api.filter.spatial.DWithin;
+import org.geotools.api.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

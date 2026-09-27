@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 
 /**

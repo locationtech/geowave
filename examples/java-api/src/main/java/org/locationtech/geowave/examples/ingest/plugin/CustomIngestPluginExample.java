@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IngestOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 
 /**

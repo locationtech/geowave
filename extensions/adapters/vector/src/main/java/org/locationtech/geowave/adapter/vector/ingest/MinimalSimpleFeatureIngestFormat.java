@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public abstract class MinimalSimpleFeatureIngestFormat implements
     IngestFormatPluginProviderSpi<AvroWholeFile, SimpleFeature> {

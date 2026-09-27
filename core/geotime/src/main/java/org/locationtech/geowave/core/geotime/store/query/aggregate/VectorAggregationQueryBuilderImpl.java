@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.query.aggregate.AggregationQueryBuilderImpl;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class VectorAggregationQueryBuilderImpl<P extends Persistable, R> extends
     AggregationQueryBuilderImpl<P, R, SimpleFeature, VectorAggregationQueryBuilder<P, R>> implements

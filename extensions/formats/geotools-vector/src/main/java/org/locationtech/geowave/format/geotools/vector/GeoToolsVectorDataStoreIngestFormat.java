@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.format.geotools.vector.retyping.date.DateFieldRetypingPlugin;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * This represents an ingest format plugin provider for GeoTools vector data stores. It currently

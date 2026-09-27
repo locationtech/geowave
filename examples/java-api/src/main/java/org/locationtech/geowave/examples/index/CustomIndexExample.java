@@ -33,8 +33,8 @@ import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.google.common.collect.Lists;
 
 /**

@@ -15,8 +15,8 @@ import org.junit.Test;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.NoSuchAuthorityCodeException;
 
 public class SpatialFieldDescriptorTest {
 

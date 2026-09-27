@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query.filter.expression.spat
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.query.filter.expression.Expression;
 import org.locationtech.geowave.core.store.query.filter.expression.Predicate;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Interface for expressions that resolve to spatial geometry objects.

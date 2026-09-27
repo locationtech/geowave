@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 import com.google.common.collect.Sets;
 
 public class CustomCRSSpatialField extends SpatialField {

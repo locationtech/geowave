@@ -22,8 +22,8 @@ import org.geotools.geojson.feature.FeatureJSON;
 import org.locationtech.geowave.core.store.cli.query.QueryOutputFormatSpi;
 import org.locationtech.geowave.core.store.query.gwql.ResultSet;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Iterators;
 

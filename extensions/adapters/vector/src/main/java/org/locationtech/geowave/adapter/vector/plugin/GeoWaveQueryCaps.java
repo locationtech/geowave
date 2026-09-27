@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import org.geotools.data.QueryCapabilities;
-import org.opengis.filter.sort.SortBy;
+import org.geotools.api.data.QueryCapabilities;
+import org.geotools.api.filter.sort.SortBy;
 
 /** A definition of the Query capabilities provided to GeoTools by the GeoWave data store. */
 public class GeoWaveQueryCaps extends QueryCapabilities {

@@ -27,7 +27,7 @@ import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 
 public class RasterOverviewStatistic extends
     DataTypeStatistic<RasterOverviewStatistic.RasterOverviewValue> {

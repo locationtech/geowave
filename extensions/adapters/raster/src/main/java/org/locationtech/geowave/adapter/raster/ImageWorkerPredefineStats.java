@@ -12,9 +12,9 @@ import java.awt.RenderingHints;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.media.jai.Histogram;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.RenderedImageAdapter;
+import org.eclipse.imagen.Histogram;
+import org.eclipse.imagen.PlanarImage;
+import org.eclipse.imagen.RenderedImageAdapter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.image.ImageWorker;
 

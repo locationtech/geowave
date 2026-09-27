@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
-import org.geotools.data.Query;
+import org.geotools.api.data.Query;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTS;
@@ -25,8 +25,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.filter.Filter;
-import org.opengis.referencing.operation.TransformException;
+import org.geotools.api.filter.Filter;
+import org.geotools.api.referencing.operation.TransformException;
 
 public class ExtractGeometryFilterVisitorTest {
   final String geomAttributeName = "geom";

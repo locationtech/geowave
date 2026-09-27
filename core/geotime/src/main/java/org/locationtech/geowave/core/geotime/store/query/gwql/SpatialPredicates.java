@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.query.filter.expression.numeric.Numer
 import org.locationtech.geowave.core.store.query.filter.expression.text.TextExpression;
 import org.locationtech.geowave.core.store.query.gwql.GWQLParseException;
 import org.locationtech.geowave.core.store.query.gwql.function.predicate.PredicateFunction;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 
 public class SpatialPredicates {
 

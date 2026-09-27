@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * Counts non-null values of a simple feature attribute. If no attribute is specified, counts each

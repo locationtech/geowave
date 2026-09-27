@@ -38,7 +38,7 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.opengis.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -295,7 +295,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
       final double maxY,
       final WritableRaster raster) {
     final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
-    final org.opengis.geometry.Envelope mapExtent =
+    final org.geotools.api.geometry.Bounds mapExtent =
         new ReferencedEnvelope(minX, maxX, minY, maxY, TestUtils.CUSTOM_CRS);
     return gcf.create(coverageName, raster, mapExtent);
   }

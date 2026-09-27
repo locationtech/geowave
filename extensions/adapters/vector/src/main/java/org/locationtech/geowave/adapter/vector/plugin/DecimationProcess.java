@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import org.geotools.data.Query;
+import org.geotools.api.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.process.ProcessException;
@@ -17,7 +17,7 @@ import org.geotools.process.factory.DescribeProcess;
 import org.geotools.process.factory.DescribeResult;
 import org.geotools.process.vector.VectorProcess;
 import org.geotools.util.factory.Hints;
-import org.opengis.coverage.grid.GridGeometry;
+import org.geotools.api.coverage.grid.GridGeometry;
 
 /**
  * This class can be used as a GeoTools Render Transform ('nga:Decimation') within an SLD on any

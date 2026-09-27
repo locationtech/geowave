@@ -280,18 +280,9 @@
 											<resource>META-INF/spring.factories</resource>
 										</transformer>
 
-										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
-											of overwriting -->
+										<!-- merges META-INF/registryFile.imagen entries instead of overwriting -->
 										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jai</resource>
-										</transformer>
-										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-											<resource>META-INF/registryFile.jaiext</resource>
+											<resource>META-INF/registryFile.imagen</resource>
 										</transformer>
 									</transformers>
 									<createDependencyReducedPom>false</createDependencyReducedPom>

@@ -15,23 +15,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.coverage.CannotEvaluateException;
-import org.opengis.coverage.PointOutsideCoverageException;
-import org.opengis.coverage.SampleDimension;
-import org.opengis.coverage.grid.GridCoverage;
-import org.opengis.coverage.grid.GridGeometry;
-import org.opengis.geometry.DirectPosition;
-import org.opengis.geometry.Envelope;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.util.Record;
-import org.opengis.util.RecordType;
+import org.geotools.api.coverage.CannotEvaluateException;
+import org.geotools.api.coverage.PointOutsideCoverageException;
+import org.geotools.api.coverage.SampleDimension;
+import org.geotools.api.coverage.grid.GridCoverage;
+import org.geotools.api.coverage.grid.GridGeometry;
+import org.geotools.api.geometry.Position;
+import org.geotools.api.geometry.Bounds;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.util.Record;
+import org.geotools.api.util.RecordType;
 
 public class FitToIndexGridCoverage implements GridCoverage {
   private final GridCoverage gridCoverage;
   private final byte[] partitionKey;
   private final byte[] sortKey;
   private final Resolution resolution;
-  private final Envelope originalEnvelope;
+  private final Bounds originalEnvelope;
   private final Geometry footprintWorldGeometry;
   private final Geometry footprintScreenGeometry;
   private final Map properties;
@@ -41,7 +41,7 @@ public class FitToIndexGridCoverage implements GridCoverage {
       final byte[] partitionKey,
       final byte[] sortKey,
       final Resolution resolution,
-      final Envelope originalEnvelope,
+      final Bounds originalEnvelope,
       final Geometry footprintWorldGeometry,
       final Geometry footprintScreenGeometry,
       final Map properties) {
@@ -83,7 +83,7 @@ public class FitToIndexGridCoverage implements GridCoverage {
     return gridCoverage;
   }
 
-  public Envelope getOriginalEnvelope() {
+  public Bounds getOriginalEnvelope() {
     return originalEnvelope;
   }
 
@@ -123,7 +123,7 @@ public class FitToIndexGridCoverage implements GridCoverage {
   }
 
   @Override
-  public Envelope getEnvelope() {
+  public Bounds getEnvelope() {
     return gridCoverage.getEnvelope();
   }
 
@@ -138,7 +138,7 @@ public class FitToIndexGridCoverage implements GridCoverage {
   }
 
   @Override
-  public Set<Record> evaluate(final DirectPosition p, final Collection<String> list)
+  public Set<Record> evaluate(final Position p, final Collection<String> list)
       throws PointOutsideCoverageException, CannotEvaluateException {
     return gridCoverage.evaluate(p, list);
   }
@@ -149,41 +149,41 @@ public class FitToIndexGridCoverage implements GridCoverage {
   }
 
   @Override
-  public Object evaluate(final DirectPosition point)
+  public Object evaluate(final Position point)
       throws PointOutsideCoverageException, CannotEvaluateException {
     return gridCoverage.evaluate(point);
   }
 
   @Override
-  public boolean[] evaluate(final DirectPosition point, final boolean[] destination)
+  public boolean[] evaluate(final Position point, final boolean[] destination)
       throws PointOutsideCoverageException, CannotEvaluateException,
       ArrayIndexOutOfBoundsException {
     return gridCoverage.evaluate(point, destination);
   }
 
   @Override
-  public byte[] evaluate(final DirectPosition point, final byte[] destination)
+  public byte[] evaluate(final Position point, final byte[] destination)
       throws PointOutsideCoverageException, CannotEvaluateException,
       ArrayIndexOutOfBoundsException {
     return gridCoverage.evaluate(point, destination);
   }
 
   @Override
-  public int[] evaluate(final DirectPosition point, final int[] destination)
+  public int[] evaluate(final Position point, final int[] destination)
       throws PointOutsideCoverageException, CannotEvaluateException,
       ArrayIndexOutOfBoundsException {
     return gridCoverage.evaluate(point, destination);
   }
 
   @Override
-  public float[] evaluate(final DirectPosition point, final float[] destination)
+  public float[] evaluate(final Position point, final float[] destination)
       throws PointOutsideCoverageException, CannotEvaluateException,
       ArrayIndexOutOfBoundsException {
     return gridCoverage.evaluate(point, destination);
   }
 
   @Override
-  public double[] evaluate(final DirectPosition point, final double[] destination)
+  public double[] evaluate(final Position point, final double[] destination)
       throws PointOutsideCoverageException, CannotEvaluateException,
       ArrayIndexOutOfBoundsException {
     return gridCoverage.evaluate(point, destination);

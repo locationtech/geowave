@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryConstrai
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraintsFactoryImpl;
-import org.opengis.filter.Filter;
+import org.geotools.api.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

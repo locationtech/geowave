@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.geotime.store;
 
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public interface InternalGeotoolsFeatureDataAdapter<T extends SimpleFeature> extends
     InternalDataAdapter<T>,

@@ -17,7 +17,7 @@ import org.locationtech.geowave.analytic.mapreduce.kde.GaussianCellMapper;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import org.locationtech.jts.geom.Point;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class ComparisonGaussianCellMapper extends GaussianCellMapper {
   protected static final String TIME_ATTRIBUTE_KEY = "TIME_ATTRIBUTE";

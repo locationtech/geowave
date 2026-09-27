@@ -11,8 +11,8 @@ package org.locationtech.geowave.adapter.vector.render;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.collection.BaseSimpleFeatureCollection;
 import org.geotools.feature.collection.DelegateSimpleFeatureIterator;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 import com.oath.cyclops.async.adapters.Queue;
 
 public class AsyncQueueFeatureCollection extends BaseSimpleFeatureCollection {

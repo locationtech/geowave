@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.opengis.filter.Filter;
+import org.geotools.api.filter.Filter;
 
 public class TemporalQuery extends AbstractVectorConstraints<ExplicitTemporalQuery> {
 
@@ -78,7 +78,7 @@ public class TemporalQuery extends AbstractVectorConstraints<ExplicitTemporalQue
       final List<Filter> filters =
           constraints.stream().map(dataToFilter).collect(Collectors.toList());
       if (filters.size() > 1) {
-        return CommonFactoryFinder.getFilterFactory2().or(filters);
+        return CommonFactoryFinder.getFilterFactory().or(filters);
       } else {
         return filters.get(0);
       }

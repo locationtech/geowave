@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.analytic.distance;
 
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class FeatureCentroidOrthodromicDistanceFn extends FeatureCentroidDistanceFn implements
     DistanceFn<SimpleFeature> {

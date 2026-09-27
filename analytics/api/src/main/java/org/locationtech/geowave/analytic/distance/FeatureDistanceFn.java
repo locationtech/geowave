@@ -11,13 +11,13 @@ package org.locationtech.geowave.analytic.distance;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.operation.distance.DistanceOp;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 /**
  * Calculate distance between two SimpleFeatures. The distance is planar distance between to two
  * closest sides.
  *
- * @see org.opengis.feature.simple.SimpleFeature
+ * @see org.geotools.api.feature.simple.SimpleFeature
  */
 public class FeatureDistanceFn implements DistanceFn<SimpleFeature> {
 

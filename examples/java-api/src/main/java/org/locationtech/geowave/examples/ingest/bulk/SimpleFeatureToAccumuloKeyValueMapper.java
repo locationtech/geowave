@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibili
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloKeyValuePairGenerator;
 import org.locationtech.jts.geom.Coordinate;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, Text, Key, Value> {
 

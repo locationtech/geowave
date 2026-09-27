@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.SpatialField.Spatia
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.referencing.FactoryException;
+import org.geotools.api.referencing.FactoryException;
 import com.google.common.collect.Lists;
 
 public class SpatialFieldMapperTest {

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import org.geotools.data.DataStore;
+import org.geotools.api.data.DataStore;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;

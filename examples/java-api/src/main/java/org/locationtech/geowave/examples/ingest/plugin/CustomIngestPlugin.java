@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.examples.ingest.bulk.GeonamesSimpleFeatureType;
 import org.locationtech.jts.geom.Coordinate;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
 
 /**
  * The ingest plugin does the work of translating a URL to a set of SimpleFeatures that can be

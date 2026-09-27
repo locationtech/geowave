@@ -19,7 +19,7 @@ import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
-import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeature;
 
 public class GeoWaveAvroIngestTest {
   private DataSchemaOptionProvider optionsProvider;

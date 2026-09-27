@@ -2,5 +2,5 @@
 <logging>
 	<level>log4j-test.properties</level>
 	<location>logs/geoserver.log</location>
-	<stdOutLogging>false</stdOutLogging>
+	<stdOutLogging>true</stdOutLogging>
 </logging>

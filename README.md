@@ -120,7 +120,7 @@ See [Example Screenshots](https://locationtech.github.io/geowave/latest/overview
 
 | GeoServer | GeoTools | Accumulo | HBase | Hadoop | Spark | Java |
 |:---------:|:--------:|:--------:|:-----:|:------:|:-----:|:----:|
-| 2.19.x | 25.x | 2.0.x | 2.4.x | 3.1.x | 4.0.x (Scala 2.13) | 21 |
+| 3.0.x | 35.x | 2.0.x | 2.4.x | 3.1.x | 4.0.x (Scala 2.13) | 21 |
 
 * Building requires JDK 21 and [Apache Maven](https://maven.apache.org/) 3.9 or later, or the committed `./mvnw` wrapper.
 * For Java 8, use the [`2.x-jdk8`](https://github.com/locationtech/geowave/tree/2.x-jdk8) branch.

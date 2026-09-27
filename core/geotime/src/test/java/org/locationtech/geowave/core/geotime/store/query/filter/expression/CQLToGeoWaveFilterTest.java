@@ -719,7 +719,7 @@ public class CQLToGeoWaveFilterTest {
   }
 
   private Filter fromCQL(final String cqlStr) throws CQLException {
-    final org.opengis.filter.Filter cqlFilter = ECQL.toFilter(cqlStr);
+    final org.geotools.api.filter.Filter cqlFilter = ECQL.toFilter(cqlStr);
     return (Filter) cqlFilter.accept(new CQLToGeoWaveFilterVisitor(adapter), null);
   }
 
