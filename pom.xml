@@ -722,8 +722,10 @@
 				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
+				<!-- hbase-shaded-client carries Hadoop 2.10's hadoop-common and hadoop-auth
+					unrelocated, and being nearer they shadow the real ones. -->
 				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-shaded-client</artifactId>
+				<artifactId>hbase-shaded-client-byo-hadoop</artifactId>
 				<version>${hbase.version}</version>
 				<scope>${hbase.scope}</scope>
 			</dependency>
@@ -941,6 +943,12 @@
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-client-runtime</artifactId>
+				<version>${hadoop.version}</version>
+			</dependency>
+			<dependency>
+				<!-- accumulo-test asks for 3.1.1, and it carries Hadoop's classes as well -->
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-client-minicluster</artifactId>
 				<version>${hadoop.version}</version>
 			</dependency>
 			<dependency>
