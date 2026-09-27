@@ -119,7 +119,7 @@
 		<!-- GeoServer 3.0.1's: it runs on Jetty 12.1's ee11 environment, which is Servlet 6.1. -->
 		<jetty.version>12.1.12</jetty.version>
 		<jakarta.servlet.version>6.1.0</jakarta.servlet.version>
-		<bouncycastle.version>1.69</bouncycastle.version>
+		<bouncycastle.version>1.86</bouncycastle.version>
 		<lz4.version>1.8.0</lz4.version>
 		<zookeeper.version>3.9.6</zookeeper.version>
 		<!-- Spark 4.0.1's. Hadoop 3.4 declares 5.2.0, and both work on any 5.x. -->
@@ -474,7 +474,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
-				<artifactId>bcprov-jdk15on</artifactId>
+				<artifactId>bcprov-jdk18on</artifactId>
 				<version>${bouncycastle.version}</version>
 			</dependency>
 			<dependency>

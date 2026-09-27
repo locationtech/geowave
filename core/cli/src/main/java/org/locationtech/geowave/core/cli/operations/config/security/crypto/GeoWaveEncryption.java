@@ -53,7 +53,9 @@ public class GeoWaveEncryption extends BaseEncryption {
 
   private PaddedBufferedBlockCipher getCipher(final boolean encrypt) {
     final PaddedBufferedBlockCipher cipher =
-        new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESEngine()), new PKCS7Padding());
+        new PaddedBufferedBlockCipher(
+            CBCBlockCipher.newInstance(AESEngine.newInstance()),
+            new PKCS7Padding());
     final CipherParameters ivAndKey =
         new ParametersWithIV(new KeyParameter(getKey().getEncoded()), salt);
     cipher.init(encrypt, ivAndKey);
