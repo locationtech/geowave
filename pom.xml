@@ -1415,8 +1415,12 @@
 				<version>${grpc.version}</version>
 			</dependency>
 			<dependency>
+				<!-- Not grpc-netty: from 4.1.101, Netty validates HTTP/2 headers by iterating
+					them, and gRPC 1.38's header class throws UnsupportedOperationException from
+					iterator(). The shaded artifact carries the Netty that gRPC 1.38 was built on,
+					relocated, so the rest of the build can have Spark's and Hadoop's. -->
 				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty</artifactId>
+				<artifactId>grpc-netty-shaded</artifactId>
 				<version>${grpc.version}</version>
 			</dependency>
 			<dependency>

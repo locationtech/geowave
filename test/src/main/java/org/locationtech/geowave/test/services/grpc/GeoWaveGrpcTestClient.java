@@ -117,7 +117,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import io.grpc.ManagedChannel;
 import io.grpc.internal.DnsNameResolverProvider;
-import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcTestClient {
