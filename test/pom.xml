@@ -311,14 +311,6 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>*</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-monitor</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -350,13 +342,12 @@
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-test</artifactId>
 			<exclusions>
+				<!-- Only for TestingKdc, which needs nothing the mini cluster and
+					hadoop-minikdc do not already bring. The rest is Accumulo's own test
+					stack, JUnit 5 included. -->
 				<exclusion>
-					<artifactId>accumulo-native</artifactId>
-					<groupId>org.apache.accumulo</groupId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-monitor</artifactId>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

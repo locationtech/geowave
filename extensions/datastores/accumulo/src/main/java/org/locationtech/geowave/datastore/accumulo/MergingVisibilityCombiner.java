@@ -15,7 +15,7 @@ import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.apache.accumulo.core.iterators.conf.ColumnSet;
+import org.apache.accumulo.core.iteratorsImpl.conf.ColumnSet;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.Text;
