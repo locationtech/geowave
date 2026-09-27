@@ -172,8 +172,9 @@ public class SparkIngestDriver implements Serializable {
         final S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
         final List<URI> inputFiles = new ArrayList<>();
         while (uri.hasNext()) {
-          final Path inputFile =
-              fs.getPath(uri.next().toString().replaceFirst(s3FinalEndpointUrl, ""));
+          // A path's URI names the endpoint by host alone, so an endpoint with a port is not a
+          // prefix of it.
+          final Path inputFile = fs.getPath(uri.next().getPath());
           inputFiles.add(inputFile.toUri());
         }
 
@@ -185,7 +186,7 @@ public class SparkIngestDriver implements Serializable {
             ingestOptions,
             configProperties,
             inputFiles.iterator(),
-            console);
+            new JCommander().getConsole());
       });
     } else if (isHDFS) {
       fileRDD.foreachPartition(uri -> {
