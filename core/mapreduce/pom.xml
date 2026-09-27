@@ -20,9 +20,21 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.upplication</groupId>
-			<artifactId>s3fs</artifactId>
-			<version>1.5.3</version>
+			<groupId>org.carlspring.cloud.aws</groupId>
+			<artifactId>s3fs-nio</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<!-- Only the synchronous client is used, over the Apache HTTP client s3fs-nio builds it
+				with, so the asynchronous client's HTTP client is left out. -->
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>software.amazon.awssdk</groupId>
+					<artifactId>netty-nio-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>

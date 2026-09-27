@@ -8,10 +8,8 @@
  */
 package org.locationtech.geowave.ingest.s3;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,30 +17,19 @@ import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.ingest.URLIngestUtils;
-import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
-import com.upplication.s3fs.S3FileSystem;
-import io.findify.s3mock.S3Mock;
 
 public class DefaultGeoWaveAWSCredentialsProviderTest {
 
   @Test
-  public void testAnonymousAccess() throws URISyntaxException, IOException {
-    final File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
-    temp.mkdirs();
-    final S3Mock mockS3 =
-        new S3Mock.Builder().withPort(8001).withFileBackend(
-            temp.getAbsolutePath()).withInMemoryBackend().build();
-    mockS3.start();
-    final SparkIngestDriver sparkDriver = new SparkIngestDriver();
-    final S3FileSystem s3 = sparkDriver.initializeS3FS("s3://s3.amazonaws.com");
-    s3.getClient().setEndpoint("http://127.0.0.1:8001");
-    s3.getClient().createBucket("testbucket");
-    s3.getClient().putObject("testbucket", "test", "content");
-    try (Stream<Path> s =
-        Files.list(URLIngestUtils.setupS3FileSystem("s3://testbucket/", "s3://s3.amazonaws.com"))) {
-      Assert.assertEquals(1, s.count());
+  public void testAnonymousAccess() throws IOException {
+    try (MockS3 mockS3 = new MockS3()) {
+      mockS3.createBucket("testbucket");
+      mockS3.put("testbucket", "test", "content");
+      try (Stream<Path> s =
+          Files.list(URLIngestUtils.setupS3FileSystem("s3://testbucket/", mockS3.endpoint()))) {
+        Assert.assertEquals(1, s.count());
+      }
     }
-    mockS3.shutdown();
   }
 
   /**

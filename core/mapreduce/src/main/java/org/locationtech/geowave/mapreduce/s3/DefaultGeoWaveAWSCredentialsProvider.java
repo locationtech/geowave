@@ -8,21 +8,22 @@
  */
 package org.locationtech.geowave.mapreduce.s3;
 
-import com.amazonaws.SdkClientException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AnonymousAWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.core.exception.SdkClientException;
 
-class DefaultGeoWaveAWSCredentialsProvider extends DefaultAWSCredentialsProviderChain {
+/** The SDK's default credentials chain, falling back to anonymous access for public buckets. */
+class DefaultGeoWaveAWSCredentialsProvider implements AwsCredentialsProvider {
+  private final AwsCredentialsProvider defaultChain = DefaultCredentialsProvider.builder().build();
 
   @Override
-  public AWSCredentials getCredentials() {
+  public AwsCredentials resolveCredentials() {
     try {
-      return super.getCredentials();
-    } catch (final SdkClientException exception) {
-
+      return defaultChain.resolveCredentials();
+    } catch (final SdkClientException e) {
+      return AnonymousCredentialsProvider.create().resolveCredentials();
     }
-    // fall back to anonymous credentials
-    return new AnonymousAWSCredentials();
   }
 }
