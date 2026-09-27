@@ -706,6 +706,18 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 				</exclusions>
 				<scope>${hbase.scope}</scope>
 			</dependency>
@@ -732,6 +744,18 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -755,6 +779,18 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -780,6 +816,18 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -862,6 +910,23 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
+					</exclusion>
+					<!-- The Jetty 9.4 of Hadoop's web servers and YARN's websocket client, here,
+						on hadoop-minicluster and on the HBase entries. Jetty 12 has no artifacts of
+						these names to manage them to, and next to the Jetty 12 core that the rest
+						of Hadoop's Jetty is managed to they cannot load. Nothing in GeoWave starts
+						a Hadoop web server. -->
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -969,6 +1034,18 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-reload4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlet</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-webapp</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.eclipse.jetty.websocket</groupId>
+						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
