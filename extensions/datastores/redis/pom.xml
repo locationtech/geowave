@@ -24,6 +24,15 @@
 		<dependency>
 			<groupId>org.redisson</groupId>
 			<artifactId>redisson</artifactId>
+			<exclusions>
+				<!-- Only Redisson's default codec uses Kryo, and RedissonClientCache sets
+					its own. Kryo 5 shares the com.esotericsoftware.kryo package with the Kryo 4
+					that Spark serialises with, so the two cannot be on one classpath. -->
+				<exclusion>
+					<groupId>com.esotericsoftware</groupId>
+					<artifactId>kryo</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.clearspring.analytics</groupId>

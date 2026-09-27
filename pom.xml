@@ -70,7 +70,7 @@
 		<accumulo.version>2.0.1</accumulo.version>
 		<thrift.version>0.12.0</thrift.version>
 		<cassandra.version>4.0.1</cassandra.version>
-		<redisson.version>3.15.5</redisson.version>
+		<redisson.version>3.47.0</redisson.version>
 		<rocksdb.version>10.10.1.1</rocksdb.version>
 		<cassandraclient.version>4.19.3</cassandraclient.version>
 		<grpc.version>1.83.1</grpc.version>
@@ -1411,6 +1411,20 @@
 				<version>${netty.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!-- Redisson brings these at its own Netty version. A netty-resolver-dns
+				newer than netty-common refers to netty-common methods the older one lacks
+				(PromiseNotifier.cascade, for one), and those fail with NoSuchMethodError
+				when reached. -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-resolver-dns</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-dns</artifactId>
+				<version>${netty.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.glassfish</groupId>
