@@ -89,12 +89,6 @@
 			<artifactId>stream</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-test</artifactId>
-			<version>2.5.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<classifier>tests</classifier>
