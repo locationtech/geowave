@@ -139,3 +139,17 @@ paginators replace them.
 later and runs on Apple silicon, and runs it on the Java that runs GeoWave, with its telemetry
 turned off. A directory that already holds an older DynamoDB Local keeps using it; empty the
 directory to upgrade.
+
+*Hadoop 3.4, GeoWave 3.0.* GeoWave 3.0 is built against Hadoop 3.4.3, ZooKeeper 3.9.6 and Guava
+33.5, where GeoWave 2.x used Hadoop 3.1.2, ZooKeeper 3.5.7 and Guava 30.1, and Netty moves from
+4.1.65 to 4.1.137. Projects that depend on GeoWave's artifacts get these versions through them.
+Hadoop's own logging backend, reload4j, and the Jetty 9.4 jars of Hadoop's web servers are left out
+of GeoWave's dependencies and jars: Hadoop logs through Log4j 2 as the rest of GeoWave does, and
+nothing in GeoWave starts a Hadoop web server.
+
+* `geowave-datastore-hbase` depends on `hbase-shaded-client-byo-hadoop` rather than
+`hbase-shaded-client`, which carries a copy of Hadoop 2.10. A project that took Hadoop's classes
+from it now gets them from Hadoop 3.4.3's own artifacts, which GeoWave depends on.
+* The gRPC server uses `grpc-netty-shaded`, gRPC's build with its own relocated Netty, instead of
+`grpc-netty`; gRPC 1.38 cannot run on the Netty that Spark 4 and Hadoop 3.4 need. A gRPC client
+built on `grpc-netty` is unaffected, since the wire protocol is the same.
