@@ -72,8 +72,7 @@
 		<cassandra.version>4.0.1</cassandra.version>
 		<redisson.version>3.15.5</redisson.version>
 		<rocksdb.version>10.10.1.1</rocksdb.version>
-		<cassandraclient.version>4.11.1</cassandraclient.version>
-		<cassandraunit.version>4.3.1.0</cassandraunit.version>
+		<cassandraclient.version>4.19.3</cassandraclient.version>
 		<grpc.version>1.83.1</grpc.version>
 		<!-- The newest 4.1 that anything here asks for, ZooKeeper 3.9.6's; Hadoop 3.4.3
 			asks for 4.1.127 and Spark 4.0.1 for 4.1.118. Neither is built on 4.2. -->
@@ -1234,11 +1233,6 @@
 						<artifactId>jts</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.cassandraunit</groupId>
-				<artifactId>cassandra-unit</artifactId>
-				<version>${cassandraunit.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
