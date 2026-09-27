@@ -8,21 +8,22 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.config;
 
+import java.util.Locale;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.regions.Regions;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
+import software.amazon.awssdk.regions.Region;
 
 
 public class DynamoDBOptions extends StoreFactoryOptions {
+  public static final int DEFAULT_MAX_CONNECTIONS = 50;
+
   @Parameter(
       names = "--endpoint",
       description = "The endpoint to connect to(specify either endpoint/region not both) ",
@@ -33,7 +34,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
       names = "--region",
       description = "The AWS region to use(specify either endpoint/region not both)",
       converter = RegionConverter.class)
-  protected Regions region = null;
+  protected Region region = null;
 
   @Parameter(
       names = "--initialWriteCapacity",
@@ -49,7 +50,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
   @Parameter(
       names = "--maxConnections",
       description = "The maximum number of open http(s) connections active at any given time")
-  protected int maxConnections = ClientConfiguration.DEFAULT_MAX_CONNECTIONS;
+  protected int maxConnections = DEFAULT_MAX_CONNECTIONS;
 
   @Parameter(
       names = "--protocol",
@@ -57,12 +58,12 @@ public class DynamoDBOptions extends StoreFactoryOptions {
       converter = ProtocolConverter.class)
   protected Protocol protocol = Protocol.HTTPS;
 
+  /** Kept so that existing commands and stored configurations still parse. */
   @Parameter(
       names = "--cacheResponseMetadata",
-      description = "Whether to cache responses from AWS (true or false). "
-          + "High performance systems can disable this but debugging will be more difficult")
-  protected boolean enableCacheResponseMetadata =
-      ClientConfiguration.DEFAULT_CACHE_RESPONSE_METADATA;
+      hidden = true,
+      description = "No longer has any effect: AWS SDK for Java 2.x keeps no response metadata cache")
+  protected boolean enableCacheResponseMetadata = true;
 
   // End of client configuration parameters
 
@@ -93,7 +94,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
 
   public DynamoDBOptions(
       final String endpoint,
-      final Regions region,
+      final Region region,
       final long writeCapacity,
       final long readCapacity,
       final int maxConnections,
@@ -112,20 +113,11 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     this.baseOptions = baseOptions;
   }
 
-  private final ClientConfiguration clientConfig = new ClientConfiguration();
-
-  public ClientConfiguration getClientConfig() {
-    clientConfig.setCacheResponseMetadata(enableCacheResponseMetadata);
-    clientConfig.setProtocol(protocol);
-    clientConfig.setMaxConnections(maxConnections);
-    return clientConfig;
-  }
-
-  public void setRegion(final Regions region) {
+  public void setRegion(final Region region) {
     this.region = region;
   }
 
-  public Regions getRegion() {
+  public Region getRegion() {
     return region;
   }
 
@@ -191,15 +183,26 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     return baseOptions;
   }
 
-  /** Jcommander helper class for AWS Region */
-  public static class RegionConverter implements IStringConverter<Regions> {
+  public enum Protocol {
+    HTTP, HTTPS;
+
+    public String scheme() {
+      return name().toLowerCase(Locale.ROOT);
+    }
+  }
+
+  /**
+   * Jcommander helper class for AWS Region. Configurations saved by GeoWave 2.x hold the name of
+   * the SDK v1 Regions constant, such as US_EAST_1, rather than the region ID.
+   */
+  public static class RegionConverter implements IStringConverter<Region> {
 
     @Override
-    public Regions convert(final String regionName) {
+    public Region convert(final String regionName) {
       if (regionName == null || regionName.isEmpty()) {
         return null;
       }
-      return Regions.fromName(regionName.toLowerCase().replaceAll("_", "-"));
+      return Region.of(regionName.toLowerCase(Locale.ROOT).replaceAll("_", "-"));
     }
   }
 

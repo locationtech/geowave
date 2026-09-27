@@ -8,16 +8,14 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
 public class DynamoDBMetadataDeleter implements MetadataDeleter {
 
@@ -50,25 +48,13 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
       }
       return true;
     }
-    final QueryRequest queryRequest = new QueryRequest(tableName);
-
-    if (metadata.hasSecondaryId()) {
-      queryRequest.withFilterExpression(
-          DynamoDBOperations.METADATA_SECONDARY_ID_KEY
-              + " = :secVal").addExpressionAttributeValuesEntry(
-                  ":secVal",
-                  new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
-    }
-    if (metadata.hasPrimaryId()) {
-      queryRequest.withKeyConditionExpression(
-          DynamoDBOperations.METADATA_PRIMARY_ID_KEY
-              + " = :priVal").addExpressionAttributeValuesEntry(
-                  ":priVal",
-                  new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
-    }
-
-    final QueryResult queryResult = operations.getClient().query(queryRequest);
-    for (final Map<String, AttributeValue> entry : queryResult.getItems()) {
+    final QueryRequest queryRequest =
+        DynamoDBMetadataReader.primaryIdQuery(
+            tableName,
+            metadata.getPrimaryId(),
+            metadata.hasSecondaryId() ? metadata.getSecondaryId() : null);
+    for (final Map<String, AttributeValue> entry : operations.getClient().queryPaginator(
+        queryRequest).items()) {
       final Map<String, AttributeValue> key = new HashMap<>();
       key.put(
           DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
@@ -76,7 +62,7 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
       key.put(
           DynamoDBOperations.METADATA_TIMESTAMP_KEY,
           entry.get(DynamoDBOperations.METADATA_TIMESTAMP_KEY));
-      operations.getClient().deleteItem(tableName, key);
+      operations.getClient().deleteItem(b -> b.tableName(tableName).key(key));
     }
 
     return true;

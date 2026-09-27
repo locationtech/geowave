@@ -159,5 +159,5 @@ When the `dynamodb` type option is used, additional options are:
   The protocol to use. Possible values are `HTTP` or `HTTPS`, default is `HTTPS`.
 
 *--cacheResponseMetadata* _<enabled>_::
-  Whether to cache responses from AWS. High performance systems can disable this but debugging will be more difficult.  Default is `true`.
+  No longer has any effect, because AWS SDK for Java 2.x keeps no response metadata cache. It is still accepted so that existing commands keep working.
 

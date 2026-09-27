@@ -8,15 +8,14 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class DynamoDBMetadataWriter implements MetadataWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDBMetadataWriter.class);
@@ -38,27 +37,25 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
     final Map<String, AttributeValue> map = new HashMap<>();
     map.put(
         DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
-        new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
+        DynamoDBUtils.binaryValue(metadata.getPrimaryId()));
 
     if (metadata.getSecondaryId() != null) {
       map.put(
           DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
-          new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
+          DynamoDBUtils.binaryValue(metadata.getSecondaryId()));
       if ((metadata.getVisibility() != null) && (metadata.getVisibility().length > 0)) {
         map.put(
             DynamoDBOperations.METADATA_VISIBILITY_KEY,
-            new AttributeValue().withB(ByteBuffer.wrap(metadata.getVisibility())));
+            DynamoDBUtils.binaryValue(metadata.getVisibility()));
       }
     }
     map.put(
         DynamoDBOperations.METADATA_TIMESTAMP_KEY,
-        new AttributeValue().withN(Long.toString(safeWrite())));
-    map.put(
-        DynamoDBOperations.METADATA_VALUE_KEY,
-        new AttributeValue().withB(ByteBuffer.wrap(metadata.getValue())));
+        AttributeValue.fromN(Long.toString(safeWrite())));
+    map.put(DynamoDBOperations.METADATA_VALUE_KEY, DynamoDBUtils.binaryValue(metadata.getValue()));
 
     try {
-      operations.getClient().putItem(new PutItemRequest(tableName, map));
+      operations.getClient().putItem(b -> b.tableName(tableName).item(map));
     } catch (final Exception e) {
       LOGGER.error("Error writing metadata", e);
     }

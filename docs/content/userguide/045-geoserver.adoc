@@ -80,7 +80,6 @@ These options are available for DynamoDB data stores.
 | initialWriteCapacity              | The maximum number of writes consumed per second before throttling occurs |
 | maxConnections                    | The maximum number of open HTTP(S) connections active at any given time |
 | protocol                          | The protocol to use                                              | `HTTP` or `HTTPS`
-| cacheResponseMetadata             | Whether to cache responses from AWS                              | High performance systems can disable this but debugging will be more difficult
 |======================
 
 ==== HBase Data Store Configuration

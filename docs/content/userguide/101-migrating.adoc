@@ -118,3 +118,20 @@ for public buckets. The chain's system property for the secret key is `aws.secre
 * The signing region comes from `s3fs.region` or a regional endpoint such as
 `s3.us-west-2.amazonaws.com`, then from `aws.region`, `AWS_REGION` or the AWS profile, and is
 `us-east-1` otherwise.
+
+*DynamoDB on AWS SDK for Java 2.x, GeoWave 3.0.* The DynamoDB data store uses AWS SDK for Java
+2.x, where GeoWave 2.x used 1.x, whose support ended with 2025. Tables written by GeoWave 2.x read
+and write as before, and the store's options keep their names.
+
+* Credentials come from the SDK 2.x default provider chain, which reads the secret key from the
+`aws.secretAccessKey` system property and the `AWS_SECRET_ACCESS_KEY` environment variable. The
+1.x alternatives `aws.secretKey`, `AWS_SECRET_KEY` and `AWS_ACCESS_KEY` are no longer read.
+* `--region` accepts any region ID, including ones newer than the SDK, and still reads the names
+GeoWave 2.x saved in store configurations, such as `US_EAST_1`.
+* `--cacheResponseMetadata` no longer has any effect, because SDK 2.x keeps no response metadata
+cache. It is still accepted, so existing commands and configurations keep working.
+* In Java, `DynamoDBOptions` takes an SDK 2.x `Region` and its own `DynamoDBOptions.Protocol` in
+place of the SDK 1.x `Regions` and `Protocol`, `getClientConfig()` is gone, and
+`DynamoDBOperations.getClient()` returns a `DynamoDbClient`. `AsyncPaginatedQuery`,
+`AsyncPaginatedScan`, `LazyPaginatedQuery` and `LazyPaginatedScan` are gone too; the SDK's own
+paginators replace them.

@@ -32,7 +32,7 @@ class DynamoDBOptions(DataStoreOptions):
         if region is None:
             j_region = None
         else:
-            j_region = java_pkg.com.amazonaws.regions.Regions.fromName(region)
+            j_region = java_pkg.software.amazon.awssdk.regions.Region.of(region)
         self._java_ref.setRegion(j_region)
 
     def get_region(self):
@@ -43,7 +43,7 @@ class DynamoDBOptions(DataStoreOptions):
         j_region = self._java_ref.getRegion()
         if j_region is None:
             return j_region
-        return j_region.getName()
+        return j_region.id()
 
     def set_endpoint(self, endpoint):
         """
@@ -119,7 +119,7 @@ class DynamoDBOptions(DataStoreOptions):
         if protocol is None:
             j_protocol = None
         else:
-            j_protocol = java_pkg.com.amazonaws.Protocol.valueOf(protocol.upper())
+            j_protocol = geowave_pkg.datastore.dynamodb.config.DynamoDBOptions.Protocol.valueOf(protocol.upper())
         self._java_ref.setProtocol(j_protocol)
 
     def get_protocol(self):

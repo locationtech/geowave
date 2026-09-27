@@ -157,8 +157,9 @@ public class DynamoDBLocal {
     cmdLine.addArgument("-inMemory");
     cmdLine.addArgument("-port");
     cmdLine.addArgument(Integer.toString(port));
+    // DynamoDB Local accepts any credentials, but a client needs some to sign with
     System.setProperty("aws.accessKeyId", "dummy");
-    System.setProperty("aws.secretKey", "dummy");
+    System.setProperty("aws.secretAccessKey", "dummy");
 
     // Using a result handler makes the emulator run async
     final DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();

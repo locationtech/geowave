@@ -8,22 +8,22 @@
  */
 package org.locationtech.geowave.datastore.dynamodb;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
+import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions.Protocol;
 import com.beust.jcommander.ParameterException;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
 public class DynamoDBClientPool {
-  private final Logger LOGGER = LoggerFactory.getLogger(DynamoDBClientPool.class);
+  /** The signing region for an endpoint given without one, which DynamoDB Local accepts. */
+  private static final Region ENDPOINT_ONLY_REGION = Region.of("local");
+
   private static DynamoDBClientPool singletonInstance;
 
   public static synchronized DynamoDBClientPool getInstance() {
@@ -37,22 +37,20 @@ public class DynamoDBClientPool {
    * What actually distinguishes one client from another. DynamoDBOptions does not define equals or
    * hashCode, and neither does StoreFactoryOptions, so caching against the options object itself
    * was caching against its identity: every store built its own client, each with its own
-   * connection pool and executor, and nothing ever closed them.
+   * connection pool, and nothing ever closed them.
    */
   private static final class ClientKey {
     private final String endpoint;
-    private final Regions region;
+    // Region does not define equals
+    private final String regionId;
     private final Protocol protocol;
     private final int maxConnections;
-    private final boolean cacheResponseMetadata;
 
     ClientKey(final DynamoDBOptions options) {
       endpoint = options.getEndpoint();
-      region = options.getRegion();
-      final ClientConfiguration config = options.getClientConfig();
-      protocol = config.getProtocol();
-      maxConnections = config.getMaxConnections();
-      cacheResponseMetadata = config.getCacheResponseMetadata();
+      regionId = options.getRegion() == null ? null : options.getRegion().id();
+      protocol = options.getProtocol();
+      maxConnections = options.getMaxConnections();
     }
 
     @Override
@@ -65,44 +63,62 @@ public class DynamoDBClientPool {
       }
       final ClientKey other = (ClientKey) obj;
       return Objects.equals(endpoint, other.endpoint)
-          && (region == other.region)
+          && Objects.equals(regionId, other.regionId)
           && (protocol == other.protocol)
-          && (maxConnections == other.maxConnections)
-          && (cacheResponseMetadata == other.cacheResponseMetadata);
+          && (maxConnections == other.maxConnections);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(endpoint, region, protocol, maxConnections, cacheResponseMetadata);
+      return Objects.hash(endpoint, regionId, protocol, maxConnections);
     }
   }
 
-  private final Map<ClientKey, AmazonDynamoDBAsync> clientCache = new HashMap<>();
+  private final Map<ClientKey, DynamoDbClient> clientCache = new HashMap<>();
 
-  public synchronized AmazonDynamoDBAsync getClient(final DynamoDBOptions options) {
+  public synchronized DynamoDbClient getClient(final DynamoDBOptions options) {
     final ClientKey key = new ClientKey(options);
-    AmazonDynamoDBAsync client = clientCache.get(key);
+    DynamoDbClient client = clientCache.get(key);
     if (client == null) {
-
-      if ((options.getRegion() == null)
-          && ((options.getEndpoint() == null) || options.getEndpoint().isEmpty())) {
+      final boolean hasEndpoint =
+          (options.getEndpoint() != null) && !options.getEndpoint().isEmpty();
+      if ((options.getRegion() == null) && !hasEndpoint) {
         throw new ParameterException("Compulsory to specify either the region or the endpoint");
       }
 
-      final ClientConfiguration clientConfig = options.getClientConfig();
-      final AmazonDynamoDBAsyncClientBuilder builder =
-          AmazonDynamoDBAsyncClientBuilder.standard().withClientConfiguration(clientConfig);
-      if ((options.getEndpoint() != null) && (options.getEndpoint().length() > 0)) {
-        builder.withEndpointConfiguration(
-            new EndpointConfiguration(
-                options.getEndpoint(),
-                options.getRegion() != null ? options.getRegion().getName() : "local"));
+      final DynamoDbClientBuilder builder =
+          DynamoDbClient.builder().httpClientBuilder(
+              ApacheHttpClient.builder().maxConnections(options.getMaxConnections()));
+      if (hasEndpoint) {
+        builder.endpointOverride(withScheme(options.getEndpoint(), options.getProtocol())).region(
+            options.getRegion() != null ? options.getRegion() : ENDPOINT_ONLY_REGION);
       } else {
-        builder.withRegion(options.getRegion());
+        builder.region(options.getRegion());
+        if (options.getProtocol() == Protocol.HTTP) {
+          // SDK v2 resolves every regional endpoint to HTTPS, where v1 honoured the protocol
+          builder.endpointOverride(
+              withScheme(
+                  DynamoDbClient.serviceMetadata().endpointFor(options.getRegion()).toString(),
+                  Protocol.HTTP));
+        }
       }
       client = builder.build();
       clientCache.put(key, client);
     }
     return client;
+  }
+
+  /**
+   * Closes every client handed out so far. Stores still holding one can no longer use it, so this
+   * is for shutting down, such as at the end of a test suite.
+   */
+  public synchronized void closeAll() {
+    clientCache.values().forEach(DynamoDbClient::close);
+    clientCache.clear();
+  }
+
+  /** SDK v1 applied the configured protocol to an endpoint given without a scheme; v2 needs one. */
+  private static URI withScheme(final String endpoint, final Protocol protocol) {
+    return URI.create(endpoint.contains("://") ? endpoint : protocol.scheme() + "://" + endpoint);
   }
 }

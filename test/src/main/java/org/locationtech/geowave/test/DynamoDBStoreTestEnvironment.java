@@ -12,6 +12,7 @@ import java.io.File;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.dynamodb.cli.DynamoDBLocal;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
@@ -58,6 +59,7 @@ public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
 
   @Override
   public void tearDown() {
+    DynamoDBClientPool.getInstance().closeAll();
     dynamoLocal.stop();
   }
 
