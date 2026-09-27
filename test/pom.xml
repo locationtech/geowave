@@ -8,23 +8,6 @@
 	</parent>
 	<properties>
 		<skipITs>true</skipITs>
-		<!-- Passed to the IT JVM as JAVA_TOOL_OPTIONS, which the JVM reads before the
-			command line and which ProcessBuilder hands on to any JVM it launches. Empty
-			except on the Accumulo lanes.
-
-			MiniAccumuloClusterImpl hard-codes -XX:+UseConcMarkSweepGC and
-			-XX:CMSInitiatingOccupancyFraction=75 into the command line of every JVM it
-			launches, as an array literal with no configuration hook. CMS was removed in JDK
-			14, so on 21 each child dies with "Unrecognized VM option 'UseConcMarkSweepGC'"
-			before it runs, and the cluster reports only "Initialize process returned 1" with
-			the real error in a child log that never reaches the build output.
-			IgnoreUnrecognizedVMOptions is read first and makes the dead flags survivable.
-			Accumulo 2.1 dropped them, so this goes away with 4.2's bump.
-
-			The cluster's ZooKeeper is one of those JVMs, and the IT JVM's system properties do
-			not reach it, so the lanes also turn its admin server off here (see
-			zookeeper.admin.enableServer below). -->
-		<it.child.jvm.options />
 		<!-- Extra arguments for the IT JVM itself, set per lane. Empty except on cassandra-it. -->
 		<it.jvm.args />
 	</properties>
@@ -617,9 +600,6 @@
 									<reportsDirectory>${surefire.report.path}
 									</reportsDirectory>
 									<argLine>${test.args} ${it.jvm.args} ${jacoco.failsafe.argline}</argLine>
-									<environmentVariables>
-										<JAVA_TOOL_OPTIONS>${it.child.jvm.options}</JAVA_TOOL_OPTIONS>
-									</environmentVariables>
 									<excludes>
 										<exclude>**/*IT.java</exclude>
 									</excludes>
@@ -681,7 +661,6 @@
 		<profile>
 			<id>accumulo-it-server</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
@@ -690,7 +669,6 @@
 		<profile>
 			<id>accumulo-it-kerberos</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
@@ -700,7 +678,6 @@
 		<profile>
 			<id>accumulo-it-client</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=false</testStoreOptions>
@@ -709,7 +686,6 @@
 		<profile>
 			<id>accumulo-it-all</id>
 			<properties>
-				<it.child.jvm.options>-XX:+IgnoreUnrecognizedVMOptions -Dzookeeper.admin.enableServer=false</it.child.jvm.options>
 				<skipITs>false</skipITs>
 				<testStoreType>ACCUMULO</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false
