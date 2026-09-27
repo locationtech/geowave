@@ -180,3 +180,19 @@ it stored.
 `grpc-netty`, which gRPC 1.83 builds on Netty 4.2; the rest of GeoWave is on the Netty 4.1 that
 Spark 4 and Hadoop 3.4 need. A gRPC client built on `grpc-netty` is unaffected, since the wire
 protocol is the same.
+
+`grpc-netty`; gRPC 1.38 cannot run on the Netty that Spark 4 and Hadoop 3.4 need. A gRPC client
+built on `grpc-netty` is unaffected, since the wire protocol is the same.
+
+*Kafka 4 client, GeoWave 3.0.* `ingest localToKafka` and `ingest kafkaToGW` use the Kafka 4.3
+client, where GeoWave 2.x used 2.8. It works with brokers from Kafka 2.1 on, so an older broker has
+to be upgraded first. GeoWave now depends on `kafka-clients` alone rather than on the whole broker,
+so the broker's classes, and the libraries only the broker needed, are no longer on GeoWave's
+classpath.
+
+*Cassandra driver coordinates, GeoWave 3.0.* The Cassandra data store uses version 4.19 of the
+Apache Cassandra Java driver, where GeoWave 2.x used 4.11. The driver has moved to the Apache
+Software Foundation and from 4.18 on is published as `org.apache.cassandra:java-driver-core` rather
+than `com.datastax.oss:java-driver-core`; its Java packages are unchanged. A build that manages or
+excludes the driver by its old coordinates has to switch to the new ones, or it will end up with
+both.
