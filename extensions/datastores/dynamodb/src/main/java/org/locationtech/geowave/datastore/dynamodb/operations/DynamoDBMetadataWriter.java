@@ -54,11 +54,7 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
         AttributeValue.fromN(Long.toString(safeWrite())));
     map.put(DynamoDBOperations.METADATA_VALUE_KEY, DynamoDBUtils.binaryValue(metadata.getValue()));
 
-    try {
-      operations.getClient().putItem(b -> b.tableName(tableName).item(map));
-    } catch (final Exception e) {
-      LOGGER.error("Error writing metadata", e);
-    }
+    operations.getClient().putItem(b -> b.tableName(tableName).item(map));
   }
 
   private long safeWrite() {
