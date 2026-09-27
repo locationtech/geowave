@@ -135,3 +135,7 @@ place of the SDK 1.x `Regions` and `Protocol`, `getClientConfig()` is gone, and
 `DynamoDBOperations.getClient()` returns a `DynamoDbClient`. `AsyncPaginatedQuery`,
 `AsyncPaginatedScan`, `LazyPaginatedQuery` and `LazyPaginatedScan` are gone too; the SDK's own
 paginators replace them.
+* `geowave util dynamodb run` downloads the current DynamoDB Local, 3.x, which needs Java 17 or
+later and runs on Apple silicon, and runs it on the Java that runs GeoWave, with its telemetry
+turned off. A directory that already holds an older DynamoDB Local keeps using it; empty the
+directory to upgrade.

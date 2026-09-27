@@ -28,8 +28,10 @@ import com.jcraft.jsch.Logger;
 public class DynamoDBLocal {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DynamoDBLocal.class);
 
-  // these need to move to config
-  private static final String DYNDB_URL = "https://s3-us-west-2.amazonaws.com/dynamodb-local/";
+  // AWS's documented download. Despite the path it serves the current release, 3.x, which is built
+  // on SDK v2, needs Java 17 and has native SQLite for Apple silicon. The old S3 location stopped
+  // at 1.25.
+  private static final String DYNDB_URL = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/";
   private static final String DYNDB_TAR = "dynamodb_local_latest.tar.gz";
   public static final int DEFAULT_PORT = 8000;
 
@@ -148,13 +150,17 @@ public class DynamoDBLocal {
   private void startDynamoLocal() throws ExecuteException, IOException, InterruptedException {
     // java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
     // -sharedDb
-    final CommandLine cmdLine = new CommandLine("java");
+    // this JVM's own java, since the one on the path may be older than DynamoDB Local's minimum
+    final CommandLine cmdLine =
+        new CommandLine(new File(System.getProperty("java.home"), "bin/java").getPath());
 
     cmdLine.addArgument("-Djava.library.path=" + dynLocalDir + "/DynamoDBLocal_lib");
     cmdLine.addArgument("-jar");
     cmdLine.addArgument(dynLocalDir + "/DynamoDBLocal.jar");
     cmdLine.addArgument("-sharedDb");
     cmdLine.addArgument("-inMemory");
+    // otherwise it reports usage to AWS and leaves a file in the working directory
+    cmdLine.addArgument("-disableTelemetry");
     cmdLine.addArgument("-port");
     cmdLine.addArgument(Integer.toString(port));
     // DynamoDB Local accepts any credentials, but a client needs some to sign with
