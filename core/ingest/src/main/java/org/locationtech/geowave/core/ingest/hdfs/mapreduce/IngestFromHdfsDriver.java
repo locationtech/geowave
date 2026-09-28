@@ -101,99 +101,98 @@ public class IngestFromHdfsDriver {
           mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),
           conf);
       mapReduceOptions.applyConfigurationProperties(conf);
-      try (FileSystem fs = FileSystem.get(conf)) {
-        if (!fs.exists(hdfsBaseDirectory)) {
-          LOGGER.error("HDFS base directory {} does not exist", hdfsBaseDirectory);
-          return false;
+      final FileSystem fs = FileSystem.get(conf);
+      if (!fs.exists(hdfsBaseDirectory)) {
+        LOGGER.error("HDFS base directory {} does not exist", hdfsBaseDirectory);
+        return false;
+      }
+      for (final Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {
+        // if an appropriate sequence file does not exist, continue
+
+        // TODO: we should probably clean up the type name to make
+        // it HDFS path safe in case there are invalid characters
+        final Path inputFile = new Path(hdfsBaseDirectory, pluginProvider.getKey());
+        if (!fs.exists(inputFile)) {
+          LOGGER.warn(
+              "HDFS file '"
+                  + inputFile
+                  + "' does not exist for ingest type '"
+                  + pluginProvider.getKey()
+                  + "'");
+          continue;
         }
-        for (final Entry<String, IngestFromHdfsPlugin<?, ?>> pluginProvider : ingestPlugins.entrySet()) {
-          // if an appropriate sequence file does not exist, continue
 
-          // TODO: we should probably clean up the type name to make
-          // it HDFS path safe in case there are invalid characters
-          final Path inputFile = new Path(hdfsBaseDirectory, pluginProvider.getKey());
-          if (!fs.exists(inputFile)) {
+        final IngestFromHdfsPlugin<?, ?> ingestFromHdfsPlugin = pluginProvider.getValue();
+        IngestWithReducer ingestWithReducer = null;
+        IngestWithMapper ingestWithMapper = null;
+
+        // first find one preferred method of ingest from HDFS
+        // (exclusively setting one or the other instance above)
+        if (ingestFromHdfsPlugin.isUseReducerPreferred()) {
+          ingestWithReducer = ingestFromHdfsPlugin.ingestWithReducer();
+          if (ingestWithReducer == null) {
             LOGGER.warn(
-                "HDFS file '"
-                    + inputFile
-                    + "' does not exist for ingest type '"
+                "Plugin provider '"
                     + pluginProvider.getKey()
-                    + "'");
-            continue;
+                    + "' prefers ingest with reducer but it is unimplemented");
           }
+        }
+        if (ingestWithReducer == null) {
+          // check for ingest with mapper
+          ingestWithMapper = ingestFromHdfsPlugin.ingestWithMapper();
+          if ((ingestWithMapper == null) && !ingestFromHdfsPlugin.isUseReducerPreferred()) {
 
-          final IngestFromHdfsPlugin<?, ?> ingestFromHdfsPlugin = pluginProvider.getValue();
-          IngestWithReducer ingestWithReducer = null;
-          IngestWithMapper ingestWithMapper = null;
-
-          // first find one preferred method of ingest from HDFS
-          // (exclusively setting one or the other instance above)
-          if (ingestFromHdfsPlugin.isUseReducerPreferred()) {
             ingestWithReducer = ingestFromHdfsPlugin.ingestWithReducer();
             if (ingestWithReducer == null) {
               LOGGER.warn(
                   "Plugin provider '"
                       + pluginProvider.getKey()
-                      + "' prefers ingest with reducer but it is unimplemented");
-            }
-          }
-          if (ingestWithReducer == null) {
-            // check for ingest with mapper
-            ingestWithMapper = ingestFromHdfsPlugin.ingestWithMapper();
-            if ((ingestWithMapper == null) && !ingestFromHdfsPlugin.isUseReducerPreferred()) {
-
-              ingestWithReducer = ingestFromHdfsPlugin.ingestWithReducer();
-              if (ingestWithReducer == null) {
-                LOGGER.warn(
-                    "Plugin provider '"
-                        + pluginProvider.getKey()
-                        + "' does not does not support ingest from HDFS");
-                continue;
-              } else {
-                LOGGER.warn(
-                    "Plugin provider '"
-                        + pluginProvider.getKey()
-                        + "' prefers ingest with mapper but it is unimplemented");
-              }
-            }
-          }
-
-          AbstractMapReduceIngest jobRunner = null;
-          if (ingestWithReducer != null) {
-            if (!checkIndexesAgainstProvider(pluginProvider.getKey(), ingestWithReducer)) {
+                      + "' does not does not support ingest from HDFS");
               continue;
+            } else {
+              LOGGER.warn(
+                  "Plugin provider '"
+                      + pluginProvider.getKey()
+                      + "' prefers ingest with mapper but it is unimplemented");
             }
-            jobRunner =
-                new IngestWithReducerJobRunner(
-                    storeOptions,
-                    indices,
-                    ingestOptions,
-                    inputFile,
-                    pluginProvider.getKey(),
-                    ingestFromHdfsPlugin,
-                    ingestWithReducer);
-
-          } else if (ingestWithMapper != null) {
-            if (!checkIndexesAgainstProvider(pluginProvider.getKey(), ingestWithMapper)) {
-              continue;
-            }
-            jobRunner =
-                new IngestWithMapperJobRunner(
-                    storeOptions,
-                    indices,
-                    ingestOptions,
-                    inputFile,
-                    pluginProvider.getKey(),
-                    ingestFromHdfsPlugin,
-                    ingestWithMapper);
           }
-          if (jobRunner != null) {
-            try {
-              runJob(conf, jobRunner);
-            } catch (final Exception e) {
-              LOGGER.warn("Error running ingest job", e);
-              return false;
-            }
+        }
+
+        AbstractMapReduceIngest jobRunner = null;
+        if (ingestWithReducer != null) {
+          if (!checkIndexesAgainstProvider(pluginProvider.getKey(), ingestWithReducer)) {
+            continue;
+          }
+          jobRunner =
+              new IngestWithReducerJobRunner(
+                  storeOptions,
+                  indices,
+                  ingestOptions,
+                  inputFile,
+                  pluginProvider.getKey(),
+                  ingestFromHdfsPlugin,
+                  ingestWithReducer);
+
+        } else if (ingestWithMapper != null) {
+          if (!checkIndexesAgainstProvider(pluginProvider.getKey(), ingestWithMapper)) {
+            continue;
+          }
+          jobRunner =
+              new IngestWithMapperJobRunner(
+                  storeOptions,
+                  indices,
+                  ingestOptions,
+                  inputFile,
+                  pluginProvider.getKey(),
+                  ingestFromHdfsPlugin,
+                  ingestWithMapper);
+        }
+        if (jobRunner != null) {
+          try {
+            runJob(conf, jobRunner);
+          } catch (final Exception e) {
+            LOGGER.warn("Error running ingest job", e);
+            return false;
           }
         }
       }

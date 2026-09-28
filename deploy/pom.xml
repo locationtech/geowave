@@ -499,7 +499,6 @@
 			<properties>
 				<hbase.scope>provided</hbase.scope>
 				<container.extension>-hbase-container</container.extension>
-				<guava.version>12.0.1</guava.version>
 			</properties>
 			<dependencies>
 				<dependency>
@@ -546,6 +545,15 @@
 											</excludes>
 										</filter>
 									</filters>
+									<relocations>
+										<!-- HBase's CoprocessorClassLoader takes every javax.* class from
+											the region server's class path, which has no Units of
+											Measurement API, so GeoTools' CRS code could not load. -->
+										<relocation>
+											<pattern>javax.measure</pattern>
+											<shadedPattern>org.locationtech.geowave.shaded.javax.measure</shadedPattern>
+										</relocation>
+									</relocations>
 									<transformers>
 										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>

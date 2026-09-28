@@ -18,11 +18,6 @@
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-stub</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>1.3.2</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -43,7 +38,7 @@
 					<includePluginDependencies>true</includePluginDependencies>
 					<mainClass>org.locationtech.geowave.service.grpc.GeowaveOperationGrpcGenerator</mainClass>
 					<arguments>
-						<argument>${project.basedir}</argument>
+						<argument>${project.build.directory}/generated-protobuf</argument>
 					</arguments>
 				</configuration>
 				<dependencies>
@@ -62,34 +57,27 @@
 				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>com.github.os72</groupId>
-				<artifactId>protoc-jar-maven-plugin</artifactId>
-				<version>${mavenprotoc.version}</version>
+				<groupId>io.github.ascopes</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>5.1.10</version>
 				<executions>
 					<execution>
-						<phase>generate-sources</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<protocVersion>${protobuf.version}</protocVersion>
-							<protocArtifact>com.google.protobuf:protoc:${protobuf.version}</protocArtifact>
-							<inputDirectories>
-								<include>src/main/protobuf</include>
-							</inputDirectories>
-							<addProtoSources>all</addProtoSources>
-							<includeStdTypes>true</includeStdTypes>
-							<outputTargets>
-								<outputTarget>
-									<type>java</type>
-									<outputDirectory>src/main/java</outputDirectory>
-								</outputTarget>
-								<outputTarget>
-									<type>grpc-java</type>
-									<outputDirectory>src/main/java</outputDirectory>
-									<pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}</pluginArtifact>
-								</outputTarget>
-							</outputTargets>
+							<protoc>${protobuf.version}</protoc>
+							<sourceDirectories>
+								<sourceDirectory>${project.basedir}/src/main/protobuf</sourceDirectory>
+								<sourceDirectory>${project.build.directory}/generated-protobuf</sourceDirectory>
+							</sourceDirectories>
+							<plugins>
+								<plugin kind="binary-maven">
+									<groupId>io.grpc</groupId>
+									<artifactId>protoc-gen-grpc-java</artifactId>
+									<version>${grpc.version}</version>
+								</plugin>
+							</plugins>
 						</configuration>
 					</execution>
 				</executions>

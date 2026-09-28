@@ -457,13 +457,13 @@
 									<goal>copy</goal>
 								</goals>
 								<phase>pre-integration-test</phase>
+								<!-- The mini cluster's class loader puts these ahead of the test
+									classpath: HBase's protobuf, and the unshaded build of each HBase
+									module that hbase-shaded-client-byo-hadoop also carries, compiled
+									there against its relocated dependencies, so that the cluster
+									loads none of the client's copies. -->
 								<configuration>
 									<artifactItems>
-										<artifactItem>
-											<artifactId>guava</artifactId>
-											<groupId>com.google.guava</groupId>
-											<version>${hbaseguava.version}</version>
-										</artifactItem>
 										<artifactItem>
 											<artifactId>protobuf-java</artifactId>
 											<groupId>com.google.protobuf</groupId>
@@ -474,8 +474,40 @@
 											<groupId>org.apache.hbase</groupId>
 										</artifactItem>
 										<artifactItem>
+											<artifactId>hbase-common</artifactId>
+											<groupId>org.apache.hbase</groupId>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-hadoop-compat</artifactId>
+											<groupId>org.apache.hbase</groupId>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-hadoop2-compat</artifactId>
+											<groupId>org.apache.hbase</groupId>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-logging</artifactId>
+											<groupId>org.apache.hbase</groupId>
+											<version>${hbase.version}</version>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-metrics</artifactId>
+											<groupId>org.apache.hbase</groupId>
+											<version>${hbase.version}</version>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-metrics-api</artifactId>
+											<groupId>org.apache.hbase</groupId>
+											<version>${hbase.version}</version>
+										</artifactItem>
+										<artifactItem>
 											<artifactId>hbase-protocol</artifactId>
 											<groupId>org.apache.hbase</groupId>
+										</artifactItem>
+										<artifactItem>
+											<artifactId>hbase-protocol-shaded</artifactId>
+											<groupId>org.apache.hbase</groupId>
+											<version>${hbase.version}</version>
 										</artifactItem>
 									</artifactItems>
 									<outputDirectory>${project.build.directory}/hbase/lib

@@ -62,11 +62,10 @@ public class GeoWaveDedupeJobRunner extends AbstractGeoWaveJobRunner {
 
     job.setSpeculativeExecution(false);
 
-    try (final FileSystem fs = FileSystem.get(job.getConfiguration())) {
-      final Path outputPath = getHdfsOutputPath();
-      fs.delete(outputPath, true);
-      FileOutputFormat.setOutputPath(job, outputPath);
-    }
+    final FileSystem fs = FileSystem.get(job.getConfiguration());
+    final Path outputPath = getHdfsOutputPath();
+    fs.delete(outputPath, true);
+    FileOutputFormat.setOutputPath(job, outputPath);
   }
 
   protected String getHdfsOutputBase() {

@@ -38,10 +38,10 @@ CI also puts Hadoop's native libraries for the build's `hadoop.version` on `LD_L
 
 ## Apple Silicon
 
-The ITs, including `rocksdb-it`, run on Apple Silicon Macs, but the build needs x86_64 protoc binaries and two passes; see [Building](https://locationtech.github.io/geowave/latest/devguide.html#building) in the Developer Guide. Build both passes first, then run the ITs without `-am`, which would rebuild the raster and HBase modules with the gRPC modules' protoc:
+The ITs, including `rocksdb-it`, run on Apple Silicon Macs. The raster and HBase modules run an x86_64 protoc under Rosetta 2; see [Building](https://locationtech.github.io/geowave/latest/devguide.html#building) in the Developer Guide.
 
 ```
-./mvnw verify -pl test -Procksdb-it -Dtest=SkipUnitTests -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dspotbugs.skip -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe
+./mvnw verify -am -pl test -Procksdb-it -Dtest=SkipUnitTests -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dspotbugs.skip
 ```
 
 Hadoop's native libraries are Linux-only, and the ITs do not need them.

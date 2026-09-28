@@ -76,19 +76,18 @@ public class StageToHdfsDriver extends
     final Path hdfsBaseDirectory = new Path(basePath);
 
     try {
-      try (final FileSystem fs = FileSystem.get(conf)) {
-        if (!fs.exists(hdfsBaseDirectory)) {
-          fs.mkdirs(hdfsBaseDirectory);
-        }
-        try {
-          final StageRunData runData = new StageRunData(hdfsBaseDirectory, fs);
-          processInput(inputPath, configFile, stageToHdfsPlugins, runData);
-          runData.close();
-          return true;
-        } catch (final IOException e) {
-          LOGGER.error("Unexpected I/O exception when reading input files", e);
-          return false;
-        }
+      final FileSystem fs = FileSystem.get(conf);
+      if (!fs.exists(hdfsBaseDirectory)) {
+        fs.mkdirs(hdfsBaseDirectory);
+      }
+      try {
+        final StageRunData runData = new StageRunData(hdfsBaseDirectory, fs);
+        processInput(inputPath, configFile, stageToHdfsPlugins, runData);
+        runData.close();
+        return true;
+      } catch (final IOException e) {
+        LOGGER.error("Unexpected I/O exception when reading input files", e);
+        return false;
       }
     } catch (final IOException e) {
       LOGGER.error("Unable to create remote HDFS directory", e);

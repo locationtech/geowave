@@ -15,6 +15,8 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<!-- Not grpc-netty, which is built on Netty 4.2; the rest of the build shares the
+				Netty 4.1 of Spark, Hadoop and ZooKeeper. -->
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-netty-shaded</artifactId>
 		</dependency>
@@ -25,7 +27,6 @@
 		<dependency>
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-services</artifactId>
-			<version>${grpc.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>

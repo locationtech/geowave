@@ -16,8 +16,6 @@ $ ./mvnw clean install <1>
 ----
 <1> You can speed up the build by skipping unit tests and bug checks by adding `-Dspotbugs.skip -DskipTests`
 
-NOTE: Use `clean` when rebuilding. The HBase and raster modules generate protobuf sources into `src/main/java`, and the HBase step rewrites its copies of the `.proto` files under `target` before compiling them, so a rebuild over a dirty tree can produce doubled class names such as `AggregationProtosClientClient`.
-
 After executing the command, Maven will search for all of the projects that need to be built and begin the build process.  The initial output of the command should look something like the following:
 
 ----
@@ -39,68 +37,19 @@ The build process can take several minutes, but once this is completed, the comp
 
 ==== Apple Silicon
 
-All modules build on Apple Silicon, but the protoc compilers and gRPC code generator that the build pins have no `osx-aarch_64` binaries. Their `osx-x86_64` binaries run under Rosetta, so the build has to be pointed at those:
-
-* The raster and HBase modules pin protoc 2.5.0 for HBase wire compatibility. Its x86_64 binary is bundled in the `protoc-jar` artifact.
-* The gRPC modules use protoc 3.17.1 together with the `protoc-gen-grpc-java` 1.38.0 code generator plugin.
-
-Fetch the x86_64 binaries and make them executable:
+The build runs in a single pass on Apple Silicon. The gRPC modules use the `osx-aarch_64` builds of protoc and of the `protoc-gen-grpc-java` code generator. The raster and HBase modules generate their protobuf classes with protoc 2.5.0, to match the protobuf-java 2.5.0 that HBase 2 region servers run, and protoc 2.5.0 was only built for x86: on macOS the build uses its `osx-x86_64` binary, which runs under Rosetta 2. If Rosetta is not installed, install it once; without it the raster module, the first to run protoc 2.5.0, fails.
 
 [source, bash]
 ----
-$ mkdir -p /tmp/protoc
-$ curl -fsSL -o /tmp/protoc/protoc-jar-3.11.4.jar \
-    https://repo1.maven.org/maven2/com/github/os72/protoc-jar/3.11.4/protoc-jar-3.11.4.jar
-$ unzip -o -j /tmp/protoc/protoc-jar-3.11.4.jar 'bin/2.5.0/protoc-2.5.0-osx-x86_64.exe' -d /tmp/protoc
-$ curl -fsSL -o /tmp/protoc/protoc-3.17.1-osx-x86_64.exe \
-    https://repo1.maven.org/maven2/com/google/protobuf/protoc/3.17.1/protoc-3.17.1-osx-x86_64.exe
-$ curl -fsSL -o /tmp/protoc/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe \
-    https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/1.38.0/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe
-$ chmod +x /tmp/protoc/*.exe
+$ softwareupdate --install-rosetta --agree-to-license
 ----
 
-IMPORTANT: The executable bit matters. If the file given to `-DprotocCommand` cannot be run, it is silently ignored, as if the property had never been set, and the build falls back to looking for an `osx-aarch_64` protoc. For protoc 2.5.0 that fails with `Unsupported platform`.
-
-The build is pointed at a protoc binary with `-DprotocCommand`, but there is no equivalent property for the gRPC code generator plugin. Instead, put the x86_64 plugin into your local Maven repository under the `osx-aarch_64` classifier, where the build looks for it:
+`rocksdbjni` includes an `osx-arm64` native library, so RocksDB, and with it the `rocksdb-it` profile, runs natively on Apple Silicon:
 
 [source, bash]
 ----
-$ mkdir -p ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.38.0
-$ cp /tmp/protoc/protoc-gen-grpc-java-1.38.0-osx-x86_64.exe \
-    ~/.m2/repository/io/grpc/protoc-gen-grpc-java/1.38.0/protoc-gen-grpc-java-1.38.0-osx-aarch_64.exe
-----
-
-`-DprotocCommand` applies to every module in the build, and the modules need different protoc versions, so a full build takes two passes: protoc 2.5.0 for everything except the gRPC protobuf and server modules and the integration tests, then protoc 3.17.1 for those three.
-
-[source, bash]
-----
-$ ./mvnw clean install -DskipTests -Dspotbugs.skip \
-    -DprotocCommand=/tmp/protoc/protoc-2.5.0-osx-x86_64.exe \
-    -pl '!services/grpc/protobuf,!services/grpc/server,!test'
-$ ./mvnw clean install -DskipTests -Dspotbugs.skip \
-    -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe \
-    -pl services/grpc/protobuf,services/grpc/server,test
-----
-
-[WARNING]
-====
-The raster and HBase modules generate their protobuf sources into `src/main/java` rather than `target`, and the HBase module rewrites the protobuf package in those sources in place, so `clean` cannot remove them. A single build of these modules with the wrong protoc leaves mis-shaded sources behind that break every later build until they are deleted by hand. The symptom is `package org.apache.hadoop.hbase.shaded.com.google.protobuf.GeneratedMessageV3 does not exist`. To recover, delete the generated sources and rebuild:
-
-[source, bash]
-----
-$ rm -rf extensions/adapters/raster/src/main/java/org/locationtech/geowave/adapter/raster/protobuf \
-    extensions/datastores/hbase/core/src/main/java/org/locationtech/geowave/datastore/hbase/coprocessors/protobuf \
-    extensions/datastores/hbase/core/src/main/java/org/locationtech/geowave/datastore/hbase/query/protobuf
-----
-====
-
-Once both passes have completed, run the integration tests on the `test` module alone, with the protoc 3.17.1 binary. Adding `-am`, as CI does, would rebuild the raster and HBase modules with that protoc as well. `rocksdbjni` includes an `osx-arm64` native library, so RocksDB, and with it the `rocksdb-it` profile, runs natively on Apple Silicon:
-
-[source, bash]
-----
-$ ./mvnw verify -pl test -Procksdb-it \
-    -Dtest=SkipUnitTests -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dspotbugs.skip \
-    -DprotocCommand=/tmp/protoc/protoc-3.17.1-osx-x86_64.exe
+$ ./mvnw verify -am -pl test -Procksdb-it \
+    -Dtest=SkipUnitTests -DfailIfNoTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dspotbugs.skip
 ----
 
 CI also puts Hadoop's Linux native libraries on `LD_LIBRARY_PATH`. There is no macOS build of them, and the integration tests do not need them.

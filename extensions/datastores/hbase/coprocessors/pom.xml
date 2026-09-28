@@ -31,5 +31,12 @@
 			<artifactId>hbase-server</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<!-- What the endpoints run on in a region server -->
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${hbaseprotobuf.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>
