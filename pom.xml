@@ -1411,20 +1411,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- Redisson brings these at its own Netty version. A netty-resolver-dns
-				newer than netty-common refers to netty-common methods the older one lacks
-				(PromiseNotifier.cascade, for one), and those fail with NoSuchMethodError
-				when reached. -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-resolver-dns</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-codec-dns</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>org.glassfish</groupId>
 				<artifactId>javax.el</artifactId>
