@@ -1,2 +1,0 @@
-src/main/java/org/locationtech/geowave/datastore/hbase/query/protobuf
-src/main/java/org/locationtech/geowave/datastore/hbase/coprocessors/protobuf

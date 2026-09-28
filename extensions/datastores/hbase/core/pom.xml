@@ -74,12 +74,51 @@
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-shaded-client-byo-hadoop</artifactId>
 		</dependency>
+		<dependency>
+			<!-- What the *ProtosServer classes run on in a region server -->
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>${hbaseprotobuf.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
+		<!-- Each message is generated twice, under different outer class names: the *ProtosServer
+			classes run in region servers on HBase's own protobuf (see hbaseprotobuf.version),
+			and the *ProtosClient classes are moved onto the copy of that protobuf which
+			hbase-shaded-client relocates. protoc is run directly: protobuf-maven-plugin passes
+			protoc its arguments in an @argfile, which protoc only reads from 3.x on. The two sets
+			are compiled separately because they define the same message names. -->
 		<plugins>
 			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.11.0</version>
+				<executions>
+					<execution>
+						<id>copy-protoc</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.google.protobuf</groupId>
+									<artifactId>protoc</artifactId>
+									<version>${hbaseprotobuf.version}</version>
+									<classifier>${hbaseprotoc.classifier}</classifier>
+									<type>exe</type>
+									<destFileName>protoc.exe</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/protoc</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<id>generate-protobuf</id>
@@ -89,66 +128,58 @@
 						</goals>
 						<configuration>
 							<target>
-								<copy toDir="target/protobuf">
-									<fileset dir="src/main/protobuf">
-										<include name="**/*.proto" />
-									</fileset>
-									<mapper>
-										<mapper type="regexp" from="(.*)\.proto(.*)" to="\1Server\.proto\2" />
-									</mapper>
+								<property name="protoc" location="${project.build.directory}/protoc/protoc.exe" />
+								<property name="protos" location="${project.build.directory}/protobuf" />
+								<property name="generated" location="${project.build.directory}/generated-sources/protobuf" />
+								<delete dir="${protos}" />
+								<delete dir="${generated}" />
+								<mkdir dir="${generated}" />
+								<copy todir="${protos}/server">
+									<fileset dir="${project.basedir}/src/main/protobuf" includes="*.proto" />
+									<globmapper from="*.proto" to="*Server.proto" />
+									<filterchain>
+										<replacestring from="Protos" to="ProtosServer" />
+									</filterchain>
 								</copy>
-								<copy toDir="target/protobuf">
-									<fileset dir="src/main/protobuf">
-										<include name="**/*.proto" />
-									</fileset>
-									<mapper>
-										<mapper type="regexp" from="(.*)\.proto(.*)" to="\1Client.proto\2" />
-									</mapper>
+								<copy todir="${protos}/client">
+									<fileset dir="${project.basedir}/src/main/protobuf" includes="*.proto" />
+									<globmapper from="*.proto" to="*Client.proto" />
+									<filterchain>
+										<replacestring from="Protos" to="ProtosClient" />
+									</filterchain>
 								</copy>
-								<replace token="Protos" value="ProtosServer" dir="target/protobuf">
-									<include name="**/*Server.proto" />
-								</replace>
-								<replace token="Protos" value="ProtosClient" dir="target/protobuf">
-									<include name="**/*Client.proto" />
-								</replace>
+								<chmod file="${protoc}" perm="u+x" />
+								<apply executable="${protoc}" parallel="true" failonerror="true">
+									<arg value="--proto_path=${protos}/server" />
+									<arg value="--java_out=${generated}" />
+									<fileset dir="${protos}/server" includes="*.proto" />
+								</apply>
+								<apply executable="${protoc}" parallel="true" failonerror="true">
+									<arg value="--proto_path=${protos}/client" />
+									<arg value="--java_out=${generated}" />
+									<fileset dir="${protos}/client" includes="*.proto" />
+								</apply>
+								<replace dir="${generated}" includes="**/*ProtosClient.java" token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." />
 							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<id>shade-protobuf</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<replace token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." dir="src/main/java">
-									<include name="**/*ProtosClient.java" />
-								</replace>
-								<delete>
-									<fileset dir="target/protobuf" includes="*.proto" />
-								</delete>
-							</target>		
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.os72</groupId>
-				<artifactId>protoc-jar-maven-plugin</artifactId>
-				<version>${mavenprotoc.version}</version>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.6.2</version>
 				<executions>
 					<execution>
+						<id>add-protobuf-sources</id>
 						<phase>generate-sources</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>add-source</goal>
 						</goals>
 						<configuration>
-							<protocVersion>${hbaseprotoc.version}</protocVersion>
-							<outputDirectory>src/main/java</outputDirectory>
-							<inputDirectories>
-								<include>target/protobuf</include>
-							</inputDirectories>
+							<sources>
+								<source>${project.build.directory}/generated-sources/protobuf</source>
+							</sources>
 						</configuration>
 					</execution>
 				</executions>
