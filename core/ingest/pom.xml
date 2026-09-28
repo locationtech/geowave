@@ -55,24 +55,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>${kafka.artifact}</artifactId>
+			<artifactId>kafka-clients</artifactId>
 			<version>${kafka.version}</version>
 			<exclusions>
+				<!-- A fork of org.lz4:lz4-java with the same net.jpountz classes, which
+					Spark already brings as the original. -->
 				<exclusion>
-					<groupId>org.apache.zookeeper</groupId>
-					<artifactId>zookeeper</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.jpountz.lz4</groupId>
-					<artifactId>lz4</artifactId>
+					<groupId>at.yawk.lz4</groupId>
+					<artifactId>lz4-java</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

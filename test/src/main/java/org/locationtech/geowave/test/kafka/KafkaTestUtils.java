@@ -9,7 +9,8 @@
 package org.locationtech.geowave.test.kafka;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
@@ -109,14 +110,15 @@ public class KafkaTestUtils {
     }
   }
 
-  public static Properties getKafkaBrokerConfig(final String host) {
-    final Properties props = new Properties();
-    props.put("log.dirs", DEFAULT_LOG_DIR.getAbsolutePath());
-    props.put("broker.id", "0");
-    props.put("listeners", "PLAINTEXT://" + host + ":9092");
+  /** Broker settings on top of the test kit's own, which sets the node, listeners and log dirs. */
+  public static Map<String, String> getKafkaBrokerConfig() {
+    final Map<String, String> props = new HashMap<>();
     props.put("message.max.bytes", MAX_MESSAGE_BYTES);
     props.put("replica.fetch.max.bytes", MAX_MESSAGE_BYTES);
     props.put("num.partitions", "1");
+    // the broker defaults assume three brokers and a production group join
+    props.put("offsets.topic.replication.factor", "1");
+    props.put("group.initial.rebalance.delay.ms", "0");
     return props;
   }
 }

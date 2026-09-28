@@ -10,6 +10,7 @@ package org.locationtech.geowave.datastore.redis.util;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.ByteArrayCodec;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -27,7 +28,8 @@ public class RedissonClientCache {
 
   private final LoadingCache<ClientKey, RedissonClient> clientCache =
       Caffeine.newBuilder().build(key -> {
-        final Config config = new Config();
+        // every object the store opens names its codec; Redisson's default would need Kryo
+        final Config config = new Config().setCodec(ByteArrayCodec.INSTANCE);
         final SingleServerConfig singleServerConfig =
             config.useSingleServer().setConnectTimeout(15000).setTimeout(150000).setRetryInterval(
                 15000).setAddress(key.address);

@@ -16,10 +16,10 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.redis.RedisStoreFactoryFamily;
+import org.locationtech.geowave.datastore.redis.util.GeoWaveSnappyCodec;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.client.codec.Codec;
 import org.redisson.codec.LZ4Codec;
-import org.redisson.codec.SnappyCodec;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
@@ -131,7 +131,7 @@ public class RedisOptions extends StoreFactoryOptions {
   }
 
   public static enum Compression {
-    SNAPPY(c -> new SnappyCodec(c)), L4Z(c -> new LZ4Codec(c)), NONE(c -> c);
+    SNAPPY(c -> new GeoWaveSnappyCodec(c)), L4Z(c -> new LZ4Codec(c)), NONE(c -> c);
 
     private transient Function<Codec, Codec> compressionTransform;
 

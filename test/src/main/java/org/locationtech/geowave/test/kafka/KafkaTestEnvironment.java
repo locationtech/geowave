@@ -8,11 +8,9 @@
  */
 package org.locationtech.geowave.test.kafka;
 
-import java.lang.reflect.Method;
-import java.net.UnknownHostException;
-import java.util.Properties;
 import org.apache.commons.io.FileUtils;
-import org.apache.kafka.streams.integration.utils.EmbeddedKafkaCluster;
+import org.apache.kafka.common.test.KafkaClusterTestKit;
+import org.apache.kafka.common.test.TestKitNodes;
 import org.locationtech.geowave.test.TestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,7 @@ public class KafkaTestEnvironment implements TestEnvironment {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaTestEnvironment.class);
 
-  private EmbeddedKafkaCluster kafkaServer;
+  private KafkaClusterTestKit kafkaCluster;
 
   private String bootstrapServers;
 
@@ -38,43 +36,34 @@ public class KafkaTestEnvironment implements TestEnvironment {
 
   @Override
   public void setup() throws Exception {
-    if (kafkaServer == null) {
+    if (kafkaCluster == null) {
       LOGGER.info("Starting up Kafka Server...");
 
       FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
 
-      final boolean success = KafkaTestUtils.DEFAULT_LOG_DIR.mkdir();
-      if (!success) {
-        LOGGER.warn(
-            "Unable to create Kafka log dir ["
-                + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath()
-                + "]");
-      }
-
-      String localhost = "localhost";
-      try {
-        localhost = java.net.InetAddress.getLocalHost().getCanonicalHostName();
-      } catch (final UnknownHostException e) {
-        LOGGER.warn("unable to get canonical hostname for localhost", e);
-      }
-
-      final Properties config = KafkaTestUtils.getKafkaBrokerConfig(localhost);
-      kafkaServer = new EmbeddedKafkaCluster(1, config);
-      bootstrapServers = localhost + ":9092";
-      kafkaServer.start();
+      // one node acting as both KRaft controller and broker
+      final TestKitNodes nodes =
+          new TestKitNodes.Builder().setCombined(true).setNumControllerNodes(1).setNumBrokerNodes(
+              1).setBaseDirectory(KafkaTestUtils.DEFAULT_LOG_DIR.toPath()).build();
+      final KafkaClusterTestKit.Builder builder = new KafkaClusterTestKit.Builder(nodes);
+      KafkaTestUtils.getKafkaBrokerConfig().forEach(builder::setConfigProp);
+      kafkaCluster = builder.build();
+      kafkaCluster.format();
+      kafkaCluster.startup();
+      kafkaCluster.waitForReadyBrokers();
+      bootstrapServers = kafkaCluster.bootstrapServers();
     }
   }
 
   @Override
   public void tearDown() throws Exception {
     LOGGER.info("Shutting down Kafka Server...");
-    if (kafkaServer != null) {
-      final Method m = kafkaServer.getClass().getDeclaredMethod("after");
-      m.setAccessible(true);
-      m.invoke(kafkaServer);
-      kafkaServer = null;
+    if (kafkaCluster != null) {
+      // this also deletes the cluster's directories
+      kafkaCluster.close();
+      kafkaCluster = null;
+      bootstrapServers = null;
     }
-    FileUtils.forceDeleteOnExit(KafkaTestUtils.DEFAULT_LOG_DIR);
   }
 
   public String getBootstrapServers() {

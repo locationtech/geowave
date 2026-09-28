@@ -26,23 +26,14 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.datastax.oss</groupId>
+			<groupId>org.apache.cassandra</groupId>
 			<artifactId>java-driver-query-builder</artifactId>
 			<version>${cassandraclient.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.datastax.oss</groupId>
+			<groupId>org.apache.cassandra</groupId>
 			<artifactId>java-driver-core</artifactId>
 			<version>${cassandraclient.version}</version>
-			<exclusions>
-				<!-- Only the driver's DSE geometry codecs need this, and it drags
-					org.json, whose "Good, not Evil" clause Eclipse cannot approve.
-					Nothing in GeoWave references com.esri. -->
-				<exclusion>
-					<groupId>com.esri.geometry</groupId>
-					<artifactId>esri-geometry-api</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.oath.cyclops</groupId>
