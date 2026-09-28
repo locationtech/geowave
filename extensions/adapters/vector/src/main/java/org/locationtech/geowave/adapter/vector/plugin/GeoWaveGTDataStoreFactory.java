@@ -37,9 +37,9 @@ import com.google.common.collect.Iterators;
 public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   private static class DataStoreCacheEntry {
     private final Map<String, ?> params;
-    private final DataStore dataStore;
+    private final GeoWaveGTDataStore dataStore;
 
-    public DataStoreCacheEntry(final Map<String, ?> params, final DataStore dataStore) {
+    public DataStoreCacheEntry(final Map<String, ?> params, final GeoWaveGTDataStore dataStore) {
       this.params = params;
       this.dataStore = dataStore;
     }
@@ -80,12 +80,16 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   // correct but it keeps us from making several connections for the same data
   // store
   @Override
-  public DataStore createDataStore(final Map<String, ?> params) throws IOException {
+  public synchronized DataStore createDataStore(final Map<String, ?> params) throws IOException {
     // iterate in reverse over the cache so the most recently added is
     // accessed first
     for (int index = dataStoreCache.size() - 1; index >= 0; index--) {
       final DataStoreCacheEntry cacheEntry = dataStoreCache.get(index);
-      if (paramsEqual(params, cacheEntry.params)) {
+      if (cacheEntry.dataStore.isDisposed()) {
+        // GeoServer disposes a store it stops using, and asks for a new one if it needs the store
+        // again. A disposed store may not work: a closed RocksDB store throws.
+        dataStoreCache.remove(index);
+      } else if (paramsEqual(params, cacheEntry.params)) {
         return cacheEntry.dataStore;
       }
     }
@@ -111,7 +115,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   }
 
   @Override
-  public DataStore createNewDataStore(final Map<String, ?> params) throws IOException {
+  public synchronized DataStore createNewDataStore(final Map<String, ?> params) throws IOException {
     final GeoWaveGTDataStore dataStore;
     try {
       dataStore =

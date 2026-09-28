@@ -196,3 +196,14 @@ Software Foundation and from 4.18 on is published as `org.apache.cassandra:java-
 than `com.datastax.oss:java-driver-core`; its Java packages are unchanged. A build that manages or
 excludes the driver by its old coordinates has to switch to the new ones, or it will end up with
 both.
+
+*Closing a RocksDB data store, GeoWave 3.0.* Every `DataStore` on a RocksDB directory shares that
+directory's databases. In GeoWave 2.x, closing one of them closed the databases under the others,
+which could then read freed native memory. Now the databases close when the last `DataStore` on the
+directory is closed, and a `DataStore` throws `IllegalStateException` if it is used after it is
+closed. Close each RocksDB `DataStore` once you are done with it, or the directory's databases stay
+open until the JVM exits.
+
+* RocksDB does not lock a directory against a second copy of itself in the same JVM, such as the
+copy of GeoWave in GeoServer's web application and one outside it. If both have a directory open,
+they corrupt it, so close the other copy's stores on a directory before GeoServer opens it.

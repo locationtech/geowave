@@ -311,7 +311,12 @@ public class GeoServerRestClient {
     boolean layerAdded = false;
     int retStatus = -1;
     final StringBuilder buf = new StringBuilder("{\"adapters\":[");
-    final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(storeName, adapterId);
+    // Loading a store checks its version through metadata stores that hold nothing to close. Load
+    // it only once, here: closing the store getStoreAdapterInfo reads through then closes what the
+    // check opened, and GeoServer's own copy of RocksDB must not find the store open in this JVM.
+    final DataStorePluginOptions storeOptions = getStorePlugin(storeName);
+    final ArrayList<DataAdapterInfo> adapterInfoList =
+        getStoreAdapterInfo(storeName, storeOptions, adapterId);
 
     LOGGER.debug("Finished retrieving adapter list");
 
@@ -349,7 +354,14 @@ public class GeoServerRestClient {
         final Response getCsResponse = getCoverageStore(workspaceName, cvgStoreName, true);
         if (getCsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
           final Response addCsResponse =
-              addCoverageStore(workspaceName, cvgStoreName, storeName, null, null, null);
+              addCoverageStore(
+                  workspaceName,
+                  cvgStoreName,
+                  storeName,
+                  storeOptions,
+                  null,
+                  null,
+                  null);
 
           if (addCsResponse.getStatus() != Status.CREATED.getStatusCode()) {
             final String ret =
@@ -441,7 +453,8 @@ public class GeoServerRestClient {
         // verify datastore exists
         final Response getDsResponse = getDatastore(workspaceName, dataStoreName, true);
         if (getDsResponse.getStatus() == Status.NOT_FOUND.getStatusCode()) {
-          final Response addDsResponse = addDatastore(workspaceName, dataStoreName, storeName);
+          final Response addDsResponse =
+              addDatastore(workspaceName, dataStoreName, storeName, storeOptions);
           if (addDsResponse.getStatus() != Status.CREATED.getStatusCode()) {
             final String ret =
                 "{ \"Adapter\":\""
@@ -701,10 +714,16 @@ public class GeoServerRestClient {
    */
   public Response addDatastore(
       final String workspaceName,
-      String datastoreName,
+      final String datastoreName,
       final String gwStoreName) {
-    final DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
+    return addDatastore(workspaceName, datastoreName, gwStoreName, getStorePlugin(gwStoreName));
+  }
 
+  private Response addDatastore(
+      final String workspaceName,
+      String datastoreName,
+      final String gwStoreName,
+      final DataStorePluginOptions inputStoreOptions) {
     if ((datastoreName == null) || datastoreName.isEmpty()) {
       datastoreName = gwStoreName + GeoServerConfig.DEFAULT_DS;
     }
@@ -1082,13 +1101,29 @@ public class GeoServerRestClient {
    */
   public Response addCoverageStore(
       final String workspaceName,
-      String cvgStoreName,
+      final String cvgStoreName,
       final String gwStoreName,
       final Boolean equalizeHistogramOverride,
       final String interpolationOverride,
       final Boolean scaleTo8Bit) {
-    final DataStorePluginOptions inputStoreOptions = getStorePlugin(gwStoreName);
+    return addCoverageStore(
+        workspaceName,
+        cvgStoreName,
+        gwStoreName,
+        getStorePlugin(gwStoreName),
+        equalizeHistogramOverride,
+        interpolationOverride,
+        scaleTo8Bit);
+  }
 
+  private Response addCoverageStore(
+      final String workspaceName,
+      String cvgStoreName,
+      final String gwStoreName,
+      final DataStorePluginOptions inputStoreOptions,
+      final Boolean equalizeHistogramOverride,
+      final String interpolationOverride,
+      final Boolean scaleTo8Bit) {
     if ((cvgStoreName == null) || cvgStoreName.isEmpty()) {
       cvgStoreName = gwStoreName + GeoServerConfig.DEFAULT_CS;
     }
@@ -1439,7 +1474,8 @@ public class GeoServerRestClient {
   }
 
   public ArrayList<String> getStoreAdapters(final String storeName, final String adapterId) {
-    final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(storeName, adapterId);
+    final ArrayList<DataAdapterInfo> adapterInfoList =
+        getStoreAdapterInfo(storeName, getStorePlugin(storeName), adapterId);
 
     final ArrayList<String> adapterIdList = new ArrayList<>();
 
@@ -1452,9 +1488,8 @@ public class GeoServerRestClient {
 
   private ArrayList<DataAdapterInfo> getStoreAdapterInfo(
       final String storeName,
+      final DataStorePluginOptions dsPlugin,
       final String adapterId) {
-    final DataStorePluginOptions dsPlugin = getStorePlugin(storeName);
-
     final DataStore dataStore = dsPlugin.createDataStore();
 
     final ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<>();

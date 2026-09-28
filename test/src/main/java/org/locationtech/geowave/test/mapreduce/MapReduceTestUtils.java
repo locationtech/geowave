@@ -154,13 +154,17 @@ public class MapReduceTestUtils {
     final DataStore geowaveDataStore = dataStore.createDataStore();
 
     final StringBuilder indexParam = new StringBuilder();
-    for (int i = 0; i < indexOptions.size(); i++) {
-      String indexName = "testIndex" + i;
-      if (indexStore.getIndex(indexName) == null) {
-        indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+    try {
+      for (int i = 0; i < indexOptions.size(); i++) {
+        String indexName = "testIndex" + i;
+        if (indexStore.getIndex(indexName) == null) {
+          indexOptions.get(i).setName(indexName);
+          geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+        }
+        indexParam.append(indexName + ",");
       }
-      indexParam.append(indexName + ",");
+    } finally {
+      TestUtils.close(geowaveDataStore);
     }
 
     mrGw.setPluginFormats(ingestFormatOptions);

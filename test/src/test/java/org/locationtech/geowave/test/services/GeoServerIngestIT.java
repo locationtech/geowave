@@ -186,9 +186,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
                 fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
                     "MERCATOR_BOUNDS").build());
     // GeoServer runs its own copy of GeoWave, and two RocksDB instances in one JVM do not lock a
-    // directory against each other, so if both have it open they corrupt it. This store lets go
-    // of the databases before GeoServer opens them.
-    release(ds);
+    // directory against each other, so if both have it open they corrupt it. Every store this JVM
+    // has on the directory lets go of the databases before GeoServer opens them.
+    TestUtils.close(ds);
     TestUtils.assertStatusCode(
         "Should Create 'testomatic' Workspace",
         201,
@@ -351,7 +351,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     try {
       final DataStore store = dataStorePluginOptions.createDataStore();
       store.removeIndex(spatialIdx.getName());
-      release(store);
+      TestUtils.close(store);
     } finally {
       services.startServices();
     }
@@ -399,12 +399,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
             null,
             true);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
-  }
-
-  private static void release(final DataStore store) throws IOException {
-    if (store instanceof Closeable) {
-      ((Closeable) store).close();
-    }
   }
 
   private static BufferedImage getWMSSingleTile(

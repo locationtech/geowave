@@ -12,10 +12,12 @@ import static org.junit.Assert.assertTrue;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -214,7 +216,27 @@ public class TestUtils {
   }
 
   public static void deleteAll(final DataStorePluginOptions dataStore) {
-    dataStore.createDataStore().deleteAll();
+    final org.locationtech.geowave.core.store.api.DataStore store = dataStore.createDataStore();
+    try {
+      store.deleteAll();
+    } finally {
+      close(store);
+    }
+  }
+
+  /**
+   * Closes a store that holds resources, such as a RocksDB store's hold on its directory's
+   * databases. GeoServer runs its own copy of RocksDB, which corrupts a directory that this JVM
+   * also has open.
+   */
+  public static void close(final org.locationtech.geowave.core.store.api.DataStore store) {
+    if (store instanceof Closeable) {
+      try {
+        ((Closeable) store).close();
+      } catch (final IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    }
   }
 
   public static void testLocalIngest(
@@ -289,13 +311,17 @@ public class TestUtils {
 
     // Add indices
     final StringBuilder indexParam = new StringBuilder();
-    for (int i = 0; i < indexOptions.size(); i++) {
-      final String indexName = "test-index" + i;
-      if (indexStore.getIndex(indexName) == null) {
-        indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+    try {
+      for (int i = 0; i < indexOptions.size(); i++) {
+        final String indexName = "test-index" + i;
+        if (indexStore.getIndex(indexName) == null) {
+          indexOptions.get(i).setName(indexName);
+          geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+        }
+        indexParam.append(indexName + ",");
       }
-      indexParam.append(indexName + ",");
+    } finally {
+      close(geowaveDataStore);
     }
     // Create the command and execute.
     final LocalToGeoWaveCommand localIngester = new LocalToGeoWaveCommand();
@@ -345,13 +371,17 @@ public class TestUtils {
         dataStore.createDataStore();
 
     final StringBuilder indexParam = new StringBuilder();
-    for (int i = 0; i < indexOptions.size(); i++) {
-      final String indexName = "test-index" + i;
-      if (indexStore.getIndex(indexName) == null) {
-        indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+    try {
+      for (int i = 0; i < indexOptions.size(); i++) {
+        final String indexName = "test-index" + i;
+        if (indexStore.getIndex(indexName) == null) {
+          indexOptions.get(i).setName(indexName);
+          geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
+        }
+        indexParam.append(indexName + ",");
       }
-      indexParam.append(indexName + ",");
+    } finally {
+      close(geowaveDataStore);
     }
 
     final ConfigAWSCommand configS3 = new ConfigAWSCommand();
@@ -417,15 +447,18 @@ public class TestUtils {
         dataStore.createDataStore();
 
     final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(",");
-    for (final String indexType : indexTypes) {
-      if (indexStore.getIndex(indexType) == null) {
-        final IndexPluginOptions pluginOptions = new IndexPluginOptions();
-        pluginOptions.selectPlugin(indexType);
-        pluginOptions.setName(indexType);
-        pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
-        geowaveDataStore.addIndex(pluginOptions.createIndex(geowaveDataStore));
+    try {
+      for (final String indexType : indexTypes) {
+        if (indexStore.getIndex(indexType) == null) {
+          final IndexPluginOptions pluginOptions = new IndexPluginOptions();
+          pluginOptions.selectPlugin(indexType);
+          pluginOptions.setName(indexType);
+          pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
+          geowaveDataStore.addIndex(pluginOptions.createIndex(geowaveDataStore));
+        }
       }
-
+    } finally {
+      close(geowaveDataStore);
     }
     props.setProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL, s3Url);
 

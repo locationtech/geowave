@@ -81,9 +81,13 @@ public class KafkaTestUtils {
 
     final IndexStore indexStore = options.createIndexStore();
     final DataStore dataStore = options.createDataStore();
-    if (indexStore.getIndex("testIndex") == null) {
-      indexOption.setName("testIndex");
-      dataStore.addIndex(indexOption.createIndex(dataStore));
+    try {
+      if (indexStore.getIndex("testIndex") == null) {
+        indexOption.setName("testIndex");
+        dataStore.addIndex(indexOption.createIndex(dataStore));
+      }
+    } finally {
+      TestUtils.close(dataStore);
     }
 
     kafkaToGeowave.setPluginFormats(ingestFormatOptions);
