@@ -12,31 +12,20 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
-import java.nio.file.FileSystemAlreadyExistsException;
-import java.nio.file.FileSystems;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.util.Collections;
 import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.upplication.s3fs.S3FileSystemProvider;
 
 public class URLIngestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(URLIngestUtils.class);
 
   public static Path setupS3FileSystem(final String basePath, final String s3EndpointUrl)
       throws IOException {
-    Path path = null;
-    FileSystem fs = null;
+    final FileSystem fs;
     try {
-      fs =
-          FileSystems.newFileSystem(
-              new URI(s3EndpointUrl + "/"),
-              Collections.singletonMap(
-                  S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS,
-                  GeoWaveAmazonS3Factory.class.getName()),
-              Thread.currentThread().getContextClassLoader());
+      fs = GeoWaveAmazonS3Factory.getFileSystem(new URI(s3EndpointUrl));
       // HP Fortify "Path Traversal" false positive
       // What Fortify considers "user input" comes only
       // from users with OS-level access anyway
@@ -44,24 +33,14 @@ public class URLIngestUtils {
     } catch (final URISyntaxException e) {
       LOGGER.error("Unable to ingest data, Inavlid S3 path");
       return null;
-    } catch (final FileSystemAlreadyExistsException e) {
-      LOGGER.info("File system " + s3EndpointUrl + "already exists");
-      try {
-        fs = FileSystems.getFileSystem(new URI(s3EndpointUrl + "/"));
-      } catch (final URISyntaxException e1) {
-        LOGGER.error("Unable to ingest data, Inavlid S3 path");
-        return null;
-      }
     }
 
     final String s3InputPath = basePath.replaceFirst("s3://", "/");
     try {
-      path = fs.getPath(s3InputPath);
+      return fs.getPath(s3InputPath);
     } catch (final InvalidPathException e) {
       LOGGER.error("Input valid input path " + s3InputPath);
       return null;
     }
-
-    return path;
   }
 }

@@ -97,3 +97,24 @@ matches nothing. Name the CRS in the filter, for example
 `BBOX(geometry,-73,18,-72,19,'CRS:84')`, to give coordinates as longitude/latitude.
 * GeoWave code running inside GeoServer uses GeoServer's ANTLR, which is older than the one GWQL
 needs, so GWQL queries are not available there. GeoServer itself does not use GWQL.
+
+*S3 input uses the AWS SDK for Java 2, GeoWave 3.0.* Version 1 of the SDK reached end of support
+at the end of 2025. GeoWave now lists and reads `s3://` input through s3fs-nio, on version 2 of the
+SDK, instead of the `com.upplication` s3fs. The endpoint is still set with `geowave config aws`,
+and paths keep their `s3://<endpoint host>/<bucket>/<key>` form.
+
+* The filesystem's settings are system properties with dotted names: `s3fs_protocol` becomes
+`s3fs.protocol`, `s3fs_access_key` becomes `s3fs.access.key`, and so on. `s3fs.region` and
+`s3fs.path.style.access` are new.
+* An `s3://` URL is now read from the configured endpoint, by the same client that listed it.
+Before, it was always read from AWS, whatever the endpoint, so an S3-compatible store could be
+listed but not read. The `s3.handler.protocol`, `s3.handler.userAgent` and
+`s3.handler.signerOverride` properties are gone; `s3fs.protocol`, `s3fs.user.agent` and
+`s3fs.signer.override` apply to reading too. The signer override is now the class name of an SDK 2
+signer, and SDK 2 has no Signature Version 2 signer.
+* Credentials come from the SDK's default chain, and GeoWave still falls back to anonymous access
+for public buckets. The chain's system property for the secret key is `aws.secretAccessKey`, not
+`aws.secretKey`.
+* The signing region comes from `s3fs.region` or a regional endpoint such as
+`s3.us-west-2.amazonaws.com`, then from `aws.region`, `AWS_REGION` or the AWS profile, and is
+`us-east-1` otherwise.

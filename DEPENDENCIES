@@ -34,7 +34,7 @@ maven/mavencentral/com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.7.8
 maven/mavencentral/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.7.8, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.fasterxml.jackson.module/jackson-module-scala_2.13/2.18.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.fasterxml.woodstox/woodstox-core/5.0.3, Apache-2.0, approved, CQ18554
-maven/mavencentral/com.github.ben-manes.caffeine/caffeine/2.6.2, Apache-2.0, approved, CQ16218
+maven/mavencentral/com.github.ben-manes.caffeine/caffeine/2.9.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.github.davidmoten/geo/0.7.7, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.github.jbellis/jamm/0.3.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.github.jnr/jffi/1.3.1, Apache-2.0 OR LGPL-3.0-or-later, approved, CQ23196
@@ -57,7 +57,6 @@ maven/mavencentral/com.github.vbmacher/java-cup-runtime/11b-20160615, SMLNJ, res
 maven/mavencentral/com.github.wendykierp/JTransforms/3.1, BSD-2-Clause AND LicenseRef-scancode-takuya-ooura, approved, #6781
 maven/mavencentral/com.google.api.grpc/proto-google-common-protos/2.0.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.google.code.findbugs/annotations/2.0.1, CC-BY-2.5 AND LGPL-2.1-or-later, restricted, #241
-maven/mavencentral/com.google.code.findbugs/jsr305/1.3.9, Apache-2.0, approved, #2146
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.0, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.2, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.gson/gson/2.11.0, Apache-2.0, approved, #14820
@@ -65,6 +64,7 @@ maven/mavencentral/com.google.code.gson/gson/2.2.4, Apache-2.0, approved, CQ7710
 maven/mavencentral/com.google.code.gson/gson/2.8.5, Apache-2.0, approved, CQ17066
 maven/mavencentral/com.google.code.gson/gson/2.8.6, Apache-2.0, approved, CQ23102
 maven/mavencentral/com.google.crypto.tink/tink/1.16.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.google.errorprone/error_prone_annotations/2.10.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.3.4, Apache-2.0, approved, #807
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.4.0, Apache-2.0, approved, #31452
 maven/mavencentral/com.google.flatbuffers/flatbuffers-java/24.3.25, Apache-2.0, approved, #19674
@@ -110,7 +110,6 @@ maven/mavencentral/com.typesafe.scala-logging/scala-logging_2.13/3.9.2, Apache-2
 maven/mavencentral/com.typesafe/config/1.4.1, Apache-2.0, approved, #19703
 maven/mavencentral/com.uber/h3/4.4.0, Apache-2.0, approved, #31453
 maven/mavencentral/com.univocity/univocity-parsers/2.9.1, Apache-2.0, approved, #19722
-maven/mavencentral/com.upplication/s3fs/1.5.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.yammer.metrics/metrics-core/2.2.0, Apache-2.0, approved, CQ9083
 maven/mavencentral/com.zaxxer/HikariCP-java7/2.4.12, Apache-2.0, approved, CQ10704
 maven/mavencentral/commons-beanutils/commons-beanutils/1.11.0, Apache-2.0, approved, #21555
@@ -445,7 +444,7 @@ maven/mavencentral/org.apache.spark/spark-tags_2.13/4.0.1, Apache-2.0, approved,
 maven/mavencentral/org.apache.spark/spark-unsafe_2.13/4.0.1, Apache-2.0, approved, #31543
 maven/mavencentral/org.apache.spark/spark-variant_2.13/4.0.1, Apache-2.0 AND BSD-3-Clause AND MIT, approved, clearlydefined
 maven/mavencentral/org.apache.thrift/libthrift/0.12.0, Apache-2.0, approved, #15514
-maven/mavencentral/org.apache.tika/tika-core/1.5, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.apache.tika/tika-core/2.9.2, Apache-2.0 AND BSD-2-Clause, approved, #12786
 maven/mavencentral/org.apache.tika/tika-core/3.3.2, Apache-2.0 AND MIT AND BSD-2-Clause-Darwin, approved, #26616
 maven/mavencentral/org.apache.ws.xmlschema/xmlschema-core/2.3.1, Apache-2.0, approved, #3391
 maven/mavencentral/org.apache.xbean/xbean-asm9-shaded/4.26, Apache-2.0 AND BSD-3-Clause, approved, clearlydefined
@@ -478,6 +477,8 @@ maven/mavencentral/org.bouncycastle/bcprov-jdk15on/1.69, MIT, approved, clearlyd
 maven/mavencentral/org.bouncycastle/bcprov-lts8on/2.73.11, MIT, approved, #19041
 maven/mavencentral/org.caffinitas.ohc/ohc-core-j8/0.5.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.caffinitas.ohc/ohc-core/0.5.1, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.carlspring.cloud.aws/s3fs-nio/3.0.0, Apache-2.0 OR MIT, approved, clearlydefined
+maven/mavencentral/org.checkerframework/checker-qual/3.19.0, MIT, approved, clearlydefined
 maven/mavencentral/org.checkerframework/checker-qual/3.5.0, MIT, approved, clearlydefined
 maven/mavencentral/org.codehaus.jackson/jackson-core-asl/1.9.13, Apache-2.0, approved, CQ8499
 maven/mavencentral/org.codehaus.jackson/jackson-jaxrs/1.9.2, Apache-2.0, approved, CQ12826
@@ -725,7 +726,9 @@ maven/mavencentral/org.ow2.asm/asm/7.1, BSD-3-Clause, approved, CQ19521
 maven/mavencentral/org.ow2.asm/asm/9.1, BSD-3-Clause, approved, CQ23029
 maven/mavencentral/org.psjava/psjava/0.1.19, MIT, approved, clearlydefined
 maven/mavencentral/org.reactivestreams/reactive-streams/1.0.0, CC0-1.0, approved, CQ17705
+maven/mavencentral/org.reactivestreams/reactive-streams/1.0.2, CC0-1.0, approved, CQ16332
 maven/mavencentral/org.reactivestreams/reactive-streams/1.0.3, CC0-1.0, approved, CQ16332
+maven/mavencentral/org.reactivestreams/reactive-streams/1.0.4, CC0-1.0, approved, CQ16332
 maven/mavencentral/org.redisson/redisson/3.15.5, Apache-2.0 AND BSD-3-Clause, approved, CQ23459
 maven/mavencentral/org.reflections/reflections/0.9.10, MIT, approved, CQ11251
 maven/mavencentral/org.reflections/reflections/0.9.11, MIT, approved, CQ16665
@@ -741,7 +744,6 @@ maven/mavencentral/org.scala-lang/scala-reflect/2.13.16, Apache-2.0, approved, #
 maven/mavencentral/org.scalanlp/breeze-macros_2.13/2.1.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.scalanlp/breeze_2.13/2.1.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.slf4j/jcl-over-slf4j/1.7.25, Apache-2.0, approved, CQ12843
-maven/mavencentral/org.slf4j/jcl-over-slf4j/1.7.5, Apache-2.0, approved, CQ14201
 maven/mavencentral/org.slf4j/jcl-over-slf4j/2.0.16, MIT AND Apache-2.0, approved, #11889
 maven/mavencentral/org.slf4j/jul-to-slf4j/2.0.16, MIT, approved, #7698
 maven/mavencentral/org.slf4j/slf4j-api/2.0.16, MIT, approved, #5915
@@ -777,6 +779,35 @@ maven/mavencentral/picocontainer/picocontainer/1.2, BSD-2-Clause, approved, CQ87
 maven/mavencentral/pl.edu.icm/JLargeArrays/1.5, BSD-2-Clause, approved, clearlydefined
 maven/mavencentral/si.uom/si-quantity/2.1, BSD-3-Clause, approved, #19732
 maven/mavencentral/si.uom/si-units/2.1, BSD-3-Clause, approved, #19719
+maven/mavencentral/software.amazon.awssdk/annotations/2.31.78, Apache-2.0, approved, #20424
+maven/mavencentral/software.amazon.awssdk/apache-client/2.31.78, Apache-2.0, approved, #20407
+maven/mavencentral/software.amazon.awssdk/arns/2.31.78, Apache-2.0, approved, #20426
+maven/mavencentral/software.amazon.awssdk/auth/2.31.78, Apache-2.0, approved, #20415
+maven/mavencentral/software.amazon.awssdk/aws-core/2.31.78, Apache-2.0, approved, #20420
+maven/mavencentral/software.amazon.awssdk/aws-query-protocol/2.31.78, Apache-2.0, approved, #20409
+maven/mavencentral/software.amazon.awssdk/aws-xml-protocol/2.31.78, Apache-2.0, approved, #20414
+maven/mavencentral/software.amazon.awssdk/checksums-spi/2.31.78, Apache-2.0, approved, #20406
+maven/mavencentral/software.amazon.awssdk/checksums/2.31.78, Apache-2.0, approved, #20429
+maven/mavencentral/software.amazon.awssdk/crt-core/2.31.78, Apache-2.0, approved, #20433
+maven/mavencentral/software.amazon.awssdk/endpoints-spi/2.31.78, Apache-2.0, approved, #20431
+maven/mavencentral/software.amazon.awssdk/http-auth-aws-eventstream/2.31.78, Apache-2.0, approved, #20423
+maven/mavencentral/software.amazon.awssdk/http-auth-aws/2.31.78, Apache-2.0, approved, #20413
+maven/mavencentral/software.amazon.awssdk/http-auth-spi/2.31.78, Apache-2.0, approved, #20403
+maven/mavencentral/software.amazon.awssdk/http-auth/2.31.78, Apache-2.0, approved, #20417
+maven/mavencentral/software.amazon.awssdk/http-client-spi/2.31.78, Apache-2.0, approved, #20421
+maven/mavencentral/software.amazon.awssdk/identity-spi/2.31.78, Apache-2.0, approved, #20428
+maven/mavencentral/software.amazon.awssdk/json-utils/2.31.78, Apache-2.0, approved, #20410
+maven/mavencentral/software.amazon.awssdk/metrics-spi/2.31.78, Apache-2.0, approved, #20432
+maven/mavencentral/software.amazon.awssdk/profiles/2.31.78, Apache-2.0, approved, #20418
+maven/mavencentral/software.amazon.awssdk/protocol-core/2.31.78, Apache-2.0, approved, #20402
+maven/mavencentral/software.amazon.awssdk/regions/2.31.78, Apache-2.0, approved, #20422
+maven/mavencentral/software.amazon.awssdk/retries-spi/2.31.78, Apache-2.0, approved, #20425
+maven/mavencentral/software.amazon.awssdk/retries/2.31.78, Apache-2.0, approved, #20427
+maven/mavencentral/software.amazon.awssdk/s3/2.31.78, Apache-2.0, approved, #20412
+maven/mavencentral/software.amazon.awssdk/sdk-core/2.31.78, Apache-2.0, approved, #20416
+maven/mavencentral/software.amazon.awssdk/third-party-jackson-core/2.31.78, Apache-2.0, approved, #20401
+maven/mavencentral/software.amazon.awssdk/utils/2.31.78, Apache-2.0, approved, #20430
+maven/mavencentral/software.amazon.eventstream/eventstream/1.0.1, Apache-2.0, approved, #19691
 maven/mavencentral/systems.uom/systems-common/2.1, BSD-3-Clause, approved, #12728
 maven/mavencentral/tech.units/indriya/2.2, BSD-3-Clause, approved, #12829
 maven/mavencentral/tech.uom.lib/uom-lib-common/2.2, BSD-3-Clause, approved, #12830

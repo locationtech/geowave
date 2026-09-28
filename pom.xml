@@ -95,6 +95,9 @@
 			Jackson that Spark 4 requires. 1.12.788 is the last v1 release and uses the
 			current API. v1 is out of support; Phase 2.10 replaces it with v2. -->
 		<awssdk.version>1.12.788</awssdk.version>
+		<!-- The Eclipse IP team has vetted every SDK artifact GeoWave uses at 2.31.78; Dash
+			reports most of them restricted in later releases. -->
+		<awssdk2.version>2.31.78</awssdk2.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<httpcore.version>4.4.13</httpcore.version>
 		<geotools.scope>compile</geotools.scope>
@@ -459,9 +462,10 @@
 				<version>${paranamer.version}</version>
 			</dependency>
 			<dependency>
+				<!-- s3fs-nio's attribute cache calls Caffeine.evictionListener, added in 2.9. -->
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
-				<version>2.6.2</version>
+				<version>2.9.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.locationtech.jts</groupId>
@@ -1057,6 +1061,13 @@
 				<groupId>com.amazonaws</groupId>
 				<artifactId>aws-java-sdk-s3</artifactId>
 				<version>${awssdk.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>bom</artifactId>
+				<version>${awssdk2.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>

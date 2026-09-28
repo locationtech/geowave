@@ -23,7 +23,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +32,7 @@ import java.util.Properties;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
+import org.carlspring.cloud.storage.s3fs.S3FileSystem;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.ingest.URLIngestUtils;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
@@ -58,8 +58,6 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.internal.Console;
 import com.google.common.collect.Lists;
-import com.upplication.s3fs.S3FileSystem;
-import com.upplication.s3fs.S3FileSystemProvider;
 
 public class SparkIngestDriver implements Serializable {
 
@@ -174,8 +172,9 @@ public class SparkIngestDriver implements Serializable {
         final S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
         final List<URI> inputFiles = new ArrayList<>();
         while (uri.hasNext()) {
-          final Path inputFile =
-              fs.getPath(uri.next().toString().replaceFirst(s3FinalEndpointUrl, ""));
+          // A path's URI names the endpoint by host alone, so an endpoint with a port is not a
+          // prefix of it.
+          final Path inputFile = fs.getPath(uri.next().getPath());
           inputFiles.add(inputFile.toUri());
         }
 
@@ -187,7 +186,7 @@ public class SparkIngestDriver implements Serializable {
             ingestOptions,
             configProperties,
             inputFiles.iterator(),
-            console);
+            new JCommander().getConsole());
       });
     } else if (isHDFS) {
       fileRDD.foreachPartition(uri -> {
@@ -340,11 +339,7 @@ public class SparkIngestDriver implements Serializable {
 
   public S3FileSystem initializeS3FS(final String s3EndpointUrl) throws URISyntaxException {
 
-    return (S3FileSystem) new S3FileSystemProvider().getFileSystem(
-        new URI(s3EndpointUrl),
-        Collections.singletonMap(
-            S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS,
-            GeoWaveAmazonS3Factory.class.getName()));
+    return GeoWaveAmazonS3Factory.getFileSystem(new URI(s3EndpointUrl));
   }
 
 }
