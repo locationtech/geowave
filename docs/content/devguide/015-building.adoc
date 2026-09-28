@@ -35,6 +35,15 @@ After executing the command, Maven will search for all of the projects that need
 
 The build process can take several minutes, but once this is completed, the compiled artifacts for each project will be installed to your local Maven repository. They will also be available in each project's `target` directory.
 
+==== Checkouts built before GeoWave 3.0
+
+Builds before GeoWave 3.0 wrote generated sources into the source tree: protobuf classes under `src/main/java` in `extensions/adapters/raster` and `extensions/datastores/hbase/core`, and gRPC `.proto` files and classes under `services/grpc/protobuf/src`. The build now generates all of them under `target`, so a checkout that still has the old copies fails to compile with `duplicate class` errors. `mvn clean` does not reach them. They are untracked files, so `git clean` removes them without touching anything under version control:
+
+[source, bash]
+----
+$ git clean -fd extensions/adapters/raster/src extensions/datastores/hbase/core/src services/grpc/protobuf/src
+----
+
 ==== Apple Silicon
 
 The build runs in a single pass on Apple Silicon. The gRPC modules use the `osx-aarch_64` builds of protoc and of the `protoc-gen-grpc-java` code generator. The raster and HBase modules generate their protobuf classes with protoc 2.5.0, to match the protobuf-java 2.5.0 that HBase 2 region servers run, and protoc 2.5.0 was only built for x86: on macOS the build uses its `osx-x86_64` binary, which runs under Rosetta 2. If Rosetta is not installed, install it once; without it the raster module, the first to run protoc 2.5.0, fails.
