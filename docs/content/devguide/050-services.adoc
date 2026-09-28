@@ -11,7 +11,7 @@ GeoWave's gRPC service provides a way for remote gRPC client applications to int
 
 ==== gRPC Protobuf
 
-During the build process, GeoWave auto-generates protobuf message files (`.proto`) for all GeoWave commands that derive from the abstract class {core-cli}/core/cli/api/ServiceEnabledCommand.java[`ServiceEnabledCommand`]. The source for the generation process may be found in the  `geowave-grpc-protobuf-generator` project. The auto-generated protobuf files, as well as any manually-generated GeoWave protobuf files can be located in the `geowave-grpc-protobuf` project. The protobuf files are compiled to their respective Java classes by this project as well. For more details on protobuf, please refer to the link:https://developers.google.com/protocol-buffers/[Protocol Buffers tutorials, window="_blank"].
+During the build process, GeoWave auto-generates protobuf message files (`.proto`) for all GeoWave commands that derive from the abstract class {core-cli}/core/cli/api/ServiceEnabledCommand.java[`ServiceEnabledCommand`]. The source for the generation process may be found in the  `geowave-grpc-protobuf-generator` project. The `geowave-grpc-protobuf` project writes the auto-generated protobuf files to its `target/generated-protobuf` directory; the manually-written GeoWave protobuf files are in its `src/main/protobuf` directory. The protobuf files are compiled to their respective Java classes by this project as well. For more details on protobuf, please refer to the link:https://developers.google.com/protocol-buffers/[Protocol Buffers tutorials, window="_blank"].
 
 ==== gRPC server
 
