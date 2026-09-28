@@ -1202,6 +1202,13 @@
 				<artifactId>gt-netcdf</artifactId>
 				<version>${geotools.version}</version>
 				<exclusions>
+					<!-- A 2009 OPeNDAP library that nothing loads: neither gt-netcdf nor
+						NetCDF-Java 5 refers to its opendap.dap classes, and NetCDF-Java 5's own DAP
+						support is a separate artifact. -->
+					<exclusion>
+						<groupId>opendap</groupId>
+						<artifactId>opendap</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
@@ -1212,6 +1219,12 @@
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>
 				<version>2.3.0</version>
+			</dependency>
+			<dependency>
+				<!-- 0.9.10 depends on com.google.code.findbugs:annotations, which 0.9.11 dropped -->
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>0.9.11</version>
 			</dependency>
 			<dependency>
 				<groupId>org.geoserver</groupId>
