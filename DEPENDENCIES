@@ -45,7 +45,6 @@ maven/mavencentral/com.github.stephenc.findbugs/findbugs-annotations/1.3.9-1, Ap
 maven/mavencentral/com.github.vbmacher/java-cup-runtime/11b-20160615, SMLNJ, restricted, #31480
 maven/mavencentral/com.github.wendykierp/JTransforms/3.1, BSD-2-Clause AND LicenseRef-scancode-takuya-ooura, approved, #6781
 maven/mavencentral/com.google.api.grpc/proto-google-common-protos/2.64.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.google.code.findbugs/annotations/2.0.1, CC-BY-2.5 AND LGPL-2.1-or-later, restricted, #241
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.0, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.2, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.gson/gson/2.11.0, Apache-2.0, approved, #14820
@@ -267,7 +266,6 @@ maven/mavencentral/net.sf.geographiclib/GeographicLib-Java/1.49, MIT, approved, 
 maven/mavencentral/net.sf.opencsv/opencsv/2.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/net.sf.py4j/py4j/0.10.9.9, BSD-3-Clause, approved, #19746
 maven/mavencentral/net.sourceforge.f2j/arpack_combined_all/0.1, BSD-2-Clause, approved, clearlydefined
-maven/mavencentral/opendap/opendap/2.1, , restricted, clearlydefined
 maven/mavencentral/org.agrona/Agrona/0.9.1, Apache-2.0, approved, CQ16554
 maven/mavencentral/org.agrona/agrona/1.12.0, Apache-2.0, approved, #19655
 maven/mavencentral/org.antlr/ST4/4.0.8, BSD-3-Clause, approved, #2017
@@ -315,21 +313,21 @@ maven/mavencentral/org.apache.hadoop.thirdparty/hadoop-shaded-guava/1.5.0, Apach
 maven/mavencentral/org.apache.hadoop.thirdparty/hadoop-shaded-protobuf_3_25/1.5.0, Apache-2.0 AND BSD-3-Clause AND MIT, approved, #27150
 maven/mavencentral/org.apache.hadoop/hadoop-annotations/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14127
 maven/mavencentral/org.apache.hadoop/hadoop-auth/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14136
-maven/mavencentral/org.apache.hadoop/hadoop-client-api/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-only, restricted, #31427
-maven/mavencentral/org.apache.hadoop/hadoop-client-runtime/3.4.3, , restricted, #31481
+maven/mavencentral/org.apache.hadoop/hadoop-client-api/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-only, restricted, #31960
+maven/mavencentral/org.apache.hadoop/hadoop-client-runtime/3.4.3, , restricted, #31955
 maven/mavencentral/org.apache.hadoop/hadoop-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT, approved, #14131
 maven/mavencentral/org.apache.hadoop/hadoop-common/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT) AND (Apache-2.0 AND BSD-3-Clause), approved, #14139
 maven/mavencentral/org.apache.hadoop/hadoop-distcp/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14124
 maven/mavencentral/org.apache.hadoop/hadoop-hdfs-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14117
 maven/mavencentral/org.apache.hadoop/hadoop-hdfs/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14122
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-app/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-app/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT, approved, #31956
 maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-common/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14110
 maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-core/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14126
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-hs/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-hs/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT, approved, #31958
 maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-jobclient/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14113
 maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-shuffle/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14115
-maven/mavencentral/org.apache.hadoop/hadoop-minicluster/3.4.3, , restricted, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-minikdc/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-minicluster/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT, approved, #31957
+maven/mavencentral/org.apache.hadoop/hadoop-minikdc/3.4.3, (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #31959
 maven/mavencentral/org.apache.hadoop/hadoop-registry/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14116
 maven/mavencentral/org.apache.hadoop/hadoop-yarn-api/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14111
 maven/mavencentral/org.apache.hadoop/hadoop-yarn-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14112
@@ -711,7 +709,6 @@ maven/mavencentral/org.reactivestreams/reactive-streams/1.0.2, CC0-1.0, approved
 maven/mavencentral/org.reactivestreams/reactive-streams/1.0.3, CC0-1.0, approved, CQ16332
 maven/mavencentral/org.reactivestreams/reactive-streams/1.0.4, CC0-1.0, approved, CQ16332
 maven/mavencentral/org.redisson/redisson/3.47.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.reflections/reflections/0.9.10, MIT, approved, CQ11251
 maven/mavencentral/org.reflections/reflections/0.9.11, MIT, approved, CQ16665
 maven/mavencentral/org.roaringbitmap/RoaringBitmap/1.3.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.rocksdb/rocksdbjni/10.10.1.1, Apache-2.0 OR GPL-2.0, approved, clearlydefined
