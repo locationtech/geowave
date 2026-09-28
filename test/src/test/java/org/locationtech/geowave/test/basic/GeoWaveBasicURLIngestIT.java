@@ -58,6 +58,7 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
       value = {
           GeoWaveStoreType.ACCUMULO,
           GeoWaveStoreType.HBASE,
+          GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM})

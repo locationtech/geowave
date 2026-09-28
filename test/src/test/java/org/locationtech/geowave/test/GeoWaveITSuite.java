@@ -32,6 +32,7 @@ import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
 import org.locationtech.geowave.test.basic.GeoWaveVisibilityIT;
 import org.locationtech.geowave.test.config.ConfigCacheIT;
 import org.locationtech.geowave.test.docs.GeoWaveDocumentationExamplesIT;
+import org.locationtech.geowave.test.javaspark.GeoWaveSparkIngestIT;
 import org.locationtech.geowave.test.kafka.BasicKafkaIT;
 import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
 import org.locationtech.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
@@ -82,6 +83,8 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveDocumentationExamplesIT.class,
     GeoWaveStatisticsIT.class,
     GeoWaveBasicURLIngestIT.class,
+    // has to be before SparkEnvironment usage: the ingest stops whatever session it gets
+    GeoWaveSparkIngestIT.class,
     GeoWaveVectorSerializationIT.class,
     GeoWaveQueryLanguageIT.class,
     BasicDataTypeAdapterQueryIT.class,
