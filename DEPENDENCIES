@@ -6,8 +6,6 @@ maven/mavencentral/com.addthis.metrics/reporter-config3/3.0.3, Apache-2.0, appro
 maven/mavencentral/com.beust/jcommander/1.82, Apache-2.0, approved, #19665
 maven/mavencentral/com.boundary/high-scale-lib/1.0.6, MIT, approved, clearlydefined
 maven/mavencentral/com.carrotsearch/hppc/0.8.1, Apache-2.0, approved, CQ22339
-maven/mavencentral/com.cedarsoftware/java-util/1.9.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.cedarsoftware/json-io/2.5.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.clearspring.analytics/stream/2.9.8, Apache-2.0, approved, CQ11377
 maven/mavencentral/com.conversantmedia/disruptor/1.2.15, Apache-2.0, approved, #19738
 maven/mavencentral/com.datastax.oss/java-driver-core/4.11.1, Apache-2.0 AND BSD-3-Clause, approved, CQ23461
@@ -23,11 +21,11 @@ maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-csv/2.10.
 maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.18.2, Apache-2.0, approved, #16370
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.10.5, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.18.2, Apache-2.0, approved, #16625
-maven/mavencentral/com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.7.8, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.7.8, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.7.8, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.12.7, Apache-2.0, approved, CQ23847
+maven/mavencentral/com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.12.7, Apache-2.0, approved, CQ23848
+maven/mavencentral/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.12.7, Apache-2.0, approved, CQ23849
 maven/mavencentral/com.fasterxml.jackson.module/jackson-module-scala_2.13/2.18.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.fasterxml.woodstox/woodstox-core/5.0.3, Apache-2.0, approved, CQ18554
+maven/mavencentral/com.fasterxml.woodstox/woodstox-core/5.4.0, Apache-2.0, approved, #19714
 maven/mavencentral/com.github.ben-manes.caffeine/caffeine/2.9.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.github.davidmoten/geo/0.7.7, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.github.jbellis/jamm/0.3.2, Apache-2.0, approved, clearlydefined
@@ -44,6 +42,7 @@ maven/mavencentral/com.github.luben/zstd-jni/1.5.0-4, BSD-2-Clause, approved, #1
 maven/mavencentral/com.github.luben/zstd-jni/1.5.6-9, BSD-2-Clause, approved, #19830
 maven/mavencentral/com.github.oshi/oshi-common/7.4.4, MIT, approved, #31826
 maven/mavencentral/com.github.oshi/oshi-core/7.4.4, MIT, approved, #31873
+maven/mavencentral/com.github.pjfanning/jersey-json/1.22.0, CDDL-1.1 OR (GPL-2.0-only WITH Classpath-exception-2.0), approved, #16970
 maven/mavencentral/com.github.rholder/snowball-stemmer/1.3.0.581.1, BSD-2-Clause, approved, clearlydefined
 maven/mavencentral/com.github.spotbugs/spotbugs-annotations/4.8.6, LGPL-2.1-or-later, approved, #20664
 maven/mavencentral/com.github.stephenc.jcip/jcip-annotations/1.0-1, Apache-2.0, approved, CQ21949
@@ -54,20 +53,22 @@ maven/mavencentral/com.google.code.findbugs/annotations/2.0.1, CC-BY-2.5 AND LGP
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.0, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.findbugs/jsr305/3.0.2, Apache-2.0 and CC-BY-2.5, approved, #15220
 maven/mavencentral/com.google.code.gson/gson/2.11.0, Apache-2.0, approved, #14820
-maven/mavencentral/com.google.code.gson/gson/2.2.4, Apache-2.0, approved, CQ7710
 maven/mavencentral/com.google.code.gson/gson/2.8.5, Apache-2.0, approved, CQ17066
 maven/mavencentral/com.google.code.gson/gson/2.8.6, Apache-2.0, approved, CQ23102
+maven/mavencentral/com.google.code.gson/gson/2.9.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.google.crypto.tink/tink/1.16.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.10.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.3.4, Apache-2.0, approved, #807
 maven/mavencentral/com.google.errorprone/error_prone_annotations/2.4.0, Apache-2.0, approved, #31452
+maven/mavencentral/com.google.errorprone/error_prone_annotations/2.41.0, Apache-2.0, approved, #22631
 maven/mavencentral/com.google.flatbuffers/flatbuffers-java/24.3.25, Apache-2.0, approved, #19674
-maven/mavencentral/com.google.guava/failureaccess/1.0.1, Apache-2.0, approved, CQ22654
-maven/mavencentral/com.google.guava/guava/30.1-jre, Apache-2.0 AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ23244
+maven/mavencentral/com.google.guava/failureaccess/1.0.3, Apache-2.0, approved, CQ22654
+maven/mavencentral/com.google.guava/guava/33.5.0-jre, Apache-2.0 AND CC0-1.0 AND CC-PDDC, approved, #23378
 maven/mavencentral/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava, Apache-2.0, approved, CQ22657
-maven/mavencentral/com.google.inject.extensions/guice-servlet/4.0, Apache-2.0, approved, #16102
-maven/mavencentral/com.google.inject/guice/4.0, Apache-2.0, approved, CQ9697
+maven/mavencentral/com.google.inject.extensions/guice-servlet/4.2.3, Apache-2.0, approved, #20008
+maven/mavencentral/com.google.inject/guice/4.2.3, Apache-2.0, approved, #817
 maven/mavencentral/com.google.j2objc/j2objc-annotations/1.3, Apache-2.0, approved, CQ21195
+maven/mavencentral/com.google.j2objc/j2objc-annotations/3.1, Apache-2.0, approved, #23379
 maven/mavencentral/com.google.protobuf/protobuf-java-util/3.17.1, BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/com.google.protobuf/protobuf-java/3.17.1, BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/com.google.re2j/re2j/1.1, BSD-3-Clause, approved, #19718
@@ -77,22 +78,21 @@ maven/mavencentral/com.googlecode.concurrent-trees/concurrent-trees/2.4.0, Apach
 maven/mavencentral/com.googlecode.json-simple/json-simple/1.1, Apache-2.0, approved, CQ5993
 maven/mavencentral/com.googlecode.json-simple/json-simple/1.1.1, Apache-2.0, approved, CQ9858
 maven/mavencentral/com.ibm.icu/icu4j/76.1, LicenseRef-scancode-unicode, approved, #16869
-maven/mavencentral/com.jcraft/jsch/0.1.54, BSD-2-Clause, approved, CQ12480
 maven/mavencentral/com.jcraft/jsch/0.1.55, BSD-3-Clause, approved, CQ19435
 maven/mavencentral/com.lmax/disruptor/3.4.2, Apache-2.0, approved, #19664
-maven/mavencentral/com.nimbusds/nimbus-jose-jwt/4.41.1, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.nimbusds/nimbus-jose-jwt/10.4, Apache-2.0, approved, #22617
 maven/mavencentral/com.ning/compress-lzf/1.1.2, Apache-2.0, approved, #20004
 maven/mavencentral/com.oath.cyclops/cyclops/10.4.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.okhttp/okhttp/2.7.5, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.okio/okio/1.6.0, Apache-2.0, approved, CQ11382
+maven/mavencentral/com.sun.codemodel/codemodel/2.6, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, clearlydefined
+maven/mavencentral/com.sun.istack/istack-commons-runtime/3.0.7, BSD-3-Clause, approved, ee4j.jaxb-impl
 maven/mavencentral/com.sun.istack/istack-commons-runtime/4.1.2, BSD-3-Clause, approved, #15290
-maven/mavencentral/com.sun.jersey.contribs/jersey-guice/1.19, CDDL-1.1 OR (GPL-2.0-only WITH Classpath-exception-2.0), approved, #13051
-maven/mavencentral/com.sun.jersey/jersey-client/1.19, CDDL-1.1 OR (GPL-2.0-only WITH Classpath-exception-2.0), approved, #19735
-maven/mavencentral/com.sun.jersey/jersey-core/1.19, CDDL-1.0 or GPL-2.0-only with Classpath-exception-2.0, approved, #1764
-maven/mavencentral/com.sun.jersey/jersey-json/1.19, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, clearlydefined
-maven/mavencentral/com.sun.jersey/jersey-server/1.19, BSD-3-Clause, approved, #1746
-maven/mavencentral/com.sun.jersey/jersey-servlet/1.19, CDDL-1.0 or GPL-2.0-only with Classpath-exception-2.0, approved, #1757
+maven/mavencentral/com.sun.jersey.contribs/jersey-guice/1.19.4, CDDL-1.1 OR (GPL-2.0-only WITH Classpath-exception-2.0), approved, #13051
+maven/mavencentral/com.sun.jersey/jersey-client/1.19.4, CDDL-1.1 OR (GPL-2.0-only WITH Classpath-exception-2.0), approved, #19735
+maven/mavencentral/com.sun.jersey/jersey-core/1.19.4, CDDL-1.0 or GPL-2.0-only with Classpath-exception-2.0, approved, #1764
+maven/mavencentral/com.sun.jersey/jersey-server/1.19.4, BSD-3-Clause, approved, #1746
+maven/mavencentral/com.sun.jersey/jersey-servlet/1.19.4, CDDL-1.0 or GPL-2.0-only with Classpath-exception-2.0, approved, #1757
 maven/mavencentral/com.sun.xml.bind/jaxb-impl/2.2.3-1, CDDL-1.0, approved, CQ7568
+maven/mavencentral/com.sun.xml.fastinfoset/FastInfoset/1.2.15, Apache-2.0, approved, CQ10313
 maven/mavencentral/com.tdunning/t-digest/3.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.thetransactioncompany/cors-filter/3.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.thetransactioncompany/java-property-utils/1.17, Apache-2.0, approved, clearlydefined
@@ -105,29 +105,27 @@ maven/mavencentral/com.typesafe/config/1.4.1, Apache-2.0, approved, #19703
 maven/mavencentral/com.uber/h3/4.4.0, Apache-2.0, approved, #31453
 maven/mavencentral/com.univocity/univocity-parsers/2.9.1, Apache-2.0, approved, #19722
 maven/mavencentral/com.yammer.metrics/metrics-core/2.2.0, Apache-2.0, approved, CQ9083
-maven/mavencentral/com.zaxxer/HikariCP-java7/2.4.12, Apache-2.0, approved, CQ10704
+maven/mavencentral/com.zaxxer/HikariCP/4.0.3, Apache-2.0, approved, #19708
 maven/mavencentral/commons-beanutils/commons-beanutils/1.11.0, Apache-2.0, approved, #21555
-maven/mavencentral/commons-cli/commons-cli/1.1, Apache-2.0, approved, #31491
-maven/mavencentral/commons-cli/commons-cli/1.2, Apache-2.0, approved, CQ4578
-maven/mavencentral/commons-cli/commons-cli/1.4, Apache-2.0, approved, CQ13132
-maven/mavencentral/commons-codec/commons-codec/1.17.2, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #14583
+maven/mavencentral/commons-cli/commons-cli/1.9.0, Apache-2.0, approved, #15950
+maven/mavencentral/commons-codec/commons-codec/1.22.1, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #27546
 maven/mavencentral/commons-collections/commons-collections/3.2.2, Apache-2.0, approved, #15185
 maven/mavencentral/commons-daemon/commons-daemon/1.0.13, Apache-2.0, approved, CQ7635
 maven/mavencentral/commons-dbcp/commons-dbcp/1.4, Apache-2.0, approved, #5105
-maven/mavencentral/commons-io/commons-io/2.18.0, Apache-2.0, approved, #17366
+maven/mavencentral/commons-io/commons-io/2.22.0, Apache-2.0, approved, #27491
 maven/mavencentral/commons-jxpath/commons-jxpath/1.4.0, Apache-2.0, approved, #20783
 maven/mavencentral/commons-lang/commons-lang/2.6, Apache-2.0, approved, CQ6183
 maven/mavencentral/commons-logging/commons-logging/1.1.3, Apache-2.0, approved, CQ10836
 maven/mavencentral/commons-logging/commons-logging/1.2, Apache-2.0, approved, CQ10162
 maven/mavencentral/commons-logging/commons-logging/1.3.5, Apache-2.0, approved, #11783
-maven/mavencentral/commons-net/commons-net/3.6, Apache-2.0, approved, clearlydefined
+maven/mavencentral/commons-net/commons-net/3.9.0, Apache-2.0, approved, #19725
 maven/mavencentral/commons-pool/commons-pool/1.5.4, Apache-2.0, approved, #19709
 maven/mavencentral/de.jflex/jflex/1.8.2, BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/de.ruedigermoeller/fst/2.50, Apache-2.0, approved, clearlydefined
 maven/mavencentral/dev.ludovic.netlib/arpack/3.0.3, MIT, approved, clearlydefined
 maven/mavencentral/dev.ludovic.netlib/blas/3.0.3, MIT, approved, clearlydefined
 maven/mavencentral/dev.ludovic.netlib/lapack/3.0.3, MIT, approved, clearlydefined
-maven/mavencentral/dnsjava/dnsjava/2.1.7, BSD-1-Clause and ISC, approved, CQ10291
+maven/mavencentral/dnsjava/dnsjava/3.6.1, BSD-3-Clause, approved, #15739
 maven/mavencentral/edu.ucar/bufr/5.5.3, BSD-3-Clause, approved, #31874
 maven/mavencentral/edu.ucar/cdm-core/5.5.3, BSD-3-Clause AND NetCDF AND Apache-2.0 AND Apache-1.1, restricted, #31849
 maven/mavencentral/edu.ucar/httpservices/5.5.3, BSD-3-Clause AND Apache-2.0, approved, #31865
@@ -137,6 +135,7 @@ maven/mavencentral/io.airlift/aircompressor/2.0.2, Apache-2.0, approved, #29916
 maven/mavencentral/io.airlift/aircompressor/2.0.3, Apache-2.0, approved, #29916
 maven/mavencentral/io.airlift/airline/0.8, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.dropwizard.metrics/metrics-core/3.1.5, Apache-2.0, approved, CQ11008
+maven/mavencentral/io.dropwizard.metrics/metrics-core/3.2.4, Apache-2.0, approved, CQ13159
 maven/mavencentral/io.dropwizard.metrics/metrics-core/3.2.6, Apache-2.0, approved, CQ13159
 maven/mavencentral/io.dropwizard.metrics/metrics-core/4.1.18, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.dropwizard.metrics/metrics-core/4.2.30, Apache-2.0, approved, #27707
@@ -150,7 +149,7 @@ maven/mavencentral/io.github.x-stream/mxparser/1.2.2, LicenseRef-scancode-indian
 maven/mavencentral/io.grpc/grpc-api/1.38.0, Apache-2.0, approved, CQ23462
 maven/mavencentral/io.grpc/grpc-context/1.38.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.grpc/grpc-core/1.38.0, Apache-2.0, approved, CQ23462
-maven/mavencentral/io.grpc/grpc-netty/1.38.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/io.grpc/grpc-netty-shaded/1.38.0, Apache-2.0, restricted, clearlydefined
 maven/mavencentral/io.grpc/grpc-protobuf-lite/1.38.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.grpc/grpc-protobuf/1.38.0, Apache-2.0, approved, CQ23462
 maven/mavencentral/io.grpc/grpc-services/1.38.0, Apache-2.0, approved, CQ23462
@@ -161,33 +160,38 @@ maven/mavencentral/io.jsonwebtoken/jjwt-jackson/0.12.6, Apache-2.0, approved, cl
 maven/mavencentral/io.kindedj/kindedj/1.1.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.micrometer/micrometer-commons/1.17.0, Apache-2.0 AND (Apache-2.0 AND MIT), approved, #28746
 maven/mavencentral/io.micrometer/micrometer-observation/1.17.0, Apache-2.0, approved, #28734
-maven/mavencentral/io.netty/netty-all/4.1.65.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ22582
-maven/mavencentral/io.netty/netty-buffer/4.1.65.Final, Apache-2.0, approved, CQ21842
-maven/mavencentral/io.netty/netty-codec-dns/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec-dns/4.1.60.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec-http/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec-http/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec-http2/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec-socks/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-codec/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-common/4.1.65.Final, Apache-2.0 AND MIT AND CC0-1.0, approved, CQ21843
-maven/mavencentral/io.netty/netty-handler-proxy/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-handler/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-resolver-dns/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-resolver-dns/4.1.60.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-resolver/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-tcnative-boringssl-static/2.0.36.Final, Apache-2.0 OR LicenseRef-Public-Domain OR BSD-2-Clause OR MIT, approved, CQ15280
-maven/mavencentral/io.netty/netty-tcnative-boringssl-static/2.0.70.Final, Apache-2.0 OR LicenseRef-Public-Domain OR BSD-2-Clause OR MIT, approved, CQ15280
-maven/mavencentral/io.netty/netty-tcnative-classes/2.0.70.Final, Apache-2.0, approved, #23398
-maven/mavencentral/io.netty/netty-transport-classes-epoll/4.1.118.Final, Apache-2.0, approved, #6366
-maven/mavencentral/io.netty/netty-transport-classes-kqueue/4.1.118.Final, Apache-2.0, approved, #4107
-maven/mavencentral/io.netty/netty-transport-native-epoll/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-transport-native-epoll/4.1.45.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-transport-native-kqueue/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-transport-native-unix-common/4.1.118.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-transport-native-unix-common/4.1.45.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty-transport/4.1.65.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
-maven/mavencentral/io.netty/netty/3.10.5.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND LicenseRef-Public-Domain, approved, CQ13510
+maven/mavencentral/io.netty/netty-all/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ22582
+maven/mavencentral/io.netty/netty-buffer/4.1.137.Final, Apache-2.0, approved, CQ21842
+maven/mavencentral/io.netty/netty-codec-dns/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-codec-haproxy/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec-http/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-codec-http2/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-codec-memcache/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec-mqtt/4.1.137.Final, Apache-2.0 OR LicenseRef-Public-Domain OR BSD-2-Clause OR MIT, approved, CQ15280
+maven/mavencentral/io.netty/netty-codec-redis/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec-smtp/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec-socks/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-codec-stomp/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec-xml/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-codec/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-common/4.1.137.Final, Apache-2.0 AND MIT AND CC0-1.0, approved, CQ21843
+maven/mavencentral/io.netty/netty-handler-proxy/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-handler-ssl-ocsp/4.1.137.Final, Apache-2.0, approved, #6365
+maven/mavencentral/io.netty/netty-handler/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-resolver-dns-classes-macos/4.1.137.Final, Apache-2.0, approved, #6367
+maven/mavencentral/io.netty/netty-resolver-dns/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-resolver/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-tcnative-boringssl-static/2.0.81.Final, Apache-2.0 OR LicenseRef-Public-Domain OR BSD-2-Clause OR MIT, approved, CQ15280
+maven/mavencentral/io.netty/netty-tcnative-classes/2.0.81.Final, Apache-2.0, approved, #23398
+maven/mavencentral/io.netty/netty-transport-classes-epoll/4.1.137.Final, Apache-2.0, approved, #6366
+maven/mavencentral/io.netty/netty-transport-classes-kqueue/4.1.137.Final, Apache-2.0, approved, #4107
+maven/mavencentral/io.netty/netty-transport-native-epoll/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-transport-native-kqueue/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-transport-native-unix-common/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
+maven/mavencentral/io.netty/netty-transport-rxtx/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-transport-sctp/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-transport-udt/4.1.137.Final, Apache-2.0 AND MIT AND BSD-3-Clause AND CC0-1.0 AND LicenseRef-Public-Domain, approved, CQ21553
+maven/mavencentral/io.netty/netty-transport/4.1.137.Final, Apache-2.0 AND BSD-3-Clause AND MIT, approved, CQ20926
 maven/mavencentral/io.projectreactor/reactor-core/3.4.4, Apache-2.0, approved, #7517
 maven/mavencentral/io.reactivex.rxjava3/rxjava/3.0.12, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.sgr/s2-geometry-library-java/1.0.1, Apache-2.0, approved, CQ20917
@@ -218,7 +222,6 @@ maven/mavencentral/it.geosolutions.imageio-ext/imageio-ext-tiff/2.1.1, LGPL-3.0-
 maven/mavencentral/it.geosolutions.imageio-ext/imageio-ext-utilities/2.1.1, LGPL-3.0-or-later AND LGPL-2.1-or-later AND BSD-3-Clause-No-Nuclear-Warranty, approved, #29913
 maven/mavencentral/it.geosolutions.jgridshift/jgridshift-core/1.3, LGPL-2.1-only, approved, #4482
 maven/mavencentral/it.unimi.dsi/fastutil/8.1.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/jakarta.activation/jakarta.activation-api/2.1.3, BSD-3-Clause OR EPL-2.0 OR GPL-2.0-only WITH Classpath-Exception-2.0, approved, #8015
 maven/mavencentral/jakarta.activation/jakarta.activation-api/2.1.4, BSD-3-Clause OR EPL-2.0 OR GPL-2.0-only WITH Classpath-Exception-2.0, approved, #8015
 maven/mavencentral/jakarta.annotation/jakarta.annotation-api/1.3.4, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.ca
 maven/mavencentral/jakarta.annotation/jakarta.annotation-api/1.3.5, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.ca
@@ -230,6 +233,7 @@ maven/mavencentral/jakarta.servlet/jakarta.servlet-api/6.1.0, EPL-2.0 OR GPL-2.0
 maven/mavencentral/jakarta.validation/jakarta.validation-api/2.0.2, Apache-2.0, approved, ee4j.validation
 maven/mavencentral/jakarta.validation/jakarta.validation-api/3.0.2, Apache-2.0, approved, ee4j.validation
 maven/mavencentral/jakarta.ws.rs/jakarta.ws.rs-api/3.1.0, EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, #8019
+maven/mavencentral/jakarta.xml.bind/jakarta.xml.bind-api/2.3.2, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ16911
 maven/mavencentral/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2, BSD-3-Clause, approved, #8016
 maven/mavencentral/jakarta.xml.bind/jakarta.xml.bind-api/4.0.4, BSD-3-Clause, approved, #8016
 maven/mavencentral/jakarta.xml.bind/jakarta.xml.bind-api/4.0.5, BSD-3-Clause, approved, #8016
@@ -237,6 +241,7 @@ maven/mavencentral/javax.activation/javax.activation-api/1.2.0, (CDDL-1.1 OR GPL
 maven/mavencentral/javax.annotation/javax.annotation-api/1.2, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ15728
 maven/mavencentral/javax.annotation/javax.annotation-api/1.3.2, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ16910
 maven/mavencentral/javax.cache/cache-api/1.0.0, Apache-2.0, approved, #31454
+maven/mavencentral/javax.cache/cache-api/1.1.1, Apache-2.0, approved, #19671
 maven/mavencentral/javax.inject/javax.inject/1, Apache-2.0, approved, CQ3555
 maven/mavencentral/javax.json/javax.json-api/1.0, CDDL-1.0, approved, CQ7334
 maven/mavencentral/javax.measure/unit-api/2.2, BSD-3-Clause, approved, #16211
@@ -257,8 +262,6 @@ maven/mavencentral/net.java.dev.jna/jna-jpms/5.19.1, Apache-2.0 AND LGPL-2.1-or-
 maven/mavencentral/net.java.dev.jna/jna-platform-jpms/5.19.1, Apache-2.0 AND LGPL-2.1-or-later AND (Apache-2.0 AND LGPL-2.1-or-later AND LicenseRef-scancode-proprietary-license), restricted, #31823
 maven/mavencentral/net.java.dev.jna/jna/5.7.0, Apache-2.0 AND LGPL-2.1-or-later, approved, #31484
 maven/mavencentral/net.lingala.zip4j/zip4j/1.3.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/net.minidev/accessors-smart/1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/net.minidev/json-smart/2.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/net.openhft/chronicle-bytes/2.20.111, Apache-2.0, approved, clearlydefined
 maven/mavencentral/net.openhft/chronicle-core/2.20.126, Apache-2.0, approved, clearlydefined
 maven/mavencentral/net.openhft/chronicle-queue/5.20.123, Apache-2.0, approved, clearlydefined
@@ -294,60 +297,54 @@ maven/mavencentral/org.apache.avro/avro-mapred/1.12.1, Apache-2.0, approved, #31
 maven/mavencentral/org.apache.avro/avro/1.12.1, Apache-2.0, approved, #27922
 maven/mavencentral/org.apache.cassandra/cassandra-all/4.0.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-collections4/4.4, Apache-2.0, approved, #17660
-maven/mavencentral/org.apache.commons/commons-compress/1.18, Apache-2.0 AND BSD-3-Clause, approved, CQ17974
-maven/mavencentral/org.apache.commons/commons-compress/1.27.1, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #17651
 maven/mavencentral/org.apache.commons/commons-compress/1.28.0, Apache-2.0 AND (Apache-2.0 AND BSD-3-Clause), approved, #22677
-maven/mavencentral/org.apache.commons/commons-configuration2/2.3, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.apache.commons/commons-configuration2/2.15.1, Apache-2.0, approved, #28937
 maven/mavencentral/org.apache.commons/commons-crypto/1.0.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-crypto/1.1.0, Apache-2.0, approved, #6563
 maven/mavencentral/org.apache.commons/commons-csv/1.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-exec/1.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-fileupload2-core/2.0.0-M5, Apache-2.0, approved, #15738
 maven/mavencentral/org.apache.commons/commons-fileupload2-jakarta-servlet6/2.0.0-M5, Apache-2.0, approved, #21710
-maven/mavencentral/org.apache.commons/commons-lang3/3.17.0, Apache-2.0, approved, #16044
+maven/mavencentral/org.apache.commons/commons-lang3/3.20.0, Apache-2.0, approved, #24711
 maven/mavencentral/org.apache.commons/commons-math3/3.6.1, Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause, approved, CQ22025
 maven/mavencentral/org.apache.commons/commons-pool2/2.4.2, Apache-2.0 AND LicenseRef-Public-Domain, approved, CQ14560
-maven/mavencentral/org.apache.commons/commons-text/1.13.0, Apache-2.0, approved, #17931
-maven/mavencentral/org.apache.commons/commons-vfs2/2.3, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.curator/curator-client/2.13.0, Apache-2.0, approved, #6164
+maven/mavencentral/org.apache.commons/commons-text/1.15.0, Apache-2.0, approved, #25194
+maven/mavencentral/org.apache.commons/commons-vfs2/2.9.0, Apache-2.0, approved, #19736
 maven/mavencentral/org.apache.curator/curator-client/5.7.1, Apache-2.0 AND EPL-1.0 AND LGPL-2.1-only AND LGPL-3.0-only AND MIT, approved, clearlydefined
-maven/mavencentral/org.apache.curator/curator-framework/2.13.0, Apache-2.0, approved, #6162
 maven/mavencentral/org.apache.curator/curator-framework/5.7.1, Apache-2.0, approved, #17339
-maven/mavencentral/org.apache.curator/curator-recipes/2.13.0, Apache-2.0, approved, #6163
 maven/mavencentral/org.apache.curator/curator-recipes/5.7.1, Apache-2.0, approved, #17320
 maven/mavencentral/org.apache.datasketches/datasketches-java/6.1.1, (Apache-2.0 AND LGPL-2.0-or-later), approved, #31499
 maven/mavencentral/org.apache.datasketches/datasketches-memory/3.0.2, Apache-2.0 AND BSD-2-Clause AND (Apache-2.0 AND LGPL-2.0-or-later) AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause), approved, #31487
-maven/mavencentral/org.apache.geronimo.specs/geronimo-jcache_1.0_spec/1.0-alpha-1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-annotations/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31483
-maven/mavencentral/org.apache.hadoop/hadoop-auth/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-client-api/3.1.1, Apache-2.0 AND MIT AND (BSD-3-Clause OR GPL-2.0-only WITH Classpath-exception-2.0) AND (MIT OR GPL-2.0-only WITH Classpath-exception-2.0), approved, #5074
-maven/mavencentral/org.apache.hadoop/hadoop-client-api/3.4.1, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-only, restricted, #31427
-maven/mavencentral/org.apache.hadoop/hadoop-client-runtime/3.1.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-client-runtime/3.4.1, , restricted, #31481
-maven/mavencentral/org.apache.hadoop/hadoop-client/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-common/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31450
-maven/mavencentral/org.apache.hadoop/hadoop-distcp/3.1.2, (AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0), restricted, #31463
-maven/mavencentral/org.apache.hadoop/hadoop-hdfs-client/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31444
-maven/mavencentral/org.apache.hadoop/hadoop-hdfs/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-app/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-common/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31497
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-core/3.1.2, (AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0), restricted, #31477
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-hs/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-jobclient/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31515
-maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-shuffle/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31479
-maven/mavencentral/org.apache.hadoop/hadoop-minicluster/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31500
-maven/mavencentral/org.apache.hadoop/hadoop-minikdc/3.1.2, (AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0), restricted, #31512
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-api/3.1.2, (AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0), restricted, #31503
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-client/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-common/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31486
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-registry/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-applicationhistoryservice/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31504
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-common/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31470
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-nodemanager/3.1.2, (AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0), restricted, #31440
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-resourcemanager/3.1.2, AGPL-3.0-only AND Apache-2.0 AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC-BY-2.5 AND CC-BY-3.0 AND CDDL-1.0 AND CDDL-1.1 AND EPL-1.0 AND GPL-2.0-only AND LGPL-2.1-only AND LicenseRef-scancode-jdom AND LicenseRef-scancode-protobuf AND MIT AND MPL-2.0, restricted, #31496
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-tests/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-timelineservice/3.1.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-web-proxy/3.1.2, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.apache.hadoop.thirdparty/hadoop-shaded-guava/1.5.0, Apache-2.0 AND BSD-3-Clause AND MIT, approved, #27160
+maven/mavencentral/org.apache.hadoop.thirdparty/hadoop-shaded-protobuf_3_25/1.5.0, Apache-2.0 AND BSD-3-Clause AND MIT, approved, #27150
+maven/mavencentral/org.apache.hadoop/hadoop-annotations/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14127
+maven/mavencentral/org.apache.hadoop/hadoop-auth/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14136
+maven/mavencentral/org.apache.hadoop/hadoop-client-api/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-only, restricted, #31427
+maven/mavencentral/org.apache.hadoop/hadoop-client-runtime/3.4.3, , restricted, #31481
+maven/mavencentral/org.apache.hadoop/hadoop-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT, approved, #14131
+maven/mavencentral/org.apache.hadoop/hadoop-common/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT) AND (Apache-2.0 AND BSD-3-Clause), approved, #14139
+maven/mavencentral/org.apache.hadoop/hadoop-distcp/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14124
+maven/mavencentral/org.apache.hadoop/hadoop-hdfs-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14117
+maven/mavencentral/org.apache.hadoop/hadoop-hdfs/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14122
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-app/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-common/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14110
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-core/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14126
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-hs/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-jobclient/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14113
+maven/mavencentral/org.apache.hadoop/hadoop-mapreduce-client-shuffle/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14115
+maven/mavencentral/org.apache.hadoop/hadoop-minicluster/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-minikdc/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-registry/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14116
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-api/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT), approved, #14111
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-client/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14112
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-common/3.4.3, Apache-2.0 AND MIT AND (MIT OR GPL-2.0-only), approved, #14134
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-applicationhistoryservice/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-common/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14114
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-nodemanager/3.4.3, Apache-2.0 AND (Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT) AND MIT, approved, #14138
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-resourcemanager/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-tests/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-timelineservice/3.4.3, , restricted, clearlydefined
+maven/mavencentral/org.apache.hadoop/hadoop-yarn-server-web-proxy/3.4.3, Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Apache-2.0, approved, #14120
 maven/mavencentral/org.apache.hbase.thirdparty/hbase-shaded-gson/3.4.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.hbase.thirdparty/hbase-shaded-jersey/3.4.1, EPL-2.0 AND (GPL-2.0-only WITH Classpath-exception-2.0) AND (Apache-2.0 AND CC0-1.0 AND EPL-2.0 AND (GPL-2.0-only WITH Classpath-exception-2.0)) AND (Apache-2.0 AND BSD-3-Clause AND CC0-1.0 AND EPL-2.0 AND (GPL-2.0-only WITH Classpath-exception-2.0) AND MIT AND W3C) AND (Apache-2.0 AND BSD-3-Clause AND EPL-2.0 AND (GPL-2.0-only WITH Classpath-exception-2.0)) AND (Apache-2.0 AND CC0-1.0) AND (CC-PDDC AND EPL-2.0 AND (GPL-2.0-only WITH Classpath-exception-2.0)), restricted, #31493
 maven/mavencentral/org.apache.hbase.thirdparty/hbase-shaded-jetty/3.4.1, Apache-1.1 AND Apache-2.0 AND EPL-1.0 AND LicenseRef-scancode-other-permissive AND (Apache-2.0 AND EPL-1.0) AND (Apache-2.0 AND EPL-1.0 AND MIT), restricted, #31460
@@ -369,12 +366,11 @@ maven/mavencentral/org.apache.hbase/hbase-protocol-shaded/2.4.2, Apache-2.0, app
 maven/mavencentral/org.apache.hbase/hbase-protocol/2.4.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.hbase/hbase-replication/2.4.2, Apache-2.0, approved, #5508
 maven/mavencentral/org.apache.hbase/hbase-server/2.4.2, Apache-2.0 AND MIT, approved, #31434
-maven/mavencentral/org.apache.hbase/hbase-shaded-client/2.4.2, Apache-2.0 AND BSD-3-Clause AND LicenseRef-scancode-protobuf AND MIT AND Minpack, restricted, #31448
+maven/mavencentral/org.apache.hbase/hbase-shaded-client-byo-hadoop/2.4.2, Apache-2.0 AND BSD-3-Clause AND MIT AND NOASSERTION, restricted, clearlydefined
 maven/mavencentral/org.apache.hbase/hbase-testing-util/2.4.2, Apache-2.0, approved, #31425
 maven/mavencentral/org.apache.hbase/hbase-zookeeper/2.4.2, Apache-2.0, approved, #31457
 maven/mavencentral/org.apache.hive/hive-storage-api/2.8.1, Apache-2.0, approved, #6526
 maven/mavencentral/org.apache.htrace/htrace-core/3.2.0-incubating, Apache-2.0, approved, CQ21804
-maven/mavencentral/org.apache.htrace/htrace-core4/4.1.0-incubating, Apache-2.0, approved, #20012
 maven/mavencentral/org.apache.htrace/htrace-core4/4.2.0-incubating, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.httpcomponents.client5/httpclient5-cache/5.4.4, Apache-2.0 AND MIT, approved, clearlydefined
 maven/mavencentral/org.apache.httpcomponents.client5/httpclient5/5.4.4, Apache-2.0 AND MPL-2.0, approved, #16947
@@ -387,21 +383,21 @@ maven/mavencentral/org.apache.kafka/kafka-clients/2.8.0, Apache-2.0 AND (Apache-
 maven/mavencentral/org.apache.kafka/kafka-metadata/2.8.0, Apache-2.0, approved, #6521
 maven/mavencentral/org.apache.kafka/kafka-raft/2.8.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.kafka/kafka_2.13/2.8.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.kerby/kerb-admin/1.0.1, Apache-2.0, approved, #15524
-maven/mavencentral/org.apache.kerby/kerb-client/1.0.1, Apache-2.0, approved, #15516
-maven/mavencentral/org.apache.kerby/kerb-common/1.0.1, Apache-2.0, approved, #15523
-maven/mavencentral/org.apache.kerby/kerb-core/1.0.1, Apache-2.0, approved, #15512
-maven/mavencentral/org.apache.kerby/kerb-crypto/1.0.1, Apache-2.0, approved, #13048
-maven/mavencentral/org.apache.kerby/kerb-identity/1.0.1, Apache-2.0, approved, #15513
-maven/mavencentral/org.apache.kerby/kerb-server/1.0.1, Apache-2.0, approved, #15510
-maven/mavencentral/org.apache.kerby/kerb-simplekdc/1.0.1, Apache-2.0, approved, #15519
-maven/mavencentral/org.apache.kerby/kerb-util/1.0.1, Apache-2.0, approved, #15511
-maven/mavencentral/org.apache.kerby/kerby-asn1/1.0.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.kerby/kerby-config/1.0.1, Apache-2.0, approved, #17100
-maven/mavencentral/org.apache.kerby/kerby-pkix/1.0.1, Apache-2.0, approved, #15518
-maven/mavencentral/org.apache.kerby/kerby-util/1.0.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.kerby/kerby-xdr/1.0.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.kerby/token-provider/1.0.1, Apache-2.0, approved, #15520
+maven/mavencentral/org.apache.kerby/kerb-admin/2.0.3, Apache-2.0, approved, #15522
+maven/mavencentral/org.apache.kerby/kerb-client/2.0.3, Apache-2.0, approved, #14132
+maven/mavencentral/org.apache.kerby/kerb-common/2.0.3, Apache-2.0, approved, #14135
+maven/mavencentral/org.apache.kerby/kerb-core/2.0.3, Apache-2.0, approved, #14137
+maven/mavencentral/org.apache.kerby/kerb-crypto/2.0.3, Apache-2.0, approved, #14130
+maven/mavencentral/org.apache.kerby/kerb-identity/2.0.3, Apache-2.0, approved, #14125
+maven/mavencentral/org.apache.kerby/kerb-server/2.0.3, Apache-2.0, approved, #15515
+maven/mavencentral/org.apache.kerby/kerb-simplekdc/2.0.3, Apache-2.0, approved, #14118
+maven/mavencentral/org.apache.kerby/kerb-util/2.0.3, Apache-2.0, approved, #15521
+maven/mavencentral/org.apache.kerby/kerby-asn1/2.0.3, Apache-2.0, approved, #19992
+maven/mavencentral/org.apache.kerby/kerby-config/2.0.3, Apache-2.0, approved, #14119
+maven/mavencentral/org.apache.kerby/kerby-pkix/2.0.3, Apache-2.0, approved, #14129
+maven/mavencentral/org.apache.kerby/kerby-util/2.0.3, Apache-2.0, approved, #19729
+maven/mavencentral/org.apache.kerby/kerby-xdr/2.0.3, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.apache.kerby/token-provider/2.0.3, Apache-2.0, approved, #14133
 maven/mavencentral/org.apache.logging.log4j/log4j-1.2-api/2.24.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.logging.log4j/log4j-api/2.24.3, Apache-2.0, approved, #16095
 maven/mavencentral/org.apache.logging.log4j/log4j-core/2.24.3, Apache-2.0 AND (Apache-2.0 AND LGPL-2.0-or-later), approved, #16549
@@ -462,32 +458,29 @@ maven/mavencentral/org.apache.xmlgraphics/batik-xml/1.18, Apache-2.0, approved, 
 maven/mavencentral/org.apache.xmlgraphics/xmlgraphics-commons/2.10, Apache-2.0, approved, #16598
 maven/mavencentral/org.apache.yetus/audience-annotations/0.12.0, Apache-2.0, approved, #19676
 maven/mavencentral/org.apache.yetus/audience-annotations/0.5.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.zookeeper/zookeeper-jute/3.5.7, Apache-2.0, approved, clearlydefined
-maven/mavencentral/org.apache.zookeeper/zookeeper-jute/3.9.3, Apache-2.0, approved, #13998
-maven/mavencentral/org.apache.zookeeper/zookeeper/3.5.7, Apache-2.0, approved, #6552
+maven/mavencentral/org.apache.zookeeper/zookeeper-jute/3.9.6, Apache-2.0, approved, #13998
+maven/mavencentral/org.apache.zookeeper/zookeeper/3.9.6, Apache-2.0, approved, #13997
 maven/mavencentral/org.apiguardian/apiguardian-api/1.1.2, Apache-2.0, approved, #17641
+maven/mavencentral/org.bouncycastle/bcpkix-jdk18on/1.82, MIT, approved, #23373
 maven/mavencentral/org.bouncycastle/bcprov-jdk15on/1.69, MIT, approved, clearlydefined
+maven/mavencentral/org.bouncycastle/bcprov-jdk18on/1.82, MIT AND CC0-1.0, approved, #23374
 maven/mavencentral/org.bouncycastle/bcprov-lts8on/2.73.11, MIT, approved, #19041
+maven/mavencentral/org.bouncycastle/bcutil-jdk18on/1.82, MIT, approved, #23375
 maven/mavencentral/org.caffinitas.ohc/ohc-core-j8/0.5.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.caffinitas.ohc/ohc-core/0.5.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.carlspring.cloud.aws/s3fs-nio/3.0.0, Apache-2.0 OR MIT, approved, clearlydefined
 maven/mavencentral/org.checkerframework/checker-qual/3.19.0, MIT, approved, clearlydefined
-maven/mavencentral/org.checkerframework/checker-qual/3.5.0, MIT, approved, clearlydefined
-maven/mavencentral/org.codehaus.jackson/jackson-core-asl/1.9.13, Apache-2.0, approved, CQ8499
-maven/mavencentral/org.codehaus.jackson/jackson-jaxrs/1.9.2, Apache-2.0, approved, CQ12826
-maven/mavencentral/org.codehaus.jackson/jackson-mapper-asl/1.9.13, Apache-2.0, approved, CQ8499
-maven/mavencentral/org.codehaus.jackson/jackson-xc/1.9.2, Apache-2.0, approved, CQ8499
 maven/mavencentral/org.codehaus.janino/commons-compiler/3.1.12, BSD-3-Clause, approved, #13293
 maven/mavencentral/org.codehaus.janino/commons-compiler/3.1.9, BSD-3-Clause, approved, #13293
 maven/mavencentral/org.codehaus.janino/janino/3.1.12, BSD-3-Clause, approved, #13292
 maven/mavencentral/org.codehaus.janino/janino/3.1.9, BSD-3-Clause, approved, #13292
-maven/mavencentral/org.codehaus.jettison/jettison/1.1, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.codehaus.jettison/jettison/1.5.4, Apache-2.0, approved, #5282
 maven/mavencentral/org.codehaus.jettison/jettison/1.5.7, Apache-2.0, approved, #5282
 maven/mavencentral/org.codehaus.plexus/plexus-archiver/2.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.codehaus.plexus/plexus-container-default/1.0-alpha-9-stable-1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.codehaus.plexus/plexus-io/2.0.4, Apache-2.0, approved, CQ6820
 maven/mavencentral/org.codehaus.plexus/plexus-utils/3.0.7, , approved, CQ7947
-maven/mavencentral/org.codehaus.woodstox/stax2-api/3.1.4, BSD-2-Clause, approved, CQ13504
+maven/mavencentral/org.codehaus.woodstox/stax2-api/4.2.1, BSD-2-Clause, approved, #2670
 maven/mavencentral/org.eclipse.angus/angus-mail/2.0.5, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.angus
 maven/mavencentral/org.eclipse.emf/org.eclipse.emf.common/2.15.0, EPL-2.0, approved, modeling.emf
 maven/mavencentral/org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.15.0, EPL-2.0, approved, modeling.emf
@@ -542,15 +535,13 @@ maven/mavencentral/org.eclipse.jetty/jetty-http/12.1.12, EPL-2.0 OR Apache-2.0, 
 maven/mavencentral/org.eclipse.jetty/jetty-io/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-security/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-server/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
-maven/mavencentral/org.eclipse.jetty/jetty-servlet/9.3.24.v20180605, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-session/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-util-ajax/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-util/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
-maven/mavencentral/org.eclipse.jetty/jetty-webapp/9.3.24.v20180605, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-xml/12.1.12, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.xsd/org.eclipse.xsd/2.12.0, EPL-1.0, approved, #8431
-maven/mavencentral/org.ehcache/ehcache/3.3.1, Apache-2.0 AND (Apache-2.0 AND CC0-1.0), approved, #6497
 maven/mavencentral/org.ehcache/ehcache/3.4.0, Apache-2.0 AND CC0-1.0, approved, clearlydefined
+maven/mavencentral/org.ehcache/ehcache/3.8.2, Apache-2.0 AND MIT AND OFL-1.1 AND LicenseRef-Terracota-Public-License-2.0, approved, #16969
 maven/mavencentral/org.ejml/ejml-core/0.41, Apache-2.0, approved, #19749
 maven/mavencentral/org.ejml/ejml-ddense/0.41, Apache-2.0, approved, #19659
 maven/mavencentral/org.freemarker/freemarker/2.3.34, Apache-2.0, approved, #6764
@@ -624,7 +615,9 @@ maven/mavencentral/org.glassfish.hk2/hk2-locator/3.0.6, EPL-2.0 OR GPL-2.0-only 
 maven/mavencentral/org.glassfish.hk2/hk2-utils/3.0.6, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.glassfish
 maven/mavencentral/org.glassfish.hk2/osgi-resource-locator/1.0.3, CDDL-1.0, approved, CQ10889
 maven/mavencentral/org.glassfish.jaxb/jaxb-core/4.0.5, BSD-3-Clause, approved, ee4j.jaxb-impl
+maven/mavencentral/org.glassfish.jaxb/jaxb-runtime/2.3.1, BSD-3-Clause, approved, ee4j.jaxb-impl
 maven/mavencentral/org.glassfish.jaxb/jaxb-runtime/4.0.5, BSD-3-Clause, approved, ee4j.jaxb-impl
+maven/mavencentral/org.glassfish.jaxb/txw2/2.3.1, BSD-3-Clause, approved, ee4j.jaxb-impl
 maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet-core/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
 maven/mavencentral/org.glassfish.jersey.containers/jersey-container-servlet/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
 maven/mavencentral/org.glassfish.jersey.core/jersey-client/3.1.12, EPL-2.0 OR GPL-2.0-only with Classpath-exception-2.0, approved, ee4j.jersey
@@ -650,7 +643,6 @@ maven/mavencentral/org.huldra.math/bigint/0.7.1, BSD-2-Clause, approved, CQ20114
 maven/mavencentral/org.jamon/jamon-runtime/2.4.1, MPL-2.0, approved, CQ12827
 maven/mavencentral/org.jasypt/jasypt-springsecurity3/1.9.3, Apache-2.0, approved, #31856
 maven/mavencentral/org.jasypt/jasypt/1.9.3, Apache-2.0 AND ICU, approved, #295
-maven/mavencentral/org.javassist/javassist/3.18.1-GA, MPL-1.1 OR LGPL-2.1-or-later OR Apache-2.0, approved, CQ16087
 maven/mavencentral/org.javassist/javassist/3.21.0-GA, MPL-1.1 OR LGPL-2.1-or-later OR Apache-2.0, approved, CQ14999
 maven/mavencentral/org.javassist/javassist/3.30.2-GA, Apache-2.0 AND LGPL-2.1-or-later AND MPL-1.1, approved, #12108
 maven/mavencentral/org.jboss.marshalling/jboss-marshalling-river/2.0.11.Final, Apache-2.0, approved, clearlydefined
@@ -661,6 +653,7 @@ maven/mavencentral/org.jctools/jctools-core/3.1.0, Apache-2.0, approved, clearly
 maven/mavencentral/org.jdom/jdom/1.1.3, Apache-1.1, approved, #18555
 maven/mavencentral/org.jdom/jdom2/2.0.6.1, Apache-1.1, approved, CQ11158
 maven/mavencentral/org.jetbrains/annotations/17.0.0, Apache-2.0, approved, #19678
+maven/mavencentral/org.jline/jline/3.9.0, BSD-3-Clause AND (Apache-2.0 AND BSD-3-Clause) AND Apache-2.0, approved, #15517
 maven/mavencentral/org.jodd/jodd-bean/5.1.6, BSD-2-Clause, approved, clearlydefined
 maven/mavencentral/org.jodd/jodd-core/5.1.6, BSD-2-Clause, approved, clearlydefined
 maven/mavencentral/org.jruby.jcodings/jcodings/1.0.55, MIT, approved, CQ10635
@@ -670,8 +663,10 @@ maven/mavencentral/org.json4s/json4s-core_2.13/4.0.7, Apache-2.0, approved, #200
 maven/mavencentral/org.json4s/json4s-jackson-core_2.13/4.0.7, Apache-2.0, approved, #20019
 maven/mavencentral/org.json4s/json4s-jackson_2.13/4.0.7, Apache-2.0, approved, #20039
 maven/mavencentral/org.json4s/json4s-scalap_2.13/4.0.7, BSD-3-Clause, approved, #20036
+maven/mavencentral/org.jsonschema2pojo/jsonschema2pojo-core/1.0.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.jspecify/jspecify/1.0.0, Apache-2.0, approved, #21897
 maven/mavencentral/org.jvnet.mimepull/mimepull/1.9.15, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ21484
+maven/mavencentral/org.jvnet.staxex/stax-ex/1.8, BSD-3-Clause, approved, ee4j.jaxb-impl
 maven/mavencentral/org.kordamp.ezmorph/ezmorph-core/3.2.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.kordamp.json/json-lib-core/3.2.0-limit-fix, Apache-2.0, approved, #31858
 maven/mavencentral/org.locationtech.geowave/geowave-adapter-auth/3.0.0-SNAPSHOT, Apache-2.0, approved, locationtech.geowave
@@ -708,13 +703,12 @@ maven/mavencentral/org.locationtech.geowave/geowave-service-api/3.0.0-SNAPSHOT, 
 maven/mavencentral/org.locationtech.jts/jts-core/1.20.0, EPL-2.0, approved, locationtech.jts
 maven/mavencentral/org.lz4/lz4-java/1.8.0, Apache-2.0, approved, #20005
 maven/mavencentral/org.mindrot/jbcrypt/0.3m, ISC, approved, #31525
-maven/mavencentral/org.objenesis/objenesis/1.0, MIT, approved, CQ3931
+maven/mavencentral/org.objenesis/objenesis/2.5.1, Apache-2.0, approved, #19694
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
 maven/mavencentral/org.ow2.asm/asm-analysis/9.1, BSD-3-Clause, approved, CQ23029
 maven/mavencentral/org.ow2.asm/asm-commons/9.1, BSD-3-Clause, approved, CQ23029
 maven/mavencentral/org.ow2.asm/asm-tree/9.1, BSD-3-Clause, approved, CQ23029
 maven/mavencentral/org.ow2.asm/asm-util/9.1, BSD-3-Clause, approved, CQ23029
-maven/mavencentral/org.ow2.asm/asm/5.0.4, BSD-2-Clause, approved, CQ9857
 maven/mavencentral/org.ow2.asm/asm/7.1, BSD-3-Clause, approved, CQ19521
 maven/mavencentral/org.ow2.asm/asm/9.1, BSD-3-Clause, approved, CQ23029
 maven/mavencentral/org.psjava/psjava/0.1.19, MIT, approved, clearlydefined
