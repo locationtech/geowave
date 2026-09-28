@@ -10,12 +10,15 @@ package org.locationtech.geowave.datastore.accumulo.cli;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
+import org.apache.accumulo.server.ServerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,6 +170,25 @@ public class MiniAccumuloUtils {
       LOGGER.warn("Unable to getZooKeepers", e);
     }
     return null;
+  }
+
+  /**
+   * Builds the cluster's server context, which stop() otherwise builds on first use. Building it
+   * registers a shutdown hook, so a stop() from a shutdown hook would fail partway through.
+   */
+  public static void createServerContext(final MiniAccumuloCluster cluster) {
+    try {
+      final Field impl = MiniAccumuloCluster.class.getDeclaredField("impl");
+      impl.setAccessible(true);
+      // not getMethod(), which loads the types of all the impl's methods, and one returns a
+      // MiniDFSCluster, which is not on this module's classpath
+      MethodHandles.publicLookup().findVirtual(
+          impl.getType(),
+          "getServerContext",
+          MethodType.methodType(ServerContext.class)).invoke(impl.get(cluster));
+    } catch (final Throwable e) {
+      LOGGER.warn("Unable to create server context", e);
+    }
   }
 
   public static Process exec(

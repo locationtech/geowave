@@ -207,3 +207,12 @@ open until the JVM exits.
 * RocksDB does not lock a directory against a second copy of itself in the same JVM, such as the
 copy of GeoWave in GeoServer's web application and one outside it. If both have a directory open,
 they corrupt it, so close the other copy's stores on a directory before GeoServer opens it.
+
+*Accumulo 2.1, GeoWave 3.0.* GeoWave 3.0 is built against Accumulo 2.1.6, from the 2.1
+long-term maintenance line, where GeoWave 2.x used Accumulo 2.0.1. The Accumulo data store and the
+GeoWave Accumulo JAR need an Accumulo 2.1 cluster, so upgrade Accumulo first, as described in
+Accumulo's link:https://accumulo.apache.org/docs/2.x/administration/upgrading[upgrade notes, window="_blank"].
+GeoWave's tables do not change, so their data needs no migration or re-ingest. Accumulo 2.1
+deprecates the `general.vfs.context.classpath.*` and `table.classpath.context` properties that
+<<105-accumulo-config.adoc#accumulo-config, Configuring Accumulo for GeoWave>> uses to put the
+GeoWave JAR on a namespace's classpath, but they still work in 2.1.

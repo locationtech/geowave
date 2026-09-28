@@ -63,12 +63,12 @@
 		<jts.version>1.20.0</jts.version>
 		<imageio.ext.version>2.1.1</imageio.ext.version>
 		<!-- GeoServer 3.0.1's, which is the Guava the GeoServer plugin runs on. Spark 4.0.1
-			asks for 33.4.0 and Hadoop 3.4.3 for 32.0.1. -->
+			asks for 33.4.0 and Hadoop 3.4.3 for 32.0.1. Accumulo 2.1 needs at least 31. -->
 		<guava.version>33.5.0-jre</guava.version>
 		<jspecify.version>1.0.0</jspecify.version>
 		<geoserver.version>3.0.1</geoserver.version>
-		<accumulo.version>2.0.1</accumulo.version>
-		<thrift.version>0.12.0</thrift.version>
+		<accumulo.version>2.1.6</accumulo.version>
+		<thrift.version>0.17.0</thrift.version>
 		<cassandra.version>4.0.1</cassandra.version>
 		<redisson.version>3.47.0</redisson.version>
 		<rocksdb.version>10.10.1.1</rocksdb.version>
@@ -493,7 +493,8 @@
 				<version>${paranamer.version}</version>
 			</dependency>
 			<dependency>
-				<!-- s3fs-nio's attribute cache calls Caffeine.evictionListener, added in 2.9. -->
+				<!-- At least 2.9: s3fs-nio's attribute cache calls Caffeine.evictionListener, and Accumulo 2.1
+					needs it too. -->
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
 				<version>2.9.3</version>
@@ -617,16 +618,40 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
-					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
-						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
-						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<!-- Only ClusterConfigParser uses it, for the accumulo-cluster script's cluster.yaml,
+						and the 2.x it asks for won't run the embedded Cassandra server, which needs
+						the 1.x API. -->
 					<exclusion>
-						<groupId>org.openjfx</groupId>
-						<artifactId>*</artifactId>
+						<groupId>org.yaml</groupId>
+						<artifactId>snakeyaml</artifactId>
+					</exclusion>
+					<!-- Accumulo depends on Hadoop's shaded client, and refers only to the
+						org.apache.hadoop API that it shares with the unshaded hadoop-client, which
+						the Accumulo data store depends on. So every Accumulo artifact here leaves
+						the shaded pair out rather than add a second copy of Hadoop, and its
+						relocated third-party jars, where Spark does not already bring one. -->
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-api</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-runtime</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.accumulo</groupId>
+				<artifactId>accumulo-start</artifactId>
+				<version>${accumulo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-runtime</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -643,29 +668,16 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
-				<artifactId>accumulo-server</artifactId>
-				<version>${accumulo.version}</version>
-				<scope>${accumulo.scope}</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-test</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
-					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
-						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
-						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
 					<exclusion>
-						<groupId>org.openjfx</groupId>
-						<artifactId>*</artifactId>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-api</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-runtime</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -674,16 +686,34 @@
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
-					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
-						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
-						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<!-- Only for an external compaction coordinator, which nothing here starts;
+						the mini cluster names it only in startCoordinator's signature. -->
 					<exclusion>
-						<groupId>org.openjfx</groupId>
-						<artifactId>*</artifactId>
+						<groupId>org.apache.accumulo</groupId>
+						<artifactId>accumulo-compaction-coordinator</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-runtime</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.accumulo</groupId>
+				<artifactId>accumulo-monitor</artifactId>
+				<version>${accumulo.version}</version>
+				<exclusions>
+					<!-- MiniAccumuloConfigImpl names Monitor.class in a field initializer, so
+						the class has to load wherever a mini cluster is configured. Nothing
+						here starts the monitor, and loading the class needs none of its web
+						stack. -->
+					<exclusion>
+						<groupId>*</groupId>
+						<artifactId>*</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -691,6 +721,16 @@
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-shell</artifactId>
 				<version>${accumulo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.hadoop</groupId>
+						<artifactId>hadoop-client-runtime</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -950,12 +990,6 @@
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-client-runtime</artifactId>
-				<version>${hadoop.version}</version>
-			</dependency>
-			<dependency>
-				<!-- accumulo-test asks for 3.1.1, and it carries Hadoop's classes as well -->
-				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop-client-minicluster</artifactId>
 				<version>${hadoop.version}</version>
 			</dependency>
 			<dependency>

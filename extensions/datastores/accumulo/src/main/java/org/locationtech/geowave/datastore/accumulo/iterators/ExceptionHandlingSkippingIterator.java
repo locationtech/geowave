@@ -25,7 +25,7 @@ public abstract class ExceptionHandlingSkippingIterator extends SkippingIterator
       throw e;
     } catch (final Exception e) {
       LOGGER.error("Exception while initializing skipping iterator", e);
-      throw new IOException(e);
+      throw new ServerSideIteratorException("Exception in skipping iterator", e);
     }
   }
 

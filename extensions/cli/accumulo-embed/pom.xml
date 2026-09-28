@@ -25,16 +25,11 @@
 					<groupId>org.apache.thrift</groupId>
 					<artifactId>libthrift</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>org.apache.htrace</groupId>
-					<artifactId>htrace-core</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-start</artifactId>
-			<version>${accumulo.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -48,15 +43,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-monitor</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
 					<artifactId>accumulo-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-fate</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.accumulo</groupId>
@@ -67,22 +54,27 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 				<exclusion>
-					<artifactId>jersey-core</artifactId>
-					<groupId>com.sun.jersey</groupId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.apache.thrift</groupId>
 					<artifactId>libthrift</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.htrace</groupId>
-					<artifactId>htrace-core</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-shell</artifactId>
+		</dependency>
+		<!-- The mini cluster's ZooKeeper server fails to start without these two, which
+			ZooKeeper declares provided. metrics-core is at Spark 4.0.1's version. -->
+		<dependency>
+			<groupId>io.dropwizard.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
+			<version>4.2.30</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.xerial.snappy</groupId>
+			<artifactId>snappy-java</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>

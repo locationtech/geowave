@@ -8,11 +8,7 @@
  */
 package org.locationtech.geowave.datastore.accumulo.iterators;
 
-import java.io.IOException;
-import java.util.Collection;
-import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
-import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.Filter;
 
@@ -23,39 +19,9 @@ public abstract class ExceptionHandlingFilter extends Filter {
     try {
       return acceptInternal(k, v);
     } catch (final Exception e) {
-      throw new WrappingFilterException("Exception in filter.", e);
+      throw new ServerSideIteratorException("Exception in filter", e);
     }
   }
 
   protected abstract boolean acceptInternal(Key k, Value v);
-
-  @Override
-  public void next() throws IOException {
-    try {
-      super.next();
-    } catch (final WrappingFilterException e) {
-      throw new IOException(e.getCause());
-    }
-  }
-
-  @Override
-  public void seek(
-      final Range range,
-      final Collection<ByteSequence> columnFamilies,
-      final boolean inclusive) throws IOException {
-    try {
-      super.seek(range, columnFamilies, inclusive);
-    } catch (final WrappingFilterException e) {
-      throw new IOException(e.getCause());
-    }
-  }
-
-  private static class WrappingFilterException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-
-    public WrappingFilterException(final String message, final Exception e) {
-      super(message, e);
-    }
-  }
-
 }

@@ -23,7 +23,7 @@ import java.util.Scanner;
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.gc.SimpleGarbageCollector;
-import org.apache.accumulo.master.Master;
+import org.apache.accumulo.manager.Manager;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
 import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.accumulo.server.init.Initialize;
@@ -239,7 +239,7 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
       cleanup.add(MiniAccumuloUtils.exec(miniAccumulo, TabletServer.class, jvmArgs));
     }
 
-    cleanup.add(MiniAccumuloUtils.exec(miniAccumulo, Master.class, jvmArgs));
+    cleanup.add(MiniAccumuloUtils.exec(miniAccumulo, Manager.class, jvmArgs));
     cleanup.add(MiniAccumuloUtils.exec(miniAccumulo, SimpleGarbageCollector.class, jvmArgs));
   }
 
