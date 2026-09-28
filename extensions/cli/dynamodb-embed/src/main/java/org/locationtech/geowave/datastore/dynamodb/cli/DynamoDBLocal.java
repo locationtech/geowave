@@ -35,7 +35,9 @@ public class DynamoDBLocal {
   private static final String DYNDB_TAR = "dynamodb_local_latest.tar.gz";
   public static final int DEFAULT_PORT = 8000;
 
-  private static final long EMULATOR_SPINUP_DELAY_MS = 30000L;
+  private static final long EMULATOR_STARTUP_TIMEOUT_MS = 60000L;
+  private static final long EMULATOR_STARTUP_POLL_MS = 100L;
+  private static final int EMULATOR_PROBE_TIMEOUT_MS = 1000;
   private static final long EMULATOR_SHUTDOWN_TIMEOUT_MS = 30000L;
   public static final File DEFAULT_DIR = new File("./temp");
 
@@ -84,21 +86,61 @@ public class DynamoDBLocal {
       }
     }
 
+    // otherwise the wait below would take whatever already answers there for this instance
+    if (isServing()) {
+      LOGGER.error("Something is already serving port " + port + "; not starting DynamoDB Local");
+      return false;
+    }
     try {
       startDynamoLocal();
+      return waitUntilServing();
     } catch (IOException | InterruptedException e) {
       LOGGER.error(e.getMessage());
       return false;
     }
-    if (resultHandler.hasResult()) {
-      // such as when the port is still taken
-      LOGGER.error(
-          "DynamoDB Local exited on startup with exit value " + resultHandler.getExitValue(),
-          resultHandler.getException());
+  }
+
+  private boolean waitUntilServing() throws InterruptedException {
+    final long deadline = System.currentTimeMillis() + EMULATOR_STARTUP_TIMEOUT_MS;
+    while (!resultHandler.hasResult()) {
+      if (isServing()) {
+        return true;
+      }
+      if (System.currentTimeMillis() > deadline) {
+        LOGGER.error(
+            "DynamoDB Local did not answer on port "
+                + port
+                + " within "
+                + EMULATOR_STARTUP_TIMEOUT_MS
+                + " ms");
+        stop();
+        return false;
+      }
+      Thread.sleep(EMULATOR_STARTUP_POLL_MS);
+    }
+    // such as when the port is still taken
+    LOGGER.error(
+        "DynamoDB Local exited on startup with exit value " + resultHandler.getExitValue(),
+        resultHandler.getException());
+    return false;
+  }
+
+  /** Any HTTP response at all, even the 400 an unsigned request gets, means it is serving. */
+  private boolean isServing() {
+    try {
+      final HttpURLConnection connection =
+          (HttpURLConnection) new URL("http://127.0.0.1:" + port + "/").openConnection();
+      connection.setConnectTimeout(EMULATOR_PROBE_TIMEOUT_MS);
+      connection.setReadTimeout(EMULATOR_PROBE_TIMEOUT_MS);
+      try {
+        connection.getResponseCode();
+        return true;
+      } finally {
+        connection.disconnect();
+      }
+    } catch (final IOException e) {
       return false;
     }
-
-    return true;
   }
 
   public boolean isRunning() {
@@ -106,6 +148,9 @@ public class DynamoDBLocal {
   }
 
   public void stop() {
+    if (watchdog == null) {
+      return;
+    }
     watchdog.destroyProcess();
     // Destroying only signals the process. A start straight after would race it for the port,
     // lose, and exit, leaving nothing listening.
@@ -157,16 +202,8 @@ public class DynamoDBLocal {
     return true;
   }
 
-  /**
-   * Using apache commons exec for cmd line execution
-   *
-   * @param command
-   * @return exitCode
-   * @throws ExecuteException
-   * @throws IOException
-   * @throws InterruptedException
-   */
-  private void startDynamoLocal() throws ExecuteException, IOException, InterruptedException {
+  /** Launches the process in the background, with Apache Commons Exec. */
+  private void startDynamoLocal() throws ExecuteException, IOException {
     // java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
     // -sharedDb
     // this JVM's own java, since the one on the path may be older than DynamoDB Local's minimum
@@ -194,9 +231,5 @@ public class DynamoDBLocal {
     final Executor executor = new DefaultExecutor();
     executor.setWatchdog(watchdog);
     executor.execute(cmdLine, resultHandler);
-
-    // we need to wait here for a bit, in case the emulator needs to update
-    // itself
-    Thread.sleep(EMULATOR_SPINUP_DELAY_MS);
   }
 }
