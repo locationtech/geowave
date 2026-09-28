@@ -43,7 +43,9 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
           "org.apache.hadoop.conf",
           "org.apache.hadoop.fs",
           "org.apache.hadoop.util",
-          "org.apache.hadoop.io"};
+          "org.apache.hadoop.io",
+          // SecurityUtil loads a DomainNameResolver through the Configuration's class loader
+          "org.apache.hadoop.net"};
 
   private static ClassLoader hbaseMiniClusterCl;
 

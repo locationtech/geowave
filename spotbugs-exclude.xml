@@ -55,26 +55,23 @@
 	</Match>
 
 	<!--
-	  Caffeine 2.9 marks LoadingCache.get and Cache.get(key, function) @Nullable,
-	  because a loader or function may return null. The loaders and functions
-	  here all create or open what they are asked for, so these gets never do.
-	  2.6.2, which GeoWave used before s3fs-nio needed 2.9, had no annotations.
+	  Caffeine 2.7 and later annotate LoadingCache.get and Cache.get(key,
+	  mappingFunction) with the Checker Framework's @Nullable, since a loader or
+	  mapping function may return null, and SpotBugs treats that as check-for-null.
+	  Each of these caches is built with a loader or function that constructs its
+	  value and never returns null, so neither get can. Caffeine 2.6.2, which
+	  GeoWave managed before, used javax.annotation.Nullable, which SpotBugs does
+	  not act on.
 	-->
 	<Match>
 		<Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE" />
 		<Or>
 			<And>
-				<Class name="org.locationtech.geowave.core.store.callback.DeleteOtherIndicesCallback" />
-				<Method name="entryDeleted" />
-			</And>
-			<And>
-				<Class
-					name="org.locationtech.geowave.datastore.filesystem.operations.FileSystemWriter" />
+				<Class name="org.locationtech.geowave.datastore.filesystem.operations.FileSystemWriter" />
 				<Method name="write" />
 			</And>
 			<And>
-				<Class
-					name="org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead$1" />
+				<Class name="org.locationtech.geowave.datastore.redis.operations.BatchedRangeRead$1" />
 				<Method name="run" />
 			</And>
 			<And>

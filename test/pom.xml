@@ -49,7 +49,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
-			<artifactId>grpc-netty</artifactId>
+			<artifactId>grpc-netty-shaded</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -297,7 +297,6 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>failureaccess</artifactId>
-			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>

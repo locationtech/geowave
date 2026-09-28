@@ -77,6 +77,15 @@ public class DeleteOtherIndicesCallback<T> implements DeleteCallback<T, GeoWaveR
     rowDeleters.invalidateAll();
   }
 
+  private RowDeleter rowDeleter(final String indexName) {
+    final RowDeleter deleter = rowDeleters.get(indexName);
+    if (deleter == null) {
+      // Accumulo and HBase log why and return null when they cannot create one.
+      throw new IllegalStateException("Unable to create a row deleter for index " + indexName);
+    }
+    return deleter;
+  }
+
   @Override
   public void entryDeleted(final T entry, final GeoWaveRow... rows) {
     if (rows.length > 0) {
@@ -89,7 +98,7 @@ public class DeleteOtherIndicesCallback<T> implements DeleteCallback<T, GeoWaveR
                 index);
         for (final SinglePartitionInsertionIds partitionId : ids.getPartitionKeys()) {
           for (final byte[] sortKey : partitionId.getSortKeys()) {
-            rowDeleters.get(index.getName()).delete(
+            rowDeleter(index.getName()).delete(
                 new GeoWaveRowImpl(
                     new GeoWaveKeyImpl(
                         rows[0].getDataId(),

@@ -18,7 +18,7 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.hbase</groupId>
-					<artifactId>hbase-shaded-client</artifactId>
+					<artifactId>hbase-shaded-client-byo-hadoop</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.apache.hbase</groupId>
