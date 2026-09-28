@@ -90,12 +90,14 @@
 		<avro.version>1.12.1</avro.version>
 		<extra.enforcer.rules.version>1.10.0</extra.enforcer.rules.version>
 		<maven.compiler.target>21</maven.compiler.target>
-		<!-- 1.11.x calls PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE, which Jackson
-			removed in 2.12, so EC2MetadataUtils fails its class initialiser against the
-			Jackson that Spark 4 requires. 1.12.788 is the last v1 release and uses the
-			current API. v1 is out of support; Phase 2.10 replaces it with v2. -->
+		<!-- Only the tests' s3mock still uses SDK 1.x, whose S3 models its routes build
+			responses from. It declares 1.11.x, which calls
+			PropertyNamingStrategy.PASCAL_CASE_TO_CAMEL_CASE, removed in Jackson 2.12, so
+			EC2MetadataUtils fails its class initialiser against the Jackson that Spark 4
+			requires. 1.12.788 is the last 1.x release and uses the current API. -->
 		<awssdk.version>1.12.788</awssdk.version>
-		<!-- The Eclipse IP team has vetted every SDK artifact GeoWave uses at 2.31.78; Dash
+		<!-- The Eclipse IP team has vetted every SDK artifact GeoWave uses at 2.31.78 except
+			dynamodb, which ClearlyDefined clears at exactly Dash's threshold score of 60. Dash
 			reports most of them restricted in later releases. -->
 		<awssdk2.version>2.31.78</awssdk2.version>
 		<httpclient.version>4.5.13</httpclient.version>

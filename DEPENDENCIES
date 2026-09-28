@@ -3,11 +3,6 @@ maven/mavencentral/ar.com.hjg/pngj/2.0.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/classworlds/classworlds/1.1-alpha-2, Plexus, approved, #1180
 maven/mavencentral/com.addthis.metrics/reporter-config-base/3.0.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.addthis.metrics/reporter-config3/3.0.3, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.amazonaws/aws-java-sdk-core/1.12.788, Apache-2.0, approved, #4399
-maven/mavencentral/com.amazonaws/aws-java-sdk-dynamodb/1.12.788, Apache-2.0, approved, #31482
-maven/mavencentral/com.amazonaws/aws-java-sdk-kms/1.12.788, Apache-2.0, approved, #15078
-maven/mavencentral/com.amazonaws/aws-java-sdk-s3/1.12.788, Apache-2.0, approved, #15079
-maven/mavencentral/com.amazonaws/jmespath-java/1.12.788, Apache-2.0, approved, #4352
 maven/mavencentral/com.beust/jcommander/1.82, Apache-2.0, approved, #19665
 maven/mavencentral/com.boundary/high-scale-lib/1.0.6, MIT, approved, clearlydefined
 maven/mavencentral/com.carrotsearch/hppc/0.8.1, Apache-2.0, approved, CQ22339
@@ -24,7 +19,6 @@ maven/mavencentral/com.esotericsoftware/minlog/1.3.0, BSD-2-Clause, approved, CQ
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.22, Apache-2.0, approved, #28540
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.18.2, Apache-2.0 AND MIT, approved, #16371
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.18.2, Apache-2.0, approved, #16372
-maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-cbor/2.18.2, Apache-2.0, approved, #18213
 maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-csv/2.10.5, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.18.2, Apache-2.0, approved, #16370
 maven/mavencentral/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.10.5, Apache-2.0, approved, clearlydefined
@@ -256,7 +250,6 @@ maven/mavencentral/javax.xml.bind/jaxb-api/2.2.11, CDDL-1.1 OR GPL-2.0-only with
 maven/mavencentral/javax.xml.bind/jaxb-api/2.3.1, CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0, approved, CQ16911
 maven/mavencentral/jline/jline/2.11, BSD-3-Clause, approved, #19707
 maven/mavencentral/joda-time/joda-time/2.10.3, Apache-2.0, approved, clearlydefined
-maven/mavencentral/joda-time/joda-time/2.12.7, Apache-2.0, approved, #12739
 maven/mavencentral/me.lemire.integercompression/JavaFastPFOR/0.1.12, Apache-2.0, approved, clearlydefined
 maven/mavencentral/net.bytebuddy/byte-buddy/1.10.14, Apache-2.0, approved, CQ22491
 maven/mavencentral/net.bytebuddy/byte-buddy/1.12.19, Apache-2.0 AND BSD-3-Clause, approved, #1811
@@ -784,11 +777,13 @@ maven/mavencentral/software.amazon.awssdk/apache-client/2.31.78, Apache-2.0, app
 maven/mavencentral/software.amazon.awssdk/arns/2.31.78, Apache-2.0, approved, #20426
 maven/mavencentral/software.amazon.awssdk/auth/2.31.78, Apache-2.0, approved, #20415
 maven/mavencentral/software.amazon.awssdk/aws-core/2.31.78, Apache-2.0, approved, #20420
+maven/mavencentral/software.amazon.awssdk/aws-json-protocol/2.31.78, Apache-2.0, approved, #20405
 maven/mavencentral/software.amazon.awssdk/aws-query-protocol/2.31.78, Apache-2.0, approved, #20409
 maven/mavencentral/software.amazon.awssdk/aws-xml-protocol/2.31.78, Apache-2.0, approved, #20414
 maven/mavencentral/software.amazon.awssdk/checksums-spi/2.31.78, Apache-2.0, approved, #20406
 maven/mavencentral/software.amazon.awssdk/checksums/2.31.78, Apache-2.0, approved, #20429
 maven/mavencentral/software.amazon.awssdk/crt-core/2.31.78, Apache-2.0, approved, #20433
+maven/mavencentral/software.amazon.awssdk/dynamodb/2.31.78, Apache-2.0, approved, clearlydefined
 maven/mavencentral/software.amazon.awssdk/endpoints-spi/2.31.78, Apache-2.0, approved, #20431
 maven/mavencentral/software.amazon.awssdk/http-auth-aws-eventstream/2.31.78, Apache-2.0, approved, #20423
 maven/mavencentral/software.amazon.awssdk/http-auth-aws/2.31.78, Apache-2.0, approved, #20413

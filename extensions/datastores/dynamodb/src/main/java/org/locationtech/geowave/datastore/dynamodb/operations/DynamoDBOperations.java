@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -46,33 +45,28 @@ import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
+import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
-import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.BatchGetItemRequest;
-import com.amazonaws.services.dynamodbv2.model.BatchGetItemResult;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.KeysAndAttributes;
-import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.amazonaws.services.dynamodbv2.model.TableStatus;
-import com.amazonaws.services.dynamodbv2.model.WriteRequest;
-import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.amazonaws.services.dynamodbv2.util.TableUtils.TableNeverTransitionedToStateException;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
+import software.amazon.awssdk.core.exception.SdkClientException;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
+import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
+import software.amazon.awssdk.services.dynamodb.model.KeyType;
+import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes;
+import software.amazon.awssdk.services.dynamodb.model.ResourceInUseException;
+import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
+import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
+import software.amazon.awssdk.services.dynamodb.model.TableStatus;
+import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
+import software.amazon.awssdk.services.dynamodb.waiters.DynamoDbWaiter;
 
 public class DynamoDBOperations implements MapReduceDataStoreOperations {
   private final Logger LOGGER = LoggerFactory.getLogger(DynamoDBOperations.class);
@@ -86,7 +80,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   public static final String METADATA_VISIBILITY_KEY = "A";
   public static final String METADATA_VALUE_KEY = "V";
 
-  private final AmazonDynamoDBAsync client;
+  private final DynamoDbClient client;
   private final String gwNamespace;
   private final DynamoDBOptions options;
   public static Map<String, Boolean> tableExistsCache = new HashMap<>();
@@ -106,12 +100,16 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     return options;
   }
 
-  public AmazonDynamoDBAsync getClient() {
+  public DynamoDbClient getClient() {
     return client;
   }
 
   public String getQualifiedTableName(final String tableName) {
     return gwNamespace == null ? tableName : gwNamespace + "_" + tableName;
+  }
+
+  private String getDataIndexTableName(final String typeName) {
+    return typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName());
   }
 
   public String getMetadataTableName(final MetadataType metadataType) {
@@ -121,10 +119,9 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public void deleteAll() throws Exception {
-    final ListTablesResult tables = client.listTables();
-    for (final String tableName : tables.getTableNames()) {
+    for (final String tableName : client.listTablesPaginator().tableNames()) {
       if ((gwNamespace == null) || tableName.startsWith(gwNamespace)) {
-        client.deleteTable(new DeleteTableRequest(tableName));
+        client.deleteTable(b -> b.tableName(tableName));
       }
     }
     tableExistsCache.clear();
@@ -132,10 +129,14 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public boolean indexExists(final String indexName) throws IOException {
+    return isTableActive(getQualifiedTableName(indexName));
+  }
+
+  private boolean isTableActive(final String tableName) {
     try {
-      return TableStatus.ACTIVE.name().equals(
-          client.describeTable(getQualifiedTableName(indexName)).getTable().getTableStatus());
-    } catch (final AmazonDynamoDBException e) {
+      return TableStatus.ACTIVE.equals(
+          client.describeTable(b -> b.tableName(tableName)).table().tableStatus());
+    } catch (final DynamoDbException e) {
       LOGGER.info("Unable to check existence of table", e);
     }
     return false;
@@ -183,23 +184,21 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final byte[][] dataIds,
       final short adapterId,
       final String typeName) {
-    final String tableName =
-        typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName());
+    final String tableName = getDataIndexTableName(typeName);
     final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
     while (dataIdIterator.hasNext()) {
       final List<WriteRequest> deleteRequests = new ArrayList<>();
       int i = 0;
       while (dataIdIterator.hasNext() && (i < MAX_ROWS_FOR_BATCHWRITER)) {
-        deleteRequests.add(
-            new WriteRequest(
-                new DeleteRequest(
-                    Collections.singletonMap(
-                        DynamoDBRow.GW_PARTITION_ID_KEY,
-                        new AttributeValue().withB(ByteBuffer.wrap(dataIdIterator.next()))))));
+        final Map<String, AttributeValue> key =
+            Collections.singletonMap(
+                DynamoDBRow.GW_PARTITION_ID_KEY,
+                DynamoDBUtils.binaryValue(dataIdIterator.next()));
+        deleteRequests.add(WriteRequest.builder().deleteRequest(d -> d.key(key)).build());
         i++;
       }
 
-      client.batchWriteItem(Collections.singletonMap(tableName, deleteRequests));
+      DynamoDBUtils.batchWriteItem(client, Collections.singletonMap(tableName, deleteRequests));
     }
   }
 
@@ -241,21 +240,11 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   }
 
   public Iterator<GeoWaveRow> getRowsFromDataIndex(final short adapterId, final String typeName) {
+    final String tableName = getDataIndexTableName(typeName);
     final List<GeoWaveRow> resultList = new ArrayList<>();
-    // fill result list
-    ScanResult result =
-        getResults(
-            typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
-            adapterId,
-            resultList,
-            null);
-    while ((result.getLastEvaluatedKey() != null) && !result.getLastEvaluatedKey().isEmpty()) {
-      result =
-          getResults(
-              typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
-              adapterId,
-              resultList,
-              result.getLastEvaluatedKey());
+    for (final Map<String, AttributeValue> item : client.scanPaginator(
+        b -> b.tableName(tableName)).items()) {
+      resultList.add(toDataIndexRow(item, adapterId));
     }
     return resultList.iterator();
   }
@@ -265,6 +254,10 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
       final short adapterId,
       final String typeName) {
     final Map<ByteArray, GeoWaveRow> resultMap = new HashMap<>();
+    final Consumer<Map<String, AttributeValue>> addToResults = item -> {
+      final GeoWaveRow row = toDataIndexRow(item, adapterId);
+      resultMap.put(new ByteArray(row.getDataId()), row);
+    };
     final Iterator<byte[]> dataIdIterator = Arrays.stream(dataIds).iterator();
     while (dataIdIterator.hasNext()) {
       // fill result map
@@ -274,102 +267,81 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         dataIdsForRequest.add(
             Collections.singletonMap(
                 DynamoDBRow.GW_PARTITION_ID_KEY,
-                new AttributeValue().withB(ByteBuffer.wrap(dataIdIterator.next()))));
+                DynamoDBUtils.binaryValue(dataIdIterator.next())));
         i++;
       }
-      BatchGetItemResult result =
-          getResults(
-              Collections.singletonMap(
-                  typeName + "_" + getQualifiedTableName(DataIndexUtils.DATA_ID_INDEX.getName()),
-                  new KeysAndAttributes().withKeys(dataIdsForRequest)),
-              adapterId,
-              resultMap);
-      while (!result.getUnprocessedKeys().isEmpty()) {
-        result = getResults(result.getUnprocessedKeys(), adapterId, resultMap);
-      }
+      DynamoDBUtils.batchGetItem(
+          client,
+          Collections.singletonMap(
+              getDataIndexTableName(typeName),
+              KeysAndAttributes.builder().keys(dataIdsForRequest).build()),
+          addToResults);
     }
     return Arrays.stream(dataIds).map(d -> resultMap.get(new ByteArray(d))).filter(
         r -> r != null).iterator();
   }
 
-  private ScanResult getResults(
-      final String tableName,
-      final short adapterId,
-      final List<GeoWaveRow> resultList,
-      final Map<String, AttributeValue> lastEvaluatedKey) {
-    final ScanRequest request = new ScanRequest(tableName);
-    if ((lastEvaluatedKey != null) && !lastEvaluatedKey.isEmpty()) {
-      request.setExclusiveStartKey(lastEvaluatedKey);
-    }
-    final ScanResult result = client.scan(request);
-    result.getItems().forEach(objMap -> {
-      final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
-      final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
-      final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
-      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
-      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
-
-      resultList.add(DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
-    });
-    return result;
+  private static GeoWaveRow toDataIndexRow(
+      final Map<String, AttributeValue> item,
+      final short adapterId) {
+    final byte[] vis = DynamoDBUtils.bytes(item.get(DynamoDBRow.GW_VISIBILITY_KEY));
+    return DataIndexUtils.deserializeDataIndexRow(
+        DynamoDBUtils.bytes(item.get(DynamoDBRow.GW_PARTITION_ID_KEY)),
+        adapterId,
+        DynamoDBUtils.bytes(item.get(DynamoDBRow.GW_VALUE_KEY)),
+        vis == null ? new byte[0] : vis);
   }
 
-  private BatchGetItemResult getResults(
-      final Map<String, KeysAndAttributes> requestItems,
-      final short adapterId,
-      final Map<ByteArray, GeoWaveRow> resultMap) {
-    final BatchGetItemRequest request = new BatchGetItemRequest(requestItems);
+  static CreateTableRequest indexTableRequest(
+      final String qName,
+      final boolean dataIndexTable,
+      final long readCapacity,
+      final long writeCapacity) {
+    final CreateTableRequest.Builder request =
+        CreateTableRequest.builder().tableName(qName).provisionedThroughput(
+            t -> t.readCapacityUnits(readCapacity).writeCapacityUnits(writeCapacity));
+    if (dataIndexTable) {
+      return request.attributeDefinitions(
+          binaryAttribute(DynamoDBRow.GW_PARTITION_ID_KEY)).keySchema(
+              key(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH)).build();
+    }
+    return request.attributeDefinitions(
+        binaryAttribute(DynamoDBRow.GW_PARTITION_ID_KEY),
+        binaryAttribute(DynamoDBRow.GW_RANGE_KEY)).keySchema(
+            key(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
+            key(DynamoDBRow.GW_RANGE_KEY, KeyType.RANGE)).build();
+  }
 
-    final BatchGetItemResult result = client.batchGetItem(request);
-    result.getResponses().values().forEach(results -> results.stream().forEach(objMap -> {
-      final byte[] dataId = objMap.get(DynamoDBRow.GW_PARTITION_ID_KEY).getB().array();
-      final AttributeValue valueAttr = objMap.get(DynamoDBRow.GW_VALUE_KEY);
-      final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
-      final AttributeValue visAttr = objMap.get(DynamoDBRow.GW_VISIBILITY_KEY);
-      final byte[] vis = visAttr == null ? new byte[0] : visAttr.getB().array();
-      resultMap.put(
-          new ByteArray(dataId),
-          DataIndexUtils.deserializeDataIndexRow(dataId, adapterId, value, vis));
-    }));
-    return result;
+  /** Keyed on the primary ID and the write timestamp together. */
+  static CreateTableRequest metadataTableRequest(final String tableName) {
+    return CreateTableRequest.builder().tableName(tableName).attributeDefinitions(
+        binaryAttribute(METADATA_PRIMARY_ID_KEY),
+        AttributeDefinition.builder().attributeName(METADATA_TIMESTAMP_KEY).attributeType(
+            ScalarAttributeType.N).build()).keySchema(
+                key(METADATA_PRIMARY_ID_KEY, KeyType.HASH),
+                key(METADATA_TIMESTAMP_KEY, KeyType.RANGE)).provisionedThroughput(
+                    t -> t.readCapacityUnits(5L).writeCapacityUnits(5L)).build();
+  }
+
+  private static AttributeDefinition binaryAttribute(final String name) {
+    return AttributeDefinition.builder().attributeName(name).attributeType(
+        ScalarAttributeType.B).build();
+  }
+
+  private static KeySchemaElement key(final String name, final KeyType type) {
+    return KeySchemaElement.builder().attributeName(name).keyType(type).build();
   }
 
   private boolean createTable(final String qName, final boolean dataIndexTable) {
-    return createTable(
-        qName,
-        dataIndexTable
-            ? () -> new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
-                new AttributeDefinition(
-                    DynamoDBRow.GW_PARTITION_ID_KEY,
-                    ScalarAttributeType.B)).withKeySchema(
-                        new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH))
-            : () -> new CreateTableRequest().withTableName(qName).withAttributeDefinitions(
-                new AttributeDefinition(DynamoDBRow.GW_PARTITION_ID_KEY, ScalarAttributeType.B),
-                new AttributeDefinition(
-                    DynamoDBRow.GW_RANGE_KEY,
-                    ScalarAttributeType.B)).withKeySchema(
-                        new KeySchemaElement(DynamoDBRow.GW_PARTITION_ID_KEY, KeyType.HASH),
-                        new KeySchemaElement(DynamoDBRow.GW_RANGE_KEY, KeyType.RANGE)));
-  }
-
-  private boolean createTable(final String qName, final Supplier<CreateTableRequest> tableRequest) {
     synchronized (tableExistsCache) {
       final Boolean tableExists = tableExistsCache.get(qName);
       if ((tableExists == null) || !tableExists) {
-        final boolean tableCreated =
-            TableUtils.createTableIfNotExists(
-                client,
-                tableRequest.get().withProvisionedThroughput(
-                    new ProvisionedThroughput(
-                        Long.valueOf(options.getReadCapacity()),
-                        Long.valueOf(options.getWriteCapacity()))));
-        if (tableCreated) {
-          try {
-            TableUtils.waitUntilActive(client, qName);
-          } catch (TableNeverTransitionedToStateException | InterruptedException e) {
-            LOGGER.error("Unable to wait for active table '" + qName + "'", e);
-          }
-        }
+        createTableIfNotExists(
+            indexTableRequest(
+                qName,
+                dataIndexTable,
+                options.getReadCapacity(),
+                options.getWriteCapacity()));
         tableExistsCache.put(qName, true);
         return true;
       }
@@ -377,15 +349,30 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     return false;
   }
 
-  public void dropMetadataTable(MetadataType type) {
-    String tableName = getMetadataTableName(type);
+  private void createTableIfNotExists(final CreateTableRequest request) {
+    try {
+      client.createTable(request);
+    } catch (final ResourceInUseException e) {
+      // it already exists
+      return;
+    }
+    try (DynamoDbWaiter waiter = client.waiter()) {
+      waiter.waitUntilTableExists(b -> b.tableName(request.tableName()));
+    } catch (final SdkClientException e) {
+      LOGGER.error("Unable to wait for active table '" + request.tableName() + "'", e);
+    }
+  }
+
+  public void dropMetadataTable(final MetadataType type) {
+    final String tableName = getMetadataTableName(type);
     synchronized (DynamoDBOperations.tableExistsCache) {
       final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
-      if (tableExists == null || tableExists) {
-        final boolean tableDropped =
-            TableUtils.deleteTableIfExists(client, new DeleteTableRequest(tableName));
-        if (tableDropped) {
+      if ((tableExists == null) || tableExists) {
+        try {
+          client.deleteTable(b -> b.tableName(tableName));
           DynamoDBOperations.tableExistsCache.put(tableName, false);
+        } catch (final ResourceNotFoundException e) {
+          // already gone
         }
       }
     }
@@ -395,24 +382,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     synchronized (DynamoDBOperations.tableExistsCache) {
       final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
       if ((tableExists == null) || !tableExists) {
-        final boolean tableCreated =
-            TableUtils.createTableIfNotExists(client, new CreateTableRequest() //
-                .withTableName(tableName) //
-                .withAttributeDefinitions(
-                    new AttributeDefinition(METADATA_PRIMARY_ID_KEY, ScalarAttributeType.B)) //
-                .withKeySchema(new KeySchemaElement(METADATA_PRIMARY_ID_KEY, KeyType.HASH)) //
-                .withAttributeDefinitions(
-                    new AttributeDefinition(METADATA_TIMESTAMP_KEY, ScalarAttributeType.N)) //
-                .withKeySchema(new KeySchemaElement(METADATA_TIMESTAMP_KEY, KeyType.RANGE)) //
-                .withProvisionedThroughput(
-                    new ProvisionedThroughput(Long.valueOf(5), Long.valueOf(5))));
-        if (tableCreated) {
-          try {
-            TableUtils.waitUntilActive(client, tableName);
-          } catch (TableNeverTransitionedToStateException | InterruptedException e) {
-            LOGGER.error("Unable to wait for active table '" + tableName + "'", e);
-          }
-        }
+        createTableIfNotExists(metadataTableRequest(tableName));
         DynamoDBOperations.tableExistsCache.put(tableName, true);
       }
     }
@@ -463,13 +433,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
 
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
-    try {
-      return TableStatus.ACTIVE.name().equals(
-          client.describeTable(getMetadataTableName(type)).getTable().getTableStatus());
-    } catch (final AmazonDynamoDBException e) {
-      LOGGER.info("Unable to check existence of table", e);
-    }
-    return false;
+    return isTableActive(getMetadataTableName(type));
   }
 
   public boolean createIndex(final Index index) throws IOException {

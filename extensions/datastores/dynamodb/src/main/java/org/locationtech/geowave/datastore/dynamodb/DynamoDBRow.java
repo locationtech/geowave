@@ -21,8 +21,8 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.beust.jcommander.internal.Lists;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
   public static final String GW_PARTITION_ID_KEY = "P";
@@ -44,23 +44,18 @@ public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
 
   private static GeoWaveValue[] getFieldValues(final Map<String, AttributeValue> objMap) {
     final GeoWaveValue[] fieldValues = new GeoWaveValueImpl[1];
-    final AttributeValue fieldMaskAttr = objMap.get(GW_FIELD_MASK_KEY);
-    final byte[] fieldMask = fieldMaskAttr == null ? null : fieldMaskAttr.getB().array();
-
-    final AttributeValue visibilityAttr = objMap.get(GW_VISIBILITY_KEY);
-    final byte[] visibility = visibilityAttr == null ? null : visibilityAttr.getB().array();
-
-    final AttributeValue valueAttr = objMap.get(GW_VALUE_KEY);
-    final byte[] value = valueAttr == null ? null : valueAttr.getB().array();
-
-    fieldValues[0] = new GeoWaveValueImpl(fieldMask, visibility, value);
+    fieldValues[0] =
+        new GeoWaveValueImpl(
+            DynamoDBUtils.bytes(objMap.get(GW_FIELD_MASK_KEY)),
+            DynamoDBUtils.bytes(objMap.get(GW_VISIBILITY_KEY)),
+            DynamoDBUtils.bytes(objMap.get(GW_VALUE_KEY)));
     return fieldValues;
   }
 
   private static GeoWaveKey getGeoWaveKey(final Map<String, AttributeValue> objMap) {
-    final byte[] partitionKey = objMap.get(GW_PARTITION_ID_KEY).getB().array();
+    final byte[] partitionKey = DynamoDBUtils.bytes(objMap.get(GW_PARTITION_ID_KEY));
 
-    final byte[] rangeKey = objMap.get(GW_RANGE_KEY).getB().array();
+    final byte[] rangeKey = DynamoDBUtils.bytes(objMap.get(GW_RANGE_KEY));
     final int length = rangeKey.length;
 
     final ByteBuffer metadataBuf = ByteBuffer.wrap(rangeKey, length - 8, 8);

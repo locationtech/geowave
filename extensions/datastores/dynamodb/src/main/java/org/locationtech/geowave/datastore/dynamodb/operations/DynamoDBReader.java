@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,28 +34,20 @@ import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
-import org.locationtech.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
-import org.locationtech.geowave.datastore.dynamodb.util.AsyncPaginatedScan;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
-import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
-import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.Condition;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
-import com.amazonaws.services.dynamodbv2.model.QueryResult;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.ComparisonOperator;
+import software.amazon.awssdk.services.dynamodb.model.Condition;
+import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
 public class DynamoDBReader<T> implements RowReader<T> {
-  private static final boolean ASYNC = false;
   private final ReaderParams<T> readerParams;
   private final RecordReaderParams recordReaderParams;
   private final DynamoDBOperations operations;
@@ -123,15 +115,6 @@ public class DynamoDBReader<T> implements RowReader<T> {
                   readerParams.getAdapterIds(),
                   readerParams.getInternalAdapterStore()))));
     }
-    // else if ((readerParams.getAdapterIds() != null) &&
-    // !readerParams.getAdapterIds().isEmpty()) {
-    // //TODO this isn't going to work because there aren't partition keys
-    // being passed along
-    // requests.addAll(
-    // getAdapterOnlyQueryRequests(
-    // tableName,
-    // readerParams.getAdapterIds()));
-    // }
 
     startRead(
         requests,
@@ -200,31 +183,19 @@ public class DynamoDBReader<T> implements RowReader<T> {
         };
 
     if (!requests.isEmpty()) {
-      if (ASYNC) {
-        rawIterator =
-            Iterators.concat(
-                requests.parallelStream().map(this::executeAsyncQueryRequest).iterator());
-      } else {
-        rawIterator =
-            Iterators.concat(requests.parallelStream().map(this::executeQueryRequest).iterator());
-      }
+      rawIterator =
+          Iterators.concat(requests.parallelStream().map(this::executeQueryRequest).iterator());
     } else {
-      if (ASYNC) {
-        final ScanRequest request = new ScanRequest(tableName);
-        rawIterator = new AsyncPaginatedScan(request, operations.getClient());
-      } else {
-        // query everything
-        final ScanRequest request = new ScanRequest(tableName);
-        final ScanResult scanResult = operations.getClient().scan(request);
-        rawIterator = new LazyPaginatedScan(scanResult, request, operations.getClient());
-        // TODO it'd be best to keep the set of partitions as a stat and
-        // use it to query by adapter IDs server-side
-        // but stats could be disabled so we may need to do client-side
-        // filtering by adapter ID
-        if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
-          adapterIdFilter =
-              input -> ArrayUtils.contains(readerParams.getAdapterIds(), input.getAdapterId());
-        }
+      // query everything
+      rawIterator =
+          operations.getClient().scanPaginator(b -> b.tableName(tableName)).items().iterator();
+      // TODO it'd be best to keep the set of partitions as a stat and
+      // use it to query by adapter IDs server-side
+      // but stats could be disabled so we may need to do client-side
+      // filtering by adapter ID
+      if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
+        adapterIdFilter =
+            input -> ArrayUtils.contains(readerParams.getAdapterIds(), input.getAdapterId());
       }
     }
 
@@ -268,40 +239,13 @@ public class DynamoDBReader<T> implements RowReader<T> {
     return iterator.next();
   }
 
-  private List<QueryRequest> getAdapterOnlyQueryRequests(
-      final String tableName,
-      final ArrayList<Short> internalAdapterIds) {
-    final List<QueryRequest> allQueries = new ArrayList<>();
-
-    for (final short internalAdapterId : internalAdapterIds) {
-      final QueryRequest singleAdapterQuery = new QueryRequest(tableName);
-
-      final byte[] start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-      final byte[] end = new ByteArray(start).getNextPrefix();
-      singleAdapterQuery.addKeyConditionsEntry(
-          DynamoDBRow.GW_RANGE_KEY,
-          new Condition().withComparisonOperator(ComparisonOperator.BETWEEN).withAttributeValueList(
-              new AttributeValue().withB(ByteBuffer.wrap(start)),
-              new AttributeValue().withB(ByteBuffer.wrap(end))));
-
-      allQueries.add(singleAdapterQuery);
-    }
-
-    return allQueries;
-  }
-
-  private QueryRequest getQuery(
+  static QueryRequest getQuery(
       final String tableName,
       final byte[] partitionId,
       final ByteArrayRange sortRange,
       final short internalAdapterId) {
     final byte[] start;
     final byte[] end;
-    final QueryRequest query =
-        new QueryRequest(tableName).addKeyConditionsEntry(
-            DynamoDBRow.GW_PARTITION_ID_KEY,
-            new Condition().withComparisonOperator(ComparisonOperator.EQ).withAttributeValueList(
-                new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
     if (sortRange == null) {
       start = rangeStart(internalAdapterId, null);
       end = rangeEnd(internalAdapterId, null);
@@ -315,12 +259,17 @@ public class DynamoDBReader<T> implements RowReader<T> {
     // DynamoDB's BETWEEN is inclusive on the end, so the upper bound has to sort above every
     // stored key the range should match rather than below the next one. The two bounds above pad
     // differently on purpose; see their javadoc.
-    query.addKeyConditionsEntry(
+    final Map<String, Condition> keyConditions = new HashMap<>();
+    keyConditions.put(
+        DynamoDBRow.GW_PARTITION_ID_KEY,
+        Condition.builder().comparisonOperator(ComparisonOperator.EQ).attributeValueList(
+            DynamoDBUtils.binaryValue(partitionId)).build());
+    keyConditions.put(
         DynamoDBRow.GW_RANGE_KEY,
-        new Condition().withComparisonOperator(ComparisonOperator.BETWEEN).withAttributeValueList(
-            new AttributeValue().withB(ByteBuffer.wrap(start)),
-            new AttributeValue().withB(ByteBuffer.wrap(end))));
-    return query;
+        Condition.builder().comparisonOperator(ComparisonOperator.BETWEEN).attributeValueList(
+            DynamoDBUtils.binaryValue(start),
+            DynamoDBUtils.binaryValue(end)).build());
+    return QueryRequest.builder().tableName(tableName).keyConditions(keyConditions).build();
   }
 
   /**
@@ -406,13 +355,6 @@ public class DynamoDBReader<T> implements RowReader<T> {
 
   private Iterator<Map<String, AttributeValue>> executeQueryRequest(
       final QueryRequest queryRequest) {
-    final QueryResult result = operations.getClient().query(queryRequest);
-    return new LazyPaginatedQuery(result, queryRequest, operations.getClient());
-  }
-
-  /** Asynchronous version of the query request. Does not block */
-  public Iterator<Map<String, AttributeValue>> executeAsyncQueryRequest(
-      final QueryRequest queryRequest) {
-    return new AsyncPaginatedQuery(queryRequest, operations.getClient());
+    return operations.getClient().queryPaginator(queryRequest).items().iterator();
   }
 }

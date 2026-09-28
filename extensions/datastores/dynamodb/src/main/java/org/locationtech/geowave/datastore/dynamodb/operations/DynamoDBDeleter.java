@@ -9,13 +9,11 @@
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 public class DynamoDBDeleter implements RowDeleter {
   private final DynamoDBOperations operations;
@@ -34,16 +32,12 @@ public class DynamoDBDeleter implements RowDeleter {
     final DynamoDBRow dynRow = (DynamoDBRow) row;
 
     for (final Map<String, AttributeValue> attributeMappings : dynRow.getAttributeMapping()) {
-      operations.getClient().deleteItem(
-          tableName,
-          Maps.filterEntries(attributeMappings, new Predicate<Entry<String, AttributeValue>>() {
-            @Override
-            public boolean apply(final Entry<String, AttributeValue> input) {
-              return (input != null)
-                  && (DynamoDBRow.GW_PARTITION_ID_KEY.equals(input.getKey())
-                      || DynamoDBRow.GW_RANGE_KEY.equals(input.getKey()));
-            }
-          }));
+      final Map<String, AttributeValue> key =
+          Maps.filterKeys(
+              attributeMappings,
+              name -> DynamoDBRow.GW_PARTITION_ID_KEY.equals(name)
+                  || DynamoDBRow.GW_RANGE_KEY.equals(name));
+      operations.getClient().deleteItem(b -> b.tableName(tableName).key(key));
     }
   }
 
