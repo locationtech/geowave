@@ -30,6 +30,7 @@ This command runs a standalone HBase instance, which can be used locally for tes
   
 *-l, --libDir* _<path>_::
   Directory for HBase server-side libraries.  Default is `./lib/services/third-party/embedded-hbase/lib`.
+  The cluster loads the jars in it ahead of GeoWave's own class path. Since GeoWave's HBase client is `hbase-shaded-client-byo-hadoop`, it needs `protobuf-java` 2.5.0 and the unshaded jars, for the HBase release GeoWave is built with, of the modules that client also carries: `hbase-client`, `hbase-common`, `hbase-hadoop-compat`, `hbase-hadoop2-compat`, `hbase-logging`, `hbase-metrics`, `hbase-metrics-api`, `hbase-protocol` and `hbase-protocol-shaded`.
   
 *-r, --regionServers* _<count>_::
   The number of region server processes.  Default is 1.

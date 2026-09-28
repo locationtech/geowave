@@ -76,6 +76,10 @@ public class HBaseMiniCluster {
         System.setProperty("test.build.data.basedirectory", hbaseDataDir);
         conf.setBoolean("hbase.online.schema.update.enable", true);
         conf.setBoolean("hbase.defaults.for.version.skip", true);
+        // HBase 2.6's web UIs need javax.validation, which GeoWave's class path, on Jakarta
+        // Validation 3, does not have. Nothing here uses them.
+        conf.setInt("hbase.master.info.port", -1);
+        conf.setInt("hbase.regionserver.info.port", -1);
         conf.setIfUnset("hbase.root.dir", hbaseDataDir);
         if (zookeeper != null && zookeeper.contains(":")) {
           conf.setIfUnset("zookeeper.host", zookeeper.split(":")[0]);
