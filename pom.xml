@@ -679,6 +679,12 @@
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
+					<!-- Only for an external compaction coordinator, which nothing here starts;
+						the mini cluster names it only in startCoordinator's signature. -->
+					<exclusion>
+						<groupId>org.apache.accumulo</groupId>
+						<artifactId>accumulo-compaction-coordinator</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.apache.hadoop</groupId>
 						<artifactId>hadoop-client-api</artifactId>
