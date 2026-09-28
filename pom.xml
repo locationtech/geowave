@@ -618,6 +618,13 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
+					<!-- Only ClusterConfigParser uses it, for the accumulo-cluster script's cluster.yaml,
+						and the 2.x it asks for won't run the embedded Cassandra server, which needs
+						the 1.x API. -->
+					<exclusion>
+						<groupId>org.yaml</groupId>
+						<artifactId>snakeyaml</artifactId>
+					</exclusion>
 					<!-- Accumulo depends on Hadoop's shaded client, and refers only to the
 						org.apache.hadoop API that it shares with the unshaded hadoop-client, which
 						the Accumulo data store depends on. So every Accumulo artifact here leaves

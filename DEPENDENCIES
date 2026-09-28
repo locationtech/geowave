@@ -143,7 +143,6 @@ maven/mavencentral/io.dropwizard.metrics/metrics-logback/3.1.5, Apache-2.0, appr
 maven/mavencentral/io.github.x-stream/mxparser/1.2.2, LicenseRef-scancode-indiana-extreme, approved, #286
 maven/mavencentral/io.grpc/grpc-api/1.83.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.grpc/grpc-core/1.83.1, Apache-2.0, approved, clearlydefined
-maven/mavencentral/io.grpc/grpc-netty-shaded/1.38.0, None, restricted, #31950
 maven/mavencentral/io.grpc/grpc-netty-shaded/1.83.1, Apache-2.0 AND LicenseRef-scancode-unknown-license-reference, restricted, clearlydefined
 maven/mavencentral/io.grpc/grpc-protobuf/1.83.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.grpc/grpc-services/1.83.1, , restricted, clearlydefined
@@ -371,7 +370,6 @@ maven/mavencentral/org.apache.hbase/hbase-protocol-shaded/2.6.6-hadoop3, Apache-
 maven/mavencentral/org.apache.hbase/hbase-protocol/2.6.6-hadoop3, Apache-2.0, approved, #16530
 maven/mavencentral/org.apache.hbase/hbase-replication/2.6.6-hadoop3, Apache-2.0, approved, #16523
 maven/mavencentral/org.apache.hbase/hbase-server/2.6.6-hadoop3, Apache-2.0 AND MIT, approved, #16539
-maven/mavencentral/org.apache.hbase/hbase-shaded-client-byo-hadoop/2.4.2, Apache-2.0 AND BSD-3-Clause AND LicenseRef-scancode-protobuf AND MIT, restricted, #31949
 maven/mavencentral/org.apache.hbase/hbase-shaded-client-byo-hadoop/2.6.6-hadoop3, , restricted, clearlydefined
 maven/mavencentral/org.apache.hbase/hbase-testing-util/2.6.6-hadoop3, , restricted, clearlydefined
 maven/mavencentral/org.apache.hbase/hbase-zookeeper/2.6.6-hadoop3, Apache-2.0, approved, #16528
@@ -764,7 +762,6 @@ maven/mavencentral/org.xerial.snappy/snappy-java/1.1.10.7, Apache-2.0 AND (Apach
 maven/mavencentral/org.xerial/sqlite-jdbc/3.53.1.0, Apache-2.0 AND BSD-2-Clause AND ISC AND Artistic-2.0, approved, #31861
 maven/mavencentral/org.yaml/snakeyaml/1.26, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.yaml/snakeyaml/2.3, Apache-2.0 AND (Apache-2.0 OR BSD-3-Clause OR EPL-1.0 OR GPL-2.0-or-later OR LGPL-2.1-or-later), approved, #16046
-maven/mavencentral/org.yaml/snakeyaml/2.4, Apache-2.0, approved, #19469
 maven/mavencentral/oro/oro/2.0.8, Apache-1.1, approved, #19713
 maven/mavencentral/picocontainer/picocontainer/1.2, BSD-2-Clause, approved, CQ8720
 maven/mavencentral/pl.edu.icm/JLargeArrays/1.5, BSD-2-Clause, approved, clearlydefined
