@@ -16,6 +16,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,13 +53,14 @@ public class GeowaveOperationGrpcGenerator {
           + protobufPackage
           + "option java_outer_classname = \"&OUTER_CLASSNAME&\";\n";
 
-  private static String outputBasePath = "";
+  private static String outputDirectory = ".";
 
-  public static void main(final String[] args) {
+  public static void main(final String[] args) throws IOException {
 
     if (args.length > 0) {
-      outputBasePath = args[0];
+      outputDirectory = args[0];
     }
+    Files.createDirectories(Paths.get(outputDirectory));
 
     final GeowaveOperationGrpcGenerator g = new GeowaveOperationGrpcGenerator();
     try {
@@ -199,8 +202,7 @@ public class GeowaveOperationGrpcGenerator {
       final ArrayList<String> rpcList = (ArrayList<String>) pair.getValue();
       final ArrayList<String> rpcInputMessageList = rpcInputMessages.get(currServiceName);
 
-      final String serviceFilename =
-          outputBasePath + "/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
+      final String serviceFilename = outputDirectory + "/GeoWave" + pair.getKey() + ".proto";
       Writer serviceWriter = null;
       try {
         serviceWriter = new OutputStreamWriter(new FileOutputStream(serviceFilename), "UTF-8");
@@ -239,8 +241,7 @@ public class GeowaveOperationGrpcGenerator {
       }
     }
 
-    final String serviceReturnFilename =
-        outputBasePath + "/src/main/protobuf/GeoWaveReturnTypesProtos.proto";
+    final String serviceReturnFilename = outputDirectory + "/GeoWaveReturnTypesProtos.proto";
     Writer serviceReturnWriter = null;
     try {
       serviceReturnWriter =

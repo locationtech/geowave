@@ -74,12 +74,14 @@
 		<rocksdb.version>10.10.1.1</rocksdb.version>
 		<cassandraclient.version>4.11.1</cassandraclient.version>
 		<cassandraunit.version>4.3.1.0</cassandraunit.version>
-		<grpc.version>1.38.0</grpc.version>
+		<grpc.version>1.83.1</grpc.version>
 		<!-- The newest 4.1 that anything here asks for, ZooKeeper 3.9.6's; Hadoop 3.4.3
 			asks for 4.1.127 and Spark 4.0.1 for 4.1.118. Neither is built on 4.2. -->
 		<netty.version>4.1.137.Final</netty.version>
-		<protobuf.version>3.17.1</protobuf.version>
-		<mavenprotoc.version>3.11.4</mavenprotoc.version>
+		<!-- gRPC 1.83's. Not 4.x: the raster adapter's tile classes are compiled against
+			protobuf-java 2.5.0 to run in HBase region servers (see hbaseprotobuf.version),
+			and 4.x no longer has GeneratedMessage.BuilderParent, which they link to. -->
+		<protobuf.version>3.25.9</protobuf.version>
 		<skipITs>true</skipITs>
 		<!-- Not 2.10, which moves the HDFS provider to commons-vfs2-hdfs; Accumulo's VFS
 			class loader refers to it. Accumulo 2.1 stays on 2.9 as well. -->
@@ -1403,32 +1405,10 @@
 			</dependency>
 			<dependency>
 				<groupId>io.grpc</groupId>
-				<artifactId>grpc-protobuf</artifactId>
+				<artifactId>grpc-bom</artifactId>
 				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-stub</artifactId>
-				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-common</artifactId>
-				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-protobuf-lite</artifactId>
-				<version>${grpc.version}</version>
-			</dependency>
-			<dependency>
-				<!-- Not grpc-netty: from 4.1.101, Netty validates HTTP/2 headers by iterating
-					them, and gRPC 1.38's header class throws UnsupportedOperationException from
-					iterator(). The shaded artifact carries the Netty that gRPC 1.38 was built on,
-					relocated, so the rest of the build can have Spark's and Hadoop's. -->
-				<groupId>io.grpc</groupId>
-				<artifactId>grpc-netty-shaded</artifactId>
-				<version>${grpc.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<!-- All of Netty, so that its native transports and tcnative match the rest -->
@@ -1853,9 +1833,7 @@
 					<lineEnding>KEEP</lineEnding>
 					<skip>${formatter.skip}</skip>
 					<excludes>
-						<exclude>**/*Protos*.java</exclude>
 						<exclude>**/Avro*.java</exclude>
-						<exclude>**/*Grpc.java</exclude>
 					</excludes>
 				</configuration>
 				<executions>

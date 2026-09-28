@@ -1,4 +1,0 @@
-src/main/java/org/locationtech/geowave/service/grpc/protobuf
-src/main/protobuf
-!src/main/protobuf/GeoWaveVector.proto
-
