@@ -36,11 +36,13 @@ public class DynamoDBLocal {
   public static final int DEFAULT_PORT = 8000;
 
   private static final long EMULATOR_SPINUP_DELAY_MS = 30000L;
+  private static final long EMULATOR_SHUTDOWN_TIMEOUT_MS = 30000L;
   public static final File DEFAULT_DIR = new File("./temp");
 
   private final File dynLocalDir;
   private final int port;
   private ExecuteWatchdog watchdog;
+  private DefaultExecuteResultHandler resultHandler;
 
   public DynamoDBLocal() {
     this(null, null);
@@ -88,6 +90,13 @@ public class DynamoDBLocal {
       LOGGER.error(e.getMessage());
       return false;
     }
+    if (resultHandler.hasResult()) {
+      // such as when the port is still taken
+      LOGGER.error(
+          "DynamoDB Local exited on startup with exit value " + resultHandler.getExitValue(),
+          resultHandler.getException());
+      return false;
+    }
 
     return true;
   }
@@ -97,8 +106,18 @@ public class DynamoDBLocal {
   }
 
   public void stop() {
-    // first, ask the watchdog nicely:
     watchdog.destroyProcess();
+    // Destroying only signals the process. A start straight after would race it for the port,
+    // lose, and exit, leaving nothing listening.
+    try {
+      resultHandler.waitFor(EMULATOR_SHUTDOWN_TIMEOUT_MS);
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+    if (!resultHandler.hasResult()) {
+      LOGGER.warn(
+          "DynamoDB Local did not exit within " + EMULATOR_SHUTDOWN_TIMEOUT_MS + " ms of stopping");
+    }
   }
 
   private boolean isInstalled() {
@@ -168,7 +187,7 @@ public class DynamoDBLocal {
     System.setProperty("aws.secretAccessKey", "dummy");
 
     // Using a result handler makes the emulator run async
-    final DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+    resultHandler = new DefaultExecuteResultHandler();
 
     // watchdog shuts down the emulator, later
     watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
