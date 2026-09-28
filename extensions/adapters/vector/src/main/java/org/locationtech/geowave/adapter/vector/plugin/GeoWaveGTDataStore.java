@@ -78,6 +78,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
   private final URI featureNameSpaceURI;
   private int transactionBufferSize = 10000;
   private final TransactionsAllocator transactionsAllocator;
+  private volatile boolean disposed = false;
 
   public GeoWaveGTDataStore(final GeoWavePluginConfig config) throws IOException {
     listenerManager = new FeatureListenerManager();
@@ -248,6 +249,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
   @Override
   public void dispose() {
+    disposed = true;
     if (dataStore instanceof Closeable) {
       try {
         ((Closeable) dataStore).close();
@@ -255,6 +257,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
         LOGGER.error("Unable to close geowave datastore", e);
       }
     }
+  }
+
+  boolean isDisposed() {
+    return disposed;
   }
 
   @Override
