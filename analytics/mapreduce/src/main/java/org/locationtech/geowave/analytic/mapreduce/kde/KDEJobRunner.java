@@ -276,22 +276,58 @@ public class KDEJobRunner extends Configured implements Tool {
       }
     }
     GeoWaveInputFormat.setQuery(conf, bldr.build(), adapterStore, internalAdapterStore, indexStore);
-    FileSystem fs = null;
-    try {
-      fs = FileSystem.get(conf);
-      fs.delete(
-          new Path(
-              "/tmp/"
-                  + inputDataStoreOptions.getGeoWaveNamespace()
-                  + "_stats_"
-                  + kdeCommandLineOptions.getMinLevel()
-                  + "_"
-                  + kdeCommandLineOptions.getMaxLevel()
-                  + "_"
-                  + kdeCommandLineOptions.getCoverageName()),
-          true);
-      FileOutputFormat.setOutputPath(
-          job,
+    final FileSystem fs = FileSystem.get(conf);
+    fs.delete(
+        new Path(
+            "/tmp/"
+                + inputDataStoreOptions.getGeoWaveNamespace()
+                + "_stats_"
+                + kdeCommandLineOptions.getMinLevel()
+                + "_"
+                + kdeCommandLineOptions.getMaxLevel()
+                + "_"
+                + kdeCommandLineOptions.getCoverageName()),
+        true);
+    FileOutputFormat.setOutputPath(
+        job,
+        new Path(
+            "/tmp/"
+                + inputDataStoreOptions.getGeoWaveNamespace()
+                + "_stats_"
+                + kdeCommandLineOptions.getMinLevel()
+                + "_"
+                + kdeCommandLineOptions.getMaxLevel()
+                + "_"
+                + kdeCommandLineOptions.getCoverageName()
+                + "/basic"));
+
+    final boolean job1Success = job.waitForCompletion(true);
+    boolean job2Success = false;
+    boolean postJob2Success = false;
+
+    // Linear MapReduce job chaining
+    if (job1Success) {
+      setupEntriesPerLevel(job, conf);
+      // Stats Reducer Job configuration parameters
+      final Job statsReducer = new Job(conf);
+      statsReducer.setJarByClass(this.getClass());
+      addJobClasspathDependencies(statsReducer, conf);
+
+      statsReducer.setJobName(getJob2Name());
+      statsReducer.setMapperClass(IdentityMapper.class);
+      statsReducer.setPartitionerClass(getJob2Partitioner());
+      statsReducer.setReducerClass(getJob2Reducer());
+      statsReducer.setNumReduceTasks(
+          getJob2NumReducers(
+              (kdeCommandLineOptions.getMaxLevel() - kdeCommandLineOptions.getMinLevel()) + 1));
+      statsReducer.setMapOutputKeyClass(DoubleWritable.class);
+      statsReducer.setMapOutputValueClass(LongWritable.class);
+      statsReducer.setOutputKeyClass(getJob2OutputKeyClass());
+      statsReducer.setOutputValueClass(getJob2OutputValueClass());
+      statsReducer.setInputFormatClass(SequenceFileInputFormat.class);
+      statsReducer.setOutputFormatClass(getJob2OutputFormatClass());
+      FileInputFormat.setInputPaths(
+          statsReducer,
           new Path(
               "/tmp/"
                   + inputDataStoreOptions.getGeoWaveNamespace()
@@ -302,129 +338,78 @@ public class KDEJobRunner extends Configured implements Tool {
                   + "_"
                   + kdeCommandLineOptions.getCoverageName()
                   + "/basic"));
+      setupJob2Output(
+          conf,
+          statsReducer,
+          outputDataStoreOptions.getGeoWaveNamespace(),
+          kdeCoverageName,
+          outputPrimaryIndex);
+      job2Success = statsReducer.waitForCompletion(true);
+      if (job2Success) {
+        postJob2Success =
+            postJob2Actions(conf, outputDataStoreOptions.getGeoWaveNamespace(), kdeCoverageName);
+      }
+    } else {
+      job2Success = false;
+    }
+    if (rasterResizeOutputDataStoreOptions != null) {
+      // delegate to resize command to wrap it up with the correctly
+      // requested tile size
 
-      final boolean job1Success = job.waitForCompletion(true);
-      boolean job2Success = false;
-      boolean postJob2Success = false;
+      final ResizeMRCommand resizeCommand = new ResizeMRCommand();
+      final File configFile = File.createTempFile("temp-config", null);
+      final ManualOperationParams params = new ManualOperationParams();
 
-      // Linear MapReduce job chaining
-      if (job1Success) {
-        setupEntriesPerLevel(job, conf);
-        // Stats Reducer Job configuration parameters
-        final Job statsReducer = new Job(conf);
-        statsReducer.setJarByClass(this.getClass());
-        addJobClasspathDependencies(statsReducer, conf);
+      params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+      final AddStoreCommand addStore = new AddStoreCommand();
+      addStore.setParameters("temp-out");
+      addStore.setPluginOptions(outputDataStoreOptions);
+      addStore.execute(params);
+      addStore.setParameters("temp-raster-out");
+      addStore.setPluginOptions(rasterResizeOutputDataStoreOptions);
+      addStore.execute(params);
+      // We're going to override these anyway.
+      resizeCommand.setParameters("temp-out", "temp-raster-out");
 
-        statsReducer.setJobName(getJob2Name());
-        statsReducer.setMapperClass(IdentityMapper.class);
-        statsReducer.setPartitionerClass(getJob2Partitioner());
-        statsReducer.setReducerClass(getJob2Reducer());
-        statsReducer.setNumReduceTasks(
-            getJob2NumReducers(
-                (kdeCommandLineOptions.getMaxLevel() - kdeCommandLineOptions.getMinLevel()) + 1));
-        statsReducer.setMapOutputKeyClass(DoubleWritable.class);
-        statsReducer.setMapOutputValueClass(LongWritable.class);
-        statsReducer.setOutputKeyClass(getJob2OutputKeyClass());
-        statsReducer.setOutputValueClass(getJob2OutputValueClass());
-        statsReducer.setInputFormatClass(SequenceFileInputFormat.class);
-        statsReducer.setOutputFormatClass(getJob2OutputFormatClass());
-        FileInputFormat.setInputPaths(
-            statsReducer,
-            new Path(
-                "/tmp/"
-                    + inputDataStoreOptions.getGeoWaveNamespace()
-                    + "_stats_"
-                    + kdeCommandLineOptions.getMinLevel()
-                    + "_"
-                    + kdeCommandLineOptions.getMaxLevel()
-                    + "_"
-                    + kdeCommandLineOptions.getCoverageName()
-                    + "/basic"));
-        setupJob2Output(
-            conf,
-            statsReducer,
-            outputDataStoreOptions.getGeoWaveNamespace(),
-            kdeCoverageName,
-            outputPrimaryIndex);
-        job2Success = statsReducer.waitForCompletion(true);
-        if (job2Success) {
-          postJob2Success =
-              postJob2Actions(conf, outputDataStoreOptions.getGeoWaveNamespace(), kdeCoverageName);
-        }
+      resizeCommand.getOptions().setInputCoverageName(kdeCoverageName);
+      resizeCommand.getOptions().setMinSplits(kdeCommandLineOptions.getMinSplits());
+      resizeCommand.getOptions().setMaxSplits(kdeCommandLineOptions.getMaxSplits());
+      resizeCommand.setHdfsHostPort(kdeCommandLineOptions.getHdfsHostPort());
+      resizeCommand.setJobTrackerOrResourceManHostPort(
+          kdeCommandLineOptions.getJobTrackerOrResourceManHostPort());
+      resizeCommand.getOptions().setOutputCoverageName(kdeCommandLineOptions.getCoverageName());
+
+      resizeCommand.getOptions().setOutputTileSize(kdeCommandLineOptions.getTileSize());
+
+      final int resizeStatus = ToolRunner.run(resizeCommand.createRunner(params), new String[] {});
+      if (resizeStatus == 0) {
+        // delegate to clear command to clean up with tmp namespace
+        // after successful resize
+        final ClearStoreCommand clearCommand = new ClearStoreCommand();
+        clearCommand.setParameters("temp-out");
+        clearCommand.execute(params);
       } else {
-        job2Success = false;
-      }
-      if (rasterResizeOutputDataStoreOptions != null) {
-        // delegate to resize command to wrap it up with the correctly
-        // requested tile size
-
-        final ResizeMRCommand resizeCommand = new ResizeMRCommand();
-        final File configFile = File.createTempFile("temp-config", null);
-        final ManualOperationParams params = new ManualOperationParams();
-
-        params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-        final AddStoreCommand addStore = new AddStoreCommand();
-        addStore.setParameters("temp-out");
-        addStore.setPluginOptions(outputDataStoreOptions);
-        addStore.execute(params);
-        addStore.setParameters("temp-raster-out");
-        addStore.setPluginOptions(rasterResizeOutputDataStoreOptions);
-        addStore.execute(params);
-        // We're going to override these anyway.
-        resizeCommand.setParameters("temp-out", "temp-raster-out");
-
-        resizeCommand.getOptions().setInputCoverageName(kdeCoverageName);
-        resizeCommand.getOptions().setMinSplits(kdeCommandLineOptions.getMinSplits());
-        resizeCommand.getOptions().setMaxSplits(kdeCommandLineOptions.getMaxSplits());
-        resizeCommand.setHdfsHostPort(kdeCommandLineOptions.getHdfsHostPort());
-        resizeCommand.setJobTrackerOrResourceManHostPort(
-            kdeCommandLineOptions.getJobTrackerOrResourceManHostPort());
-        resizeCommand.getOptions().setOutputCoverageName(kdeCommandLineOptions.getCoverageName());
-
-        resizeCommand.getOptions().setOutputTileSize(kdeCommandLineOptions.getTileSize());
-
-        final int resizeStatus =
-            ToolRunner.run(resizeCommand.createRunner(params), new String[] {});
-        if (resizeStatus == 0) {
-          // delegate to clear command to clean up with tmp namespace
-          // after successful resize
-          final ClearStoreCommand clearCommand = new ClearStoreCommand();
-          clearCommand.setParameters("temp-out");
-          clearCommand.execute(params);
-        } else {
-          LOGGER.warn(
-              "Resize command error code '"
-                  + resizeStatus
-                  + "'.  Retaining temporary namespace '"
-                  + outputDataStoreOptions.getGeoWaveNamespace()
-                  + "' with tile size of 1.");
-        }
-      }
-
-      fs.delete(
-          new Path(
-              "/tmp/"
-                  + inputDataStoreOptions.getGeoWaveNamespace()
-                  + "_stats_"
-                  + kdeCommandLineOptions.getMinLevel()
-                  + "_"
-                  + kdeCommandLineOptions.getMaxLevel()
-                  + "_"
-                  + kdeCommandLineOptions.getCoverageName()),
-          true);
-      return (job1Success && job2Success && postJob2Success) ? 0 : 1;
-    } finally {
-      if (fs != null) {
-        try {
-          fs.close();
-        } catch (final IOException e) {
-          LOGGER.info(e.getMessage());
-          // Attempt to close, but don't throw an error if it is
-          // already closed.
-          // Log message, so find bugs does not complain.
-        }
+        LOGGER.warn(
+            "Resize command error code '"
+                + resizeStatus
+                + "'.  Retaining temporary namespace '"
+                + outputDataStoreOptions.getGeoWaveNamespace()
+                + "' with tile size of 1.");
       }
     }
+
+    fs.delete(
+        new Path(
+            "/tmp/"
+                + inputDataStoreOptions.getGeoWaveNamespace()
+                + "_stats_"
+                + kdeCommandLineOptions.getMinLevel()
+                + "_"
+                + kdeCommandLineOptions.getMaxLevel()
+                + "_"
+                + kdeCommandLineOptions.getCoverageName()),
+        true);
+    return (job1Success && job2Success && postJob2Success) ? 0 : 1;
   }
 
   protected void setupEntriesPerLevel(final Job job1, final Configuration conf) throws IOException {

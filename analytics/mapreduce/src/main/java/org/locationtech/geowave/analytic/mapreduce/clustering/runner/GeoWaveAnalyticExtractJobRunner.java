@@ -225,17 +225,16 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner impl
 
     GeoWaveOutputFormat.setStoreOptions(config, dataStoreOptions);
 
-    try (final FileSystem fs = FileSystem.get(config)) {
-      if (fs.exists(getHdfsOutputPath())) {
-        fs.delete(
-            // HPFortify "Path Manipulation"
-            // False positive - path is internally managed
-            getHdfsOutputPath(),
-            true);
-      }
-
-      return ToolRunner.run(config, this, new String[] {});
+    final FileSystem fs = FileSystem.get(config);
+    if (fs.exists(getHdfsOutputPath())) {
+      fs.delete(
+          // HPFortify "Path Manipulation"
+          // False positive - path is internally managed
+          getHdfsOutputPath(),
+          true);
     }
+
+    return ToolRunner.run(config, this, new String[] {});
   }
 
   @Override
