@@ -166,6 +166,19 @@ jobs:
           restore-keys: ${{ runner.os }}-other-
           path: ~/.downloads
 
+      - name: Read the Hadoop version
+        id: hadoop
+        run: echo "version=$(./mvnw -q -N help:evaluate -Dexpression=hadoop.version -DforceStdout)" >> "$GITHUB_OUTPUT"
+
+      # run-tests.sh fetches these from a Hadoop release tarball, and archive.apache.org has
+      # taken two hours to serve one. Saved even when the lane fails, so one slow fetch is enough.
+      - name: Restore Hadoop's native libraries
+        id: hadoop-native
+        uses: actions/cache/restore@v6
+        with:
+          key: ${{ runner.os }}-hadoop-native-${{ steps.hadoop.outputs.version }}
+          path: ~/.cache/hadoop-native
+
       # Keep timeout-minutes below the job's (see there). A retried lane's second
       # attempt starts however long the first took, and this timeout ends it if
       # need be; the step then fails and the reports still upload. That is the
@@ -177,6 +190,15 @@ jobs:
         env:
           RETRY_PRESERVE_DIRS: test/target/surefire-reports test/target/failsafe-reports
         run: ./.utility/retry ./.utility/run-tests.sh
+
+      - name: Save Hadoop's native libraries
+        if: always() && steps.hadoop-native.outputs.cache-hit != 'true'
+        # nothing to save if the lane failed before fetching them
+        continue-on-error: true
+        uses: actions/cache/save@v6
+        with:
+          key: ${{ runner.os }}-hadoop-native-${{ steps.hadoop.outputs.version }}
+          path: ~/.cache/hadoop-native
 
       - name: Upload test reports
         if: always()
