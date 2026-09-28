@@ -30,7 +30,7 @@ public abstract class ExceptionHandlingTransformingIterator extends Transforming
       throw e;
     } catch (final Exception e) {
       LOGGER.error("Exception while transforming range", e);
-      throw new IOException(e);
+      throw new ServerSideIteratorException("Exception in transforming iterator", e);
     }
   }
 
