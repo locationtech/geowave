@@ -10,7 +10,7 @@
 |:-----:|:--------:|:-------------:|:-------:|
 | [![Tests](https://github.com/locationtech/geowave/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/locationtech/geowave/actions/workflows/test.yml?query=branch%3Amaster) | [![IP Check](https://github.com/locationtech/geowave/actions/workflows/ip-check.yml/badge.svg?branch=master)](https://github.com/locationtech/geowave/actions/workflows/ip-check.yml?query=branch%3Amaster) | [![Maven Central](https://img.shields.io/maven-central/v/org.locationtech.geowave/geowave-core-store)](https://central.sonatype.com/artifact/org.locationtech.geowave/geowave-core-store) | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) |
 
-GeoWave is an open source set of software that:
+LocationTech GeoWave is an open source set of software that:
 
 * Capabilities
   * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](https://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Redis](https://redis.io/), and [RocksDB](https://rocksdb.org/), as well as direct FileSystem support)
