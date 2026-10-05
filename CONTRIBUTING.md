@@ -7,6 +7,12 @@ For more information on contributing to GeoWave, please see our developer guide 
 
 - https://locationtech.github.io/geowave/devguide.html#how-to-contribute
 
+Build instructions, including running the integration tests, are in the developer guide's
+[Building the Source](https://locationtech.github.io/geowave/latest/devguide.html#building-the-source) section.
+
+Please report security vulnerabilities privately, as described in [SECURITY.md](SECURITY.md),
+rather than in public issues or pull requests.
+
 ## Third-party dependencies
 
 GeoWave is an Eclipse Foundation project, so every dependency it redistributes
