@@ -27,7 +27,7 @@ import org.geotools.api.coverage.grid.GridGeometry;
  */
 @DescribeProcess(
     title = "SubsampleAtScreenResolution",
-    description = "This process will enable GeoWave to subsample WMS requests based on pixel resolution to not oversample data.  This will efficiently render overlapping point geometry that would otherwise be hidden but it assumes an opaque style and does not take transparency into account.  It will use the centroid for other geometry types than point which can produce visual artifacts - distributed rendering is an alternative approach to efficiently render lines and polygons")
+    description = "This process will enable GeoWave to subsample WMS requests based on pixel resolution to not oversample data.  This will efficiently render overlapping point geometry that would otherwise be hidden but it assumes an opaque style and does not take transparency into account.  It will use the centroid for other geometry types than point, which can produce visual artifacts.")
 public class SubsampleProcess {
   public static final Hints.Key SUBSAMPLE_ENABLED = new Hints.Key(Boolean.class);
   public static final Hints.Key PIXEL_SIZE = new Hints.Key(Double.class);

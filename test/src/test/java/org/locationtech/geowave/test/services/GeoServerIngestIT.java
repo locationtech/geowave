@@ -234,12 +234,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
     TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
-    TestUtils.assertStatusCode(
         "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
         201,
         geoServerServiceClient.addLayer(
@@ -329,20 +323,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
             null,
             false);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
-
-    final BufferedImage biDistributedRendering =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
-            920,
-            360,
-            null,
-            true);
-    TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
     // Test subsampling with only the spatial-temporal index. Stopping GeoServer closes its data
     // store, so the index is removed while nothing else has the databases open.
@@ -474,7 +454,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
     geoServerServiceClient.removeWorkspace(WORKSPACE);
   }
 

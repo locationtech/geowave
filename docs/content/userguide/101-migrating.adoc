@@ -98,6 +98,15 @@ matches nothing. Name the CRS in the filter, for example
 * GeoWave code running inside GeoServer uses GeoServer's ANTLR, which is older than the one GWQL
 needs, so GWQL queries are not available there. GeoServer itself does not use GWQL.
 
+*Distributed rendering removed, GeoWave 3.0.* The `geowave:DistributedRender` rendering
+transformation and its example style, `DistributedRender.sld`, are gone, with the classes behind
+them: the `org.locationtech.geowave.adapter.vector.render` package, `DistributedRenderProcess` and
+`InternalProcessFactory`. Distributed rendering never took effect through GeoServer: from its
+introduction in GeoWave 0.9.3, the plugin's GetMap callback looked for the transformation in a way
+that could never match, so GeoServer rendered a layer with this style itself, like any other.
+Remove the `<Transformation>` element from a style that uses it; the style then renders as it
+always has.
+
 *S3 input uses the AWS SDK for Java 2, GeoWave 3.0.* Version 1 of the SDK reached end of support
 at the end of 2025. GeoWave now lists and reads `s3://` input through s3fs-nio, on version 2 of the
 SDK, instead of the `com.upplication` s3fs. The endpoint is still set with `geowave config aws`,
