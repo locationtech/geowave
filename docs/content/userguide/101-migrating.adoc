@@ -107,6 +107,24 @@ that could never match, so GeoServer rendered a layer with this style itself, li
 Remove the `<Transformation>` element from a style that uses it; the style then renders as it
 always has.
 
+*GeoServer is no longer in GeoWave's JARs, GeoWave 3.0.* GeoServer is licensed under the GPL, and
+GeoWave does not distribute it. Distributed rendering was the only GeoWave code that used it, and
+with it gone GeoWave no longer depends on GeoServer at all. In GeoWave 2.x, `geowave-adapter-vector`
+and `geowave-adapter-raster` had GeoServer's `gs-wms-core` as a compile dependency, so the tools JAR
+and the Accumulo and HBase JARs carried `gs-wms-core`, `gs-main`, `gs-ows` and `gs-platform`, and the
+libraries that came with them.
+
+* Those JARs no longer carry the libraries that only GeoServer used, among them Spring, Spring
+Security, Apache HttpClient 5, XStream and FreeMarker, and the GeoTools modules for GeoPackage
+(`gt-geopkg`), WFS (`gt-wfs-ng`), WMS and WMTS (`gt-wms`, `gt-wmts`), property files
+(`gt-property`) and SVG (`gt-svg`). The `geotools-vector` ingest format of the tools JAR therefore
+no longer reads through those data stores. The Accumulo and HBase JARs also no longer carry GeoTools'
+GeoTIFF, image mosaic and image modules.
+* A project that depends on `geowave-adapter-vector` or `geowave-adapter-raster` and used any of
+these through it has to declare them itself.
+* GeoServer still supplies all of this to the GeoServer plugin, which never included it, and
+`geowave gs run` runs GeoServer from its WAR as before.
+
 *S3 input uses the AWS SDK for Java 2, GeoWave 3.0.* Version 1 of the SDK reached end of support
 at the end of 2025. GeoWave now lists and reads `s3://` input through s3fs-nio, on version 2 of the
 SDK, instead of the `com.upplication` s3fs. The endpoint is still set with `geowave config aws`,

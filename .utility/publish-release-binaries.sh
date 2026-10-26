@@ -20,6 +20,12 @@ pushd deploy/target
 ASSETS=()
 for type in tools geoserver; do
   jar="geowave-deploy-${GEOWAVE_VERSION}-${type}.jar"
+  # GeoServer is GPL-licensed, and GeoWave does not distribute it
+  # (grep -q would stop reading early, and pipefail would then turn a match into a failure)
+  if unzip -Z1 "$jar" | grep -E '^org/(geoserver|vfny)/' > /dev/null; then
+    echo "ERROR: $jar contains GeoServer classes" >&2
+    exit 1
+  fi
   sha256sum "$jar" > "$jar.sha256"
   ASSETS+=("$jar" "$jar.sha256")
 done

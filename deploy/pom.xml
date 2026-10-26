@@ -213,6 +213,12 @@
 									<goal>shade</goal>
 								</goals>
 								<configuration>
+									<artifactSet>
+										<excludes>
+											<!-- GeoServer is GPL-licensed, and GeoWave does not distribute it -->
+											<exclude>org.geoserver*:*</exclude>
+										</excludes>
+									</artifactSet>
 									<filters>
 										<filter>
 											<artifact>junit:junit</artifact>
@@ -443,6 +449,8 @@
 								<configuration>
 									<artifactSet>
 										<excludes>
+											<!-- GeoServer is GPL-licensed, and GeoWave does not distribute it -->
+											<exclude>org.geoserver*:*</exclude>
 											<exclude>org.slf4j:*</exclude>
 											<!-- The web servers and UI of Hadoop and Spark, which never
 												run in a tablet server -->
@@ -522,6 +530,8 @@
 								<configuration>
 									<artifactSet>
 										<excludes>
+											<!-- GeoServer is GPL-licensed, and GeoWave does not distribute it -->
+											<exclude>org.geoserver*:*</exclude>
 											<exclude>org.slf4j:*</exclude>
 											<exclude>com.google.protobuf:*</exclude>
 											<exclude>org.apache.hadoop:*</exclude>
