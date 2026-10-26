@@ -55,7 +55,7 @@
 						<configuration>
 							<publishingServerId>central</publishingServerId>
 							<autoPublish>true</autoPublish>
-							<waitUntilPublished>true</waitUntilPublished>
+							<waitUntil>published</waitUntil>
 						</configuration>
 					</plugin>
 					<!-- To generate javadoc -->
