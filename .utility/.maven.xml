@@ -1,12 +1,11 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/SETTINGS/1.0.0" xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
-        <!-- Sonatype Central Portal. SONATYPE_USERNAME/SONATYPE_PASSWORD are the
-             Portal user token, not the retired OSSRH JIRA account. -->
+        <!-- Sonatype Central Portal user token -->
         <server>
             <id>central</id>
-            <username>${env.SONATYPE_USERNAME}</username>
-            <password>${env.SONATYPE_PASSWORD}</password>
+            <username>${env.CENTRAL_SONATYPE_TOKEN_USERNAME}</username>
+            <password>${env.CENTRAL_SONATYPE_TOKEN_PASSWORD}</password>
         </server>
 
         <server>
@@ -20,16 +19,4 @@
         </server>
     </servers>
 
-    <profiles>
-      <profile>
-        <id>signing</id>
-        <activation>
-          <activeByDefault>true</activeByDefault>
-        </activation>
-        <properties>
-          <gpg.executable>${env.GPG_EXECUTABLE}</gpg.executable>
-          <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
-        </properties>
-      </profile>
-    </profiles>
 </settings>

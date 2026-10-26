@@ -1814,9 +1814,7 @@
 
 			<build>
 				<plugins>
-					<!-- To release to Maven central. OSSRH was retired on 2025-06-30; this
-						replaces nexus-staging-maven-plugin, and SONATYPE_USERNAME/SONATYPE_PASSWORD
-						must now be a Central Portal user token rather than JIRA credentials. -->
+					<!-- To release to Maven Central through the Central Portal -->
 					<plugin>
 						<groupId>org.sonatype.central</groupId>
 						<artifactId>central-publishing-maven-plugin</artifactId>
@@ -1825,7 +1823,8 @@
 						<configuration>
 							<publishingServerId>central</publishingServerId>
 							<autoPublish>true</autoPublish>
-							<waitUntilPublished>true</waitUntilPublished>
+							<waitUntil>published</waitUntil>
+							<deploymentName>LocationTech GeoWave ${project.version}</deploymentName>
 						</configuration>
 					</plugin>
 					<!-- To generate javadoc -->
