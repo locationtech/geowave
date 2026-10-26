@@ -15,10 +15,7 @@ import org.geotools.api.data.FeatureReader;
 import org.geotools.api.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.feature.FeatureIterator;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
@@ -44,19 +41,17 @@ import org.slf4j.LoggerFactory;
  * This class is a helper for the GeoWave GeoTools data store. It represents a collection of feature
  * data by encapsulating a GeoWave reader and a query object in order to open the appropriate cursor
  * to iterate over data. It uses Keys within the Query hints to determine whether to perform special
- * purpose queries such as decimation or distributed rendering.
+ * purpose queries such as decimation.
  */
 public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureCollection.class);
   private final GeoWaveFeatureReader reader;
   private CloseableIterator<SimpleFeature> featureCursor;
   private final Query query;
-  private static SimpleFeatureType distributedRenderFeatureType;
 
   public GeoWaveFeatureCollection(final GeoWaveFeatureReader reader, final Query query) {
     this.reader = reader;
-    this.query =
-        validateQuery(GeoWaveFeatureCollection.getSchema(reader, query).getTypeName(), query);
+    this.query = validateQuery(reader.getComponents().getFeatureType().getTypeName(), query);
   }
 
   @Override
@@ -130,40 +125,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   @Override
   public SimpleFeatureType getSchema() {
-    if (isDistributedRenderQuery()) {
-      return getDistributedRenderFeatureType();
-    }
     return reader.getFeatureType();
-  }
-
-  public static synchronized SimpleFeatureType getDistributedRenderFeatureType() {
-    if (distributedRenderFeatureType == null) {
-      distributedRenderFeatureType = createDistributedRenderFeatureType();
-    }
-    return distributedRenderFeatureType;
-  }
-
-  private static SimpleFeatureType createDistributedRenderFeatureType() {
-    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-    typeBuilder.setName("distributed_render");
-    typeBuilder.add("result", DistributedRenderResult.class);
-    typeBuilder.add("options", DistributedRenderOptions.class);
-    return typeBuilder.buildFeatureType();
-  }
-
-  protected boolean isDistributedRenderQuery() {
-    return GeoWaveFeatureCollection.isDistributedRenderQuery(query);
-  }
-
-  protected static final boolean isDistributedRenderQuery(final Query query) {
-    return query.getHints().containsKey(DistributedRenderProcess.OPTIONS);
-  }
-
-  private static SimpleFeatureType getSchema(final GeoWaveFeatureReader reader, final Query query) {
-    if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
-      return getDistributedRenderFeatureType();
-    }
-    return reader.getComponents().getFeatureType();
   }
 
   protected QueryConstraints getQueryConstraints() throws TransformException, FactoryException {
@@ -212,13 +174,6 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       featureCursor = reader.getNoData();
     } else if (query.getFilter() == Filter.EXCLUDE) {
       featureCursor = reader.getNoData();
-    } else if (isDistributedRenderQuery()) {
-      featureCursor =
-          reader.renderData(
-              constraints.jtsBounds,
-              constraints.timeBounds,
-              constraints.limit,
-              (DistributedRenderOptions) query.getHints().get(DistributedRenderProcess.OPTIONS));
     } else if (query.getHints().containsKey(SubsampleProcess.OUTPUT_WIDTH)
         && query.getHints().containsKey(SubsampleProcess.OUTPUT_HEIGHT)
         && query.getHints().containsKey(SubsampleProcess.OUTPUT_BBOX)) {

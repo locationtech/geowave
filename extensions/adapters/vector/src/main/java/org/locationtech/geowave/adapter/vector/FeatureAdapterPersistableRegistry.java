@@ -16,12 +16,6 @@ import org.locationtech.geowave.adapter.vector.ingest.FeatureSerializationOption
 import org.locationtech.geowave.adapter.vector.ingest.GeometrySimpOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.TypeNameOptionProvider;
 import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggregation;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult.CompositeGroupResult;
-import org.locationtech.geowave.adapter.vector.render.PersistableComposite;
-import org.locationtech.geowave.adapter.vector.render.PersistableRenderedImage;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
@@ -41,13 +35,9 @@ public class FeatureAdapterPersistableRegistry implements
         new PersistableIdAndConstructor((short) 505, FeatureSerializationOptionProvider::new),
         new PersistableIdAndConstructor((short) 506, TypeNameOptionProvider::new),
         // 507-508 are available
-        new PersistableIdAndConstructor((short) 509, DistributedRenderOptions::new),
-        new PersistableIdAndConstructor((short) 510, CompositeGroupResult::new),
-        new PersistableIdAndConstructor((short) 511, DistributedRenderResult::new),
-        new PersistableIdAndConstructor((short) 512, PersistableComposite::new),
-        new PersistableIdAndConstructor((short) 513, PersistableRenderedImage::new),
+        // 509-513 are retired: distributed rendering's classes, removed in 3.0
         // 514-520 is available
-        new PersistableIdAndConstructor((short) 521, DistributedRenderAggregation::new),
+        // 521 is retired: distributed rendering's aggregation, removed in 3.0
         new PersistableIdAndConstructor((short) 522, SimpleFeatureUserDataConfigurationSet::new),
         // 523 is used by core-geotime
         // 524-526 are legacy classes (pre 2.0)
