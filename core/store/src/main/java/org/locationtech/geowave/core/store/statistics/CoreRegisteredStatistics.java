@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.core.store.statistics;
 
+import org.locationtech.geowave.core.store.statistics.adapter.AdditiveVectorStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.AdditiveVectorStatistic.AdditiveVectorValue;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
@@ -151,7 +153,13 @@ public class CoreRegisteredStatistics implements StatisticsRegistrySPI {
             BloomFilterStatistic::new,
             BloomFilterValue::new,
             (short) 2032,
-            (short) 2033),};
+            (short) 2033),
+        new RegisteredStatistic(
+            AdditiveVectorStatistic.STATS_TYPE,
+            AdditiveVectorStatistic::new,
+            AdditiveVectorValue::new,
+            (short) 2034,
+            (short) 2035),};
   }
 
   @Override

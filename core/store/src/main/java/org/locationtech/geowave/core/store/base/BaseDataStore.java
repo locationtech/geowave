@@ -2508,6 +2508,7 @@ public class BaseDataStore implements DataStore {
       final Statistic<V> statistic,
       final V value) {
     assertStatisticExists(statistic);
+    statistic.validateValue(value);
     statisticsStore.incorporateStatisticValue(statistic, value);
   }
 
@@ -2517,6 +2518,7 @@ public class BaseDataStore implements DataStore {
       final V value,
       final ByteArray bin) {
     assertStatisticExists(statistic);
+    statistic.validateValue(value);
     statisticsStore.incorporateStatisticValue(statistic, value, bin);
   }
 
