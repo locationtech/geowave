@@ -111,7 +111,7 @@ public class TimeRangeFieldValueBinningStrategy extends FieldValueBinningStrateg
     if (timeMillis != TimeUtils.RESERVED_MILLIS_FOR_NULL) {
       return new ExplicitConstraints(new ByteArray[] {getTimeBin(timeMillis)});
     }
-    return super.constraints(constraint);
+    return super.singleFieldConstraints(constraint);
   }
 
   @Override

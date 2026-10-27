@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionF
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel;
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleDimensionOne;
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleNumericIndexStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.FixedLengthTestBinningStrategy;
 
 public class TestStorePersistableRegistry implements
     PersistableRegistrySpi,
@@ -33,8 +34,7 @@ public class TestStorePersistableRegistry implements
         new PersistableIdAndConstructor((short) 10204, ExampleNumericIndexStrategy::new),
         new PersistableIdAndConstructor((short) 10205, ExampleDimensionOne::new),
         new PersistableIdAndConstructor((short) 10206, TestTypeBasicDataAdapter::new),
-        new PersistableIdAndConstructor(
-            (short) 10207,
-            TestTypeBasicDataAdapterSeparateDataID::new)};
+        new PersistableIdAndConstructor((short) 10207, TestTypeBasicDataAdapterSeparateDataID::new),
+        new PersistableIdAndConstructor((short) 10208, FixedLengthTestBinningStrategy::new)};
   }
 }

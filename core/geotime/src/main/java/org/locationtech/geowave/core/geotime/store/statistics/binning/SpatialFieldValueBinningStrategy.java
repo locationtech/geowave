@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store.statistics.binning;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.OptionalInt;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
@@ -26,7 +27,6 @@ import org.locationtech.jts.geom.Geometry;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.google.common.primitives.Bytes;
 
 public class SpatialFieldValueBinningStrategy extends FieldValueBinningStrategy {
   public static final String NAME = "SPATIAL";
@@ -150,7 +150,27 @@ public class SpatialFieldValueBinningStrategy extends FieldValueBinningStrategy 
         fields.stream().map(
             field -> getSpatialBinsFromObj(adapter.getFieldValue(entry, field))).toArray(
                 ByteArray[][]::new);
-    return getAllCombinationsNoSeparator(fieldValues);
+    return BinningStrategyUtils.getAllCombinations(fieldValues, this::joinFieldBins);
+  }
+
+  @Override
+  protected ByteArray joinFieldBins(final ByteArray[] fieldBins) {
+    return BinningStrategyUtils.concatenate(fieldBins);
+  }
+
+  @Override
+  protected OptionalInt getFixedFieldBinLength() {
+    return OptionalInt.of(type.getBinByteLength(precision));
+  }
+
+  /**
+   * Every H3 and S2 bin is 8 bytes and every geohash bin is as long as the precision, and a field
+   * value that is not a geometry, such as null, gets no bin at all.
+   */
+  @Override
+  public OptionalInt getFixedBinLength() {
+    return fields.isEmpty() ? OptionalInt.empty()
+        : OptionalInt.of(fields.size() * type.getBinByteLength(precision));
   }
 
   @Override
@@ -263,13 +283,6 @@ public class SpatialFieldValueBinningStrategy extends FieldValueBinningStrategy 
           precision);
     }
     return super.singleFieldConstraints(constraints);
-  }
-
-  private static ByteArray[] getAllCombinationsNoSeparator(final ByteArray[][] perFieldBins) {
-    return BinningStrategyUtils.getAllCombinations(
-        perFieldBins,
-        a -> new ByteArray(
-            Bytes.concat(Arrays.stream(a).map(ByteArray::getBytes).toArray(byte[][]::new))));
   }
 
   public static class ComplexGeometryBinningOptionConverter implements
