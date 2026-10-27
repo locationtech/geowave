@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.util.Arrays;
+import java.util.OptionalInt;
 import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -55,6 +56,17 @@ public interface StatisticBinningStrategy extends Persistable, BinningStrategy {
    * Adds all of the field names used by the binning strategy to the provided set.
    */
   default void addFieldsUsed(final Set<String> fieldsUsed) {}
+
+  /**
+   * Get the length shared by every bin this strategy produces, for any entry, including entries
+   * whose binned values are null. A composite bin puts its child bins one after another, so it can
+   * only be constrained by prefix or range under, or on, children whose bins have a fixed length.
+   *
+   * @return the length in bytes of every bin, or empty if bins can differ in length
+   */
+  default OptionalInt getFixedBinLength() {
+    return OptionalInt.empty();
+  }
 
   default Class<?>[] supportedConstraintClasses() {
     return new Class<?>[] {

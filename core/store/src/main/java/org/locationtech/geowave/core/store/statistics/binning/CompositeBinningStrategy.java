@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
@@ -27,11 +28,19 @@ import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstrain
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.ExplicitConstraints;
 import com.google.common.collect.Lists;
 
 /**
  * Statistic binning strategy that combines two or more other binning strategies.
+ *
+ * <p> A composite bin is the child bins concatenated, followed by their lengths, so leading child
+ * bins form a key prefix. An Object[] constraint with one entry per child is combined from the
+ * children's constraints: leading exact constraints multiply out, the first child that is not exact
+ * may be constrained to all bins, prefixes or ranges (which become prefixes or ranges under each
+ * leading combination), and every child after it must be constrained to all bins. Nothing separates
+ * one child bin from the next, so those prefixes and ranges need every exact child before them, and
+ * a child constrained by prefix or range, to have a fixed bin length (see
+ * {@link StatisticBinningStrategy#getFixedBinLength()}); otherwise the constraint is refused.
  */
 public class CompositeBinningStrategy implements StatisticBinningStrategy {
 
@@ -159,7 +168,7 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
       // get the subBin from the buffer at this position
       return ((CompositeBinningStrategy) childBinningStrategies[composite.getAsInt()]).binMatches(
           binningStrategyClass,
-          new ByteArray(getSubBinAtIndex(directlyAssignable.getAsInt(), buffer)),
+          new ByteArray(getSubBinAtIndex(composite.getAsInt(), buffer)),
           subBin);
     }
     return false;
@@ -169,7 +178,7 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
     // get the subBin from the buffer at this position
     buffer.position(buffer.limit() - 1);
     final int skipBytes =
-        IntStream.range(0, index - 1).map(i -> VarintUtils.readUnsignedIntReversed(buffer)).sum();
+        IntStream.range(0, index).map(i -> VarintUtils.readUnsignedIntReversed(buffer)).sum();
     final byte[] subBin = new byte[VarintUtils.readUnsignedIntReversed(buffer)];
     buffer.position(skipBytes);
     buffer.get(subBin);
@@ -239,40 +248,60 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
   }
 
   private ByteArrayConstraints concat(final List<ByteArrayConstraints> perStrategyConstraints) {
-    final ByteArray[][] c = new ByteArray[perStrategyConstraints.size()][];
-    boolean allBins = true;
-    for (int i = 0; i < perStrategyConstraints.size(); i++) {
-      final ByteArrayConstraints constraints = perStrategyConstraints.get(i);
-      if (constraints.isAllBins()) {
-        if (!allBins) {
-          throw new IllegalArgumentException(
-              "Cannot use 'all bins' query for one strategy and not the other");
-        }
-      } else {
-        allBins = false;
+    return BinningStrategyUtils.combineConstraints(perStrategyConstraints, new Layout());
+  }
+
+  @Override
+  public OptionalInt getFixedBinLength() {
+    int length = 0;
+    for (final StatisticBinningStrategy child : childBinningStrategies) {
+      final OptionalInt childLength = child.getFixedBinLength();
+      if (childLength.isEmpty()) {
+        return OptionalInt.empty();
       }
-      if (constraints.isPrefix()) {
-        // can only use a prefix if its the last field or the rest of the fields are 'all bins'
-        boolean isValid = true;
-        for (final int j = i + 1; i < perStrategyConstraints.size(); i++) {
-          final ByteArrayConstraints innerConstraints = perStrategyConstraints.get(j);
-          if (!innerConstraints.isAllBins()) {
-            isValid = false;
-            break;
-          } else {
-            c[i] = new ByteArray[] {new ByteArray()};
-          }
-        }
-        if (isValid) {
-          return new ExplicitConstraints(getAllCombinations(c), true);
-        } else {
-          throw new IllegalArgumentException(
-              "Cannot use 'prefix' query for a strategy that is also using exact constraints on a subsequent strategy");
-        }
-      }
-      c[i] = constraints.getBins();
+      length += childLength.getAsInt() + VarintUtils.unsignedIntByteLength(childLength.getAsInt());
     }
-    return new ExplicitConstraints(getAllCombinations(c), false);
+    return OptionalInt.of(length);
+  }
+
+  private class Layout implements BinningStrategyUtils.ComponentLayout {
+    @Override
+    public ByteArray getBin(final ByteArray[] componentBins) {
+      return CompositeBinningStrategy.getBin(componentBins);
+    }
+
+    @Override
+    public ByteArray getPrefix(final ByteArray[] leadingBins, final ByteArray partialBin) {
+      return BinningStrategyUtils.concatenate(ArrayUtils.add(leadingBins, partialBin));
+    }
+
+    @Override
+    public ByteArray getExactPrefix(final ByteArray[] leadingBins, final ByteArray bin) {
+      // the bin has its child's fixed length, so no longer child bin can start with it
+      return getPrefix(leadingBins, bin);
+    }
+
+    @Override
+    public void checkDelimited(final int component, final ByteArrayConstraints constraints) {
+      final OptionalInt length = childBinningStrategies[component].getFixedBinLength();
+      if (length.isEmpty()) {
+        // the next child's bytes or the bin lengths follow a child bin with nothing in between
+        throw new IllegalArgumentException(
+            "Cannot use prefix, range or 'all bins' constraints on or after "
+                + describe(component)
+                + " because its bins do not have a fixed length; constrain every binning strategy to exact bins, or all of them to all bins");
+      }
+      BinningStrategyUtils.checkFixedLength(length.getAsInt(), constraints, describe(component));
+    }
+
+    @Override
+    public String describe(final int component) {
+      return "binning strategy "
+          + component
+          + " ("
+          + childBinningStrategies[component].getStrategyName()
+          + ")";
+    }
   }
 
   private static ByteArray[] getAllCombinations(final ByteArray[][] perStrategyBins) {
