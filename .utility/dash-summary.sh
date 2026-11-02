@@ -26,7 +26,7 @@ cd "$(cd "$(dirname "$0")/.." && pwd)"
 ATTEMPTS=${DASH_ATTEMPTS:-4}
 for attempt in $(seq 1 "$ATTEMPTS"); do
   rm -f "$OUT"
-  if mvn -B org.eclipse.dash:license-tool-plugin:license-check -pl '!test' -Ddash.summary="$OUT" "$@"; then
+  if ./mvnw -B org.eclipse.dash:license-tool-plugin:license-check -pl '!test' -Ddash.summary="$OUT" "$@"; then
     break
   fi
   if [ "$attempt" -eq "$ATTEMPTS" ]; then
