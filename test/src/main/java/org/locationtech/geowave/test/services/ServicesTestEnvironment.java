@@ -62,7 +62,6 @@ public class ServicesTestEnvironment implements TestEnvironment {
   protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
   protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "SubsamplePoints-10px";
   protected static final String TEST_STYLE_NAME_MAJOR_SUBSAMPLE = "SubsamplePoints-100px";
-  protected static final String TEST_STYLE_NAME_DISTRIBUTED_RENDER = "DistributedRender";
   protected static final String TEST_STYLE_PATH = "src/test/resources/sld/";
   protected static final String TEST_GEOSERVER_LOGGING_PATH = "src/test/resources/logging.xml";
   protected static final String TEST_LOG_PROPERTIES_PATH =
@@ -77,8 +76,6 @@ public class ServicesTestEnvironment implements TestEnvironment {
       TEST_STYLE_PATH + TEST_STYLE_NAME_MINOR_SUBSAMPLE + ".sld";
   protected static final String TEST_SLD_MAJOR_SUBSAMPLE_FILE =
       TEST_STYLE_PATH + TEST_STYLE_NAME_MAJOR_SUBSAMPLE + ".sld";
-  protected static final String TEST_SLD_DISTRIBUTED_RENDER_FILE =
-      TEST_STYLE_PATH + TEST_STYLE_NAME_DISTRIBUTED_RENDER + ".sld";
 
   private Server jettyServer;
   private HttpServer restServer;

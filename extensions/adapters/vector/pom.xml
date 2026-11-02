@@ -54,26 +54,8 @@
 			<artifactId>gt-geojson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.geoserver</groupId>
-			<artifactId>gs-wms-core</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>gt-epsg-hsql</artifactId>
-					<groupId>org.geotools</groupId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-beanutils</groupId>
-					<artifactId>commons-beanutils</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.oath.cyclops</groupId>
-			<artifactId>cyclops</artifactId>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-process-feature</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>

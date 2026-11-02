@@ -1199,6 +1199,18 @@
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
+				<artifactId>gt-process-feature</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<!-- s3fs-nio asks for 2.9.2, which CVE-2025-66516 affects (tika-core 1.13 to 3.2.1) -->
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-core</artifactId>
+				<version>3.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
 				<artifactId>gt-netcdf</artifactId>
 				<version>${geotools.version}</version>
 				<exclusions>
@@ -1213,6 +1225,11 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
 					</exclusion>
+					<!-- GeoWave takes the EPSG database from gt-epsg-wkt -->
+					<exclusion>
+						<groupId>org.geotools</groupId>
+						<artifactId>gt-epsg-hsql</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
@@ -1225,48 +1242,6 @@
 				<groupId>org.reflections</groupId>
 				<artifactId>reflections</artifactId>
 				<version>0.9.11</version>
-			</dependency>
-			<dependency>
-				<groupId>org.geoserver</groupId>
-				<artifactId>gs-wms-core</artifactId>
-				<version>${geoserver.version}</version>
-				<scope>${geotools.scope}</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>com.vividsolutions</groupId>
-						<artifactId>jts</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.geoserver</groupId>
-				<artifactId>gs-main</artifactId>
-				<version>${geoserver.version}</version>
-				<scope>${geotools.scope}</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>com.vividsolutions</groupId>
-						<artifactId>jts</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.geoserver</groupId>
-				<artifactId>gs-ows</artifactId>
-				<version>${geoserver.version}</version>
-				<scope>${geotools.scope}</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.geoserver</groupId>
-				<artifactId>gs-platform</artifactId>
-				<version>${geoserver.version}</version>
-				<scope>${geotools.scope}</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.geoserver</groupId>
-				<artifactId>gs-wfs-core</artifactId>
-				<version>${geoserver.version}</version>
-				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>

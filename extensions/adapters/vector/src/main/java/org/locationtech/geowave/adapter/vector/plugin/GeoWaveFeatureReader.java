@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import org.geotools.api.data.FeatureReader;
 import org.geotools.api.data.Query;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.AttributeExpressionImpl;
 import org.geotools.filter.FidFilterImpl;
 import org.geotools.filter.spatial.BBOXImpl;
@@ -30,9 +29,6 @@ import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
-import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
 import org.locationtech.geowave.core.geotime.index.SpatialIndexFilter;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
@@ -469,47 +465,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         throw new IllegalArgumentException("Unable to create Reference Envelope", e);
       }
     }
-  }
-
-  private class RenderQueryIssuer extends BaseIssuer implements QueryIssuer {
-    final DistributedRenderOptions renderOptions;
-
-    public RenderQueryIssuer(final Integer limit, final DistributedRenderOptions renderOptions) {
-      super(limit);
-      this.renderOptions = renderOptions;
-    }
-
-    @Override
-    public CloseableIterator<SimpleFeature> query(
-        final Index index,
-        final BasicQueryByClass query,
-        final boolean spatialOnly) {
-      final VectorAggregationQueryBuilder<DistributedRenderOptions, DistributedRenderResult> bldr =
-          (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder.newBuilder().setAuthorizations(
-              transaction.composeAuthorizations());
-      if (index != null) {
-        bldr.indexName(index.getName());
-      }
-      bldr.aggregate(
-          components.getAdapter().getTypeName(),
-          new DistributedRenderAggregation(renderOptions)).constraints(
-              createQueryConstraints(index, query, spatialOnly));
-      final DistributedRenderResult result = components.getDataStore().aggregate(bldr.build());
-      return new CloseableIterator.Wrapper<>(
-          Iterators.singletonIterator(
-              SimpleFeatureBuilder.build(
-                  GeoWaveFeatureCollection.getDistributedRenderFeatureType(),
-                  new Object[] {result, renderOptions},
-                  "render")));
-    }
-  }
-
-  public CloseableIterator<SimpleFeature> renderData(
-      final Geometry jtsBounds,
-      final TemporalConstraintsSet timeBounds,
-      final Integer limit,
-      final DistributedRenderOptions renderOptions) {
-    return issueQuery(jtsBounds, timeBounds, new RenderQueryIssuer(limit, renderOptions));
   }
 
   public CloseableIterator<SimpleFeature> getData(

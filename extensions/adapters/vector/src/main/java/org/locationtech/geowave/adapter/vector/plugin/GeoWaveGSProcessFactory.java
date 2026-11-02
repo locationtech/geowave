@@ -19,10 +19,6 @@ import org.geotools.text.Text;
 public class GeoWaveGSProcessFactory extends AnnotatedBeanProcessFactory {
 
   public GeoWaveGSProcessFactory() {
-    super(
-        Text.text("GeoWave Process Factory"),
-        "geowave",
-        SubsampleProcess.class,
-        DistributedRenderProcess.class);
+    super(Text.text("GeoWave Process Factory"), "geowave", SubsampleProcess.class);
   }
 }
