@@ -6,9 +6,6 @@ set -ev
 echo -e "Building javadocs...\n"
 "$MVN" javadoc:javadoc -B -DskipTests -Dspotbugs.skip
 
-echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
-echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
-
 # dev-resources is consumed as a plugin dependency, so it has to already exist
 # in a repository before the reactor starts -- it cannot be a reactor module.
 # Publish it only when this version is not out there yet. Ask Maven rather than
@@ -19,11 +16,11 @@ if ! "$MVN" -q -B dependency:get \
   then
     pushd dev-resources
     echo -e "Deploying dev-resources..."
-    "$MVN" deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+    "$MVN" deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease -Dgpg.keyname="$GPG_KEY_ID"
     popd
 fi
 echo -e "Deploying geowave artifacts..."
-"$MVN" deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+"$MVN" deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease -Dgpg.keyname="$GPG_KEY_ID"
 
 # Get the version from the build.properties file
 filePath=deploy/target/classes/build.properties

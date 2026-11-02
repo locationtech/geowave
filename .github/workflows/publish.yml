@@ -16,15 +16,13 @@ env:
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"
 jobs:
   publish:
-    # The runner label this job asked for was retired years ago, so it has not
-    # run since; the first push to 2.x-jdk8 that can actually reach a runner would
-    # otherwise publish without anyone deciding to. Publishing stays off until a
-    # committer sets the PUBLISH_ON_2X_JDK8 repository variable to true, which
-    # should happen once the org.locationtech namespace is granted on the Central
-    # Portal and SONATYPE_USERNAME/SONATYPE_PASSWORD hold a Portal user token.
-    # Until then a committer can still publish deliberately with Run workflow.
-    # master's copy of this workflow reads PUBLISH_ON_MASTER instead, so turning
-    # on one branch's releases does not start publishing from the other.
+    # Publishing from 2.x-jdk8 stays off until a committer sets the
+    # PUBLISH_ON_2X_JDK8 repository variable to true; until then a committer can
+    # still publish deliberately with Run workflow. The Central Portal token and
+    # the signing key are the Eclipse Foundation-managed CENTRAL_SONATYPE_TOKEN_*
+    # and GPG_* secrets. master's copy of this workflow reads PUBLISH_ON_MASTER
+    # instead, so turning on one branch's releases does not start publishing from
+    # the other.
     if: >-
       github.repository == 'locationtech/geowave' &&
       (github.event_name == 'workflow_dispatch' || vars.PUBLISH_ON_2X_JDK8 == 'true')
@@ -33,12 +31,12 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN }}
-      GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
-      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
-      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      CENTRAL_SONATYPE_TOKEN_USERNAME: ${{ secrets.CENTRAL_SONATYPE_TOKEN_USERNAME }}
+      CENTRAL_SONATYPE_TOKEN_PASSWORD: ${{ secrets.CENTRAL_SONATYPE_TOKEN_PASSWORD }}
+      # maven-gpg-plugin reads the passphrase from MAVEN_GPG_PASSPHRASE
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE_NEW }}
+      GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
@@ -56,6 +54,9 @@ jobs:
           21
           8
         cache: maven
+        # imports the signing key into the runner's keyring
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
 
     - name: Install Local Artifacts
