@@ -37,7 +37,7 @@ jobs:
       # Inter-module dependencies do not resolve from the reactor alone, so the
       # summary would be missing GeoWave's own artifacts without this.
       - name: Install artifacts
-        run: mvn -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
+        run: ./mvnw -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
 
       - name: Generate dependency summary
         run: ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated"
@@ -71,7 +71,7 @@ jobs:
           cache: maven
 
       - name: Install artifacts
-        run: mvn -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
+        run: ./mvnw -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
 
       - name: File review requests
         env:
