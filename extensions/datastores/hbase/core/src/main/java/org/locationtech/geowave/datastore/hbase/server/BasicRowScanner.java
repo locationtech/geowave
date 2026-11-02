@@ -22,8 +22,13 @@ public class BasicRowScanner implements RowScanner {
   private Map<String, Object> hints;
 
   public BasicRowScanner(final List<Cell> list, final Scan scan) {
+    this(list, scan, null);
+  }
+
+  public BasicRowScanner(final List<Cell> list, final Scan scan, final Map<String, Object> hints) {
     this.list = list;
     this.scan = scan;
+    this.hints = hints;
   }
 
   @Override
