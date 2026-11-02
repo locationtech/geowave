@@ -40,9 +40,9 @@ GeoWave publishes through the https://central.sonatype.com/[Sonatype Central Por
 
 Publishing is done by the `Publish` workflow, which runs `.utility/publish-artifacts.sh`. That script signs the artifacts with the CI GPG key and runs `./mvnw deploy -Prelease`; the `release` profile activates `central-publishing-maven-plugin`, which uploads a deployment bundle to the Portal and waits for it to be published.
 
-The workflow is currently gated off pending the Eclipse Foundation's approval of the `org.locationtech` namespace on the Portal. It runs only when a committer starts it manually (Run workflow), or on pushes to `master` once the `PUBLISH_ON_MASTER` repository variable is set to `true`. That variable is read by `master` only; the `2.x-jdk8` branch's copy of the workflow reads its own, `PUBLISH_ON_2X_JDK8`, so publishing a 2.x release does not also start publishing from `master`. The same workflow also publishes the documentation to link:https://locationtech.github.io/geowave/[GitHub Pages, window="_blank"].
+Publishing from `master` is off by default. The workflow runs only when a committer starts it manually (Run workflow), or on pushes to `master` once the `PUBLISH_ON_MASTER` repository variable is set to `true`. That variable is read by `master` only; the `2.x-jdk8` branch's copy of the workflow reads its own, `PUBLISH_ON_2X_JDK8`, so publishing a 2.x release does not also start publishing from `master`. The same workflow also publishes the documentation to link:https://locationtech.github.io/geowave/[GitHub Pages, window="_blank"].
 
-Two things must be in place for publishing to work:
+The credentials are repository secrets that the Eclipse Foundation manages, declared in the LocationTech https://github.com/locationtech/.eclipsefdn[Otterdog configuration]:
 
-* The `SONATYPE_USERNAME` and `SONATYPE_PASSWORD` repository secrets must hold a Central Portal *user token*, not the retired OSSRH account. Tokens are generated from the Portal account page.
-* The `org.locationtech` namespace must be verified on the Portal for the publishing account. LocationTech namespaces are administered by the Eclipse Foundation rather than by the project, so obtaining publishing rights goes through the EMO.
+* `CENTRAL_SONATYPE_TOKEN_USERNAME` and `CENTRAL_SONATYPE_TOKEN_PASSWORD`, a Central Portal user token for the `org.locationtech` namespace, which the Eclipse Foundation administers.
+* `GPG_PRIVATE_KEY`, `GPG_PASSPHRASE_NEW` and `GPG_KEY_ID`, the project's signing key. The workflow imports the key with `actions/setup-java`, and `maven-gpg-plugin` signs with it.
