@@ -89,6 +89,15 @@ public class AddStatCommand extends ServiceEnabledCommand<Void> {
 
   @Override
   public Void computeResults(final OperationParams params) {
+    if (binningStrategy != null) {
+      // The strategy's options are only parsed after prepare(). Persisting a statistic logs and
+      // drops a serialization failure, so check here that the options can be persisted.
+      try {
+        binningStrategy.toBinary();
+      } catch (final IllegalArgumentException e) {
+        throw new ParameterException(e.getMessage(), e);
+      }
+    }
     final String storeName = parameters.get(0);
 
     // Attempt to load store.
