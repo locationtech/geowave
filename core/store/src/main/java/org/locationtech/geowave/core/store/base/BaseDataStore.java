@@ -1520,10 +1520,13 @@ public class BaseDataStore implements DataStore {
           final ByteArrayConstraints bins = query.binConstraints().constraints(stat);
           // we really don't need to check if the binning strategy supports the class considering
           // the binning strategy won't return bin constraints if it doesn't support the object
-          if ((bins != null) && ((bins.getBins().length > 0) || bins.isAllBins())) {
+          if ((bins != null)
+              && ((bins.getBins().length > 0)
+                  || (bins.getBinRanges().length > 0)
+                  || bins.isAllBins())) {
             iterators.add(
                 statisticsStore.getStatisticValues(
-                    statistics.iterator(),
+                    Iterators.singletonIterator(stat),
                     bins,
                     query.authorizations()));
           }
