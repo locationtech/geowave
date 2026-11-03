@@ -8,11 +8,16 @@
  */
 package org.locationtech.geowave.core.store.statistics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
@@ -58,7 +63,9 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
         if ((nextStat.getBinningStrategy() != null)
             && (binConstraints != null)
             && !binConstraints.isAllBins()) {
-          if (binConstraints.getBins().length > 0) {
+          if ((binConstraints.getBins().length > 0) && (binConstraints.getBinRanges().length > 0)) {
+            current = binsAndRanges(nextStat);
+          } else if (binConstraints.getBins().length > 0) {
             if (binConstraints.isPrefix()) {
               final List<CloseableIterator<StatisticValue<Object>>> iters =
                   Arrays.stream(binConstraints.getBins()).map(
@@ -79,8 +86,6 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
                               bin,
                               authorizations)).filter(Objects::nonNull).iterator());
             }
-            // TODO should we allow for both prefix/bin constraints and range constraints or just
-            // use one or the other as now? there doesn't seem to be a good use case to require both
           } else if (binConstraints.getBinRanges().length > 0) {
             current =
                 statisticsStore.getStatisticValues(
@@ -103,6 +108,55 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
         next = current.next();
       }
     }
+  }
+
+  // Reads the union of the bins and the ranges, each value once: prefix bins become ranges, and an
+  // exact bin is left to the range read when a range covers it.
+  private CloseableIterator<StatisticValue<Object>> binsAndRanges(
+      final Statistic<StatisticValue<Object>> statistic) {
+    final List<ByteArrayRange> ranges = new ArrayList<>();
+    for (final ByteArrayRange range : binConstraints.getBinRanges()) {
+      // merging sorts a null start last, so an open start becomes the empty bin
+      ranges.add(
+          new ByteArrayRange(
+              range.getStart() == null ? new byte[0] : range.getStart(),
+              range.getEnd()));
+    }
+    if (binConstraints.isPrefix()) {
+      for (final ByteArray bin : binConstraints.getBins()) {
+        ranges.add(new ByteArrayRange(bin.getBytes(), bin.getBytes()));
+      }
+    }
+    // an inverted range matches nothing, but would keep the ranges around it from merging
+    ranges.removeIf(r -> ByteArrayUtils.compare(r.getStart(), r.getEndAsNextPrefix()) >= 0);
+    final ByteArrayRange[] merged =
+        ByteArrayRange.mergeIntersections(ranges, MergeOperation.UNION).toArray(
+            new ByteArrayRange[0]);
+    final List<CloseableIterator<StatisticValue<Object>>> iters = new ArrayList<>();
+    if (!binConstraints.isPrefix()) {
+      iters.add(
+          new CloseableIterator.Wrapper<>(
+              Arrays.stream(binConstraints.getBins()).distinct().filter(
+                  bin -> Arrays.stream(merged).noneMatch(
+                      range -> covers(range, bin.getBytes()))).map(
+                          bin -> statisticsStore.getStatisticValue(
+                              statistic,
+                              bin,
+                              authorizations)).filter(Objects::nonNull).iterator()));
+    }
+    // to a metadata query, no ranges means every value
+    if (merged.length > 0) {
+      iters.add(statisticsStore.getStatisticValues(statistic, merged, authorizations));
+    }
+    return new CloseableIteratorWrapper<>(
+        () -> iters.forEach(CloseableIterator::close),
+        Iterators.concat(iters.iterator()));
+  }
+
+  private static boolean covers(final ByteArrayRange range, final byte[] bin) {
+    return (ByteArrayUtils.compare(bin, range.getStart()) >= 0)
+        && ((range.getEnd() == null)
+            || (ByteArrayUtils.compare(bin, range.getEndAsNextPrefix()) < 0));
   }
 
   @Override
