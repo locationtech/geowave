@@ -624,7 +624,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
         metadataStore.get(type).remove(
             new MemoryMetadataEntry(r, ((GeoWaveMetadataWithUUID) r).uuidBytes));
       }
-      return true;
+      return !toRemove.isEmpty();
     }
 
     @Override

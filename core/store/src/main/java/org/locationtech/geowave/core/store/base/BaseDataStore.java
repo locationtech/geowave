@@ -2523,6 +2523,42 @@ public class BaseDataStore implements DataStore {
     statisticsStore.incorporateStatisticValue(statistic, value, bin);
   }
 
+  @Override
+  public <V extends StatisticValue<R>, R> void incorporateStatisticValues(
+      final Statistic<V> statistic,
+      final Map<ByteArray, V> binnedValues) {
+    assertStatisticExists(statistic);
+    assertStatisticBinned(statistic);
+    statisticsStore.incorporateStatisticValues(statistic, binnedValues);
+  }
+
+  @Override
+  public boolean removeStatisticValues(
+      final Statistic<?> statistic,
+      final BinConstraints binConstraints) {
+    assertStatisticExists(statistic);
+    assertStatisticBinned(statistic);
+    final ByteArrayConstraints constraints = binConstraints.constraints(statistic);
+    if (constraints == null) {
+      return false;
+    }
+    if (constraints.isAllBins()) {
+      return statisticsStore.removeStatisticValues(statistic);
+    }
+    boolean removed = false;
+    if (constraints.getBins().length > 0) {
+      removed =
+          statisticsStore.removeStatisticValues(
+              statistic,
+              constraints.getBins(),
+              constraints.isPrefix());
+    }
+    if (constraints.getBinRanges().length > 0) {
+      removed |= statisticsStore.removeStatisticValues(statistic, constraints.getBinRanges());
+    }
+    return removed;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public <T, V extends StatisticValue<R>, R> void incorporateStatisticFromEntry(
@@ -2567,6 +2603,13 @@ public class BaseDataStore implements DataStore {
       ((StatisticsIngestCallback) value).entryIngested(adapter, entry);
     }
     return value;
+  }
+
+  private void assertStatisticBinned(final Statistic<?> statistic) {
+    if (statistic.getBinningStrategy() == null) {
+      throw new IllegalArgumentException(
+          "The statistic " + statistic.toString() + " doesn't use a binning strategy.");
+    }
   }
 
   private void assertStatisticExists(final Statistic<?> statistic) {

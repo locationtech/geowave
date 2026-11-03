@@ -35,6 +35,10 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
 
   @Override
   public boolean delete(final MetadataQuery metadata) {
+    if (metadata.hasPrimaryIdRanges() || (metadata.hasPrimaryId() && metadata.isPrefix())) {
+      // find the matching entries first, then delete them one at a time
+      return DataStoreUtils.safeMetadataDelete(this, operations, metadataType, metadata);
+    }
     // the nature of metadata deleter is that primary ID is always
     // well-defined and it is deleting a single entry at a time
     final String tableName = operations.getMetadataTableName(metadataType);

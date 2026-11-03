@@ -27,6 +27,7 @@ import org.locationtech.geowave.test.basic.GeoWaveHBaseStatisticDeleteIT;
 import org.locationtech.geowave.test.basic.GeoWaveMultiProcessIngestIT;
 import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningAggregationIT;
 import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningStatisticsIT;
+import org.locationtech.geowave.test.basic.GeoWaveStatisticValueRangesIT;
 import org.locationtech.geowave.test.basic.GeoWaveStatisticsIT;
 import org.locationtech.geowave.test.basic.GeoWaveTextIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
@@ -84,6 +85,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveDocumentationExamplesIT.class,
     GeoWaveStatisticsIT.class,
     GeoWaveHBaseStatisticDeleteIT.class,
+    GeoWaveStatisticValueRangesIT.class,
     GeoWaveBasicURLIngestIT.class,
     // has to be before SparkEnvironment usage: the ingest stops whatever session it gets
     GeoWaveSparkIngestIT.class,

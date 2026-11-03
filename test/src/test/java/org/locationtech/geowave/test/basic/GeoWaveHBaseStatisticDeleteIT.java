@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.BinConstraints;
@@ -78,6 +79,15 @@ public class GeoWaveHBaseStatisticDeleteIT {
   @Test
   public void testAllBinsDeleteSurvivesFlushAndCompaction() throws Exception {
     assertDeleteSurvives("all", DataStatisticsStore::removeStatisticValues);
+  }
+
+  @Test
+  public void testRangeDeleteSurvivesFlushAndCompaction() throws Exception {
+    assertDeleteSurvives(
+        "range",
+        (statistics, stat) -> ds.removeStatisticValues(
+            stat,
+            BinConstraints.ofRange(new ByteArrayRange(BIN.getBytes(), BIN.getBytes()))));
   }
 
   @Test

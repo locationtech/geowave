@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.accumulo.operations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.accumulo.core.client.BatchScanner;
@@ -54,6 +53,22 @@ public class AccumuloMetadataReader implements MetadataReader {
       if ((query.getAuthorizations() != null) && (query.getAuthorizations().length > 0)) {
         operations.ensureAuthorizations(null, query.getAuthorizations());
       }
+      final Collection<Range> ranges = new ArrayList<>();
+      if (query.hasPrimaryId()) {
+        if (query.isPrefix()) {
+          ranges.add(Range.prefix(new Text(query.getPrimaryId())));
+        } else {
+          ranges.add(Range.exact(new Text(query.getPrimaryId())));
+        }
+      } else if (query.hasPrimaryIdRanges()) {
+        ranges.addAll(
+            AccumuloUtils.byteArrayRangesToBoundedAccumuloRanges(query.getPrimaryIdRanges()));
+      } else {
+        ranges.add(new Range());
+      }
+      if (ranges.isEmpty()) {
+        return new CloseableIterator.Empty<>();
+      }
       final BatchScanner scanner =
           operations.createBatchScanner(
               AbstractGeoWavePersistence.METADATA_TABLE,
@@ -66,20 +81,6 @@ public class AccumuloMetadataReader implements MetadataReader {
         } else {
           scanner.fetchColumnFamily(new Text(columnFamily));
         }
-      }
-      final Collection<Range> ranges = new ArrayList<>();
-      if (query.hasPrimaryId()) {
-        if (query.isPrefix()) {
-          ranges.add(Range.prefix(new Text(query.getPrimaryId())));
-        } else {
-          ranges.add(Range.exact(new Text(query.getPrimaryId())));
-        }
-      } else if (query.hasPrimaryIdRanges()) {
-        ranges.addAll(
-            AccumuloUtils.byteArrayRangesToAccumuloRanges(
-                Arrays.asList(query.getPrimaryIdRanges())));
-      } else {
-        ranges.add(new Range());
       }
       scanner.setRanges(ranges);
 

@@ -185,6 +185,46 @@ public class DataStoreUtils {
     return dataSet.getFieldsDeferred();
   }
 
+  /**
+   * Whether an id lies within the range: start (inclusive) up to the end as an inclusive prefix. A
+   * single value range matches ids starting with its start. Stores that key entries by more than
+   * the id use this to drop neighbors that sort inside the raw key range, such as {@code 1}
+   * followed by a secondary id inside {@code [10, 20]}.
+   */
+  public static boolean isInRange(final byte[] id, final ByteArrayRange range) {
+    if (range.isSingleValue()) {
+      return ByteArrayUtils.startsWith(id, range.getStart());
+    }
+    return ((range.getStart() == null) || (ByteArrayUtils.compare(id, range.getStart()) >= 0))
+        && ((range.getEnd() == null)
+            || (ByteArrayUtils.compare(id, range.getEndAsNextPrefix()) < 0));
+  }
+
+  /**
+   * The raw key range to scan for entries whose primary id is in the range, when keys are the
+   * primary id followed by more bytes. Only an id that is a proper prefix of the range's exclusive
+   * end can sort past that end once those bytes are appended, so the scan runs on over every id
+   * starting with the shortest such prefix at or after the start: the start itself when it is a
+   * prefix of the end, otherwise the common prefix of start and end plus the end's next byte.
+   * Filter the results with {@link #isInRange}.
+   */
+  public static ByteArrayRange toKeyScanRange(final ByteArrayRange range) {
+    if (range.isSingleValue()) {
+      return range;
+    }
+    final byte[] start = range.getStart();
+    final byte[] end = range.getEnd();
+    if ((start == null) || (end == null)) {
+      return new ByteArrayRange(start, null);
+    }
+    int common = 0;
+    while ((common < start.length) && (common < end.length) && (start[common] == end[common])) {
+      common++;
+    }
+    final int scanEndLength = common == start.length ? common : Math.min(common + 1, end.length);
+    return new ByteArrayRange(start, scanEndLength == 0 ? null : Arrays.copyOf(end, scanEndLength));
+  }
+
   public static boolean startsWithIfPrefix(
       final byte[] source,
       final byte[] match,
@@ -641,11 +681,17 @@ public class DataStoreUtils {
     return Collections.unmodifiableList(loadedIndices);
   }
 
-  public static void safeMetadataDelete(
+  /**
+   * Deletes the entries matching the query one by one.
+   *
+   * @return true if at least one entry was found
+   */
+  public static boolean safeMetadataDelete(
       final MetadataDeleter deleter,
       final DataStoreOperations operations,
       final MetadataType metadataType,
       final MetadataQuery query) {
+    boolean found = false;
     // we need to respect visibilities although this may be much slower
     final MetadataReader reader = operations.createMetadataReader(metadataType);
     try (final CloseableIterator<GeoWaveMetadata> it = reader.query(query)) {
@@ -656,7 +702,9 @@ public class DataStoreUtils {
                 entry.getPrimaryId(),
                 entry.getSecondaryId(),
                 query.getAuthorizations()));
+        found = true;
       }
     }
+    return found;
   }
 }

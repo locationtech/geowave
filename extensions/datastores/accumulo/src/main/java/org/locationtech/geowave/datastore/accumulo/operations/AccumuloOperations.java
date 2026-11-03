@@ -483,6 +483,33 @@ public class AccumuloOperations implements
     }
   }
 
+  public boolean deleteRanges(
+      final String tableName,
+      final Collection<Range> rowRanges,
+      final String columnFamily,
+      final byte[] columnQualifier,
+      final String... authorizations) {
+    BatchDeleter deleter = null;
+    try {
+      deleter = createBatchDeleter(tableName, authorizations);
+      if ((columnQualifier != null) && (columnQualifier.length != 0)) {
+        deleter.fetchColumn(new Text(columnFamily), new Text(columnQualifier));
+      } else {
+        deleter.fetchColumnFamily(new Text(columnFamily));
+      }
+      deleter.setRanges(rowRanges);
+      deleter.delete();
+      return true;
+    } catch (final TableNotFoundException | MutationsRejectedException e) {
+      LOGGER.warn("Unable to delete rows from table [" + tableName + "].", e);
+      return false;
+    } finally {
+      if (deleter != null) {
+        deleter.close();
+      }
+    }
+  }
+
   public boolean delete(
       final String tableName,
       final List<ByteArray> rowIds,

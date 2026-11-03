@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.statistics;
 
 import java.util.Iterator;
+import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
@@ -187,6 +188,19 @@ public interface DataStatisticsStore {
       ByteArray bin);
 
   /**
+   * Add the binned statistic values to the store, preserving the existing values. All values are
+   * written with a single writer so that the underlying store can batch the writes. This method is
+   * not applicable to statistics that do not use a binning strategy. The batch is not atomic, and
+   * failures are only logged, not thrown.
+   *
+   * @param statistic the statistic to that the values belong to
+   * @param binnedValues the values to add, keyed by the bin that each value belongs to
+   */
+  <V extends StatisticValue<R>, R> void incorporateStatisticValues(
+      Statistic<V> statistic,
+      Map<ByteArray, V> binnedValues);
+
+  /**
    * Removes the value of the given statistic. This method is not applicable to statistics that use
    * a binning strategy.
    *
@@ -213,6 +227,38 @@ public interface DataStatisticsStore {
    * @return {@code true} if values were removed
    */
   boolean removeStatisticValues(Statistic<? extends StatisticValue<?>> statistic);
+
+  /**
+   * Removes the values of the given statistic whose bins fall within any of the given ranges. A
+   * range with a null start or end is unbounded on that side, but never extends beyond the values
+   * of the given statistic, and an inverted range matches nothing. This method is not applicable to
+   * statistics that do not use a binning strategy. The removal is not atomic, and failures are only
+   * logged, not thrown.
+   *
+   * @param statistic the statistic to remove values for
+   * @param binRanges the bin ranges to remove, with inclusive prefix ends
+   * @return {@code true} if values were removed, on a best effort basis: some stores report
+   *         {@code true} whenever the delete was issued
+   */
+  boolean removeStatisticValues(
+      Statistic<? extends StatisticValue<?>> statistic,
+      ByteArrayRange[] binRanges);
+
+  /**
+   * Removes the values of the given statistic for the given bins, using a single delete operation.
+   * This method is not applicable to statistics that do not use a binning strategy. The removal is
+   * not atomic, and failures are only logged, not thrown.
+   *
+   * @param statistic the statistic to remove values for
+   * @param bins the bins to remove, or bin prefixes if {@code prefix} is set
+   * @param prefix if true, every bin starting with one of the given bins is removed
+   * @return {@code true} if values were removed, on a best effort basis: some stores report
+   *         {@code true} whenever the delete was issued
+   */
+  boolean removeStatisticValues(
+      Statistic<? extends StatisticValue<?>> statistic,
+      ByteArray[] bins,
+      boolean prefix);
 
   /**
    * Remove all type-specific values from the given index statistic. If the statistic does not use a

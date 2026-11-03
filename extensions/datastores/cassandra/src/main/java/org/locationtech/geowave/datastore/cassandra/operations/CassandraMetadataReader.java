@@ -76,6 +76,12 @@ public class CassandraMetadataReader implements MetadataReader {
         // TODO this is not as efficient as prepared bound statements if there are many
         // ranges, but will work for now
         Select select = operations.getSelect(tableName, selectedColumns);
+        if (query.hasSecondaryId()) {
+          select =
+              select.allowFiltering().whereColumn(
+                  CassandraMetadataWriter.SECONDARY_ID_KEY).isEqualTo(
+                      QueryBuilder.literal(ByteBuffer.wrap(query.getSecondaryId())));
+        }
         if (r.getStart() != null) {
           select =
               select.allowFiltering().whereColumn(

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -183,6 +184,37 @@ public interface DataStore {
       Statistic<V> statistic,
       V value,
       ByteArray bin);
+
+  /**
+   * Incorporate many binned statistic values directly into the data store without ingesting the
+   * underlying data. All values are written together so that the underlying store can batch the
+   * writes. This method is for statistics that use a binning strategy.
+   *
+   * The batch is not atomic, and a store that fails to write some values only logs the failure
+   * rather than throwing, so a caller that needs certainty should read the values back.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statistic the statistic to incorporate the values into
+   * @param binnedValues the statistic values to incorporate, keyed by the bin each belongs to
+   */
+  <V extends StatisticValue<R>, R> void incorporateStatisticValues(
+      Statistic<V> statistic,
+      Map<ByteArray, V> binnedValues);
+
+  /**
+   * Removes the values of a binned statistic that match the given bin constraints, for example to
+   * expire old time bins. Only the values of the given statistic are affected. A range with a null
+   * start or end is open on that side, and an inverted range matches nothing.
+   *
+   * <p> The removal is not atomic, and failures are only logged, not thrown.
+   *
+   * @param statistic the statistic to remove values from, which must use a binning strategy
+   * @param binConstraints the constraints selecting the bins to remove
+   * @return {@code true} if values were removed, on a best effort basis: some stores report
+   *         {@code true} whenever the delete was issued
+   */
+  boolean removeStatisticValues(Statistic<?> statistic, BinConstraints binConstraints);
 
   /**
    * Compute and incorporate statistic values from an entry without storing the entry itself. The
