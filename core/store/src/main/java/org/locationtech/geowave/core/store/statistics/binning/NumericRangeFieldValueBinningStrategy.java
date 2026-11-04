@@ -95,7 +95,7 @@ public class NumericRangeFieldValueBinningStrategy extends FieldValueBinningStra
           Arrays.stream((Range[]) constraint).map(this::getNumericBins);
       return new ExplicitConstraints(stream.flatMap(Arrays::stream).toArray(ByteArray[]::new));
     }
-    return super.constraints(constraint);
+    return super.singleFieldConstraints(constraint);
   }
 
   @Override
