@@ -63,6 +63,9 @@ public final class H3CellRanges {
   // H3 reads a polygon edge spanning more than 180 degrees of longitude as crossing the
   // antimeridian, so wider polygons are covered in slabs no wider than this
   private static final double MAX_POLYFILL_DEGREES = 90;
+  // H3's native libraries disagree by platform on whether a pole vertex is exactly +/-90; 1e-9
+  // degrees (0.1 mm) is far below the smallest resolution 15 edge, about 4e-6 degrees
+  private static final double POLE_TOLERANCE_DEGREES = 1e-9;
 
   private static final Object H3_MUTEX = new Object();
   private static volatile H3Core h3Core;
@@ -160,8 +163,8 @@ public final class H3CellRanges {
   /**
    * The cell's boundary as a lon/lat polygon. A cell crossing the antimeridian is split there into
    * a multipolygon, and a cell containing a pole is closed along the pole so that it spans every
-   * longitude. A cell with a vertex exactly at a pole is closed along the pole between the
-   * longitudes of that vertex's neighbors.
+   * longitude. A cell with a vertex at a pole is closed along the pole between the longitudes of
+   * that vertex's neighbors.
    */
   public static Geometry cellToGeometry(final long cell) {
     final List<LatLng> boundary = splitPoleVertices(h3().cellToBoundary(cell));
@@ -189,17 +192,19 @@ public final class H3CellRanges {
   }
 
   /**
-   * The boundary with each vertex at a latitude of exactly +/-90, whose longitude is arbitrary,
-   * replaced by two pole vertices at the longitudes of its neighbors.
+   * The boundary with each vertex within {@link #POLE_TOLERANCE_DEGREES} of a latitude of +/-90,
+   * whose longitude is arbitrary, replaced by two vertices at exactly the pole at the longitudes of
+   * its neighbors.
    */
-  private static List<LatLng> splitPoleVertices(final List<LatLng> boundary) {
+  static List<LatLng> splitPoleVertices(final List<LatLng> boundary) {
     final int size = boundary.size();
     final List<LatLng> vertices = new ArrayList<>(size + 1);
     for (int i = 0; i < size; i++) {
       final LatLng vertex = boundary.get(i);
-      if (Math.abs(vertex.lat) == 90) {
-        vertices.add(new LatLng(vertex.lat, boundary.get(((i + size) - 1) % size).lng));
-        vertices.add(new LatLng(vertex.lat, boundary.get((i + 1) % size).lng));
+      if ((90 - Math.abs(vertex.lat)) <= POLE_TOLERANCE_DEGREES) {
+        final double poleLat = Math.copySign(90, vertex.lat);
+        vertices.add(new LatLng(poleLat, boundary.get(((i + size) - 1) % size).lng));
+        vertices.add(new LatLng(poleLat, boundary.get((i + 1) % size).lng));
       } else {
         vertices.add(vertex);
       }
