@@ -63,9 +63,11 @@ public final class H3CellRanges {
   // H3 reads a polygon edge spanning more than 180 degrees of longitude as crossing the
   // antimeridian, so wider polygons are covered in slabs no wider than this
   private static final double MAX_POLYFILL_DEGREES = 90;
-  // H3's native libraries disagree by platform on whether a pole vertex is exactly +/-90; 1e-9
-  // degrees (0.1 mm) is far below the smallest resolution 15 edge, about 4e-6 degrees
-  private static final double POLE_TOLERANCE_DEGREES = 1e-9;
+  // H3 computes vertex latitudes with asin, which resolves only about 8.5e-7 degrees per step
+  // near a pole, so a pole vertex lands a few steps short of +/-90 on some platforms. This covers
+  // about 3 steps and stays under half the smallest resolution 15 edge, about 4.6e-6 degrees, so
+  // no other vertex is mistaken for the pole.
+  static final double POLE_TOLERANCE_DEGREES = 2e-6;
 
   private static final Object H3_MUTEX = new Object();
   private static volatile H3Core h3Core;
