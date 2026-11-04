@@ -10,7 +10,9 @@ package org.locationtech.geowave.datastore.hbase.server;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
@@ -20,6 +22,8 @@ public class ServerOpInternalScannerWrapper implements InternalScanner {
   protected final Collection<HBaseServerOp> orderedServerOps;
   protected InternalScanner delegate;
   protected Scan scan;
+  // shared by the batches of cells HBase splits a row into, which each get their own RowScanner
+  private final Map<String, Object> hints = new HashMap<>();
 
   public ServerOpInternalScannerWrapper(
       final Collection<HBaseServerOp> orderedServerOps,
@@ -40,7 +44,7 @@ public class ServerOpInternalScannerWrapper implements InternalScanner {
   }
 
   protected boolean internalNextRow(final List<Cell> rowCells) throws IOException {
-    return internalNextRow(new BasicRowScanner(rowCells, scan));
+    return internalNextRow(new BasicRowScanner(rowCells, scan, hints));
   }
 
   protected boolean internalNextRow(final List<Cell> rowCells, final ScannerContext scannerContext)

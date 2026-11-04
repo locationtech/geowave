@@ -39,6 +39,7 @@ public class MergingServerOp implements HBaseServerOp {
   protected Set<GeoWaveColumnId> columnFamilyIds = new HashSet<>();
   // protected Set<ByteArrayId> columnFamilyIds = new HashSet<>();
   private static final String OLD_MAX_VERSIONS_KEY = "MAX_VERSIONS";
+  private static final String ROW_DELETES_KEY = "ROW_DELETES";
 
   protected Mergeable getMergeable(final Cell cell, final byte[] bytes) {
     return (Mergeable) URLClassloaderUtils.fromBinary(bytes);
@@ -54,6 +55,7 @@ public class MergingServerOp implements HBaseServerOp {
       do {
         // a reference variable to all the current cells
         final List<Cell> rowCells = rowScanner.currentCellsInRow();
+        final RowDeletes rowDeletes = trackDeletes(rowScanner, rowCells);
 
         if (rowCells.size() > 1) {
           Integer maxVersions = null;
@@ -74,10 +76,19 @@ public class MergingServerOp implements HBaseServerOp {
           final Iterator<Cell> iter = rowCells.iterator();
           final Map<PartialCellEquality, List<Cell>> merges = new HashMap<>();
           final Map<PartialCellEquality, List<Cell>> nonMerges = new HashMap<>();
+          final List<Cell> unmerged = new ArrayList<>();
           // iterate once to capture individual tags/visibilities
           boolean rebuildList = false;
           while (iter.hasNext()) {
             final Cell cell = iter.next();
+            // a delete marker has to survive a flush or compaction unmerged, otherwise it no
+            // longer masks the older cells it deleted in other store files. While a scanner older
+            // than the marker is open, HBase also hands over the Puts the marker masks; merging
+            // one into a newer Put would bring its value back.
+            if (CellUtil.isDelete(cell) || ((rowDeletes != null) && rowDeletes.masks(cell))) {
+              unmerged.add(cell);
+              continue;
+            }
             // TODO consider avoiding extra byte array allocations
             final byte[] familyBytes = CellUtil.cloneFamily(cell);
             GeoWaveColumnId familyId = null;
@@ -135,6 +146,7 @@ public class MergingServerOp implements HBaseServerOp {
                 rowCells.addAll(cells);
               }
             }
+            rowCells.addAll(unmerged);
             // these have to stay in order and they can get out of
             // order when adding cells from 2 maps
             rowCells.sort(HBaseUtils.getCellComparator());
@@ -143,6 +155,34 @@ public class MergingServerOp implements HBaseServerOp {
       } while (!rowScanner.nextCellsInRow().isEmpty());
       return true;
     }
+  }
+
+  /**
+   * Adds the delete markers among the current cells to those of the same row in earlier batches. A
+   * flush or compaction hands over at most hbase.hstore.compaction.kv.max cells of a row at a time,
+   * and a family marker sorts first in its family, so it can come in an earlier batch than the Puts
+   * it masks.
+   */
+  private static RowDeletes trackDeletes(final RowScanner rowScanner, final List<Cell> rowCells) {
+    if (rowCells.isEmpty()) {
+      return null;
+    }
+    final Map<String, Object> hints = rowScanner.getHints();
+    RowDeletes rowDeletes = (RowDeletes) hints.get(ROW_DELETES_KEY);
+    if ((rowDeletes != null) && !CellUtil.matchingRows(rowCells.get(0), rowDeletes.row)) {
+      hints.remove(ROW_DELETES_KEY);
+      rowDeletes = null;
+    }
+    for (final Cell cell : rowCells) {
+      if (CellUtil.isDelete(cell)) {
+        if (rowDeletes == null) {
+          rowDeletes = new RowDeletes(CellUtil.cloneRow(cell));
+          hints.put(ROW_DELETES_KEY, rowDeletes);
+        }
+        rowDeletes.add(cell);
+      }
+    }
+    return rowDeletes;
   }
 
   protected boolean includeTags() {
@@ -238,4 +278,83 @@ public class MergingServerOp implements HBaseServerOp {
 
   @Override
   public void fromBinary(final byte[] bytes) {}
+
+  /**
+   * The timestamps that the delete markers of a row mask, per column family and per column. A
+   * family marker has an empty qualifier, so it masks Puts of every column in its family.
+   */
+  private static class RowDeletes {
+    private final byte[] row;
+    private final Map<ByteArray, MaskedTimestamps> families = new HashMap<>();
+    private final Map<PartialCellEquality, MaskedTimestamps> columns = new HashMap<>();
+
+    private RowDeletes(final byte[] row) {
+      this.row = row;
+    }
+
+    private void add(final Cell marker) {
+      final long timestamp = marker.getTimestamp();
+      switch (marker.getType()) {
+        case DeleteFamily:
+          family(marker).maskUpTo(timestamp);
+          break;
+        case DeleteFamilyVersion:
+          family(marker).mask(timestamp);
+          break;
+        case DeleteColumn:
+          column(marker).maskUpTo(timestamp);
+          break;
+        case Delete:
+          column(marker).mask(timestamp);
+          break;
+        default:
+          break;
+      }
+    }
+
+    private MaskedTimestamps family(final Cell marker) {
+      return families.computeIfAbsent(
+          new ByteArray(CellUtil.cloneFamily(marker)),
+          k -> new MaskedTimestamps());
+    }
+
+    private MaskedTimestamps column(final Cell marker) {
+      // the key can outlive the batch of cells the marker came in, so it holds a copy
+      return columns.computeIfAbsent(
+          new PartialCellEquality(new KeyValue(marker), false),
+          k -> new MaskedTimestamps());
+    }
+
+    private boolean masks(final Cell put) {
+      final long timestamp = put.getTimestamp();
+      if (!families.isEmpty()) {
+        final MaskedTimestamps family = families.get(new ByteArray(CellUtil.cloneFamily(put)));
+        if ((family != null) && family.contains(timestamp)) {
+          return true;
+        }
+      }
+      if (!columns.isEmpty()) {
+        final MaskedTimestamps column = columns.get(new PartialCellEquality(put, false));
+        return (column != null) && column.contains(timestamp);
+      }
+      return false;
+    }
+  }
+
+  private static class MaskedTimestamps {
+    private long upTo = Long.MIN_VALUE;
+    private final Set<Long> versions = new HashSet<>();
+
+    private void maskUpTo(final long timestamp) {
+      upTo = Math.max(upTo, timestamp);
+    }
+
+    private void mask(final long timestamp) {
+      versions.add(timestamp);
+    }
+
+    private boolean contains(final long timestamp) {
+      return (timestamp <= upTo) || versions.contains(timestamp);
+    }
+  }
 }

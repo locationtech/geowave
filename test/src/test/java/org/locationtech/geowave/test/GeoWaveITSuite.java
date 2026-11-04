@@ -23,6 +23,7 @@ import org.locationtech.geowave.test.basic.GeoWaveCustomCRSSpatialVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveEnumIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
+import org.locationtech.geowave.test.basic.GeoWaveHBaseStatisticDeleteIT;
 import org.locationtech.geowave.test.basic.GeoWaveMultiProcessIngestIT;
 import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningAggregationIT;
 import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningStatisticsIT;
@@ -82,6 +83,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveCustomIndexIT.class,
     GeoWaveDocumentationExamplesIT.class,
     GeoWaveStatisticsIT.class,
+    GeoWaveHBaseStatisticDeleteIT.class,
     GeoWaveBasicURLIngestIT.class,
     // has to be before SparkEnvironment usage: the ingest stops whatever session it gets
     GeoWaveSparkIngestIT.class,
