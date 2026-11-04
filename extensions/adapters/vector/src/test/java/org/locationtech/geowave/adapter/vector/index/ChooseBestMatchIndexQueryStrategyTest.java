@@ -415,6 +415,13 @@ public class ChooseBestMatchIndexQueryStrategyTest {
     }
 
     @Override
+    public <V extends StatisticValue<R>, R> void incorporateStatisticValues(
+        final Statistic<V> statistic,
+        final Map<ByteArray, V> binnedValues) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean removeStatisticValue(final Statistic<? extends StatisticValue<?>> statistic) {
       throw new UnsupportedOperationException();
     }
@@ -428,6 +435,21 @@ public class ChooseBestMatchIndexQueryStrategyTest {
 
     @Override
     public boolean removeStatisticValues(final Statistic<? extends StatisticValue<?>> statistic) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean removeStatisticValues(
+        final Statistic<? extends StatisticValue<?>> statistic,
+        final ByteArrayRange[] binRanges) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean removeStatisticValues(
+        final Statistic<? extends StatisticValue<?>> statistic,
+        final ByteArray[] bins,
+        final boolean prefix) {
       throw new UnsupportedOperationException();
     }
 

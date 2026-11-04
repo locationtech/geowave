@@ -8,11 +8,16 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
+import java.util.Collections;
+import java.util.List;
+import org.apache.accumulo.core.data.Range;
+import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class AccumuloMetadataDeleter implements MetadataDeleter {
 
@@ -32,6 +37,21 @@ public class AccumuloMetadataDeleter implements MetadataDeleter {
 
   @Override
   public boolean delete(final MetadataQuery query) {
+    if (query.hasPrimaryIdRanges() || (query.hasPrimaryId() && query.isPrefix())) {
+      final List<Range> ranges =
+          query.hasPrimaryIdRanges()
+              ? AccumuloUtils.byteArrayRangesToBoundedAccumuloRanges(query.getPrimaryIdRanges())
+              : Collections.singletonList(Range.prefix(new Text(query.getPrimaryId())));
+      if (ranges.isEmpty()) {
+        return false;
+      }
+      return operations.deleteRanges(
+          AbstractGeoWavePersistence.METADATA_TABLE,
+          ranges,
+          metadataTypeId,
+          query.getSecondaryId(),
+          query.getAuthorizations());
+    }
     // the nature of metadata deleter is that primary ID is always
     // well-defined and it is deleting a single entry at a time
     return operations.delete(

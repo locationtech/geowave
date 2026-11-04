@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -35,6 +36,15 @@ public class FileSystemMetadataReader implements MetadataReader {
     this.metadataType = metadataType;
   }
 
+  // the raw key range also holds entries whose primary id is outside the range
+  private CloseableIterator<GeoWaveMetadata> rangeIterator(final ByteArrayRange range) {
+    final CloseableIterator<GeoWaveMetadata> it =
+        table.iterator(DataStoreUtils.toKeyScanRange(range));
+    return new CloseableIteratorWrapper<>(
+        it,
+        Iterators.filter(it, input -> DataStoreUtils.isInRange(input.getPrimaryId(), range)));
+  }
+
   @Override
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     CloseableIterator<GeoWaveMetadata> originalResults;
@@ -44,7 +54,7 @@ public class FileSystemMetadataReader implements MetadataReader {
       resultsIt = originalResults;
     } else if (query.hasPrimaryIdRanges()) {
       final List<CloseableIterator<GeoWaveMetadata>> rangeIterators =
-          Arrays.stream(query.getPrimaryIdRanges()).map(table::iterator).collect(
+          Arrays.stream(query.getPrimaryIdRanges()).map(this::rangeIterator).collect(
               Collectors.toList());
       originalResults =
           new CloseableIteratorWrapper<>(

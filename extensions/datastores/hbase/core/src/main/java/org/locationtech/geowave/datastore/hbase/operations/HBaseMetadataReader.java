@@ -54,41 +54,12 @@ public class HBaseMetadataReader implements MetadataReader {
 
   @Override
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
-    final Scan scanner = new Scan();
-
     try {
       final byte[] columnFamily = StringUtils.stringToBinary(metadataType.id());
       final byte[] columnQualifier = query.getSecondaryId();
-
-      if (columnQualifier != null) {
-        scanner.addColumn(columnFamily, columnQualifier);
-      } else {
-        scanner.addFamily(columnFamily);
-      }
-      if (query.hasPrimaryIdRanges()) {
-        final MultiRowRangeFilter filter =
-            operations.getMultiRowRangeFilter(Arrays.asList(query.getPrimaryIdRanges()));
-        // TODO performance could be perhaps improved using parallel scanning logic but for now keep
-        // it simple
-        if (filter.getRowRanges().size() == 1) {
-          scanner.withStartRow(filter.getRowRanges().get(0).getStartRow()).withStopRow(
-              filter.getRowRanges().get(0).getStopRow());
-        } else if (filter.getRowRanges().size() > 1) {
-          scanner.setFilter(filter);
-          scanner.withStartRow(filter.getRowRanges().get(0).getStartRow()).withStopRow(
-              filter.getRowRanges().get(filter.getRowRanges().size() - 1).getStopRow());
-        } else {
-          return new CloseableIterator.Empty<>();
-        }
-      } else {
-        if (query.hasPrimaryId()) {
-          if (query.isPrefix()) {
-            scanner.withStartRow(query.getPrimaryId()).withStopRow(
-                ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
-          } else {
-            scanner.withStartRow(query.getPrimaryId()).withStopRow(query.getPrimaryId(), true);
-          }
-        }
+      final Scan scanner = createRowScan(query);
+      if (scanner == null) {
+        return new CloseableIterator.Empty<>();
       }
       final boolean clientsideStatsMerge =
           (metadataType.isStatValues()) && !options.isServerSideLibraryEnabled();
@@ -142,6 +113,46 @@ public class HBaseMetadataReader implements MetadataReader {
       LOGGER.warn("GeoWave metadata table not found", e);
     }
     return new CloseableIterator.Wrapper<>(Collections.emptyIterator());
+  }
+
+  /**
+   * Builds a scan selecting the columns and rows matching the query's secondary id and primary id
+   * (exact, prefix or ranges), or null if the query cannot match any row.
+   */
+  Scan createRowScan(final MetadataQuery query) {
+    final Scan scanner = new Scan();
+    final byte[] columnFamily = StringUtils.stringToBinary(metadataType.id());
+    final byte[] columnQualifier = query.getSecondaryId();
+
+    if (columnQualifier != null) {
+      scanner.addColumn(columnFamily, columnQualifier);
+    } else {
+      scanner.addFamily(columnFamily);
+    }
+    if (query.hasPrimaryIdRanges()) {
+      final MultiRowRangeFilter filter =
+          operations.getMultiRowRangeFilter(Arrays.asList(query.getPrimaryIdRanges()));
+      // TODO performance could be perhaps improved using parallel scanning logic but for now keep
+      // it simple
+      if (filter.getRowRanges().size() == 1) {
+        scanner.withStartRow(filter.getRowRanges().get(0).getStartRow()).withStopRow(
+            filter.getRowRanges().get(0).getStopRow());
+      } else if (filter.getRowRanges().size() > 1) {
+        scanner.setFilter(filter);
+        scanner.withStartRow(filter.getRowRanges().get(0).getStartRow()).withStopRow(
+            filter.getRowRanges().get(filter.getRowRanges().size() - 1).getStopRow());
+      } else {
+        return null;
+      }
+    } else if (query.hasPrimaryId()) {
+      if (query.isPrefix()) {
+        scanner.withStartRow(query.getPrimaryId()).withStopRow(
+            ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+      } else {
+        scanner.withStartRow(query.getPrimaryId()).withStopRow(query.getPrimaryId(), true);
+      }
+    }
+    return scanner;
   }
 
   private byte[] getMergedStats(

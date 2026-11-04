@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -363,6 +365,22 @@ public class DataStatisticsStoreImpl extends
     }
   }
 
+  @Override
+  public <V extends StatisticValue<R>, R> void incorporateStatisticValues(
+      final Statistic<V> statistic,
+      final Map<ByteArray, V> binnedValues) {
+    if (statistic.getBinningStrategy() == null) {
+      throw new UnsupportedOperationException(
+          "The given statistic does not use a binning strategy, but bins were specified.");
+    }
+    try (StatisticValueWriter<V> writer = createStatisticValueWriter(statistic)) {
+      for (final Map.Entry<ByteArray, V> entry : binnedValues.entrySet()) {
+        writer.writeStatisticValue(entry.getKey().getBytes(), null, entry.getValue());
+      }
+    } catch (final Exception e) {
+      LOGGER.error("Unable to write statistic values", e);
+    }
+  }
 
   @Override
   public <V extends StatisticValue<R>, R> StatisticValueWriter<V> createStatisticValueWriter(
@@ -398,20 +416,35 @@ public class DataStatisticsStoreImpl extends
       final Statistic<V> statistic,
       final ByteArrayRange[] binRanges,
       final String... authorizations) {
+    final ByteArrayRange[] valueIdRanges = toValueIdRanges(statistic, binRanges);
+    if (valueIdRanges.length == 0) {
+      return new StatisticValueReader<>(new CloseableIterator.Empty<>(), statistic);
+    }
     final MetadataQuery query =
-        new MetadataQuery(
-            Arrays.stream(binRanges).map(
-                range -> new ByteArrayRange(
-                    range.getStart() == null ? null
-                        : StatisticValue.getValueId(statistic.getId(), range.getStart()),
-                    range.getEnd() == null ? null
-                        : StatisticValue.getValueId(statistic.getId(), range.getEnd()),
-                    range.isSingleValue())).toArray(ByteArrayRange[]::new),
-            statistic.getId().getGroupId().getBytes(),
-            authorizations);
+        new MetadataQuery(valueIdRanges, statistic.getId().getGroupId().getBytes(), authorizations);
     return new StatisticValueReader<>(
         operations.createMetadataReader(MetadataType.STATISTIC_VALUES).query(query),
         statistic);
+  }
+
+  // An open end of a bin range stays within the statistic by falling back to its value prefix.
+  // Inverted ranges match nothing and are dropped, because an empty set of ranges means "all" to
+  // a metadata query.
+  private static ByteArrayRange[] toValueIdRanges(
+      final Statistic<? extends StatisticValue<?>> statistic,
+      final ByteArrayRange[] binRanges) {
+    final byte[] valuePrefix = StatisticValue.getValueId(statistic.getId(), new byte[0]);
+    return Arrays.stream(binRanges).map(
+        range -> new ByteArrayRange(
+            range.getStart() == null ? valuePrefix
+                : StatisticValue.getValueId(statistic.getId(), range.getStart()),
+            range.getEnd() == null ? valuePrefix
+                : StatisticValue.getValueId(statistic.getId(), range.getEnd()),
+            range.isSingleValue())).filter(
+                range -> range.isSingleValue()
+                    || (ByteArrayUtils.compare(
+                        range.getStart(),
+                        range.getEndAsNextPrefix()) < 0)).toArray(ByteArrayRange[]::new);
   }
 
   @Override
@@ -456,25 +489,61 @@ public class DataStatisticsStoreImpl extends
     return deleted;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public boolean removeStatisticValues(final Statistic<? extends StatisticValue<?>> statistic) {
     if (statistic.getBinningStrategy() == null) {
       return removeStatisticValue(statistic);
     }
-    // TODO: The performance of this operation could be improved if primary ID prefix queries were
-    // allowed during delete.
-    boolean deleted = false;
-    final List<ByteArray> binsToRemove = Lists.newLinkedList();
-    try (CloseableIterator<StatisticValue<Object>> valueIter =
-        getStatisticValues((Statistic<StatisticValue<Object>>) statistic)) {
-      while (valueIter.hasNext()) {
-        final ByteArray bin = valueIter.next().getBin();
-        binsToRemove.add(bin);
-      }
+    return deleteValues(
+        new MetadataQuery(
+            StatisticValue.getValueId(statistic.getId(), new byte[0]),
+            statistic.getId().getGroupId().getBytes(),
+            true));
+  }
+
+  @Override
+  public boolean removeStatisticValues(
+      final Statistic<? extends StatisticValue<?>> statistic,
+      final ByteArrayRange[] binRanges) {
+    if (statistic.getBinningStrategy() == null) {
+      throw new UnsupportedOperationException(
+          "The given statistic does not use a binning strategy, but bin ranges were specified.");
     }
-    for (final ByteArray bin : binsToRemove) {
-      deleted = deleted || removeStatisticValue(statistic, bin);
+    final ByteArrayRange[] valueIdRanges = toValueIdRanges(statistic, binRanges);
+    if (valueIdRanges.length == 0) {
+      return false;
+    }
+    return deleteValues(
+        new MetadataQuery(valueIdRanges, statistic.getId().getGroupId().getBytes()));
+  }
+
+  @Override
+  public boolean removeStatisticValues(
+      final Statistic<? extends StatisticValue<?>> statistic,
+      final ByteArray[] bins,
+      final boolean prefix) {
+    if (statistic.getBinningStrategy() == null) {
+      throw new UnsupportedOperationException(
+          "The given statistic does not use a binning strategy, but bins were specified.");
+    }
+    final byte[] groupId = statistic.getId().getGroupId().getBytes();
+    return deleteValues(
+        Arrays.stream(bins).map(
+            bin -> new MetadataQuery(
+                StatisticValue.getValueId(statistic.getId(), bin),
+                groupId,
+                prefix)).toArray(MetadataQuery[]::new));
+  }
+
+  private boolean deleteValues(final MetadataQuery... queries) {
+    boolean deleted = false;
+    try (
+        MetadataDeleter deleter = operations.createMetadataDeleter(MetadataType.STATISTIC_VALUES)) {
+      for (final MetadataQuery query : queries) {
+        deleted |= deleter.delete(query);
+      }
+    } catch (final Exception e) {
+      LOGGER.error("Unable to remove values for statistic", e);
     }
     return deleted;
   }

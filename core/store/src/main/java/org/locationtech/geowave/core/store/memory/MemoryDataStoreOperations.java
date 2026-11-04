@@ -469,32 +469,10 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
                         new MemoryMetadataEntry(
                             new GeoWaveMetadata(r.getStart(), query.getSecondaryId(), null, null),
                             null),
+                        // exclusive, so no entry at the next prefix is included
                         new MemoryMetadataEntry(
-                            new GeoWaveMetadata(
-                                r.getEndAsNextPrefix(),
-                                getNextPrefix(query.getSecondaryId()),
-                                // this should be sufficient
-                                new byte[] {
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF},
-                                // this should be sufficient
-                                new byte[] {
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF,
-                                    (byte) 0xFF}),
-                            new byte[] {
-                                (byte) 0xFF,
-                                (byte) 0xFF,
-                                (byte) 0xFF,
-                                (byte) 0xFF,
-                                (byte) 0xFF,
-                                (byte) 0xFF,
-                                (byte) 0xFF})).stream()).collect(Collectors.toSet()));
+                            new GeoWaveMetadata(r.getEndAsNextPrefix(), null, null, null),
+                            null)).stream()).collect(Collectors.toSet()));
       } else {
         set =
             typeStore.subSet(
@@ -646,7 +624,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
         metadataStore.get(type).remove(
             new MemoryMetadataEntry(r, ((GeoWaveMetadataWithUUID) r).uuidBytes));
       }
-      return true;
+      return !toRemove.isEmpty();
     }
 
     @Override

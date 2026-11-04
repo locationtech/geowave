@@ -36,6 +36,10 @@ public class CassandraMetadataDeleter implements MetadataDeleter {
 
   @Override
   public boolean delete(final MetadataQuery query) {
+    if (query.hasPrimaryIdRanges() || (query.hasPrimaryId() && query.isPrefix())) {
+      // cassandra can't delete by primary ID range or prefix, so find the entries first
+      return DataStoreUtils.safeMetadataDelete(this, operations, metadataType, query);
+    }
     // deleting by secondary ID without primary ID is not supported (and not
     // directly supported by cassandra, we'd have to query first to get
     // primary ID(s) and then delete, but this is not a use case necessary

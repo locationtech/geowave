@@ -75,10 +75,28 @@ public class AccumuloUtils {
     final Text start =
         byteArrayRange.getStart() == null ? null : new Text(byteArrayRange.getStart());
     final Text end = byteArrayRange.getEnd() == null ? null : new Text(byteArrayRange.getEnd());
-    if ((start != null) && (end != null) && (start.compareTo(end) > 0)) {
+    final Text exclusiveEnd = end == null ? null : Range.followingPrefix(end);
+    // the end is an inclusive prefix, so compare against the exclusive end
+    if ((start != null) && (exclusiveEnd != null) && (start.compareTo(exclusiveEnd) >= 0)) {
       return null;
     }
-    return new Range(start, true, end == null ? null : Range.followingPrefix(end), false);
+    return new Range(start, true, exclusiveEnd, false);
+  }
+
+  /**
+   * Unlike {@link #byteArrayRangesToAccumuloRanges}, rejected (inverted) ranges are dropped without
+   * falling back to a full table range, so the result may be empty.
+   */
+  public static List<Range> byteArrayRangesToBoundedAccumuloRanges(
+      final ByteArrayRange[] byteArrayRanges) {
+    final List<Range> ranges = new ArrayList<>();
+    for (final ByteArrayRange byteArrayRange : byteArrayRanges) {
+      final Range range = byteArrayRangeToAccumuloRange(byteArrayRange);
+      if (range != null) {
+        ranges.add(range);
+      }
+    }
+    return ranges;
   }
 
   public static TreeSet<Range> byteArrayRangesToAccumuloRanges(
