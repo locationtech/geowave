@@ -437,6 +437,24 @@ public class AdditiveVectorStatisticTest {
   }
 
   @Test
+  public void testBatchWithAValueOfAnotherSchemaIsRejectedWhole() {
+    final AdditiveVectorStatistic statistic = binnedStatistic();
+    final ByteArray a = new ByteArray("a");
+    final ByteArray b = new ByteArray("b");
+    dataStore.incorporateStatisticValue(statistic, valueOf(1, 7), a);
+    final Map<ByteArray, AdditiveVectorValue> batch = new HashMap<>();
+    batch.put(a, valueOf(1, 1));
+    batch.put(b, valueOf(2, 1));
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> dataStore.incorporateStatisticValues(statistic, batch));
+
+    assertEquals(7L, countOf(statistic, a));
+    assertTrue(dataStore.getStatisticValue(statistic, BinConstraints.of(b)).isEmpty());
+  }
+
+  @Test
   public void testUnbinnedValueOfAnotherSchemaIsRejected() {
     final AdditiveVectorStatistic statistic =
         new AdditiveVectorStatistic(TYPE_NAME, 1, 1, COUNTS, SUMS);

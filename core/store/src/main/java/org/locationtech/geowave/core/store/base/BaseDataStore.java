@@ -2531,6 +2531,7 @@ public class BaseDataStore implements DataStore {
       final Map<ByteArray, V> binnedValues) {
     assertStatisticExists(statistic);
     assertStatisticBinned(statistic);
+    binnedValues.values().forEach(statistic::validateValue);
     statisticsStore.incorporateStatisticValues(statistic, binnedValues);
   }
 
