@@ -46,6 +46,15 @@ public abstract class Statistic<V extends StatisticValue<?>> implements Persista
   public abstract V createEmpty();
 
   /**
+   * Called by {@code DataStore.incorporateStatisticValue} before it writes a caller-supplied value.
+   * The default accepts every value.
+   *
+   * @param value the value about to be written
+   * @throws IllegalArgumentException if this statistic cannot hold the value
+   */
+  public void validateValue(final V value) {}
+
+  /**
    * @return {@code true} if the statistic is an internal statistic
    */
   public boolean isInternal() {
