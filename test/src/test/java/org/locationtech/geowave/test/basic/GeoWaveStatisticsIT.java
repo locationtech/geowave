@@ -18,13 +18,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import org.apache.commons.lang3.Range;
@@ -36,14 +39,23 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
+import org.locationtech.geowave.core.geotime.binning.H3CellRanges;
+import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.EpochInterval;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.EpochIntervalBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.H3CellFieldValueBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.SpatialFieldValueBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -86,12 +98,17 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import org.geotools.api.feature.simple.SimpleFeature;
 import org.geotools.api.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
 import com.beust.jcommander.Parameter;
+import com.uber.h3core.H3Core;
+import com.uber.h3core.util.LatLng;
 import com.google.common.hash.BloomFilter;
 import com.google.common.math.DoubleMath;
 import com.google.common.collect.Iterators;
@@ -853,6 +870,269 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
       final int valueCount = Iterators.size(iter);
       assertTrue(valueCount == 1);
     }
+  }
+
+  @Test
+  public void testTimeAndH3RangeConstraints() {
+    final DataStore ds = dataStore.createDataStore();
+    final int resolution = 2;
+    final EpochIntervalBinningStrategy days =
+        new EpochIntervalBinningStrategy(EpochInterval.DAY, "TimeStamp");
+    final CountStatistic countByDayAndCell = new CountStatistic(SimpleIngest.FEATURE_NAME);
+    countByDayAndCell.setTag("day-h3");
+    countByDayAndCell.setBinningStrategy(
+        new CompositeBinningStrategy(
+            days,
+            new SpatialFieldValueBinningStrategy(
+                SpatialBinningType.H3,
+                resolution,
+                ComplexGeometryBinningOption.USE_CENTROID_ONLY,
+                SimpleIngest.GEOMETRY_FIELD)));
+    ds.addStatistic(countByDayAndCell);
+
+    final Map<Pair<Long, Long>, Long> expectedCounts = new HashMap<>();
+    try (CloseableIterator<SimpleFeature> it = ds.query(VectorQueryBuilder.newBuilder().build())) {
+      while (it.hasNext()) {
+        final SimpleFeature feature = it.next();
+        final Point point = (Point) feature.getDefaultGeometry();
+        expectedCounts.merge(
+            Pair.of(
+                days.bucketStart(((Date) feature.getAttribute("TimeStamp")).getTime()),
+                H3CellRanges.h3().latLngToCell(point.getY(), point.getX(), resolution)),
+            1L,
+            Long::sum);
+      }
+    }
+
+    final Instant firstDay = Instant.parse("2021-01-01T00:00:00Z");
+    final Interval allDays = Interval.of(firstDay, Duration.ofDays(366));
+    final Interval someDays =
+        Interval.of(firstDay.plus(Duration.ofDays(100)), firstDay.plus(Duration.ofDays(251)));
+    final Geometry acrossAntimeridian =
+        GeometryUtils.GEOMETRY_FACTORY.createMultiPolygon(
+            new Polygon[] {box(170, 0, 180, 90), box(-180, 0, -160, 90)});
+    // every longitude at a pole is the pole's cell, so this holds the point at (130, -90)
+    final Geometry southPole = box(-10, -90, 10, -85);
+    final Geometry midLatitudes = box(-120, -60, 0, 80);
+    for (final Interval window : new Interval[] {allDays, someDays}) {
+      for (final Geometry area : new Geometry[] {acrossAntimeridian, southPole, midLatitudes}) {
+        final long expected = expectedCount(expectedCounts, days, window, area, resolution);
+        final BinConstraints constraints = BinConstraints.ofObject(new Object[] {window, area});
+        assertEquals(expected, sumOfCounts(ds, countByDayAndCell, constraints));
+        final CountValue aggregated =
+            ds.aggregateStatistics(
+                StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                    SimpleIngest.FEATURE_NAME).tag("day-h3").binConstraints(constraints).build());
+        assertEquals(expected, aggregated.getValue().longValue());
+      }
+    }
+    assertTrue(expectedCount(expectedCounts, days, allDays, acrossAntimeridian, resolution) > 0);
+    assertTrue(expectedCount(expectedCounts, days, allDays, southPole, resolution) > 0);
+
+    // the exact days of a window with all cells is a prefix query per day
+    assertEquals(
+        expectedCount(expectedCounts, days, someDays, null, resolution),
+        sumOfCounts(
+            ds,
+            countByDayAndCell,
+            BinConstraints.ofObject(new Object[] {someDays, BinConstraints.allBins()})));
+
+    // time leads the composite key, so a day range is a key range
+    assertTrue(
+        ds.removeStatisticValues(
+            countByDayAndCell,
+            BinConstraints.ofRange(days.getBinRanges(someDays))));
+    expectedCounts.keySet().removeIf(bin -> someDays.contains(Instant.ofEpochMilli(bin.getLeft())));
+    assertEquals(
+        0L,
+        sumOfCounts(
+            ds,
+            countByDayAndCell,
+            BinConstraints.ofObject(new Object[] {someDays, BinConstraints.allBins()})));
+    assertEquals(
+        expectedCount(expectedCounts, days, allDays, null, resolution),
+        sumOfCounts(ds, countByDayAndCell, BinConstraints.allBins()));
+    assertTrue(expectedCount(expectedCounts, days, allDays, null, resolution) > 0);
+  }
+
+  @Test
+  public void testIncorporatedTimeAndH3Bins() {
+    final DataStore ds = dataStore.createDataStore();
+    final int resolution = 5;
+    final EpochIntervalBinningStrategy hours =
+        new EpochIntervalBinningStrategy(EpochInterval.HOUR, "TimeStamp");
+    final H3CellFieldValueBinningStrategy cells =
+        new H3CellFieldValueBinningStrategy(resolution, "TrajectoryID");
+    final CountStatistic countByHourAndCell = new CountStatistic(SimpleIngest.FEATURE_NAME);
+    countByHourAndCell.setTag("hour-h3");
+    countByHourAndCell.setBinningStrategy(new CompositeBinningStrategy(hours, cells));
+    // no ingested entry has a cell id, so every value comes from the writes below
+    ds.addStatistic(countByHourAndCell);
+
+    final Random random = new Random(8675309);
+    final H3Core h3 = H3CellRanges.h3();
+    final List<Long> sampleCells = new ArrayList<>();
+    for (final long pentagon : h3.getPentagons(resolution)) {
+      sampleCells.addAll(h3.gridDisk(pentagon, 2));
+    }
+    sampleCells.addAll(h3.gridDisk(h3.latLngToCell(0, 180, resolution), 3));
+    sampleCells.addAll(h3.gridDisk(h3.latLngToCell(90, 0, resolution), 3));
+    sampleCells.addAll(h3.gridDisk(h3.latLngToCell(-90, 0, resolution), 3));
+    sampleCells.addAll(h3.gridDisk(h3.latLngToCell(38.9, -77.0, resolution), 6));
+    final long firstHour = hours.bucketStart(Instant.parse("2026-10-26T00:00:00Z").toEpochMilli());
+    final long hour = Duration.ofHours(1).toMillis();
+    final Map<Pair<Long, Long>, Long> expectedCounts = new HashMap<>();
+    final Map<ByteArray, CountValue> batch = new HashMap<>();
+    for (int i = 0; i < 3000; i++) {
+      final long bucket = firstHour + (random.nextInt(72) * hour);
+      final long cell = sampleCells.get(random.nextInt(sampleCells.size()));
+      final long count = 1 + random.nextInt(5);
+      final ByteArray bin =
+          CompositeBinningStrategy.getBin(hours.getBin(bucket), cells.getBin(cell));
+      final CountValue value = batch.computeIfAbsent(bin, b -> countByHourAndCell.createEmpty());
+      value.merge(countValue(count));
+      expectedCounts.merge(Pair.of(bucket, cell), count, Long::sum);
+    }
+    ds.incorporateStatisticValues(countByHourAndCell, batch);
+    // a second flush of the same bins adds to them
+    final Map<ByteArray, CountValue> again = new HashMap<>();
+    for (final Map.Entry<Pair<Long, Long>, Long> entry : expectedCounts.entrySet()) {
+      again.put(
+          CompositeBinningStrategy.getBin(
+              hours.getBin(entry.getKey().getLeft()),
+              cells.getBin(entry.getKey().getRight())),
+          countValue(1));
+    }
+    ds.incorporateStatisticValues(countByHourAndCell, again);
+    expectedCounts.replaceAll((bin, count) -> count + 1);
+
+    final LatLng pentagon = h3.cellToLatLng(h3.getPentagons(resolution).iterator().next());
+    final Geometry[] areas =
+        new Geometry[] {
+            GeometryUtils.GEOMETRY_FACTORY.createMultiPolygon(
+                new Polygon[] {box(178, -3, 180, 3), box(-180, -3, -178, 3)}),
+            box(-30, 88, 30, 90),
+            box(-30, -90, 30, -88),
+            box(-77.5, 38.5, -76.5, 39.3),
+            box(pentagon.lng - 1, pentagon.lat - 1, pentagon.lng + 1, pentagon.lat + 1)};
+    for (int i = 0; i < 20; i++) {
+      final long start = firstHour + (random.nextInt(60) * hour);
+      final Interval window =
+          Interval.of(
+              Instant.ofEpochMilli(start),
+              Instant.ofEpochMilli(start + ((1 + random.nextInt(12)) * hour)));
+      final Geometry area = areas[i % areas.length];
+      assertEquals(
+          expectedCount(expectedCounts, hours, window, area, resolution),
+          sumOfCounts(
+              ds,
+              countByHourAndCell,
+              BinConstraints.ofObject(new Object[] {window, area})));
+    }
+
+    // retention: drop the first day by key range, then one hour of every cell by prefix
+    final Interval firstDay = Interval.of(Instant.ofEpochMilli(firstHour), Duration.ofDays(1));
+    assertTrue(
+        ds.removeStatisticValues(
+            countByHourAndCell,
+            BinConstraints.ofRange(hours.getBinRanges(firstDay))));
+    expectedCounts.keySet().removeIf(bin -> firstDay.contains(Instant.ofEpochMilli(bin.getLeft())));
+    final Interval oneHour =
+        Interval.of(Instant.ofEpochMilli(firstHour + (30 * hour)), Duration.ofHours(1));
+    assertTrue(
+        ds.removeStatisticValues(
+            countByHourAndCell,
+            BinConstraints.ofObject(new Object[] {oneHour, BinConstraints.allBins()})));
+    expectedCounts.keySet().removeIf(bin -> oneHour.contains(Instant.ofEpochMilli(bin.getLeft())));
+
+    // an empty window has no bin range, so the range delete matches nothing
+    final Instant emptyAt = Instant.ofEpochMilli(firstHour + (50 * hour));
+    ds.removeStatisticValues(
+        countByHourAndCell,
+        BinConstraints.ofRange(hours.getBinRanges(Interval.of(emptyAt, emptyAt))));
+
+    // open-ended retention: everything before the cutoff goes, with no bucket enumeration
+    final Interval beforeCutoff = Interval.endingAt(Instant.ofEpochMilli(firstHour + (40 * hour)));
+    assertTrue(
+        ds.removeStatisticValues(
+            countByHourAndCell,
+            BinConstraints.ofRange(hours.getBinRanges(beforeCutoff))));
+    expectedCounts.keySet().removeIf(
+        bin -> beforeCutoff.contains(Instant.ofEpochMilli(bin.getLeft())));
+
+    final Map<Pair<Long, Long>, Long> remaining = new HashMap<>();
+    try (CloseableIterator<Pair<ByteArray, Long>> it =
+        ds.getBinnedStatisticValues(countByHourAndCell, BinConstraints.allBins())) {
+      while (it.hasNext()) {
+        final Pair<ByteArray, Long> binned = it.next();
+        if (binned.getValue() > 0) {
+          final Pair<StatisticBinningStrategy, ByteArray>[] subBins =
+              ((CompositeBinningStrategy) countByHourAndCell.getBinningStrategy()).getSubBins(
+                  binned.getKey());
+          remaining.put(
+              Pair.of(
+                  hours.getInterval(subBins[0].getRight()).getStart().toEpochMilli(),
+                  cells.getCell(subBins[1].getRight())),
+              binned.getValue());
+        }
+      }
+    }
+    assertEquals(expectedCounts, remaining);
+  }
+
+  private static CountValue countValue(final long count) {
+    final CountValue value = new CountValue();
+    value.fromBinary(VarintUtils.writeSignedLong(count));
+    return value;
+  }
+
+  private static Polygon box(
+      final double minX,
+      final double minY,
+      final double maxX,
+      final double maxY) {
+    return (Polygon) GeometryUtils.GEOMETRY_FACTORY.toGeometry(
+        new Envelope(minX, maxX, minY, maxY));
+  }
+
+  private static long expectedCount(
+      final Map<Pair<Long, Long>, Long> counts,
+      final EpochIntervalBinningStrategy time,
+      final Interval window,
+      final Geometry area,
+      final int resolution) {
+    final Set<Long> areaCells = new HashSet<>();
+    if (area != null) {
+      for (final ByteArray bin : SpatialBinningType.H3.getSpatialBins(area, resolution)) {
+        areaCells.add(H3CellRanges.fromBin(bin.getBytes()));
+      }
+    }
+    final Set<Long> windowBuckets = new HashSet<>();
+    final long end = window.getEnd().toEpochMilli();
+    final long width = time.getInterval().getWidthMillis();
+    long bucket = time.bucketStart(window.getStart().toEpochMilli());
+    while (bucket < end) {
+      windowBuckets.add(bucket);
+      bucket += width;
+    }
+    return counts.entrySet().stream().filter(
+        e -> windowBuckets.contains(e.getKey().getLeft())
+            && ((area == null) || areaCells.contains(e.getKey().getRight()))).mapToLong(
+                Map.Entry::getValue).sum();
+  }
+
+  private static long sumOfCounts(
+      final DataStore ds,
+      final CountStatistic statistic,
+      final BinConstraints constraints) {
+    long sum = 0;
+    try (CloseableIterator<Pair<ByteArray, Long>> it =
+        ds.getBinnedStatisticValues(statistic, constraints)) {
+      while (it.hasNext()) {
+        sum += it.next().getValue();
+      }
+    }
+    return sum;
   }
 
   @Test

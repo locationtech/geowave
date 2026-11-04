@@ -10,6 +10,8 @@ package org.locationtech.geowave.core.geotime.store.statistics;
 
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.EpochIntervalBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.H3CellFieldValueBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.SpatialFieldValueBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.StatisticsRegistrySPI;
@@ -44,6 +46,14 @@ public class GeotimeRegisteredStatistics implements StatisticsRegistrySPI {
         new RegisteredBinningStrategy(
             SpatialFieldValueBinningStrategy.NAME,
             SpatialFieldValueBinningStrategy::new,
-            (short) 2151)};
+            (short) 2151),
+        new RegisteredBinningStrategy(
+            EpochIntervalBinningStrategy.NAME,
+            EpochIntervalBinningStrategy::new,
+            (short) 2152),
+        new RegisteredBinningStrategy(
+            H3CellFieldValueBinningStrategy.NAME,
+            H3CellFieldValueBinningStrategy::new,
+            (short) 2153)};
   }
 }
