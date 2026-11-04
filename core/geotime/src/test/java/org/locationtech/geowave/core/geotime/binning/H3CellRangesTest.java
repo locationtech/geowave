@@ -508,12 +508,28 @@ public class H3CellRangesTest {
   }
 
   @Test
+  public void aVertexJustShortOfThePoleIsSplitAtThePole() {
+    final List<LatLng> boundary =
+        Arrays.asList(
+            new LatLng(-89.99999, 10),
+            new LatLng(-89.9999999999999, 50),
+            new LatLng(-89.99999, 90));
+    final List<LatLng> split = H3CellRanges.splitPoleVertices(boundary);
+    assertEquals(4, split.size());
+    assertEquals(-90, split.get(1).lat, 0);
+    assertEquals(10, split.get(1).lng, 0);
+    assertEquals(-90, split.get(2).lat, 0);
+    assertEquals(90, split.get(2).lng, 0);
+  }
+
+  @Test
   public void cellsWithAVertexAtThePoleAreClosedAlongThePole() {
     // the three resolution 15 cells that meet at the south pole, where each has a vertex
     final long[] cells = new long[] {0x8ff29380e0d0cc4L, 0x8ff29380e0d0cc6L, 0x8ff29380e0d0cc0L};
     final List<Geometry> geometries = new ArrayList<>();
     for (final long cell : cells) {
-      assertTrue(H3.cellToBoundary(cell).stream().anyMatch(vertex -> vertex.lat == -90));
+      assertTrue(
+          H3.cellToBoundary(cell).stream().anyMatch(vertex -> Math.abs(vertex.lat + 90) <= 1e-9));
       final Geometry geometry = H3CellRanges.cellToGeometry(cell);
       assertValidAndContainsCenter(cell, geometry);
       geometries.add(geometry);
