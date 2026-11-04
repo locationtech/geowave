@@ -513,13 +513,21 @@ public class H3CellRangesTest {
         Arrays.asList(
             new LatLng(-89.99999, 10),
             new LatLng(-89.9999999999999, 50),
+            new LatLng(-89.9999985, 70),
+            new LatLng(-89.999995, 80),
             new LatLng(-89.99999, 90));
     final List<LatLng> split = H3CellRanges.splitPoleVertices(boundary);
-    assertEquals(4, split.size());
+    // the vertices at -89.9999985 and -89.9999999999999 split; the one at -89.999995 does not
+    assertEquals(7, split.size());
     assertEquals(-90, split.get(1).lat, 0);
     assertEquals(10, split.get(1).lng, 0);
     assertEquals(-90, split.get(2).lat, 0);
-    assertEquals(90, split.get(2).lng, 0);
+    assertEquals(70, split.get(2).lng, 0);
+    assertEquals(-90, split.get(3).lat, 0);
+    assertEquals(50, split.get(3).lng, 0);
+    assertEquals(-90, split.get(4).lat, 0);
+    assertEquals(80, split.get(4).lng, 0);
+    assertEquals(-89.999995, split.get(5).lat, 0);
   }
 
   @Test
@@ -529,7 +537,9 @@ public class H3CellRangesTest {
     final List<Geometry> geometries = new ArrayList<>();
     for (final long cell : cells) {
       assertTrue(
-          H3.cellToBoundary(cell).stream().anyMatch(vertex -> Math.abs(vertex.lat + 90) <= 1e-9));
+          "no pole vertex in " + H3.cellToBoundary(cell),
+          H3.cellToBoundary(cell).stream().anyMatch(
+              vertex -> Math.abs(vertex.lat + 90) <= H3CellRanges.POLE_TOLERANCE_DEGREES));
       final Geometry geometry = H3CellRanges.cellToGeometry(cell);
       assertValidAndContainsCenter(cell, geometry);
       geometries.add(geometry);
